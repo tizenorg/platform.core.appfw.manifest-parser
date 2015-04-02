@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include <boost/filesystem/path.hpp>
+
 #include <gtest/gtest.h>
 
 #include <vector>
@@ -10,7 +11,9 @@
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_handlers/service_handler.h"
 #include "manifest_parser/manifest.h"
+#include "manifest_parser/manifest_constants.h"
 #include "manifest_parser/manifest_handler.h"
+#include "manifest_parser/manifest_parser_impl.h"
 #include "manifest_parser/manifest_parser.h"
 
 namespace bf = boost::filesystem;
@@ -35,7 +38,7 @@ namespace keys = wgt::application_widget_keys;
 class ServiceHandlerTest : public testing::Test {
  public:
   void SetUp() override {
-    parser_.reset(new ManifestParser((GetRegistryForTest())));
+    parser_.reset(new ManifestParserImpl((GetRegistryForTest())));
   }
   void TearDown() override {
     parser_.reset();
@@ -56,7 +59,7 @@ class ServiceHandlerTest : public testing::Test {
   }
 
  private:
-  std::unique_ptr<ManifestParser> parser_;
+  std::unique_ptr<ManifestParserImpl> parser_;
 };
 
 TEST_F(ServiceHandlerTest, NoServiceEntry) {
