@@ -7,18 +7,16 @@
 #define MANIFEST_PARSER_MANIFEST_PARSER_H_
 
 #include <boost/filesystem/path.hpp>
-#include <pkgmgr/pkgmgr_parser.h>
 
-#include <map>
 #include <memory>
-#include <set>
 #include <string>
-#include <vector>
 
 #include "manifest_parser/manifest.h"
 #include "manifest_parser/manifest_handler.h"
 
 namespace parser {
+
+class ManifestParserImpl;
 
 class ManifestParser {
  public:
@@ -33,26 +31,7 @@ class ManifestParser {
 
   std::shared_ptr<const ManifestData> GetManifestData(std::string key);
 
- private:
-  bool ParseManifestData(std::string* error);
-
-  void SetManifestData(const std::string& key,
-      std::shared_ptr<ManifestData> data);
-
-  // Uses manifest handlers for parsing ManifestData stucts
-  bool ParseAppManifest(std::string* error);
-  // Uses manifest handlers for validating ManifestData stucts
-  bool ValidateAppManifest(std::string* error);
-
-  std::unique_ptr<ManifestHandlerRegistry> registry_;
-  std::shared_ptr<Manifest> manifest_;
-  ManifestDataMap manifest_data_;
-  bool valid_;
-
-  std::string error_;
-
-  // For testing
-  friend class ServiceHandlerTest;
+  std::unique_ptr<ManifestParserImpl> impl_;
 };
 
 }  // namespace parser
