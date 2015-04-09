@@ -1,0 +1,4 @@
+ADD_SUBDIRECTORY(manifest_parser)
+ADD_SUBDIRECTORY(manifest_handlers)
+ADD_SUBDIRECTORY(unit_tests)
+ADD_SUBDIRECTORY(utils)
