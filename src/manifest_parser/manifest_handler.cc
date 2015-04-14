@@ -53,6 +53,7 @@ ManifestHandlerRegistry::~ManifestHandlerRegistry() {
 void ManifestHandlerRegistry::RegisterManifestHandler(
     ManifestHandler* handler) {
   handlers_[handler->Key()] = handler;
+  ReorderHandlersGivenDependencies();
 }
 
 ManifestHandlerMap ManifestHandlerRegistry::handlers() {

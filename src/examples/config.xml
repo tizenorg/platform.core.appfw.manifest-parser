@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns:tizen="http://tizen.org/ns/widgets"  xmlns="http://www.w3.org/ns/widgets">
+  <tizen:application id="nNBDOItqjN.sample" package="nNBDOItqjN" required_version="2.2"/>
+  <item-list count="3">
+    <item type="text">first</item>
+    <item type="file">second.png</item>
+    <item type="text">third</item>
+  </item-list>
+  <item type="additional">standalone</item>
+</widget>

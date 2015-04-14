@@ -38,6 +38,13 @@ Requires: %{name} = %{version}
 %description tests
 Unit tests for al modules of manifest-parser
 
+%package examples
+Summary: Examples for manifest-parser
+Requires: %{name} = %{version}
+
+%description examples
+Examples of manifest-parser usage
+
 %prep
 %setup -q
 
@@ -46,7 +53,7 @@ Unit tests for al modules of manifest-parser
 # with cmake, which are on one repository. Later this macro
 # is used in CMakeLists.txt files to distinguish, which project
 # is currently being build.
-%cmake . -DCMAKE_BUILD_TYPE=%{?build_type:%build_type} -DBUILD_PARSER=1
+%cmake . -DCMAKE_BUILD_TYPE=%{?build_type:%build_type}
 make %{?_smp_mflags}
 
 %install
@@ -70,3 +77,9 @@ make %{?_smp_mflags}
 %files tests
 %{_bindir}/manifest-parser-ut/*
 %{_datadir}/manifest-parser-ut/*
+
+%files examples
+%defattr(-,root,root)
+%{_bindir}/manifest-parser/*
+%{_datadir}/manifest-parser/*
+%license LICENSE LICENSE-xwalk
