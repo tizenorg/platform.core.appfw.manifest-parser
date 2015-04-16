@@ -11,7 +11,6 @@
 #include <vector>
 
 #include "manifest_parser/manifest_handler.h"
-#include "utils/macros.h"
 
 namespace wgt {
 namespace parse {
@@ -48,9 +47,6 @@ class ImeHandler : public parser::ManifestHandler {
       const parser::ManifestDataMap& handlers_output,
       std::string* error) const override;
   std::string Key() const override;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(ImeHandler);
 };
 
 }  // namespace parse

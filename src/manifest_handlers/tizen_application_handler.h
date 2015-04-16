@@ -13,7 +13,6 @@
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
-#include "utils/macros.h"
 
 namespace wgt {
 namespace parse {
@@ -64,9 +63,6 @@ class TizenApplicationHandler : public parser::ManifestHandler {
       std::string* error) const override;
   bool AlwaysParseForType() const override;
   std::string Key() const override;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(TizenApplicationHandler);
 };
 
 }  // namespace parse

@@ -11,7 +11,6 @@
 
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
-#include "utils/macros.h"
 
 namespace wgt {
 namespace parse {
@@ -61,9 +60,6 @@ class ServiceHandler : public parser::ManifestHandler {
       const parser::ManifestDataMap& handlers_output,
       std::string* error) const override;
   std::string Key() const override;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(ServiceHandler);
 };
 
 }  // namespace parse

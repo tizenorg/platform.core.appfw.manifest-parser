@@ -19,7 +19,6 @@
 #include "manifest_parser/manifest_util.h"
 #include "manifest_parser/permission_types.h"
 #include "manifest_parser/values.h"
-#include "utils/macros.h"
 
 namespace bf = boost::filesystem;
 

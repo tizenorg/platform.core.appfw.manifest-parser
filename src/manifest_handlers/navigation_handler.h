@@ -43,9 +43,6 @@ class NavigationHandler : public parser::ManifestHandler {
       std::string* error) const override;
 
   std::string Key() const override;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(NavigationHandler);
 };
 
 }  // namespace parse

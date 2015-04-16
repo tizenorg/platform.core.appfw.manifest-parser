@@ -13,7 +13,6 @@
 #include <set>
 #include <vector>
 
-#include "utils/macros.h"
 #include "manifest_parser/values.h"
 
 namespace parser {
@@ -93,7 +92,8 @@ class Manifest {
   std::string default_locale_;
   std::unique_ptr<std::list<std::string> > user_agent_locales_;
 
-  DISALLOW_COPY_AND_ASSIGN(Manifest);
+  Manifest(const Manifest&) = delete;
+  Manifest& operator=(const Manifest&) = delete;
 };
 
 }  // namespace parser

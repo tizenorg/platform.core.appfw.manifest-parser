@@ -9,8 +9,6 @@
 #include <string>
 #include <vector>
 
-#include "utils/macros.h"
-
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/permission_types.h"
 
@@ -32,7 +30,6 @@ class PermissionsInfo: public parser::ManifestData {
 
  private:
   parser::PermissionSet api_permissions_;
-  DISALLOW_COPY_AND_ASSIGN(PermissionsInfo);
 };
 
 class PermissionsHandler: public parser::ManifestHandler {
@@ -49,9 +46,6 @@ class PermissionsHandler: public parser::ManifestHandler {
       const parser::ManifestDataMap& handlers_output,
       std::string* error) const override;
   std::string Key() const override;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(PermissionsHandler);
 };
 
 }  // namespace parse

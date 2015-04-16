@@ -11,7 +11,6 @@
 #include <regex>
 #include <set>
 
-#include "utils/macros.h"
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_handlers/tizen_application_handler.h"
 #include "manifest_parser/values.h"

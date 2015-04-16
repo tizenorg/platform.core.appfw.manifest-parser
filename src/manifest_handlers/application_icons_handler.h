@@ -40,9 +40,6 @@ class ApplicationIconsHandler : public parser::ManifestHandler {
       std::string* error) const override;
   bool AlwaysParseForType() const override;
   std::string Key() const override;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(ApplicationIconsHandler);
 };
 
 }  // namespace parse
