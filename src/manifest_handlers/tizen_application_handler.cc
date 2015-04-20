@@ -11,12 +11,9 @@
 
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_parser/manifest_util.h"
+#include "manifest_handlers/platform_version.h"
 #include "manifest_parser/values.h"
 #include "utils/logging.h"
-
-namespace {
-const char kTizenWebAPIVersion[] = "2.2";
-}
 
 namespace wgt {
 namespace parse {
@@ -110,8 +107,10 @@ bool TizenApplicationHandler::Validate(
     return false;
   }
 
-  const std::string supported_version = kTizenWebAPIVersion;
-  if (supported_version.compare(app_info.required_version()) < 0) {
+  const std::string supported_version = parser::GetCurrentPlatformVersion();
+  // TODO(w.kosowicz) write better mechanism of version comparison
+  if (supported_version.empty() ||
+      supported_version.compare(app_info.required_version()) < 0) {
     *error = "The required_version of Tizen Web API "
              "is not supported.\n";
     return false;
