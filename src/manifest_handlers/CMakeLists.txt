@@ -9,6 +9,7 @@ SET(SRCS
   metadata_handler.cc
   navigation_handler.cc
   permissions_handler.cc
+  platform_version.cc
   setting_handler.cc
   service_handler.cc
   splash_screen_handler.cc
@@ -21,6 +22,7 @@ ADD_LIBRARY(${TARGET_LIBNAME_MANIFEST_HANDLERS} SHARED ${SRCS})
 # Target - includes
 TARGET_INCLUDE_DIRECTORIES(${TARGET_LIBNAME_MANIFEST_HANDLERS} PUBLIC
                            "${CMAKE_CURRENT_SOURCE_DIR}/../")
+APPLY_PKG_CONFIG(${TARGET_LIBNAME_MANIFEST_HANDLERS} PUBLIC CAPI_SYSTEM_INFO_DEPS)
 
 # Extra
 SET_TARGET_PROPERTIES(${TARGET_LIBNAME_MANIFEST_HANDLERS} PROPERTIES VERSION ${VERSION})
