@@ -34,83 +34,103 @@ const char kAuthorHref[] = "authorHref";
 const char kHeight[] = "height";
 const char kWidth[] = "width";
 const char kPreferences[] = "preferences";
+const char kDefaultLocale[] = "defaultlocale";
+const char kViewModes[] = "viewmodes";
 
 // Child keys inside 'preferences' key.
-const char kPreferencesName[] = "name";
-const char kPreferencesValue[] = "value";
-const char kPreferencesReadonly[] = "readonly";
+const char kPreferencesName[] = "@name";
+const char kPreferencesValue[] = "@value";
+const char kPreferencesReadonly[] = "@readonly";
 
-typedef std::map<std::string, std::string> KeyMap;
-typedef std::map<std::string, std::string>::const_iterator KeyMapIterator;
-typedef std::pair<std::string, std::string> KeyPair;
-
-const KeyMap& GetWidgetKeyPairs() {
-  static KeyMap map;
-  if (map.empty()) {
-    map.insert(KeyPair(keys::kAuthorKey, kAuthor));
-    map.insert(KeyPair(keys::kDescriptionKey, kDecription));
-    map.insert(KeyPair(keys::kNameKey, kName));
-    map.insert(KeyPair(keys::kShortNameKey, kShortName));
-    map.insert(KeyPair(keys::kVersionKey, kVersion));
-    map.insert(KeyPair(keys::kIDKey, kID));
-    map.insert(KeyPair(keys::kAuthorEmailKey, kAuthorEmail));
-    map.insert(KeyPair(keys::kAuthorHrefKey, kAuthorHref));
-    map.insert(KeyPair(keys::kHeightKey, kHeight));
-    map.insert(KeyPair(keys::kWidthKey, kWidth));
-  }
-
-  return map;
-}
-
-bool ParsePreferenceItem(const parser::DictionaryValue* in_value,
-                         parser::DictionaryValue* out_value,
-                         std::set<std::string>* used) {
-  assert(in_value && in_value->IsType(parser::Value::TYPE_DICTIONARY));
-
-  std::string pref_name;
-  std::string pref_value;
-  std::string pref_readonly;
-  if (in_value->GetString(keys::kPreferencesNameKey, &pref_name)
-     && used->find(pref_name) == used->end()) {
-    out_value->SetString(kPreferencesName, pref_name);
-    used->insert(pref_name);
-  } else {
+bool ParserPreferenceItem(const parser::Value* val,
+                          Preference* output,
+                          std::string* error) {
+  const parser::DictionaryValue* pref_dict;
+  if (!val->GetAsDictionary(&pref_dict)) {
+    *error = "Parsing preference element failed";
     return false;
   }
-
-  if (in_value->GetString(keys::kPreferencesValueKey, &pref_value))
-    out_value->SetString(kPreferencesValue, pref_value);
-
-  if (in_value->GetString(keys::kPreferencesReadonlyKey, &pref_readonly))
-    out_value->SetBoolean(kPreferencesReadonly, pref_readonly == "true");
+  std::string name, value;
+  bool readonly;
+  pref_dict->GetString(kPreferencesName, &name);
+  pref_dict->GetString(kPreferencesValue, &value);
+  pref_dict->GetBoolean(kPreferencesReadonly, &readonly);
+  output = new Preference(name, value, readonly);
   return true;
 }
 
 }  // namespace
 
-WidgetInfo::WidgetInfo()
-    : value_(new parser::DictionaryValue) {}
+WidgetInfo::WidgetInfo() {}
 
 WidgetInfo::~WidgetInfo() {}
 
-void WidgetInfo::SetString(const std::string& key, const std::string& value) {
-  value_->SetString(key, value);
+void WidgetInfo::set_name(const std::string& name) {
+  name_ = name;
 }
 
-void WidgetInfo::Set(const std::string& key, parser::Value* value) {
-  value_->Set(key, value);
+void WidgetInfo::set_short_name(const std::string& short_name) {
+  short_name_ = short_name;
 }
 
-void WidgetInfo::SetName(const std::string& name) {
-  value_->SetString(kName, name);
+void WidgetInfo::set_description(const std::string& description) {
+  description_ = description_;
 }
 
-void WidgetInfo::SetShortName(const std::string& short_name) {
-  value_->SetString(kShortName, short_name);
+const std::string& WidgetInfo::name() const {
+  return name_;
 }
 
-void WidgetInfo::SetDescription(const std::string& description) {
-  value_->SetString(kDecription, description);
+const std::string& WidgetInfo::short_name() const {
+  return short_name_;
+}
+
+const std::string& WidgetInfo::description() const {
+  return description_;
+}
+
+const std::string& WidgetInfo::id() const {
+  return id_;
+}
+
+const std::string& WidgetInfo::version() const {
+  return version_;
+}
+
+const std::string& WidgetInfo::view_modes() const {
+  return viewmodes_;
+}
+
+const std::string& WidgetInfo::default_locale() const {
+  return default_locale_;
+}
+
+const std::string& WidgetInfo::author() const {
+  return author_;
+}
+
+const std::string& WidgetInfo::author_email() const {
+  return author_email_;
+}
+
+const std::string& WidgetInfo::author_href() const {
+  return author_href_;
+}
+
+const std::string& WidgetInfo::widget_namespace() const {
+  return widget_namespace_;
+}
+
+unsigned int WidgetInfo::height() const {
+  return height_;
+}
+
+unsigned int WidgetInfo::width() const {
+  return width_;
+}
+
+const std::vector<Preference*>& WidgetInfo::preferences() const {
+  return preferences_;
 }
 
 WidgetHandler::WidgetHandler() {}
@@ -120,49 +140,70 @@ WidgetHandler::~WidgetHandler() {}
 bool WidgetHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
-    std::string* /*error*/) {
+    std::string* error) {
   std::shared_ptr<WidgetInfo> widget_info(new WidgetInfo());
-  const KeyMap& map = GetWidgetKeyPairs();
+  widget_info->preferences_ = std::vector<Preference*>();
 
-  for (KeyMapIterator iter = map.begin(); iter != map.end(); ++iter) {
-    std::string string;
-    bool result = manifest.GetString(iter->first, &string);
-    if (result && !string.empty() && iter->first == keys::kAuthorHrefKey)
-      // When authorhref is an invalid URI, reset it an empty string.
-      string.clear();
-    widget_info->SetString(iter->second, result ? string : "");
+  if (manifest.HasPath(keys::kWidgetNamespaceKey))
+    manifest.GetString(keys::kWidgetNamespaceKey,
+                       &widget_info->widget_namespace_);
+  if (manifest.HasPath(keys::kAuthorKey))
+    manifest.GetString(keys::kAuthorKey, &widget_info->author_);
+  if (manifest.HasPath(keys::kDescriptionKey))
+    manifest.GetString(keys::kDescriptionKey, &widget_info->description_);
+  if (manifest.HasPath(keys::kNameKey))
+    manifest.GetString(keys::kNameKey, &widget_info->name_);
+  if (manifest.HasPath(keys::kShortNameKey))
+    manifest.GetString(keys::kShortNameKey, &widget_info->short_name_);
+  if (manifest.HasPath(keys::kVersionKey))
+    manifest.GetString(keys::kVersionKey, &widget_info->version_);
+  if (manifest.HasPath(keys::kIDKey))
+    manifest.GetString(keys::kIDKey, &widget_info->id_);
+  if (manifest.HasPath(keys::kAuthorEmailKey))
+    manifest.GetString(keys::kAuthorEmailKey, &widget_info->author_email_);
+  if (manifest.HasPath(keys::kAuthorHrefKey))
+    manifest.GetString(keys::kAuthorHrefKey, &widget_info->author_href_);
+  if (manifest.HasPath(keys::kHeightKey)) {
+    int h;
+    manifest.GetInteger(keys::kHeightKey, &h);
+    widget_info->height_ = static_cast<unsigned int>(h);
   }
+  if (manifest.HasPath(keys::kWidthKey)) {
+    int w;
+    manifest.GetInteger(keys::kWidthKey, &w);
+    widget_info->width_ = static_cast<unsigned int>(w);
+  }
+  if (manifest.HasPath(keys::kDefaultLocaleKey))
+    manifest.GetString(keys::kDefaultLocaleKey, &widget_info->default_locale_);
+  if (manifest.HasPath(keys::kViewModesKey))
+    manifest.GetString(keys::kDefaultLocaleKey, &widget_info->viewmodes_);
 
-  parser::Value* pref_value = nullptr;
-  manifest.Get(keys::kPreferencesKey, &pref_value);
-
-  std::set<std::string> preference_names_used;
-  if (pref_value && pref_value->IsType(parser::Value::TYPE_DICTIONARY)) {
-    parser::DictionaryValue* preferences =
-        new parser::DictionaryValue;
-    parser::DictionaryValue* dict;
-    pref_value->GetAsDictionary(&dict);
-    if (ParsePreferenceItem(dict, preferences, &preference_names_used))
-      widget_info->Set(kPreferences, preferences);
-  } else if (pref_value && pref_value->IsType(
-                 parser::Value::TYPE_LIST)) {
-    parser::ListValue* preferences = new parser::ListValue;
-    parser::ListValue* list;
-    pref_value->GetAsList(&list);
-
-    for (parser::ListValue::iterator it = list->begin();
-         it != list->end(); ++it) {
-      parser::DictionaryValue* pref = new parser::DictionaryValue;
-      parser::DictionaryValue* dict;
-      (*it)->GetAsDictionary(&dict);
-      if (ParsePreferenceItem(dict, pref, &preference_names_used))
-        preferences->Append(pref);
+  if (manifest.HasPath(keys::kPreferencesKey)) {
+    const parser::Value* val = nullptr;
+    if (manifest.Get(keys::kPreferencesKey, &val)) {
+      if (val->GetType() == parser::Value::TYPE_LIST) {
+        // list of preferences
+        const parser::ListValue* pref_list;
+        if (val->GetAsList(&pref_list)) {
+          // get all preferences
+          for (const auto& pref : *pref_list) {
+            Preference* preference;
+            if (!ParserPreferenceItem(pref, preference, error))
+              return false;
+            widget_info->preferences_.push_back(preference);
+          }
+        } else {
+          *error = "Preference list exists in manifest, but is not accessible.";
+          return false;
+        }
+      } else if (val->GetType() == parser::Value::TYPE_DICTIONARY) {
+        // only one preference
+        Preference* pref;
+        if (!ParserPreferenceItem(val, pref, error))
+          return false;
+        widget_info->preferences_.push_back(pref);
+      }
     }
-    widget_info->Set(kPreferences, preferences);
-  }
-  std::string ns_value;
-  if (manifest.GetString(keys::kWidgetNamespaceKey, &ns_value)) {
-    widget_info->SetString(keys::kWidgetNamespaceKey, ns_value);
   }
 
   *output = std::static_pointer_cast<parser::ManifestData>(widget_info);
@@ -174,13 +215,7 @@ bool WidgetHandler::Validate(
     const parser::ManifestDataMap& /*handlers_output*/,
     std::string* error) const {
   const WidgetInfo& widget_info = static_cast<const WidgetInfo&>(data);
-  std::string ns_value;
-  if (!widget_info.GetWidgetInfo()->GetString(keys::kWidgetNamespaceKey,
-                                               &ns_value)) {
-    *error = "Failed to retrieve the widget's namespace.";
-    return false;
-  }
-  if (strcasecmp(keys::kWidgetNamespacePrefix, ns_value.c_str()) != 0) {
+  if (widget_info.widget_namespace() != keys::kWidgetNamespacePrefix) {
     *error = "The widget namespace is invalid.";
     return false;
   }
