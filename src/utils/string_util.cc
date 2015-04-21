@@ -100,10 +100,13 @@ const char kRightToLeftOverride[] = u8"\xE2\x80\xAE";
 
 std::string CollapseWhitespaceUTF8(const std::string& text) {
   std::string result;
-  result.resize(text.size());
 
-  // Set flags to pretend we're already in a trimmed whitespace sequence, so we
-  // will trim any leading whitespace.
+  if (text.empty())
+    return result;
+
+  result.resize(text.size());
+  // Set flags to pretend we're already in a trimmed whitespace sequence,
+  // so we will trim any leading whitespace.
   bool in_whitespace = true;
   int chars_written = 0;
 
