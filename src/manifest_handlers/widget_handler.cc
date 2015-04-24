@@ -15,6 +15,7 @@
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_parser/manifest_constants.h"
 #include "manifest_parser/values.h"
+#include "utils/logging.h"
 
 namespace wgt {
 namespace parse {
@@ -65,28 +66,51 @@ WidgetInfo::WidgetInfo() {}
 
 WidgetInfo::~WidgetInfo() {}
 
-void WidgetInfo::set_name(const std::string& name) {
-  name_ = name;
+void WidgetInfo::AddName(const std::string& locale, const std::string& name) {
+  if (name_set_.find(locale) != name_set_.end())
+    return;
+  name_set_.insert(std::make_pair(locale, name));
 }
 
-void WidgetInfo::set_short_name(const std::string& short_name) {
-  short_name_ = short_name;
+void WidgetInfo::AddShortName(const std::string& locale,
+                              const std::string& short_name) {
+  if (short_name_set_.find(locale) != short_name_set_.end())
+    return;
+  short_name_set_.insert(std::make_pair(locale, short_name));
 }
 
-void WidgetInfo::set_description(const std::string& description) {
-  description_ = description_;
+void WidgetInfo::AddDescription(const std::string& locale,
+                    const std::string& description) {
+  if (description_set_.find(locale) != description_set_.end())
+    return;
+  description_set_.insert(std::make_pair(locale, description));
 }
 
-const std::string& WidgetInfo::name() const {
-  return name_;
+const std::map<std::string, std::string>& WidgetInfo::name_set() const {
+  return name_set_;
 }
 
-const std::string& WidgetInfo::short_name() const {
-  return short_name_;
+const std::map<std::string, std::string>& WidgetInfo::short_name_set() const {
+  return short_name_set_;
 }
 
-const std::string& WidgetInfo::description() const {
-  return description_;
+const std::map<std::string, std::string>& WidgetInfo::description_set() const {
+  return description_set_;
+}
+
+std::string WidgetInfo::name() const {
+  return (name_set_.begin() != name_set_.end()) ?
+      name_set_.begin()->second : std::string();
+}
+
+std::string WidgetInfo::short_name() const {
+  return (short_name_set_.begin() != short_name_set_.end()) ?
+      short_name_set_.begin()->second : std::string();
+}
+
+std::string WidgetInfo::description() const {
+  return (description_set_.begin() != description_set_.end()) ?
+      description_set_.begin()->second : std::string();
 }
 
 const std::string& WidgetInfo::id() const {
@@ -137,6 +161,101 @@ WidgetHandler::WidgetHandler() {}
 
 WidgetHandler::~WidgetHandler() {}
 
+void WidgetHandler::ParseSingleLocalizedDescriptionElement(
+    const parser::DictionaryValue* item_dict, const std::string& parent_lang,
+    std::shared_ptr<WidgetInfo> info) {
+  bool lang_overwriten = false;
+  std::string lang;
+  std::string text;
+
+  if (item_dict->HasKey(keys::kXmlLangKey)) {
+    lang_overwriten = true;
+    item_dict->GetString(keys::kXmlLangKey, &lang);
+  }
+  item_dict->GetString(parser::kXmlTextKey, &text);
+  // TODO(t.iwanek): check internationalization tag...
+  if (lang_overwriten) {
+    info->description_set_.insert(std::make_pair(lang, text));
+  } else {
+    info->description_set_.insert(std::make_pair(parent_lang, text));
+  }
+}
+
+void WidgetHandler::ParseLocalizedDescriptionElements(
+    const parser::Manifest& manifest,
+    const std::string& parent_lang,
+    std::shared_ptr<WidgetInfo> info) {
+  if (!manifest.HasPath(keys::kDescriptionKey))
+    return;
+
+  const parser::Value* val = nullptr;
+  const parser::DictionaryValue* dict = nullptr;
+  const parser::ListValue* list = nullptr;
+  if (manifest.Get(keys::kDescriptionKey, &val)) {
+    if (val->GetAsDictionary(&dict)) {
+      ParseSingleLocalizedDescriptionElement(dict, parent_lang, info);
+    } else if (val->GetAsList(&list)) {
+      for (auto& item : *list)
+        if (item->GetAsDictionary(&dict))
+          ParseSingleLocalizedDescriptionElement(dict, parent_lang,
+              info);
+    }
+  }
+}
+
+void WidgetHandler::ParseSingleLocalizedNameElement(
+    const parser::DictionaryValue* item_dict, const std::string& parent_lang,
+    std::shared_ptr<WidgetInfo> info) {
+  bool lang_overwriten = false;
+  std::string lang;
+  std::string name;
+  std::string short_name;
+
+  if (item_dict->HasKey(keys::kXmlLangKey)) {
+    lang_overwriten = true;
+    item_dict->GetString(keys::kXmlLangKey, &lang);
+  }
+  if (item_dict->HasKey(keys::kShortKey)) {
+    item_dict->GetString(keys::kShortKey, &short_name);
+  }
+  item_dict->GetString(parser::kXmlTextKey, &name);
+
+  // ignore if given language already spotted
+  if (info->name_set_.find(lang) != info->name_set_.end())
+    return;
+
+  // TODO(t.iwanek): check internationalization tag...
+
+  if (lang_overwriten) {
+    info->name_set_.insert(std::make_pair(lang, name));
+    if (!short_name.empty())
+      info->short_name_set_.insert(std::make_pair(lang, short_name));
+  } else {
+    info->name_set_.insert(std::make_pair(parent_lang, name));
+    if (!short_name.empty())
+      info->short_name_set_.insert(std::make_pair(parent_lang, short_name));
+  }
+}
+
+void WidgetHandler::ParseLocalizedNameElements(const parser::Manifest& manifest,
+    const std::string& parent_lang, std::shared_ptr<WidgetInfo> info) {
+  if (!manifest.HasPath(keys::kNameKey))
+    return;
+
+  const parser::Value* val = nullptr;
+  const parser::DictionaryValue* dict = nullptr;
+  const parser::ListValue* list = nullptr;
+  if (manifest.Get(keys::kNameKey, &val)) {
+    if (val->GetAsDictionary(&dict)) {
+      ParseSingleLocalizedNameElement(dict, parent_lang, info);
+    } else if (val->GetAsList(&list)) {
+      for (auto& item : *list)
+        if (item->GetAsDictionary(&dict))
+          ParseSingleLocalizedNameElement(dict, parent_lang, info);
+    }
+  }
+}
+
 bool WidgetHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
@@ -144,17 +263,19 @@ bool WidgetHandler::Parse(
   std::shared_ptr<WidgetInfo> widget_info(new WidgetInfo());
   widget_info->preferences_ = std::vector<Preference*>();
 
-  if (manifest.HasPath(keys::kWidgetNamespaceKey))
+  std::string parent_lang;
+  if (manifest.HasPath(keys::kWidgetNamespaceKey)) {
     manifest.GetString(keys::kWidgetNamespaceKey,
                        &widget_info->widget_namespace_);
+    manifest.GetString(keys::kWidgetLangKey,
+                       &parent_lang);
+  }
   if (manifest.HasPath(keys::kAuthorKey))
     manifest.GetString(keys::kAuthorKey, &widget_info->author_);
-  if (manifest.HasPath(keys::kDescriptionKey))
-    manifest.GetString(keys::kDescriptionKey, &widget_info->description_);
-  if (manifest.HasPath(keys::kNameKey))
-    manifest.GetString(keys::kNameKey, &widget_info->name_);
-  if (manifest.HasPath(keys::kShortNameKey))
-    manifest.GetString(keys::kShortNameKey, &widget_info->short_name_);
+
+  ParseLocalizedDescriptionElements(manifest, parent_lang, widget_info);
+  ParseLocalizedNameElements(manifest, parent_lang, widget_info);
+
   if (manifest.HasPath(keys::kVersionKey))
     manifest.GetString(keys::kVersionKey, &widget_info->version_);
   if (manifest.HasPath(keys::kIDKey))
