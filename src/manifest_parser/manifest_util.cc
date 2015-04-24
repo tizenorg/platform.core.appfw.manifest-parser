@@ -24,7 +24,6 @@ namespace bf = boost::filesystem;
 namespace {
 const char kAttributePrefix[] = "@";
 const char kNamespaceKey[] = "@namespace";
-const char kTextKey[] = "#text";
 
 const char kContentKey[] = "content";
 
@@ -303,7 +302,7 @@ std::unique_ptr<DictionaryValue> LoadXMLNode(
     text = utils::CollapseWhitespaceUTF8(text);
 
   if (!text.empty())
-    value->SetString(kTextKey, text);
+    value->SetString(parser::kXmlTextKey, text);
 
   return value;
 }

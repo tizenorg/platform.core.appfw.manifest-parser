@@ -50,15 +50,16 @@ namespace application_widget_keys {
 const char kNamespaceKey[] = "@namespace";
 const char kXmlLangKey[] = "@lang";
 const char kDefaultLocaleKey[] = "widget.@defaultlocale";
-const char kNameKey[] = "widget.name.#text";
+const char kNameKey[] = "widget.name";
 const char kVersionKey[] = "widget.@version";
 const char kViewModesKey[] = "widget.@viewmodes";
 const char kWidgetKey[] = "widget";
 const char kLaunchLocalPathKey[] = "widget.content.@src";
 const char kWebURLsKey[] = "widget.@id";
 const char kAuthorKey[] = "widget.author.#text";
-const char kDescriptionKey[] = "widget.description.#text";
+const char kDescriptionKey[] = "widget.description";
 const char kShortNameKey[] = "widget.name.@short";
+const char kShortKey[] = "@short";
 const char kIDKey[] = "widget.@id";
 const char kAuthorEmailKey[] = "widget.author.@email";
 const char kAuthorHrefKey[] = "widget.author.@href";
@@ -73,6 +74,7 @@ const char kPreferencesNameKey[] = "@name";
 const char kPreferencesValueKey[] = "@value";
 const char kPreferencesReadonlyKey[] = "@readonly";
 
+const char kWidgetLangKey[] = "widget.@lang";
 const char kWidgetNamespaceKey[] = "widget.@namespace";
 const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
 
