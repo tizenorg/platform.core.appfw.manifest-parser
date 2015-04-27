@@ -144,6 +144,9 @@ const char kTizenImeUuidTextKey[] = "#text";
 const char kTizenImeLanguagesKey[] = "languages";
 const char kTizenImeLanguageKey[] = "language";
 const char kTizenImeLanguageTextKey[] = "#text";
+
+const char kTizenContentKey[] = "widget.content";
+const char kTizenContentSrcKey[] = "@src";
 // category
 const char kTizenCategoryKey[] = "widget.category";
 const char kTizenCategoryNameKey[] = "@name";

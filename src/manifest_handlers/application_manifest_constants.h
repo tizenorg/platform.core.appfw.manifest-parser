@@ -128,6 +128,8 @@ extern const char kTizenImeUuidTextKey[];
 extern const char kTizenImeLanguagesKey[];
 extern const char kTizenImeLanguageKey[];
 extern const char kTizenImeLanguageTextKey[];
+extern const char kTizenContentKey[];
+extern const char kTizenContentSrcKey[];
 extern const char kTizenCategoryKey[];
 extern const char kTizenCategoryNameKey[];
 extern const char kTizenNamespacePrefix[];

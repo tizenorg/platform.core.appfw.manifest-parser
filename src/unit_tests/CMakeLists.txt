@@ -7,6 +7,7 @@ SET(TESTS
   manifest_util_unittest
   parser_unittest
   service_handler_unittest
+  content_handler_unittest
   string_util_unittest
 )
 SET(DESTINATION_DIR manifest-parser-ut)
@@ -24,6 +25,8 @@ ADD_EXECUTABLE(manifest_util_unittest
                parser_manifest_util_unittest.cc)
 ADD_EXECUTABLE(service_handler_unittest
                service_handler_unittest.cc)
+ADD_EXECUTABLE(content_handler_unittest
+               content_handler_unittest.cc)
 ADD_EXECUTABLE(parser_unittest
                parser_unittest.cc)
 ADD_EXECUTABLE(string_util_unittest string_util_unittest.cc)
@@ -50,6 +53,7 @@ target_link_libraries(manifest_handler_unittest PUBLIC ${TARGET_LIBNAME_PARSER} 
 target_link_libraries(manifest_util_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${TARGET_LIBNAME_MANIFEST_HANDLERS} ${GTEST_MAIN_LIBRARIES})
 target_link_libraries(parser_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${GTEST_MAIN_LIBRARIES})
 target_link_libraries(service_handler_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${TARGET_LIBNAME_MANIFEST_HANDLERS} ${GTEST_MAIN_LIBRARIES})
+target_link_libraries(content_handler_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${TARGET_LIBNAME_MANIFEST_HANDLERS} ${GTEST_MAIN_LIBRARIES})
 target_link_libraries(string_util_unittest PUBLIC ${TARGET_LIBNAME_UTILS} ${GTEST_MAIN_LIBRARIES})
 
 FOREACH(test ${TESTS})

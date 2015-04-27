@@ -51,6 +51,7 @@ class ManifestParserImpl {
 
   // For testing
   friend class ServiceHandlerTest;
+  friend class ContentHandlerTest;
 };
 
 }  // namespace parser
