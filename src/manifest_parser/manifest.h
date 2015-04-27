@@ -64,20 +64,7 @@ class Manifest {
   // Note: only use this when you KNOW you don't need the validation.
   const DictionaryValue* value() const { return data_.get(); }
 
-  const std::string& default_locale() const {
-    return default_locale_;
-  }
-
-  // Update user agent locale when system locale is changed.
-  void SetSystemLocale(const std::string& locale);
-
  private:
-  void ParseWGTI18n();
-  void ParseWGTI18nEachPath(const std::string& path);
-  bool ParseWGTI18nEachElement(Value* value,
-                               const std::string& path,
-                               const std::string& locale = "");
-
   // Returns true if the application can specify the given |path|.
   bool CanAccessPath(const std::string& path) const;
   bool CanAccessKey(const std::string& key) const;
@@ -87,10 +74,6 @@ class Manifest {
 
   // The underlying dictionary representation of the manifest.
   std::unique_ptr<DictionaryValue> data_;
-  std::unique_ptr<DictionaryValue> i18n_data_;
-
-  std::string default_locale_;
-  std::unique_ptr<std::list<std::string> > user_agent_locales_;
 
   Manifest(const Manifest&) = delete;
   Manifest& operator=(const Manifest&) = delete;
