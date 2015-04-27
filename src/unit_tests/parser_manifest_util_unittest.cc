@@ -20,7 +20,7 @@ class ManifestUtilTest : public testing::Test {
 };
 
 TEST_F(ManifestUtilTest, LoadApplicationWithValidPath) {
-  boost::filesystem::path install_dir("/usr/share/app-installers-ut");
+  boost::filesystem::path install_dir("/usr/share/manifest-parser-ut");
   ASSERT_TRUE(&install_dir);
   install_dir /= "test_samples";
   install_dir /= "good_manifest.xml";
@@ -38,7 +38,7 @@ TEST_F(ManifestUtilTest, LoadApplicationWithValidPath) {
 
 TEST_F(ManifestUtilTest,
        LoadApplicationGivesHelpfullErrorOnMissingManifest) {
-  boost::filesystem::path install_dir("/usr/share/app-installers-ut");
+  boost::filesystem::path install_dir("/usr/share/manifest-parser-ut");
   ASSERT_TRUE(&install_dir);
   install_dir /= "test_samples";
   install_dir /= "bad_manifest.xml";
