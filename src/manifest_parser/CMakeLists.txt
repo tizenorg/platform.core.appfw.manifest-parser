@@ -5,7 +5,6 @@ SET(SRCS
   manifest_parser.cc
   manifest_parser_impl.cc
   manifest_util.cc
-  system_locale.cc
   values.cc
 )
 
