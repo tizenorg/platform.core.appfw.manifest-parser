@@ -34,7 +34,8 @@ class AppControlHandler : public parser::ManifestHandler {
 class AppControlInfo {
  public:
   AppControlInfo(const std::string& src, const std::string& operation,
-      const std::string& uri, const std::string& mime);
+      const std::string& uri, const std::string& mime,
+      const std::string& onreset);
   const std::string& src() const {
     return src_;
   }
@@ -48,11 +49,16 @@ class AppControlInfo {
     return mime_;
   }
 
+  const std::string& onreset() const {
+    return onreset_;
+  }
+
  private:
   std::string src_;
   std::string operation_;
   std::string uri_;
   std::string mime_;
+  std::string onreset_;
 };
 
 struct AppControlInfoList : public parser::ManifestData {

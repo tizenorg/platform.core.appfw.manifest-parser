@@ -121,6 +121,7 @@ extern const char kTizenApplicationAppControlSrcKey[];
 extern const char kTizenApplicationAppControlOperationKey[];
 extern const char kTizenApplicationAppControlUriKey[];
 extern const char kTizenApplicationAppControlMimeKey[];
+extern const char kTizenApplicationAppControlOnResetKey[];
 extern const char kTizenApplicationAppControlChildNameAttrKey[];
 extern const char kTizenImeKey[];
 extern const char kTizenImeUuidKey[];

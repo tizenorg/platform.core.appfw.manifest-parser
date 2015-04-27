@@ -6,9 +6,13 @@
 #include "manifest_handlers/app_control_handler.h"
 
 #include <iri.h>
-
 #include "manifest_parser/values.h"
 #include "manifest_handlers/application_manifest_constants.h"
+
+namespace {
+const char kEnabledValue[] = "enabled";
+const char kDisabledValue[] = "disabled";
+}  // namespace
 
 namespace wgt {
 namespace parse {
@@ -53,7 +57,15 @@ void ParseAppControlEntryAndStore(
         keys::kTizenApplicationAppControlChildNameAttrKey, &mime);
   }
 
-  aplist->controls.emplace_back(src, operation, uri, mime);
+  std::string onreset(kEnabledValue);
+  const parser::DictionaryValue* onreset_dict;
+  if (control_dict.GetDictionary(keys::kTizenApplicationAppControlOnResetKey,
+      &onreset_dict)) {
+    onreset_dict->GetString(
+        keys::kTizenApplicationAppControlChildNameAttrKey, &onreset);
+  }
+
+  aplist->controls.emplace_back(src, operation, uri, mime, onreset);
 }
 
 }  // namespace
@@ -129,6 +141,13 @@ bool AppControlHandler::Validate(
           "The operation child element of app-control element is not valid url";
       return false;
     }
+
+    const std::string& onreset = item.onreset();
+    if (onreset != kEnabledValue && onreset != kDisabledValue) {
+      *error =
+          "The improper value was given for appcontrol on-reset";
+      return false;
+    }
   }
   return true;
 }
@@ -141,11 +160,13 @@ AppControlInfo::AppControlInfo(
     const std::string& src,
     const std::string& operation,
     const std::string& uri,
-    const std::string& mime)
+    const std::string& mime,
+    const std::string& onreset)
     : src_(src),
       operation_(operation),
       uri_(uri),
-      mime_(mime) { }
+      mime_(mime),
+      onreset_(onreset) {}
 
 }   // namespace parse
 }   // namespace wgt
