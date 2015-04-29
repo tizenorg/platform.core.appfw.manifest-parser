@@ -98,21 +98,6 @@ const std::map<std::string, std::string>& WidgetInfo::description_set() const {
   return description_set_;
 }
 
-std::string WidgetInfo::name() const {
-  return (name_set_.begin() != name_set_.end()) ?
-      name_set_.begin()->second : std::string();
-}
-
-std::string WidgetInfo::short_name() const {
-  return (short_name_set_.begin() != short_name_set_.end()) ?
-      short_name_set_.begin()->second : std::string();
-}
-
-std::string WidgetInfo::description() const {
-  return (description_set_.begin() != description_set_.end()) ?
-      description_set_.begin()->second : std::string();
-}
-
 const std::string& WidgetInfo::id() const {
   return id_;
 }
@@ -173,7 +158,7 @@ void WidgetHandler::ParseSingleLocalizedDescriptionElement(
     item_dict->GetString(keys::kXmlLangKey, &lang);
   }
   item_dict->GetString(parser::kXmlTextKey, &text);
-  // TODO(t.iwanek): check internationalization tag...
+  // TODO(t.iwanek): check internationalization tag validity...
   if (lang_overwriten) {
     info->description_set_.insert(std::make_pair(lang, text));
   } else {
@@ -224,7 +209,7 @@ void WidgetHandler::ParseSingleLocalizedNameElement(
   if (info->name_set_.find(lang) != info->name_set_.end())
     return;
 
-  // TODO(t.iwanek): check internationalization tag...
+  // TODO(t.iwanek): check internationalization tag validity...
 
   if (lang_overwriten) {
     info->name_set_.insert(std::make_pair(lang, name));

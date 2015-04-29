@@ -49,20 +49,6 @@ class WidgetInfo : public parser::ManifestData {
   const std::map<std::string, std::string>& short_name_set() const;
   const std::map<std::string, std::string>& description_set() const;
 
-  // TODO(t.iwanek): remove this function after API switch
-  /**
-   * @deprecated
-   */
-  std::string name() const;
-  /**
-   * @deprecated
-   */
-  std::string short_name() const;
-  /**
-   * @deprecated
-   */
-  std::string description() const;
-
   const std::string& id() const;
   const std::string& version() const;
   const std::string& view_modes() const;
