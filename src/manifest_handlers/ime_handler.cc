@@ -137,7 +137,7 @@ bool ImeHandler::Parse(
     result = ParseImeEntryAndStore(*dict, ime_info.get(), error);
   } else if (value->GetType() == parser::Value::TYPE_LIST) {
     *error = kErrMsgParsingIme;
-    return nullptr;
+    return false;
   } else {
     LOG(INFO) << "IME element is not defined.";
     return true;

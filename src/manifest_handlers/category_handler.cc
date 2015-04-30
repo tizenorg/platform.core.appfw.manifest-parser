@@ -57,7 +57,7 @@ bool CategoryHandler::Parse(
       if (!item->GetAsDictionary(&control_dict) ||
           !ParseCategoryEntryAndStore(*control_dict, aplist.get())) {
         *error = kErrMsgCategory;
-        return nullptr;
+        return false;
       }
     }
   } else if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
@@ -65,7 +65,7 @@ bool CategoryHandler::Parse(
     const parser::DictionaryValue* dict;
     value->GetAsDictionary(&dict);
     if (!ParseCategoryEntryAndStore(*dict, aplist.get()))
-      return nullptr;
+      return false;
   } else {
     LOG(INFO) << "Category element is not defined.";
     return true;
