@@ -124,8 +124,9 @@ bool ImeHandler::Parse(
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
   std::shared_ptr<ImeInfo> ime_info(new ImeInfo);
-  parser::Value* value;
-  manifest.Get(keys::kTizenImeKey, &value);
+  parser::Value* value = nullptr;
+  if (!manifest.Get(keys::kTizenImeKey, &value))
+    return true;
 
   bool result = true;
 
