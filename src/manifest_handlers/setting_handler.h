@@ -19,14 +19,25 @@ namespace parse {
 
 class SettingInfo : public parser::ManifestData {
  public:
-  SettingInfo();
-  virtual ~SettingInfo();
-
-  enum ScreenOrientation {
+  enum class ScreenOrientation {
     PORTRAIT,
     LANDSCAPE,
     AUTO
   };
+
+  enum class InstallLocation {
+    INTERNAL,
+    EXTERNAL,
+    AUTO
+  };
+
+  enum class SoundMode {
+    SHARED,
+    EXCLUSIVE
+  };
+
+  SettingInfo();
+  virtual ~SettingInfo();
 
   void set_hwkey_enabled(bool enabled) { hwkey_enabled_ = enabled; }
   bool hwkey_enabled() const { return hwkey_enabled_; }
@@ -52,12 +63,44 @@ class SettingInfo : public parser::ManifestData {
     return background_support_enabled_;
   }
 
+  void set_install_location(InstallLocation installLocation) {
+    install_location_ = installLocation;
+  }
+  InstallLocation install_location() const { return install_location_; }
+
+  void set_no_display(bool enabled) { no_display_ = enabled; }
+  bool no_display() const { return no_display_; }
+
+  void set_indicator_persence(bool enabled) { indicator_persence_ = enabled; }
+  bool indicator_persence() const { return indicator_persence_; }
+
+  void set_backbutton_persence(bool enabled) { backbutton_persence_ = enabled; }
+  bool backbutton_persence() const { return backbutton_persence_; }
+
+  void set_user_agent(std::string user_agent) { user_agent_ = user_agent; }
+  std::string user_agent() const { return user_agent_; }
+
+  void set_sound_mode(SoundMode soundMode) { sound_mode_ = soundMode; }
+  SoundMode sound_mode() const { return sound_mode_; }
+
+  void set_background_vibration(bool enabled) {
+    background_vibration_ = enabled;
+  }
+  bool background_vibration() { return background_vibration_; }
+
  private:
   bool hwkey_enabled_;
   ScreenOrientation screen_orientation_;
   bool encryption_enabled_;
   bool context_menu_enabled_;
   bool background_support_enabled_;
+  InstallLocation install_location_;
+  bool no_display_;
+  bool indicator_persence_;
+  bool backbutton_persence_;
+  std::string user_agent_;
+  SoundMode sound_mode_;
+  bool background_vibration_;
 };
 
 class SettingHandler : public parser::ManifestHandler {
@@ -75,7 +118,6 @@ class SettingHandler : public parser::ManifestHandler {
       std::string* error) const override;
   std::string Key() const override;
 };
-
 }  // namespace parse
 }  // namespace wgt
 

@@ -97,6 +97,15 @@ const char kTizenBackgroundSupportKey[] = "widget.setting.@background-support";
 const char kTizenContextMenuKey[] = "widget.setting.@context-menu";
 const char kTizenHardwareKey[] = "widget.setting.@hwkey-event";
 const char kTizenEncryptionKey[] = "widget.setting.@encryption";
+const char kTizenInstallLocationKey[] = "widget.setting.@install-location";
+const char kTizenNoDisplayKey[] = "widget.setting.@nodisplay";
+const char kTizenIndicatorPersenceKey[] = "widget.setting.@indicator-persence";
+const char kTizenBackbuttonPersenceKey[] =
+    "widget.setting.@backbutton-persence";
+const char kTizenUserAgentKey[] = "widget.setting.@user-agent";
+const char kTizenSoundModeKey[] = "widget.setting.@sound-mode";
+const char kTizenBackgroundVibrationKey[] =
+    "widget.setting.@background-vibration";
 const char kTizenMetaDataKey[] = "widget.metadata";
 // Child keys inside 'kTizenMetaDataKey'
 const char kTizenMetaDataNameKey[] = "@key";
