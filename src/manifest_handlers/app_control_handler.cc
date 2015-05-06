@@ -81,8 +81,9 @@ bool AppControlHandler::Parse(
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
   std::shared_ptr<AppControlInfoList> aplist(new AppControlInfoList());
-  parser::Value* value;
-  manifest.Get(keys::kTizenApplicationAppControlsKey, &value);
+  parser::Value* value = nullptr;
+  if (!manifest.Get(keys::kTizenApplicationAppControlsKey, &value))
+    return true;
 
   if (value->GetType() == parser::Value::TYPE_LIST) {
     // multiple entries

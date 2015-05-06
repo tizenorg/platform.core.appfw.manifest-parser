@@ -44,8 +44,9 @@ bool CategoryHandler::Parse(
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
   std::shared_ptr<CategoryInfoList> aplist(new CategoryInfoList());
-  parser::Value* value;
-  manifest.Get(keys::kTizenCategoryKey, &value);
+  parser::Value* value = nullptr;
+  if (!manifest.Get(keys::kTizenCategoryKey, &value))
+    return true;
 
   if (value->GetType() == parser::Value::TYPE_LIST) {
     // multiple entries
