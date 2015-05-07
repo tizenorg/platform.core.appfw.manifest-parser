@@ -86,7 +86,7 @@ class SettingInfo : public parser::ManifestData {
   void set_background_vibration(bool enabled) {
     background_vibration_ = enabled;
   }
-  bool background_vibration() { return background_vibration_; }
+  bool background_vibration() const { return background_vibration_; }
 
  private:
   bool hwkey_enabled_;
