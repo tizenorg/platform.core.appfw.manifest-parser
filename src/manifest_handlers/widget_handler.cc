@@ -7,6 +7,7 @@
 
 #include <string.h>
 
+#include <algorithm>
 #include <cassert>
 #include <map>
 #include <utility>
@@ -44,6 +45,62 @@ bool ParserPreferenceItem(const parser::Value* val,
 }
 
 }  // namespace
+
+
+void WidgetInfo::AddLicense(const std::string& locale,
+                    const std::string& license) {
+  if (license_set_.find(locale) != license_set_.end())
+    return;
+  license_set_.insert(std::make_pair(locale, license));
+}
+
+void WidgetHandler::ParseSingleLocalizedLicenseElement(
+    const parser::DictionaryValue* item_dict, const std::string& parent_lang,
+    std::shared_ptr<WidgetInfo> info) {
+  bool lang_overwriten = false;
+  std::string lang;
+  std::string text;
+  std::string href;
+
+  if (item_dict->HasKey(keys::kXmlLangKey)) {
+    lang_overwriten = true;
+    item_dict->GetString(keys::kXmlLangKey, &lang);
+  }
+  if (item_dict->HasKey(keys::kXmlHrefKey)) {
+    item_dict->GetString(keys::kXmlHrefKey, &href);
+  }
+  item_dict->GetString(parser::kXmlTextKey, &text);
+  // TODO(w.kosowicz) check internationalization tag validity...
+  // TODO(w.kosowicz) check where href should be put...
+  if (lang_overwriten) {
+    info->license_set_.insert(std::make_pair(lang, text + href));
+  } else {
+    info->license_set_.insert(std::make_pair(parent_lang, text + href));
+  }
+}
+
+void WidgetHandler::ParseLocalizedLicenseElements(
+    const parser::Manifest& manifest,
+    const std::string& parent_lang,
+    std::shared_ptr<WidgetInfo> info) {
+  if (!manifest.HasPath(keys::kLicenseKey))
+    return;
+
+  const parser::Value* val = nullptr;
+  const parser::DictionaryValue* dict = nullptr;
+  const parser::ListValue* list = nullptr;
+  if (manifest.Get(keys::kLicenseKey, &val)) {
+    if (val->GetAsDictionary(&dict)) {
+      ParseSingleLocalizedLicenseElement(dict, parent_lang, info);
+    } else if (val->GetAsList(&list)) {
+      for_each(list->begin(), list->end(), [list, &dict,
+               parent_lang, info, this](parser::Value* item) {
+        if (item->GetAsDictionary(&dict))
+          ParseSingleLocalizedLicenseElement(dict, parent_lang, info);
+      });
+    }
+  }
+}
 
 void WidgetInfo::AddName(const std::string& locale, const std::string& name) {
   if (name_set_.find(locale) != name_set_.end())
@@ -180,6 +237,7 @@ bool WidgetHandler::Parse(
 
   ParseLocalizedDescriptionElements(manifest, parent_lang, widget_info);
   ParseLocalizedNameElements(manifest, parent_lang, widget_info);
+  ParseLocalizedLicenseElements(manifest, parent_lang, widget_info);
 
   if (manifest.HasPath(keys::kVersionKey))
     manifest.GetString(keys::kVersionKey, &widget_info->version_);
