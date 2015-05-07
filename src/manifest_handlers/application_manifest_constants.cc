@@ -48,6 +48,7 @@ namespace application_widget_keys {
 
 const char kNamespaceKey[] = "@namespace";
 const char kXmlLangKey[] = "@lang";
+const char kXmlHrefKey[] = "@href";
 const char kDefaultLocaleKey[] = "widget.@defaultlocale";
 const char kNameKey[] = "widget.name";
 const char kVersionKey[] = "widget.@version";
@@ -68,6 +69,7 @@ const char kCSPKey[] = "widget.content-security-policy.#text";
 const char kCSPKeyReportOnly[] =
     "widget.content-security-policy-report-only.#text";
 const char kAccessKey[] = "widget.access";
+const char kLicenseKey[] = "widget.license";
 
 // Child keys inside 'kPreferencesKey'.
 const char kPreferencesNameKey[] = "@name";

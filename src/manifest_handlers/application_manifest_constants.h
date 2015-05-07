@@ -44,6 +44,7 @@ extern const char kLaunchScreenReadyWhen[];
 namespace application_widget_keys {
 extern const char kNamespaceKey[];
 extern const char kXmlLangKey[];
+extern const char kXmlHrefKey[];
 extern const char kDefaultLocaleKey[];
 extern const char kNameKey[];
 extern const char kWebURLsKey[];
@@ -51,6 +52,7 @@ extern const char kWidgetKey[];
 extern const char kVersionKey[];
 extern const char kViewModesKey[];
 extern const char kAccessKey[];
+extern const char kLicenseKey[];
 extern const char kAccessOriginKey[];
 extern const char kAccessSubdomainsKey[];
 extern const char kCSPKey[];
