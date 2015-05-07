@@ -44,10 +44,13 @@ class WidgetInfo : public parser::ManifestData {
   void AddShortName(const std::string& locale, const std::string& short_name);
   void AddDescription(const std::string& locale,
                       const std::string& description);
+  void AddLicense(const std::string& locale,
+                      const std::string& description);
 
   const std::map<std::string, std::string>& name_set() const;
   const std::map<std::string, std::string>& short_name_set() const;
   const std::map<std::string, std::string>& description_set() const;
+  const std::map<std::string, std::string>& license_set() const;
 
   const std::string& id() const;
   const std::string& version() const;
@@ -71,6 +74,7 @@ class WidgetInfo : public parser::ManifestData {
   std::map<std::string, std::string> description_set_;
   std::map<std::string, std::string> name_set_;
   std::map<std::string, std::string> short_name_set_;
+  std::map<std::string, std::string> license_set_;
   std::string author_email_;
   std::string author_href_;
   std::string widget_namespace_;
@@ -92,6 +96,14 @@ class WidgetHandler : public parser::ManifestHandler {
   bool AlwaysParseForType() const override;
   std::string Key() const override;
 
+  void ParseSingleLocalizedLicenseElement(
+      const parser::DictionaryValue* item_dict,
+      const std::string& parent_lang,
+      std::shared_ptr<WidgetInfo> info);
+  void ParseLocalizedLicenseElements(
+      const parser::Manifest& manifest,
+      const std::string& parent_lang,
+      std::shared_ptr<WidgetInfo> info);
   void ParseSingleLocalizedDescriptionElement(
       const parser::DictionaryValue* item_dict,
       const std::string& parent_lang,
