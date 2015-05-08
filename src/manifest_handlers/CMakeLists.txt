@@ -15,6 +15,7 @@ SET(SRCS
   service_handler.cc
   splash_screen_handler.cc
   tizen_application_handler.cc
+  warp_handler.cc
   widget_handler.cc
 )
 
