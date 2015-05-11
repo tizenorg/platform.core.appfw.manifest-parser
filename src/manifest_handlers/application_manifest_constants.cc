@@ -66,6 +66,8 @@ const char kHeightKey[] = "widget.@height";
 const char kWidthKey[] = "widget.@width";
 const char kPreferencesKey[] = "widget.preference";
 const char kCSPKey[] = "widget.content-security-policy.#text";
+const char kCSPKeyReportOnly[] =
+    "widget.content-security-policy-report-only.#text";
 const char kAccessKey[] = "widget.access";
 
 // Child keys inside 'kPreferencesKey'.
