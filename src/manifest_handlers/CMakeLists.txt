@@ -6,6 +6,7 @@ SET(SRCS
   appwidget_handler.cc
   category_handler.cc
   content_handler.cc
+  csp_handler.cc
   ime_handler.cc
   metadata_handler.cc
   navigation_handler.cc
