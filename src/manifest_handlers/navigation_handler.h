@@ -15,10 +15,10 @@
 namespace wgt {
 namespace parse {
 
-class NavigationInfo : public parser::ManifestData {
+class AllowedNavigationInfo : public parser::ManifestData {
  public:
-  explicit NavigationInfo(const std::string& allowed_domains);
-  virtual ~NavigationInfo();
+  explicit AllowedNavigationInfo(const std::string& allowed_domains);
+  virtual ~AllowedNavigationInfo();
 
   const std::vector<std::string>& GetAllowedDomains() const {
     return allowed_domains_;
