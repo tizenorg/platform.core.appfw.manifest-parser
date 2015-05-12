@@ -20,7 +20,8 @@ const boost::char_separator<char> navigation_separator(" ");
 
 }  // namespace
 
-NavigationInfo::NavigationInfo(const std::string& allowed_domains) {
+AllowedNavigationInfo::AllowedNavigationInfo(const std::string&
+                                             allowed_domains) {
   boost::tokenizer<boost::char_separator<char>> tokens(
       allowed_domains, navigation_separator);
   for (auto& item : tokens) {
@@ -28,7 +29,7 @@ NavigationInfo::NavigationInfo(const std::string& allowed_domains) {
   }
 }
 
-NavigationInfo::~NavigationInfo() {
+AllowedNavigationInfo::~AllowedNavigationInfo() {
 }
 
 NavigationHandler::NavigationHandler() {
@@ -51,12 +52,12 @@ bool NavigationHandler::Parse(
   }
   if (allowed_domains.empty()) {
     *output = std::static_pointer_cast<parser::ManifestData>(
-        std::make_shared<NavigationInfo>(""));
+        std::make_shared<AllowedNavigationInfo>(""));
     return true;
   }
 
   *output = std::static_pointer_cast<parser::ManifestData>(
-      std::make_shared<NavigationInfo>(allowed_domains));
+      std::make_shared<AllowedNavigationInfo>(allowed_domains));
   return true;
 }
 
@@ -64,7 +65,8 @@ bool NavigationHandler::Validate(
     const parser::ManifestData& data,
     const parser::ManifestDataMap& /*handlers_output*/,
     std::string* /*error*/) const {
-  const NavigationInfo& navi_info = static_cast<const NavigationInfo&>(data);
+  const AllowedNavigationInfo& navi_info =
+      static_cast<const AllowedNavigationInfo&>(data);
   // TODO(j.izydorczyk): There should be done 'navi_info' validity check.
   (void) navi_info;
   return true;
