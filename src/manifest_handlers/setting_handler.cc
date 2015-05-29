@@ -20,7 +20,7 @@ namespace keys = wgt::application_widget_keys;
 
 SettingInfo::SettingInfo()
     : hwkey_enabled_(true),
-      screen_orientation_(ScreenOrientation::PORTRAIT),
+      screen_orientation_(ScreenOrientation::AUTO),
       background_support_enabled_(false),
       install_location_(InstallLocation::AUTO),
       no_display_(false),
