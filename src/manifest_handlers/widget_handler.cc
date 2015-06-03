@@ -44,7 +44,7 @@ const char kPreferencesValue[] = "@value";
 const char kPreferencesReadonly[] = "@readonly";
 
 bool ParserPreferenceItem(const parser::Value* val,
-                          Preference* output,
+                          Preference** output,
                           std::string* error) {
   const parser::DictionaryValue* pref_dict;
   if (!val->GetAsDictionary(&pref_dict)) {
@@ -56,7 +56,7 @@ bool ParserPreferenceItem(const parser::Value* val,
   pref_dict->GetString(kPreferencesName, &name);
   pref_dict->GetString(kPreferencesValue, &value);
   pref_dict->GetBoolean(kPreferencesReadonly, &readonly);
-  output = new Preference(name, value, readonly);
+  *output = new Preference(name, value, readonly);
   return true;
 }
 
@@ -294,7 +294,7 @@ bool WidgetHandler::Parse(
           // get all preferences
           for (const auto& pref : *pref_list) {
             Preference* preference;
-            if (!ParserPreferenceItem(pref, preference, error))
+            if (!ParserPreferenceItem(pref, &preference, error))
               return false;
             widget_info->preferences_.push_back(preference);
           }
@@ -305,7 +305,7 @@ bool WidgetHandler::Parse(
       } else if (val->GetType() == parser::Value::TYPE_DICTIONARY) {
         // only one preference
         Preference* pref;
-        if (!ParserPreferenceItem(val, pref, error))
+        if (!ParserPreferenceItem(val, &pref, error))
           return false;
         widget_info->preferences_.push_back(pref);
       }
