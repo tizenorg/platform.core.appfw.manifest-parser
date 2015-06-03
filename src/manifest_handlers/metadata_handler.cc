@@ -28,9 +28,12 @@ MetaDataPair ParseMetaDataItem(const parser::DictionaryValue* dict,
                                std::string* error) {
   assert(dict && dict->IsType(parser::Value::TYPE_DICTIONARY));
   MetaDataPair result;
-  if (!dict->GetString(keys::kTizenMetaDataNameKey, &result.first) ||
-      !dict->GetString(keys::kTizenMetaDataValueKey, &result.second)) {
+  if (!dict->GetString(keys::kTizenMetaDataNameKey, &result.first)) {
     *error = "Invalid key/value of tizen metaData.";
+  } else {
+    if (!dict->GetString(keys::kTizenMetaDataValueKey, &result.second)) {
+      result.second = "";
+    }
   }
 
   return result;
