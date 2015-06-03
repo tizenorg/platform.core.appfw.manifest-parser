@@ -90,13 +90,14 @@ inline bool IsWhitespaceUTF8(const char* c) {
 namespace parser {
 namespace utils {
 
-const char kRightToLeftMark[] = u8"\xE2\x80\x8F";
-const char kLeftToRightMark[] = u8"\xE2\x80\x8E";
-const char kLeftToRightEmbeddingMark[] = u8"\xE2\x80\xAA";
-const char kRightToLeftEmbeddingMark[] = u8"\xE2\x80\xAB";
-const char kPopDirectionalFormatting[] = u8"\xE2\x80\xAC";
-const char kLeftToRightOverride[] = u8"\xE2\x80\xAD";
-const char kRightToLeftOverride[] = u8"\xE2\x80\xAE";
+//based on http://unicode.org/reports/tr9/
+const char kRightToLeftMark[] = u8"\u200F";
+const char kLeftToRightMark[] = u8"\u200E";
+const char kLeftToRightEmbeddingMark[] = u8"\u202A";
+const char kRightToLeftEmbeddingMark[] = u8"\u202B";
+const char kPopDirectionalFormatting[] = u8"\u202C";
+const char kLeftToRightOverride[] = u8"\u202D";
+const char kRightToLeftOverride[] = u8"\u202E";
 
 std::string CollapseWhitespaceUTF8(const std::string& text) {
   std::string result;
