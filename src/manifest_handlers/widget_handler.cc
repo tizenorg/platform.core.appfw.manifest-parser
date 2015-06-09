@@ -6,6 +6,7 @@
 #include "manifest_handlers/widget_handler.h"
 
 #include <string.h>
+#include <iri.h>
 
 #include <cassert>
 #include <map>
@@ -325,6 +326,20 @@ bool WidgetHandler::Validate(
     *error = "The widget namespace is invalid.";
     return false;
   }
+  std::unique_ptr<iri_struct, decltype(&iri_destroy)> iri_id(
+    iri_parse(widget_info.id_.c_str()), iri_destroy);
+  if (!iri_id) {
+    *error = "Libiri failed";
+    return false;
+  }
+
+  std::unique_ptr<iri_struct, decltype(&iri_destroy)> iri_author_href(
+    iri_parse(widget_info.author_href_.c_str()), iri_destroy);
+  if (!iri_author_href) {
+    *error = "Libiri failed";
+    return false;
+  }
+
   return true;
 }
 
