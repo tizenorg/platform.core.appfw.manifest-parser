@@ -24,7 +24,11 @@ class ContentInfo : public parser::ManifestData {
   const std::string& src() const {
     return src_;
   }
+  const std::string& encoding() const {
+    return encoding_;
+  }
   void set_src(const std::string& src) { src_ = src; }
+  void set_encoding(const std::string& encoding) { encoding_ = encoding; }
   bool is_tizen_content() const {
     return is_tizen_content_;
   }
@@ -34,6 +38,7 @@ class ContentInfo : public parser::ManifestData {
 
  private:
   std::string src_;
+  std::string encoding_;
   bool is_tizen_content_;
 };
 

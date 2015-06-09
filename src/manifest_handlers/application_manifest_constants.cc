@@ -158,14 +158,15 @@ const char kTizenImeUuidTextKey[] = "#text";
 const char kTizenImeLanguagesKey[] = "languages";
 const char kTizenImeLanguageKey[] = "language";
 const char kTizenImeLanguageTextKey[] = "#text";
-
+// Content
 const char kTizenContentKey[] = "widget.content";
 const char kTizenContentSrcKey[] = "@src";
-// category
+const char kTizenContentEncodingKey[] = "@encoding";
+// Category
 const char kTizenCategoryKey[] = "widget.category";
 const char kTizenCategoryNameKey[] = "@name";
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
-// service
+// Service
 const char kTizenServiceKey[] = "widget.service";
 const char kTizenServiceIdKey[] = "@id";
 const char kTizenServiceAutoRestartKey[] = "@auto-restart";

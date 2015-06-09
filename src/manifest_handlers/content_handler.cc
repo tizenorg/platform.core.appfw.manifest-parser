@@ -13,9 +13,15 @@ namespace {
 void ParseAndUpdateContentValue(const parser::DictionaryValue& dict,
     std::shared_ptr<wgt::parse::ContentInfo> content) {
   std::string src;
+  std::string encoding;
   std::string element_namespace;
   if (!dict.GetString(keys::kTizenContentSrcKey, &src))
     return;
+
+  // default encoding setting
+  if (!dict.GetString(keys::kTizenContentEncodingKey, &encoding))
+    encoding = "UTF-8";
+
   dict.GetString(keys::kNamespaceKey, &element_namespace);
   // tizen:content already found, ignore the rest
   if (content->is_tizen_content())
@@ -28,11 +34,13 @@ void ParseAndUpdateContentValue(const parser::DictionaryValue& dict,
   // set new content if not found yet or tizen:content found after content tag
   if (content->src().empty()) {
     content->set_src(src);
+    content->set_encoding(encoding);
     content->set_is_tizen_content(\
         element_namespace == keys::kTizenNamespacePrefix);
   } else if (element_namespace == keys::kTizenNamespacePrefix &&
              !content->is_tizen_content()) {
     content->set_src(src);
+    content->set_encoding(encoding);
     content->set_is_tizen_content(true);
   }
 }
