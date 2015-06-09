@@ -71,11 +71,11 @@ class SettingInfo : public parser::ManifestData {
   void set_no_display(bool enabled) { no_display_ = enabled; }
   bool no_display() const { return no_display_; }
 
-  void set_indicator_persence(bool enabled) { indicator_persence_ = enabled; }
-  bool indicator_persence() const { return indicator_persence_; }
+  void set_indicator_presence(bool enabled) { indicator_presence_ = enabled; }
+  bool indicator_presence() const { return indicator_presence_; }
 
-  void set_backbutton_persence(bool enabled) { backbutton_persence_ = enabled; }
-  bool backbutton_persence() const { return backbutton_persence_; }
+  void set_backbutton_presence(bool enabled) { backbutton_presence_ = enabled; }
+  bool backbutton_presence() const { return backbutton_presence_; }
 
   void set_user_agent(std::string user_agent) { user_agent_ = user_agent; }
   std::string user_agent() const { return user_agent_; }
@@ -96,8 +96,8 @@ class SettingInfo : public parser::ManifestData {
   bool background_support_enabled_;
   InstallLocation install_location_;
   bool no_display_;
-  bool indicator_persence_;
-  bool backbutton_persence_;
+  bool indicator_presence_;
+  bool backbutton_presence_;
   std::string user_agent_;
   SoundMode sound_mode_;
   bool background_vibration_;

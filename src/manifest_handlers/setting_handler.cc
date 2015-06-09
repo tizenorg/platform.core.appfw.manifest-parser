@@ -24,8 +24,8 @@ SettingInfo::SettingInfo()
       background_support_enabled_(false),
       install_location_(InstallLocation::AUTO),
       no_display_(false),
-      indicator_persence_(true),
-      backbutton_persence_(false),
+      indicator_presence_(true),
+      backbutton_presence_(false),
       sound_mode_(SoundMode::SHARED),
       background_vibration_(false) {}
 
@@ -75,27 +75,27 @@ bool SettingHandler::Parse(
   manifest.GetString(keys::kTizenNoDisplayKey, &no_display);
   app_info->set_no_display(background_support == "enable");
 
-  if (manifest.HasKey(keys::kTizenIndicatorPersenceKey)) {
-    bool indicator_persence;
-    manifest.GetBoolean(keys::kTizenIndicatorPersenceKey, &indicator_persence);
-    app_info->set_indicator_persence(indicator_persence);
+  if (manifest.HasKey(keys::kTizenIndicatorPresenceKey)) {
+    bool indicator_presence;
+    manifest.GetBoolean(keys::kTizenIndicatorPresenceKey, &indicator_presence);
+    app_info->set_indicator_presence(indicator_presence);
   }
 
-  if (manifest.HasKey(keys::kTizenBackbuttonPersenceKey)) {
-    bool backbutton_persence;
-    manifest.GetBoolean(keys::kTizenBackbuttonPersenceKey,
-                        &backbutton_persence);
-    app_info->set_backbutton_persence(backbutton_persence);
+  if (manifest.HasKey(keys::kTizenBackbuttonPresenceKey)) {
+    bool backbutton_presence;
+    manifest.GetBoolean(keys::kTizenBackbuttonPresenceKey,
+                        &backbutton_presence);
+    app_info->set_backbutton_presence(backbutton_presence);
   }
 
   if (manifest.HasKey(keys::kTizenUserAgentKey)) {
     std::string user_agent;
-    manifest.GetString(keys::kTizenBackbuttonPersenceKey, &user_agent);
+    manifest.GetString(keys::kTizenBackbuttonPresenceKey, &user_agent);
     app_info->set_user_agent(user_agent);
   }
 
   std::string background_vibration;
-  manifest.GetString(keys::kTizenBackbuttonPersenceKey, &background_vibration);
+  manifest.GetString(keys::kTizenBackbuttonPresenceKey, &background_vibration);
   app_info->set_background_vibration(background_vibration == "enable");
 
   std::string sound_mode;
