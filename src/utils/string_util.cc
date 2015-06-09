@@ -27,6 +27,7 @@ const char* kWhitespaceSequences[] = {
   u8"\xc2\x85",      /* NEXT LINE (NEL) */
   u8"\xc2\xa0",      /* NO-BREAK SPACE */
   u8"\xe1\x9a\x80",  /* OGHAM SPACE MARK */
+  u8"\xe1\xa0\x8e",  /* MONGOLIAN VOWEL SEPARATOR */
   u8"\xe2\x80\x80",  /* EN QUAD */
   u8"\xe2\x80\x81",  /* EM QUAD */
   u8"\xe2\x80\x82",  /* EN SPACE */
