@@ -6,6 +6,7 @@
 #include "manifest_handlers/widget_handler.h"
 
 #include <string.h>
+#include <iri.h>
 
 #include <cassert>
 #include <map>
@@ -263,12 +264,20 @@ bool WidgetHandler::Parse(
 
   if (manifest.HasPath(keys::kVersionKey))
     manifest.GetString(keys::kVersionKey, &widget_info->version_);
-  if (manifest.HasPath(keys::kIDKey))
-    manifest.GetString(keys::kIDKey, &widget_info->id_);
+  if (manifest.HasPath(keys::kIDKey)) {
+    std::string id;
+    manifest.GetString(keys::kIDKey, &id);
+    if (!id.empty() && ValidateIRIType(id))
+      widget_info->id_ = id;
+  }
   if (manifest.HasPath(keys::kAuthorEmailKey))
     manifest.GetString(keys::kAuthorEmailKey, &widget_info->author_email_);
-  if (manifest.HasPath(keys::kAuthorHrefKey))
-    manifest.GetString(keys::kAuthorHrefKey, &widget_info->author_href_);
+  if (manifest.HasPath(keys::kAuthorHrefKey)) {
+    std::string author_href;
+    manifest.GetString(keys::kAuthorHrefKey, &author_href);
+    if (!author_href.empty() && ValidateIRIType(author_href))
+      widget_info->author_href_ = author_href;
+  }
   if (manifest.HasPath(keys::kHeightKey)) {
     int h;
     manifest.GetInteger(keys::kHeightKey, &h);
@@ -334,6 +343,25 @@ bool WidgetHandler::AlwaysParseForType() const {
 
 std::string WidgetHandler::Key() const {
   return application_widget_keys::kTizenWidgetKey;
+}
+
+bool WidgetHandler::ValidateIRIType(const std::string& prop) const {
+  std::unique_ptr<iri_struct, decltype(&iri_destroy)> iri(
+    iri_parse(prop.c_str()), iri_destroy);
+
+  return
+    iri != NULL &&
+    iri->scheme != NULL && (
+      iri->display != NULL ||
+      iri->user != NULL ||
+      iri->auth != NULL ||
+      iri->password != NULL ||
+      iri->host != NULL ||
+      iri->path != NULL ||
+      iri->query != NULL ||
+      iri->anchor != NULL ||
+      iri->qparams != NULL ||
+      iri->schemelist != NULL );
 }
 
 }  // namespace parse
