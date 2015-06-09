@@ -113,6 +113,9 @@ class WidgetHandler : public parser::ManifestHandler {
       const parser::ManifestData& data,
       const parser::ManifestDataMap& handlers_output,
       std::string* error) const override;
+
+  private:
+  bool ValidateIRIType(const std::string& prop) const;
 };
 
 }  // namespace parse
