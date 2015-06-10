@@ -79,20 +79,18 @@ std::string GetNodeText(xmlNode* root, const std::string& inherit_dir) {
   assert(root);
   if (root->type != XML_ELEMENT_NODE)
     return std::string();
-
   std::string current_dir(GetNodeDir(root, inherit_dir));
   std::string text;
+  if (!current_dir.empty())
+    text += parser::utils::GetDirUTF8Start(current_dir);
   for (xmlNode* node = root->children; node; node = node->next) {
-    if (node->type == XML_TEXT_NODE || node->type == XML_CDATA_SECTION_NODE) {
-      text = text
-          + parser::utils::StripWrappingBidiControlCharactersUTF8(
-          std::string(reinterpret_cast<char*>(node->content)));
-      // This is supposed to be done once for each text element
-      text = utils::GetDirTextUTF8(text, current_dir);
-    } else {
-      text = text + GetNodeText(node, current_dir);
-    }
+    if (node->type == XML_TEXT_NODE || node->type == XML_CDATA_SECTION_NODE)
+      text = text + std::string(reinterpret_cast<char*>(node->content));
+    else
+      text += GetNodeText(node, current_dir);
   }
+  if (!current_dir.empty())
+    text += parser::utils::GetDirUTF8End();
   return text;
 }
 

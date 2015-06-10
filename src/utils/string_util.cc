@@ -91,7 +91,7 @@ inline bool IsWhitespaceUTF8(const char* c) {
 namespace parser {
 namespace utils {
 
-//based on http://unicode.org/reports/tr9/
+// based on http://unicode.org/reports/tr9/
 const char kRightToLeftMark[] = u8"\u200F";
 const char kLeftToRightMark[] = u8"\u200E";
 const char kLeftToRightEmbeddingMark[] = u8"\u202A";
@@ -99,6 +99,14 @@ const char kRightToLeftEmbeddingMark[] = u8"\u202B";
 const char kPopDirectionalFormatting[] = u8"\u202C";
 const char kLeftToRightOverride[] = u8"\u202D";
 const char kRightToLeftOverride[] = u8"\u202E";
+
+const std::map<std::string, std::string> kTextDir = {
+  { std::string(kDirLTRKey), std::string(kLeftToRightEmbeddingMark) },
+  { std::string(kDirRTLKey), std::string(kRightToLeftEmbeddingMark) },
+  { std::string(kDirLROKey), std::string(kLeftToRightOverride) },
+  { std::string(kDirRLOKey), std::string(kRightToLeftOverride) }
+};
+
 
 std::string CollapseWhitespaceUTF8(const std::string& text) {
   std::string result;
@@ -158,27 +166,21 @@ std::string StripWrappingBidiControlCharactersUTF8(const std::string& text) {
 }
 
 std::string GetDirTextUTF8(const std::string& text, const std::string& dir) {
-  if (dir == kDirLTRKey)
-    return std::string(kLeftToRightEmbeddingMark)
-           + text
-           + kPopDirectionalFormatting;
-
-  if (dir == kDirRTLKey)
-    return std::string(kRightToLeftEmbeddingMark)
-           + text
-           + kPopDirectionalFormatting;
-
-  if (dir == kDirLROKey)
-    return std::string(kLeftToRightOverride)
-           + text
-           + kPopDirectionalFormatting;
-
-  if (dir == kDirRLOKey)
-    return std::string(kRightToLeftOverride)
-           + text
-           + kPopDirectionalFormatting;
-
+  auto dirValue = kTextDir.find(dir);
+  if (dirValue != kTextDir.end())
+    return  dirValue->second + text + kPopDirectionalFormatting;
   return text;
+}
+
+std::string GetDirUTF8Start(const std::string& dir) {
+  auto dirValue = kTextDir.find(dir);
+  if (dirValue != kTextDir.end())
+    return dirValue->second;
+  return std::string();
+}
+
+std::string GetDirUTF8End() {
+  return std::string(kPopDirectionalFormatting);
 }
 
 std::string DecodePercentEscapedCharacter(const std::string& path) {

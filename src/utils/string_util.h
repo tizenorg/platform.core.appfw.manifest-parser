@@ -6,6 +6,7 @@
 #ifndef UTILS_STRING_UTIL_H_
 #define UTILS_STRING_UTIL_H_
 
+#include <map>
 #include <string>
 
 namespace parser {
@@ -19,10 +20,13 @@ extern const char kRightToLeftEmbeddingMark[];
 extern const char kPopDirectionalFormatting[];
 extern const char kLeftToRightOverride[];
 extern const char kRightToLeftOverride[];
+extern const std::map<std::string, std::string> kTextDir;
 
 std::string CollapseWhitespaceUTF8(const std::string& text);
 std::string StripWrappingBidiControlCharactersUTF8(const std::string& text);
 std::string GetDirTextUTF8(const std::string& text, const std::string& dir);
+std::string GetDirUTF8Start(const std::string& dir);
+std::string GetDirUTF8End();
 
 std::string DecodePercentEscapedCharacter(const std::string& path);
 
