@@ -91,7 +91,7 @@ inline bool IsWhitespaceUTF8(const char* c) {
 namespace parser {
 namespace utils {
 
-//based on http://unicode.org/reports/tr9/
+// based on http://unicode.org/reports/tr9/
 const char kRightToLeftMark[] = u8"\u200F";
 const char kLeftToRightMark[] = u8"\u200E";
 const char kLeftToRightEmbeddingMark[] = u8"\u202A";
@@ -179,6 +179,25 @@ std::string GetDirTextUTF8(const std::string& text, const std::string& dir) {
            + kPopDirectionalFormatting;
 
   return text;
+}
+
+std::string GetDirUTF8Start(const std::string& dir) {
+  if (dir == kDirLTRKey)
+    return std::string(kLeftToRightEmbeddingMark);
+
+  if (dir == kDirRTLKey)
+    return std::string(kRightToLeftEmbeddingMark);
+
+  if (dir == kDirLROKey)
+    return std::string(kLeftToRightOverride);
+
+  if (dir == kDirRLOKey)
+    return std::string(kRightToLeftOverride);
+  return std::string();
+}
+
+std::string GetDirUTF8End() {
+  return std::string(kPopDirectionalFormatting);
 }
 
 std::string DecodePercentEscapedCharacter(const std::string& path) {
