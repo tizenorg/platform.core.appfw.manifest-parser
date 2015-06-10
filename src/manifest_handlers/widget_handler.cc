@@ -51,12 +51,13 @@ bool ParserPreferenceItem(const parser::Value* val,
     *error = "Parsing preference element failed";
     return false;
   }
-  std::string name, value;
-  bool readonly;
+  std::string name;
+  std::string value;
+  std::string readonly = "false";
   pref_dict->GetString(kPreferencesName, &name);
   pref_dict->GetString(kPreferencesValue, &value);
-  pref_dict->GetBoolean(kPreferencesReadonly, &readonly);
-  *output = new Preference(name, value, readonly);
+  pref_dict->GetString(kPreferencesReadonly, &readonly);
+  *output = new Preference(name, value, readonly == "true");
   return true;
 }
 
