@@ -23,6 +23,8 @@ extern const char kRightToLeftOverride[];
 std::string CollapseWhitespaceUTF8(const std::string& text);
 std::string StripWrappingBidiControlCharactersUTF8(const std::string& text);
 std::string GetDirTextUTF8(const std::string& text, const std::string& dir);
+std::string GetDirUTF8Start(const std::string& dir);
+std::string GetDirUTF8End();
 
 std::string DecodePercentEscapedCharacter(const std::string& path);
 
