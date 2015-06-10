@@ -33,6 +33,7 @@ const xmlChar kDescriptionNodeKey[] = "description";
 const xmlChar kAuthorNodeKey[] = "author";
 const xmlChar kLicenseNodeKey[] = "license";
 const xmlChar kIconNodeKey[] = "icon";
+const xmlChar kPreferenceNodeKey[] = "preference";
 
 const xmlChar kVersionAttributeKey[] = "version";
 const xmlChar kShortAttributeKey[] = "short";
@@ -42,6 +43,8 @@ const xmlChar kHrefAttributeKey[] = "href";
 const xmlChar kIdAttributeKey[] = "id";
 const xmlChar kDefaultLocaleAttributeKey[] = "defaultlocale";
 const xmlChar kPathAttributeKey[] = "path";
+const xmlChar kNameAttributeKey[] = "name";
+const xmlChar kValueAttributeKey[] = "value";
 
 const char* kSingletonElements[] = {
   "allow-navigation",
@@ -163,6 +166,11 @@ bool IsTrimRequiredForProp(xmlNode* root, xmlAttr* prop) {
   }
   if (xmlStrEqual(root->name, kIconNodeKey) &&
       xmlStrEqual(prop->name, kPathAttributeKey)) {
+    return true;
+  }
+  if (xmlStrEqual(root->name, kPreferenceNodeKey) &&
+      (xmlStrEqual(prop->name, kNameAttributeKey) ||
+      xmlStrEqual(prop->name, kValueAttributeKey))) {
     return true;
   }
   return false;
