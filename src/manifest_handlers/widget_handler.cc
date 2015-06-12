@@ -282,7 +282,7 @@ bool WidgetHandler::Parse(
   if (manifest.HasPath(keys::kDefaultLocaleKey))
     manifest.GetString(keys::kDefaultLocaleKey, &widget_info->default_locale_);
   if (manifest.HasPath(keys::kViewModesKey))
-    manifest.GetString(keys::kDefaultLocaleKey, &widget_info->viewmodes_);
+    manifest.GetString(keys::kViewModesKey, &widget_info->viewmodes_);
 
   if (manifest.HasPath(keys::kPreferencesKey)) {
     const parser::Value* val = nullptr;
