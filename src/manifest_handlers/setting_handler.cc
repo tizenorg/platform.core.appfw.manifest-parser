@@ -21,6 +21,8 @@ namespace keys = wgt::application_widget_keys;
 SettingInfo::SettingInfo()
     : hwkey_enabled_(true),
       screen_orientation_(ScreenOrientation::AUTO),
+      encryption_enabled_(false),
+      context_menu_enabled_(true),
       background_support_enabled_(false),
       install_location_(InstallLocation::AUTO),
       no_display_(false),
@@ -40,6 +42,7 @@ bool SettingHandler::Parse(
     std::shared_ptr<parser::ManifestData>* output,
     std::string* /*error*/) {
   std::shared_ptr<SettingInfo> app_info(new SettingInfo);
+
   std::string hwkey;
   manifest.GetString(keys::kTizenHardwareKey, &hwkey);
   app_info->set_hwkey_enabled(hwkey != "disable");
@@ -52,6 +55,7 @@ bool SettingHandler::Parse(
     app_info->set_screen_orientation(SettingInfo::ScreenOrientation::LANDSCAPE);
   else
     app_info->set_screen_orientation(SettingInfo::ScreenOrientation::AUTO);
+
   std::string encryption;
   manifest.GetString(keys::kTizenEncryptionKey, &encryption);
   app_info->set_encryption_enabled(encryption == "enable");
@@ -73,7 +77,7 @@ bool SettingHandler::Parse(
 
   std::string no_display;
   manifest.GetString(keys::kTizenNoDisplayKey, &no_display);
-  app_info->set_no_display(background_support == "enable");
+  app_info->set_no_display(no_display == "true");
 
   if (manifest.HasKey(keys::kTizenIndicatorPresenceKey)) {
     bool indicator_presence;
