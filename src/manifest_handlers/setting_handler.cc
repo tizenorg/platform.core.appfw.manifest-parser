@@ -65,7 +65,7 @@ bool SettingHandler::Parse(
   app_info->set_background_support_enabled(background_support == "enable");
 
   std::string install_location;
-  manifest.GetString(keys::kTizenScreenOrientationKey, &install_location);
+  manifest.GetString(keys::kTizenInstallLocationKey, &install_location);
   if (strcasecmp("internal-only", install_location.c_str()) == 0)
     app_info->set_install_location(SettingInfo::InstallLocation::INTERNAL);
   else if (strcasecmp("prefer-external", install_location.c_str()) == 0)
@@ -90,16 +90,16 @@ bool SettingHandler::Parse(
 
   if (manifest.HasKey(keys::kTizenUserAgentKey)) {
     std::string user_agent;
-    manifest.GetString(keys::kTizenBackbuttonPresenceKey, &user_agent);
+    manifest.GetString(keys::kTizenUserAgentKey, &user_agent);
     app_info->set_user_agent(user_agent);
   }
 
   std::string background_vibration;
-  manifest.GetString(keys::kTizenBackbuttonPresenceKey, &background_vibration);
+  manifest.GetString(keys::kTizenBackgroundVibrationKey, &background_vibration);
   app_info->set_background_vibration(background_vibration == "enable");
 
   std::string sound_mode;
-  manifest.GetString(keys::kTizenScreenOrientationKey, &sound_mode);
+  manifest.GetString(keys::kTizenSoundModeKey, &sound_mode);
   if (strcasecmp("exclusive", sound_mode.c_str()) == 0)
     app_info->set_sound_mode(SettingInfo::SoundMode::EXCLUSIVE);
 
