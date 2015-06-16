@@ -50,8 +50,7 @@ const char* kSingletonElements[] = {
   "allow-navigation",
   "author",
   "content-security-policy-report-only",
-  "content-security-policy",
-  "content"
+  "content-security-policy"
 };
 
 const char kIdPattern[] = "^[0-9a-zA-Z]{10}[.][0-9a-zA-Z]{1,52}$";
@@ -260,17 +259,6 @@ std::unique_ptr<DictionaryValue> LoadXMLNode(
       value->Set(sub_node_name, sub_value.release());
       continue;
     } else if (IsSingletonElement(sub_node_name)) {
-      continue;
-    } else if (sub_node_name == kContentKey) {
-      std::string current_namespace, new_namespace;
-      DictionaryValue* current_value;
-      value->GetDictionary(sub_node_name, &current_value);
-
-      current_value->GetString(kNamespaceKey, &current_namespace);
-      sub_value->GetString(kNamespaceKey, &new_namespace);
-      if (current_namespace != new_namespace &&
-          new_namespace == kTizenNamespacePrefix)
-        value->Set(sub_node_name, sub_value.release());
       continue;
     }
 

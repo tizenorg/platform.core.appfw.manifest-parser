@@ -99,7 +99,8 @@ TEST_F(ContentHandlerTest, SingleTizenContentEntry) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
-  content->SetString(keys::kTizenContentSrcKey, "my_index.html");
+  content->SetString(keys::kTizenContentSrcKey,
+      "http://www.tizen.app/my_index.html");
   content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
   widget->Set(kTizenContentTagKey, content.release());
   value->Set(keys::kWidgetKey, widget.release());
@@ -113,7 +114,7 @@ TEST_F(ContentHandlerTest, SingleTizenContentEntry) {
           GetManifestData(keys::kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), true);
-  ASSERT_EQ(content_info->src(), "my_index.html");
+  ASSERT_EQ(content_info->src(), "http://www.tizen.app/my_index.html");
 }
 
 TEST_F(ContentHandlerTest, MultipleContentEntryTizenPrioritized) {
@@ -126,7 +127,8 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenPrioritized) {
   std::unique_ptr<DictionaryValue> content2(
       new DictionaryValue());
   content1->SetString(keys::kTizenContentSrcKey, "my_index.html");
-  content2->SetString(keys::kTizenContentSrcKey, "tizen_index.html");
+  content2->SetString(keys::kTizenContentSrcKey,
+      "http://www.tizen.app/tizen_index.html");
   content2->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
   list->Append(content1.release());
   list->Append(content2.release());
@@ -142,7 +144,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenPrioritized) {
           GetManifestData(keys::kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), true);
-  ASSERT_EQ(content_info->src(), "tizen_index.html");
+  ASSERT_EQ(content_info->src(), "http://www.tizen.app/tizen_index.html");
 }
 
 TEST_F(ContentHandlerTest, MultipleContentEntryTizenTakeFirst) {
@@ -154,9 +156,11 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenTakeFirst) {
       new DictionaryValue());
   std::unique_ptr<DictionaryValue> content2(
       new DictionaryValue());
-  content1->SetString(keys::kTizenContentSrcKey, "tizen_1_index.html");
+  content1->SetString(keys::kTizenContentSrcKey,
+      "http://www.tizen.app/tizen_1_index.html");
   content1->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  content2->SetString(keys::kTizenContentSrcKey, "tizen_2_index.html");
+  content2->SetString(keys::kTizenContentSrcKey,
+      "http://www.tizen.app/tizen_2_index.html");
   content2->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
   list->Append(content1.release());
   list->Append(content2.release());
@@ -172,10 +176,10 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenTakeFirst) {
           GetManifestData(keys::kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), true);
-  ASSERT_EQ(content_info->src(), "tizen_1_index.html");
+  ASSERT_EQ(content_info->src(), "http://www.tizen.app/tizen_1_index.html");
 }
 
-TEST_F(ContentHandlerTest, MultipleContentEntryW3CTakeFirst) {
+TEST_F(ContentHandlerTest, MultipleContentEntryW3CReportError) {
   // Set test values
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
@@ -192,18 +196,11 @@ TEST_F(ContentHandlerTest, MultipleContentEntryW3CTakeFirst) {
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
-  // Check correctness
-  ASSERT_TRUE(ParseAppManifest());
-  ASSERT_TRUE(ValidateAppManifest());
-  std::shared_ptr<const wgt::parse::ContentInfo> content_info =
-      std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
-  ASSERT_TRUE(!!content_info);
-  ASSERT_EQ(content_info->is_tizen_content(), false);
-  ASSERT_EQ(content_info->src(), "w3c_1_index.html");
+  // Check error
+  ASSERT_FALSE(ParseAppManifest());
 }
 
-TEST_F(ContentHandlerTest, MultipleContentEntryIgnoreFirstBroken) {
+TEST_F(ContentHandlerTest, MultipleContentEntryFirstBrokenError) {
   // Set test values
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
@@ -219,18 +216,11 @@ TEST_F(ContentHandlerTest, MultipleContentEntryIgnoreFirstBroken) {
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
-  // Check correctness
-  ASSERT_TRUE(ParseAppManifest());
-  ASSERT_TRUE(ValidateAppManifest());
-  std::shared_ptr<const wgt::parse::ContentInfo> content_info =
-      std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
-  ASSERT_TRUE(!!content_info);
-  ASSERT_EQ(content_info->is_tizen_content(), false);
-  ASSERT_EQ(content_info->src(), "w3c_2_index.html");
+  // Check error
+  ASSERT_FALSE(ParseAppManifest());
 }
 
-TEST_F(ContentHandlerTest, MultipleContentEntryIgnoreSecondBroken) {
+TEST_F(ContentHandlerTest, MultipleContentEntrySecondBrokenError) {
   // Set test values
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
@@ -247,15 +237,38 @@ TEST_F(ContentHandlerTest, MultipleContentEntryIgnoreSecondBroken) {
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
-  // Check correctness
-  ASSERT_TRUE(ParseAppManifest());
-  ASSERT_TRUE(ValidateAppManifest());
-  std::shared_ptr<const wgt::parse::ContentInfo> content_info =
-      std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
-  ASSERT_TRUE(!!content_info);
-  ASSERT_EQ(content_info->is_tizen_content(), false);
-  ASSERT_EQ(content_info->src(), "w3c_1_index.html");
+  // Check error
+  ASSERT_FALSE(ParseAppManifest());
+}
+
+TEST_F(ContentHandlerTest, MultipleContentEntryBrokenURL) {
+  // Set test values
+  std::unique_ptr<DictionaryValue> value(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> content(new DictionaryValue());
+  content->SetString(keys::kTizenContentSrcKey, "broken_url");
+  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  widget->Set(kTizenContentTagKey, content.release());
+  value->Set(keys::kWidgetKey, widget.release());
+  std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
+  SetManifest(manifest);
+  // Check error
+  ASSERT_FALSE(ParseAppManifest());
+}
+
+TEST_F(ContentHandlerTest, MultipleContentEntrySrcEmpty) {
+  // Set test values
+  std::unique_ptr<DictionaryValue> value(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> content(new DictionaryValue());
+  content->SetString(keys::kTizenContentSrcKey, "");
+  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  widget->Set(kTizenContentTagKey, content.release());
+  value->Set(keys::kWidgetKey, widget.release());
+  std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
+  SetManifest(manifest);
+  // Check error
+  ASSERT_FALSE(ParseAppManifest());
 }
 
 TEST_F(ContentHandlerTest, MultipleMoreContentEntry) {
@@ -272,10 +285,14 @@ TEST_F(ContentHandlerTest, MultipleMoreContentEntry) {
   std::unique_ptr<DictionaryValue> content4(
       new DictionaryValue());
   content1->SetString(keys::kTizenContentSrcKey, "w3c_1_index.html");
-  content2->SetString(keys::kTizenContentSrcKey, "tizen_2_index.html");
+  content2->SetString(keys::kTizenContentSrcKey,
+      "http://www.tizen.app/tizen_2_index.html");
   content2->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  content3->SetString(keys::kTizenContentSrcKey, "w3c_3_index.html");
-  content4->SetString(keys::kTizenContentSrcKey, "tizen_4_index.html");
+  content3->SetString(keys::kTizenContentSrcKey,
+      "http://www.tizen.app/tizen_3_index.html");
+  content3->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content4->SetString(keys::kTizenContentSrcKey,
+      "http://www.tizen.app/tizen_4_index.html");
   content4->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
   list->Append(content1.release());
   list->Append(content2.release());
@@ -293,7 +310,7 @@ TEST_F(ContentHandlerTest, MultipleMoreContentEntry) {
           GetManifestData(keys::kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), true);
-  ASSERT_EQ(content_info->src(), "tizen_2_index.html");
+  ASSERT_EQ(content_info->src(), "http://www.tizen.app/tizen_2_index.html");
 }
 
 }  // namespace parser
