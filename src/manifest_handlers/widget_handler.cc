@@ -257,8 +257,17 @@ bool WidgetHandler::Parse(
     manifest.GetString(keys::kWidgetLangKey,
                        &parent_lang);
   }
-  if (manifest.HasPath(keys::kAuthorKey))
-    manifest.GetString(keys::kAuthorKey, &widget_info->author_);
+  if (manifest.HasPath(keys::kAuthorKey)) {
+    parser::Value* value = nullptr;
+    manifest.Get(keys::kAuthorKey, &value);
+    if (value->GetType() == parser::Value::TYPE_LIST) {
+      *error = "Author tag should not occur more than one time";
+      return false;
+    }
+  }
+
+  if (manifest.HasPath(keys::kAuthorKeyText))
+    manifest.GetString(keys::kAuthorKeyText, &widget_info->author_);
 
   ParseLocalizedDescriptionElements(manifest, parent_lang, widget_info);
   ParseLocalizedNameElements(manifest, parent_lang, widget_info);

@@ -48,7 +48,6 @@ const xmlChar kValueAttributeKey[] = "value";
 
 const char* kSingletonElements[] = {
   "allow-navigation",
-  "author",
   "content-security-policy-report-only",
   "content-security-policy"
 };

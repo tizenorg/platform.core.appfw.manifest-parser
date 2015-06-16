@@ -40,25 +40,30 @@ bool TizenApplicationHandler::Parse(
   // Find an application element with tizen namespace
   parser::DictionaryValue* app_dict;
   std::string value;
-  bool find = false;
+  bool found = false;
   if (app_value && app_value->IsType(parser::Value::TYPE_DICTIONARY)) {
     app_value->GetAsDictionary(&app_dict);
-    find = app_dict->GetString(keys::kNamespaceKey, &value);
-    find = find && (value == keys::kTizenNamespacePrefix);
+    found = app_dict->GetString(keys::kNamespaceKey, &value);
+    found = found && (value == keys::kTizenNamespacePrefix);
   } else if (app_value && app_value->IsType(parser::Value::TYPE_LIST)) {
     parser::ListValue* list;
     app_value->GetAsList(&list);
     for (parser::ListValue::iterator it = list->begin();
          it != list->end(); ++it) {
       (*it)->GetAsDictionary(&app_dict);
-      find = app_dict->GetString(keys::kNamespaceKey, &value);
-      find = find && (value == keys::kTizenNamespacePrefix);
-      if (find)
-        break;
+      app_dict->GetString(keys::kNamespaceKey, &value);
+      bool is_tizen = (value == keys::kTizenNamespacePrefix);
+      if (is_tizen) {
+        if (found) {
+          *error = "There should be no more than one tizen:application element";
+          return false;
+        }
+        found = true;
+      }
     }
   }
 
-  if (!find) {
+  if (!found) {
     *error = "Cannot find application element with tizen namespace "
              "or the tizen namespace prefix is incorrect.\n";
     return false;
