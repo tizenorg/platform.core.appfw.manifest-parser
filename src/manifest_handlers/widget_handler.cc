@@ -12,10 +12,10 @@
 #include <utility>
 #include <set>
 
-#include <iri.h>
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_parser/manifest_constants.h"
 #include "manifest_parser/values.h"
+#include "utils/iri_util.h"
 #include "utils/logging.h"
 
 namespace wgt {
@@ -60,25 +60,6 @@ bool ParserPreferenceItem(const parser::Value* val,
   pref_dict->GetString(kPreferencesReadonly, &readonly);
   *output = new Preference(name, value, readonly == "true");
   return true;
-}
-
-bool ValidateIRIType(const std::string& prop) {
-  std::unique_ptr<iri_struct, decltype(&iri_destroy)> iri(
-    iri_parse(prop.c_str()), iri_destroy);
-
-  return
-    iri != NULL &&
-    iri->scheme != NULL && (
-      iri->display != NULL ||
-      iri->user != NULL ||
-      iri->auth != NULL ||
-      iri->password != NULL ||
-      iri->host != NULL ||
-      iri->path != NULL ||
-      iri->query != NULL ||
-      iri->anchor != NULL ||
-      iri->qparams != NULL ||
-      iri->schemelist != NULL );
 }
 
 }  // namespace
@@ -287,7 +268,7 @@ bool WidgetHandler::Parse(
   if (manifest.HasPath(keys::kIDKey)) {
     std::string id;
     manifest.GetString(keys::kIDKey, &id);
-    if (!id.empty() && ValidateIRIType(id))
+    if (!id.empty() && parser::utils::IsValidIRI(id))
       widget_info->id_ = id;
   }
   if (manifest.HasPath(keys::kAuthorEmailKey))
@@ -295,7 +276,7 @@ bool WidgetHandler::Parse(
   if (manifest.HasPath(keys::kAuthorHrefKey)) {
     std::string author_href;
     manifest.GetString(keys::kAuthorHrefKey, &author_href);
-    if (!author_href.empty() && ValidateIRIType(author_href))
+    if (!author_href.empty() && parser::utils::IsValidIRI(author_href))
       widget_info->author_href_ = author_href;
   }
   if (manifest.HasPath(keys::kHeightKey)) {

@@ -5,9 +5,9 @@
 
 #include "manifest_handlers/app_control_handler.h"
 
-#include <iri.h>
 #include "manifest_parser/values.h"
 #include "manifest_handlers/application_manifest_constants.h"
+#include "utils/iri_util.h"
 
 namespace {
 const char kEnabledValue[] = "enabled";
@@ -131,13 +131,8 @@ bool AppControlHandler::Validate(
           "The operation child element of app-control element is obligatory";
       return false;
     }
-    std::unique_ptr<iri_struct, decltype(&iri_destroy)> iri(
-        iri_parse(operation.c_str()), iri_destroy);
-    if (!iri) {
-      *error = "Libiri failed";
-      return false;
-    }
-    if (!iri->scheme || !iri->host) {
+
+    if (!parser::utils::IsValidIRI(operation)) {
       *error =
           "The operation child element of app-control element is not valid url";
       return false;

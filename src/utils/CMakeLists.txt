@@ -1,5 +1,6 @@
 # Target - sources
 SET(SRCS
+  iri_util.cc
   string_util.cc
 )
 # Target - definition
@@ -9,6 +10,7 @@ TARGET_INCLUDE_DIRECTORIES(${TARGET_LIBNAME_UTILS} PUBLIC "${CMAKE_CURRENT_SOURC
 
 # Target - deps
 APPLY_PKG_CONFIG(${TARGET_LIBNAME_UTILS} PUBLIC
+  LIBIRI_DEPS
   Boost
 )
 

@@ -91,7 +91,7 @@ inline bool IsWhitespaceUTF8(const char* c) {
 namespace parser {
 namespace utils {
 
-//based on http://unicode.org/reports/tr9/
+// based on http://unicode.org/reports/tr9/
 const char kRightToLeftMark[] = u8"\u200F";
 const char kLeftToRightMark[] = u8"\u200E";
 const char kLeftToRightEmbeddingMark[] = u8"\u202A";
