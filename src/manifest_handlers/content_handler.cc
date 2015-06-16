@@ -4,44 +4,65 @@
 
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_handlers/content_handler.h"
+#include "utils/iri_util.h"
 #include "utils/logging.h"
 
 namespace keys = wgt::application_widget_keys;
 
 namespace {
 
-void ParseAndUpdateContentValue(const parser::DictionaryValue& dict,
-    std::shared_ptr<wgt::parse::ContentInfo> content) {
+bool ParseAndUpdateContentValue(const parser::DictionaryValue& dict,
+    std::shared_ptr<wgt::parse::ContentInfo> content, bool* w3c_content_found) {
   std::string src;
-  std::string encoding;
-  std::string element_namespace;
-  if (!dict.GetString(keys::kTizenContentSrcKey, &src))
-    return;
+  // src is mandatory
+  if (!dict.GetString(keys::kTizenContentSrcKey, &src)) {
+    LOG(ERROR) << "<content> / <tizen:content> tags requires src attribute";
+    return false;
+  }
 
+  std::string encoding;
   // default encoding setting
   if (!dict.GetString(keys::kTizenContentEncodingKey, &encoding))
     encoding = "UTF-8";
 
+  std::string element_namespace;
   dict.GetString(keys::kNamespaceKey, &element_namespace);
-  // tizen:content already found, ignore the rest
-  if (content->is_tizen_content())
-    return;
 
-  // if empty or not defined then skip it
-  if (src.empty())
-    return;
+  // error if empty
+  if (src.empty()) {
+    LOG(ERROR) << "<content> / <tizen:content> src attribute"
+               << " should not be empty";
+    return false;
+  }
 
-  // set new content if not found yet or tizen:content found after content tag
-  if (content->src().empty()) {
-    content->set_src(src);
-    content->set_encoding(encoding);
-    content->set_is_tizen_content(\
-        element_namespace == keys::kTizenNamespacePrefix);
-  } else if (element_namespace == keys::kTizenNamespacePrefix &&
-             !content->is_tizen_content()) {
-    content->set_src(src);
-    content->set_encoding(encoding);
-    content->set_is_tizen_content(true);
+  if (element_namespace == keys::kTizenNamespacePrefix) {
+    if (!parser::utils::IsValidIRI(src)) {
+      LOG(ERROR) << "src of <tizen:content> should be valid external url";
+      return false;
+    }
+
+    if (content->is_tizen_content()) {
+      // if more than one <tizen:content> ignore rest
+      return true;
+    } else {
+      // override normal content
+      content->set_src(src);
+      content->set_encoding(encoding);
+      content->set_is_tizen_content(true);
+      return true;
+    }
+  } else {
+    if (*w3c_content_found) {
+      LOG(ERROR) << "w3c <content> tag should occur at most 1 time";
+      return false;
+    } else {
+      // found first <content> tag
+      *w3c_content_found = true;
+      content->set_src(src);
+      content->set_encoding(encoding);
+      content->set_is_tizen_content(false);
+      return true;
+    }
   }
 }
 
@@ -64,17 +85,24 @@ bool ContentHandler::Parse(
   parser::Value* value = nullptr;
   manifest.Get(keys::kTizenContentKey, &value);
 
+  bool w3c_content_found = false;
   if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
     const parser::DictionaryValue* dict = nullptr;
     value->GetAsDictionary(&dict);
-    ParseAndUpdateContentValue(*dict, content_info);
+    if (!ParseAndUpdateContentValue(*dict, content_info, &w3c_content_found)) {
+      return false;
+    }
   } else if (value->GetType() == parser::Value::TYPE_LIST) {
     parser::ListValue* list = nullptr;
     value->GetAsList(&list);
     for (auto& item : *list) {
       const parser::DictionaryValue* dict = nullptr;
-      if (item->GetAsDictionary(&dict))
-        ParseAndUpdateContentValue(*dict, content_info);
+      if (item->GetAsDictionary(&dict)) {
+        if (!ParseAndUpdateContentValue(*dict, content_info,
+                                        &w3c_content_found)) {
+          return false;
+        }
+      }
     }
   } else {
     return true;
