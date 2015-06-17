@@ -85,26 +85,6 @@ bool ApplicationIconsHandler::Parse(
   return true;
 }
 
-bool ApplicationIconsHandler::Validate(
-    const parser::ManifestData& data,
-    const parser::ManifestDataMap& /*handlers_output*/,
-    std::string* error) const {
-  const ApplicationIconsInfo& icon_info =
-      static_cast<const ApplicationIconsInfo&>(data);
-  std::vector<std::string> icon_paths = icon_info.get_icon_paths();
-  for (const auto& src : icon_paths) {
-    if (!src.empty() && src.compare(src.size() - 3, 3, "png") &&
-        src.compare(src.size() - 3, 3, "svg") &&
-        src.compare(src.size() - 3, 3, "gif") &&
-        src.compare(src.size() - 3, 3, "jpg") &&
-        src.compare(src.size() - 3, 3, "ico")) {
-      *error = "Image extension not supported";
-      return false;
-    }
-  }
-  return true;
-}
-
 bool ApplicationIconsHandler::AlwaysParseForType() const {
   return true;
 }
