@@ -319,7 +319,7 @@ std::shared_ptr<Manifest> LoadManifest(const std::string& manifest_path,
                                        std::string* error) {
   xmlDoc * doc = nullptr;
   xmlNode* root_node = nullptr;
-  doc = xmlReadFile(manifest_path.c_str(), nullptr, 0);
+  doc = xmlReadFile(manifest_path.c_str(), nullptr, XML_PARSE_NOENT);
   if (!doc) {
     *error = application_manifest_errors::kManifestUnreadable;
     return nullptr;
