@@ -47,6 +47,7 @@ const xmlChar kNameAttributeKey[] = "name";
 const xmlChar kValueAttributeKey[] = "value";
 
 const char* kSingletonElements[] = {
+  "author",
   "allow-navigation",
   "content-security-policy-report-only",
   "content-security-policy"
