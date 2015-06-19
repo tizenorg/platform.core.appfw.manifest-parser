@@ -27,7 +27,6 @@ extern const char kIconsKey[];
 
 extern const char kAppKey[];
 extern const char kLaunchWebURLKey[];
-extern const char kLaunchLocalPathKey[];
 extern const char kDeprecatedURLKey[];
 extern const char kDeprecatedVersionKey[];
 extern const char kDeprecatedDescriptionKey[];
@@ -47,7 +46,6 @@ extern const char kNamespaceKey[];
 extern const char kXmlLangKey[];
 extern const char kDefaultLocaleKey[];
 extern const char kNameKey[];
-extern const char kLaunchLocalPathKey[];
 extern const char kWebURLsKey[];
 extern const char kWidgetKey[];
 extern const char kVersionKey[];

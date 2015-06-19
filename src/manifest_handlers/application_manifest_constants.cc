@@ -21,7 +21,6 @@ const char kIconsKey[] = "icons";
 // Deprecated entries:
 
 const char kAppKey[] = "app";
-const char kLaunchLocalPathKey[] = "app.launch.local_path";
 const char kLaunchWebURLKey[] = "app.launch.web_url";
 const char kDeprecatedURLKey[] = "url";
 const char kDeprecatedVersionKey[] = "version";
@@ -54,7 +53,6 @@ const char kNameKey[] = "widget.name";
 const char kVersionKey[] = "widget.@version";
 const char kViewModesKey[] = "widget.@viewmodes";
 const char kWidgetKey[] = "widget";
-const char kLaunchLocalPathKey[] = "widget.content.@src";
 const char kWebURLsKey[] = "widget.@id";
 const char kAuthorKeyText[] = "widget.author.#text";
 const char kDescriptionKey[] = "widget.description";

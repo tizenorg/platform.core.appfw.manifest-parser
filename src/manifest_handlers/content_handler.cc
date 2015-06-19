@@ -12,11 +12,12 @@ namespace keys = wgt::application_widget_keys;
 namespace {
 
 bool ParseAndUpdateContentValue(const parser::DictionaryValue& dict,
-    std::shared_ptr<wgt::parse::ContentInfo> content, bool* w3c_content_found) {
+    std::shared_ptr<wgt::parse::ContentInfo> content, bool* w3c_content_found,
+    std::string* error) {
   std::string src;
   // src is mandatory
   if (!dict.GetString(keys::kTizenContentSrcKey, &src)) {
-    LOG(ERROR) << "<content> / <tizen:content> tags requires src attribute";
+    *error = "<content> / <tizen:content> tags requires src attribute";
     return false;
   }
 
@@ -30,40 +31,32 @@ bool ParseAndUpdateContentValue(const parser::DictionaryValue& dict,
 
   // error if empty
   if (src.empty()) {
-    LOG(ERROR) << "<content> / <tizen:content> src attribute"
-               << " should not be empty";
+    *error = "<content> / <tizen:content> src attribute"
+             " should not be empty";
     return false;
   }
 
   if (element_namespace == keys::kTizenNamespacePrefix) {
     if (!parser::utils::IsValidIRI(src)) {
-      LOG(ERROR) << "src of <tizen:content> should be valid external url";
+      *error = "src of <tizen:content> should be valid external url";
       return false;
     }
 
-    if (content->is_tizen_content()) {
-      // if more than one <tizen:content> ignore rest
-      return true;
-    } else {
+    if (!content->is_tizen_content()) {
       // override normal content
       content->set_src(src);
       content->set_encoding(encoding);
       content->set_is_tizen_content(true);
-      return true;
     }
   } else {
-    if (*w3c_content_found) {
-      LOG(ERROR) << "w3c <content> tag should occur at most 1 time";
-      return false;
-    } else {
-      // found first <content> tag
-      *w3c_content_found = true;
+    if (!*w3c_content_found && !content->is_tizen_content()) {
       content->set_src(src);
       content->set_encoding(encoding);
       content->set_is_tizen_content(false);
-      return true;
     }
+    *w3c_content_found = true;
   }
+  return true;
 }
 
 }  // namespace
@@ -80,7 +73,7 @@ ContentHandler::~ContentHandler() {
 bool ContentHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
-    std::string* /*error*/) {
+    std::string* error) {
   std::shared_ptr<ContentInfo> content_info(new ContentInfo);
   parser::Value* value = nullptr;
   manifest.Get(keys::kTizenContentKey, &value);
@@ -89,7 +82,8 @@ bool ContentHandler::Parse(
   if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
     const parser::DictionaryValue* dict = nullptr;
     value->GetAsDictionary(&dict);
-    if (!ParseAndUpdateContentValue(*dict, content_info, &w3c_content_found)) {
+    if (!ParseAndUpdateContentValue(*dict, content_info, &w3c_content_found,
+                                    error)) {
       return false;
     }
   } else if (value->GetType() == parser::Value::TYPE_LIST) {
@@ -99,7 +93,7 @@ bool ContentHandler::Parse(
       const parser::DictionaryValue* dict = nullptr;
       if (item->GetAsDictionary(&dict)) {
         if (!ParseAndUpdateContentValue(*dict, content_info,
-                                        &w3c_content_found)) {
+                                        &w3c_content_found, error)) {
           return false;
         }
       }

@@ -179,27 +179,6 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenTakeFirst) {
   ASSERT_EQ(content_info->src(), "http://www.tizen.app/tizen_1_index.html");
 }
 
-TEST_F(ContentHandlerTest, MultipleContentEntryW3CReportError) {
-  // Set test values
-  std::unique_ptr<DictionaryValue> value(new DictionaryValue());
-  std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
-  std::unique_ptr<ListValue> list(new ListValue());
-  std::unique_ptr<DictionaryValue> content1(
-      new DictionaryValue());
-  std::unique_ptr<DictionaryValue> content2(
-      new DictionaryValue());
-  content1->SetString(keys::kTizenContentSrcKey, "w3c_1_index.html");
-  content2->SetString(keys::kTizenContentSrcKey, "w3c_2_index.html");
-  list->Append(content1.release());
-  list->Append(content2.release());
-  widget->Set(kTizenContentTagKey, list.release());
-  value->Set(keys::kWidgetKey, widget.release());
-  std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
-  SetManifest(manifest);
-  // Check error
-  ASSERT_FALSE(ParseAppManifest());
-}
-
 TEST_F(ContentHandlerTest, MultipleContentEntryFirstBrokenError) {
   // Set test values
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
@@ -286,8 +265,7 @@ TEST_F(ContentHandlerTest, MultipleMoreContentEntry) {
       new DictionaryValue());
   content1->SetString(keys::kTizenContentSrcKey, "w3c_1_index.html");
   content2->SetString(keys::kTizenContentSrcKey,
-      "http://www.tizen.app/tizen_2_index.html");
-  content2->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+      "w3c_2_index.html");
   content3->SetString(keys::kTizenContentSrcKey,
       "http://www.tizen.app/tizen_3_index.html");
   content3->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
@@ -310,7 +288,7 @@ TEST_F(ContentHandlerTest, MultipleMoreContentEntry) {
           GetManifestData(keys::kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), true);
-  ASSERT_EQ(content_info->src(), "http://www.tizen.app/tizen_2_index.html");
+  ASSERT_EQ(content_info->src(), "http://www.tizen.app/tizen_3_index.html");
 }
 
 }  // namespace parser
