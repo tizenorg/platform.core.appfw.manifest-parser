@@ -141,6 +141,7 @@ extern const char kTizenImeLanguageTextKey[];
 extern const char kTizenContentKey[];
 extern const char kTizenContentSrcKey[];
 extern const char kTizenContentEncodingKey[];
+extern const char kTizenContentTypeKey[];
 extern const char kTizenCategoryKey[];
 extern const char kTizenCategoryNameKey[];
 extern const char kTizenNamespacePrefix[];
