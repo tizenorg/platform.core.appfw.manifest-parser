@@ -164,6 +164,7 @@ const char kTizenImeLanguageTextKey[] = "#text";
 const char kTizenContentKey[] = "widget.content";
 const char kTizenContentSrcKey[] = "@src";
 const char kTizenContentEncodingKey[] = "@encoding";
+const char kTizenContentTypeKey[] = "@type";
 // Category
 const char kTizenCategoryKey[] = "widget.category";
 const char kTizenCategoryNameKey[] = "@name";

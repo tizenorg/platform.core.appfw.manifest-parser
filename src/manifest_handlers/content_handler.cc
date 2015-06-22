@@ -2,23 +2,45 @@
 // Use of this source code is governed by a apache 2.0 license that can be
 // found in the LICENSE-xwalk file.
 
-#include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_handlers/content_handler.h"
+
+#include <set>
+
+#include "manifest_handlers/application_manifest_constants.h"
 #include "utils/iri_util.h"
 #include "utils/logging.h"
+#include "utils/string_util.h"
 
 namespace keys = wgt::application_widget_keys;
 
 namespace {
+const std::set<std::string> ValidMimeTypeStartFile = {
+  "text/html",
+  "application/xhtml+xml",
+  "image/svg+xml"
+};
+
+bool ValidateMimeTypeStartFile(const std::string& type) {
+  return ValidMimeTypeStartFile.find(
+        parser::utils::CollapseWhitespaceUTF8(type)) !=
+      ValidMimeTypeStartFile.end();
+}
 
 bool ParseAndUpdateContentValue(const parser::DictionaryValue& dict,
     std::shared_ptr<wgt::parse::ContentInfo> content, bool* w3c_content_found,
     std::string* error) {
   std::string src;
+  std::string type;
   // src is mandatory
   if (!dict.GetString(keys::kTizenContentSrcKey, &src)) {
     *error = "<content> / <tizen:content> tags requires src attribute";
     return false;
+  }
+
+  if (!dict.GetString(keys::kTizenContentTypeKey, &type) &&
+      !ValidateMimeTypeStartFile(type)) {
+      *error = "Not proper type of starting file";
+      return false;
   }
 
   std::string encoding;
