@@ -80,6 +80,14 @@ TEST(StringUtilTest, CollapseWhitespaceUTF8_WhitespaceAtEnd) {
       std::string(u8"\x0C\xe2\x80\x8A\x0B\x0C\x0C")));
 }
 
+TEST(StringUtilTest, CollapseWhitespaceUTF8_WhitespaceAtAll) {
+  std::string text =
+      u8"";
+  EXPECT_EQ(text, CollapseWhitespaceUTF8(
+      text +
+      std::string(u8"\x0C\xe2\x80\x8A\x0B\x0C\x0C")));
+}
+
 TEST_FOR_COLLAPSE_CHARCTER(CharacterTabulation, u8"\x09")
 TEST_FOR_COLLAPSE_CHARCTER(LineFeed, u8"\x0A")
 TEST_FOR_COLLAPSE_CHARCTER(LineTabulation, u8"\x0B")
