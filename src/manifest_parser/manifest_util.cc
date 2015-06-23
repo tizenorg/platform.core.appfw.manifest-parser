@@ -233,8 +233,11 @@ std::unique_ptr<DictionaryValue> LoadXMLNode(
     if (IsPropSupportDir(root, prop))
       prop_value = utils::GetDirTextUTF8(prop_value, current_dir);
 
-    if (IsTrimRequiredForProp(root, prop))
+    if (IsTrimRequiredForProp(root, prop)) {
       prop_value = utils::CollapseWhitespaceUTF8(prop_value);
+      if (prop_value.empty())
+          continue;
+    }
 
     value->SetString(
         std::string(kAttributePrefix)
