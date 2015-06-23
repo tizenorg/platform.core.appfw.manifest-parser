@@ -140,7 +140,7 @@ std::string CollapseWhitespaceUTF8(const std::string& text) {
     }
   }
 
-  if (in_whitespace) {
+  if (in_whitespace && chars_written > 0) {
     // Any trailing whitespace is eliminated.
     --chars_written;
   }
