@@ -25,7 +25,7 @@ ManifestParser::ManifestParser(
 ManifestParser::~ManifestParser() {
 }
 
-const std::string& ManifestParser::GetErrorMessage() {
+const std::string& ManifestParser::GetErrorMessage() const {
   return impl_->GetErrorMessage();
 }
 

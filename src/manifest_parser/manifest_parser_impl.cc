@@ -40,7 +40,7 @@ ManifestParserImpl::ManifestParserImpl(
 ManifestParserImpl::~ManifestParserImpl() {
 }
 
-const std::string& ManifestParserImpl::GetErrorMessage() {
+const std::string& ManifestParserImpl::GetErrorMessage() const {
   return error_;
 }
 
