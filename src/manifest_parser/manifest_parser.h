@@ -18,13 +18,13 @@ namespace parser {
 
 class ManifestParserImpl;
 
-class ManifestParser {
+class ManifestParser final {
  public:
   // This class should take ownership of ManifestHandlerRegistry
   explicit ManifestParser(std::unique_ptr<ManifestHandlerRegistry> registry);
   ~ManifestParser();
 
-  const std::string& GetErrorMessage();
+  virtual const std::string& GetErrorMessage() const;
 
   // Parses manifest file to manfiest_ object
   bool ParseManifest(const boost::filesystem::path& path);

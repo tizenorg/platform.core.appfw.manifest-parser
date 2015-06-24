@@ -25,7 +25,7 @@ class ManifestParserImpl {
       std::unique_ptr<ManifestHandlerRegistry> registry);
   ~ManifestParserImpl();
 
-  const std::string& GetErrorMessage();
+  const std::string& GetErrorMessage() const;
 
   bool ParseManifest(const boost::filesystem::path& path);
 
