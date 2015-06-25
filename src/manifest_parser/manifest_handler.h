@@ -34,7 +34,7 @@ class ManifestData {
   bool exists_;
 };
 
-typedef std::map<const std::string, std::shared_ptr<ManifestData> >
+typedef std::map<std::string, std::shared_ptr<ManifestData> >
     ManifestDataMap;
 
 class ManifestHandler {
