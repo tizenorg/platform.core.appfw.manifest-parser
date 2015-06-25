@@ -49,6 +49,14 @@ const char* kDefaultStartFiles[] = {
   "index.xht"
 };
 
+const char* kDefaultIconFiles[] = {
+  "icon.svg",
+  "icon.ico",
+  "icon.png",
+  "icon.gif",
+  "icon.jpg"
+};
+
 enum class FindResult {
   OK,
   NUL,
@@ -194,12 +202,49 @@ bool WidgetConfigParser::CheckStartFile() {
   return true;
 }
 
+bool WidgetConfigParser::CheckWidgetIcons() {
+  std::shared_ptr<ApplicationIconsInfo> icons_info =
+      std::static_pointer_cast<ApplicationIconsInfo>(
+          parser_->AccessManifestData(application_manifest_keys::kIconsKey));
+  if (!icons_info) {
+    error_ = "Failed to get icon info";
+    return false;
+  }
+  ApplicationIconsInfo icons;
+  // custom icons
+  for (auto& icon : icons_info->get_icon_paths()) {
+    bf::path result;
+    if (FindFileWithinWidget(widget_path_, icon, &result) == FindResult::OK) {
+      std::string relative =
+          result.string().substr(widget_path_.string().size() + 1);
+      icons.add_icon_path(relative);
+    }
+  }
+  // default icons
+  for (auto& icon : kDefaultIconFiles) {
+    bf::path result;
+    if (FindFileWithinWidget(widget_path_, icon, &result) == FindResult::OK) {
+      std::string relative =
+          result.string().substr(widget_path_.string().size() + 1);
+      icons.add_icon_path(relative);
+    }
+  }
+  for (auto& icon : icons.get_icon_paths()) {
+    LOG(DEBUG) << "Valid icon: " << icon;
+  }
+  *icons_info = icons;
+  return true;
+}
+
 bool WidgetConfigParser::ParseManifest(const boost::filesystem::path& path) {
   widget_path_ = path.parent_path();
   if (!parser_->ParseManifest(path))
     return false;
 
   if (!CheckStartFile())
+    return false;
+
+  if (!CheckWidgetIcons())
     return false;
 
   return true;

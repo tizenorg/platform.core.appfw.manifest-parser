@@ -26,6 +26,11 @@ class WidgetConfigParser {
 
  private:
   bool CheckStartFile();
+  // This function creates list of icons that are valid disregarding
+  // (in actual version) current system's locale as installer do not need to
+  // know about it.
+  // Edited/Created list is present as kIconsKey key in parser.
+  bool CheckWidgetIcons();
 
   std::unique_ptr<parser::ManifestParser> parser_;
   boost::filesystem::path widget_path_;

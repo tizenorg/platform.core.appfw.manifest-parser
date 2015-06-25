@@ -29,7 +29,10 @@ class ManifestParser final {
   // Parses manifest file to manfiest_ object
   bool ParseManifest(const boost::filesystem::path& path);
 
-  std::shared_ptr<const ManifestData> GetManifestData(std::string key);
+  std::shared_ptr<const ManifestData> GetManifestData(const std::string& key);
+  // Getter returning writable data so that value of key can be changed
+  // used in WidgetConfigParser
+  std::shared_ptr<ManifestData> AccessManifestData(const std::string& key);
 
   std::unique_ptr<ManifestParserImpl> impl_;
 };

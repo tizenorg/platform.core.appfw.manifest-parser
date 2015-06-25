@@ -16,8 +16,8 @@ namespace parse {
 
 class ApplicationIconsInfo : public parser::ManifestData {
  public:
-  std::vector<std::string> get_icon_paths() const;
-  void add_icon_path(std::string icon_path);
+  const std::vector<std::string>& get_icon_paths() const;
+  void add_icon_path(const std::string& icon_path);
  private:
   std::vector<std::string> icon_paths_;
 };

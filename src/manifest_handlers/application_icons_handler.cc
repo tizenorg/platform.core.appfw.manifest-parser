@@ -4,6 +4,7 @@
 
 #include "manifest_handlers/application_icons_handler.h"
 
+#include <algorithm>
 #include <string>
 
 #include "utils/logging.h"
@@ -13,11 +14,16 @@ namespace parse {
 
 namespace keys = wgt::application_widget_keys;
 
-std::vector<std::string> ApplicationIconsInfo::get_icon_paths() const {
+const std::vector<std::string>& ApplicationIconsInfo::get_icon_paths() const {
   return icon_paths_;
 }
 
-void ApplicationIconsInfo::add_icon_path(std::string icon_path) {
+void ApplicationIconsInfo::add_icon_path(const std::string& icon_path) {
+  // Eliminate duplicates, keep order
+  if (std::find(icon_paths_.begin(), icon_paths_.end(), icon_path)
+      != icon_paths_.end()) {
+    return;
+  }
   icon_paths_.push_back(icon_path);
 }
 
@@ -52,6 +58,7 @@ bool ApplicationIconsHandler::Parse(
       std::make_shared<ApplicationIconsInfo>();
   parser::Value* key_value;
   if (!manifest.Get(keys::kWidgetIconKey, &key_value)) {
+    *output = std::static_pointer_cast<parser::ManifestData>(app_icons_info);
     return true;
   }
 
