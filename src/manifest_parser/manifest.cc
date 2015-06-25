@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <list>
 
+#include "utils/logging.h"
 #include "manifest_parser/manifest_constants.h"
 
 namespace parser {
@@ -17,6 +18,14 @@ Manifest::Manifest(std::unique_ptr<DictionaryValue> value)
 }
 
 Manifest::~Manifest() {
+}
+
+bool Manifest::CompareNamespace(
+    const std::string& path, const std::string comparedNamespace) const {
+  std::string comparingNamespace;
+  LOG(ERROR) << "about to check namespace";
+  data_->GetString(path + ".@namespace", &comparingNamespace);
+  return comparedNamespace == comparingNamespace;
 }
 
 bool Manifest::ValidateManifest(
@@ -58,7 +67,8 @@ bool Manifest::GetInteger(
 
 bool Manifest::GetString(
     const std::string& path, std::string* out_value) const {
-  if (!CanAccessPath(path))
+
+  if (!CompareNamespace(path) || !CanAccessPath(path))
     return false;
 
   return data_->GetString(path, out_value);

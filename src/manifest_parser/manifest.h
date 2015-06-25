@@ -38,6 +38,7 @@ class Manifest {
   bool Get(const std::string& path, Value** out_value) const;
   bool GetBoolean(const std::string& path, bool* out_value) const;
   bool GetInteger(const std::string& path, int* out_value) const;
+  bool CompareNamespace(const std::string& path, const std::string comparedNamespace = "http://www.w3.org/ns/widgets") const;
 
   // If the path is supported by i18n, we can get a locale string from
   // this two GetString function. The following is locale priority:
