@@ -45,10 +45,6 @@ bool ParserPreferenceItem(const parser::Value* val,
 
 }  // namespace
 
-WidgetInfo::WidgetInfo() {}
-
-WidgetInfo::~WidgetInfo() {}
-
 void WidgetInfo::AddName(const std::string& locale, const std::string& name) {
   if (name_set_.find(locale) != name_set_.end())
     return;
@@ -68,66 +64,6 @@ void WidgetInfo::AddDescription(const std::string& locale,
     return;
   description_set_.insert(std::make_pair(locale, description));
 }
-
-const std::map<std::string, std::string>& WidgetInfo::name_set() const {
-  return name_set_;
-}
-
-const std::map<std::string, std::string>& WidgetInfo::short_name_set() const {
-  return short_name_set_;
-}
-
-const std::map<std::string, std::string>& WidgetInfo::description_set() const {
-  return description_set_;
-}
-
-const std::string& WidgetInfo::id() const {
-  return id_;
-}
-
-const std::string& WidgetInfo::version() const {
-  return version_;
-}
-
-const std::string& WidgetInfo::view_modes() const {
-  return viewmodes_;
-}
-
-const std::string& WidgetInfo::default_locale() const {
-  return default_locale_;
-}
-
-const std::string& WidgetInfo::author() const {
-  return author_;
-}
-
-const std::string& WidgetInfo::author_email() const {
-  return author_email_;
-}
-
-const std::string& WidgetInfo::author_href() const {
-  return author_href_;
-}
-
-const std::string& WidgetInfo::widget_namespace() const {
-  return widget_namespace_;
-}
-
-unsigned int WidgetInfo::height() const {
-  return height_;
-}
-
-unsigned int WidgetInfo::width() const {
-  return width_;
-}
-
-const std::vector<Preference*>& WidgetInfo::preferences() const {
-  return preferences_;
-}
-
-WidgetHandler::WidgetHandler() {}
-
-WidgetHandler::~WidgetHandler() {}
 
 void WidgetHandler::ParseSingleLocalizedDescriptionElement(
     const parser::DictionaryValue* item_dict, const std::string& parent_lang,
@@ -320,12 +256,8 @@ bool WidgetHandler::Validate(
   return true;
 }
 
-bool WidgetHandler::AlwaysParseForType() const {
-  return true;
-}
-
 std::string WidgetHandler::Key() const {
-  return application_widget_keys::kTizenWidgetKey;
+  return keys::kTizenWidgetKey;
 }
 
 }  // namespace parse

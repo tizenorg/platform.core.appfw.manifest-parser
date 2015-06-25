@@ -33,33 +33,35 @@ class Preference {
   bool readonly_;
 };
 
+typedef std::map<std::string, std::string> LangValMap;
+
 class WidgetInfo : public parser::ManifestData {
  public:
-  WidgetInfo();
-  virtual ~WidgetInfo();
+  WidgetInfo() {}
+  virtual ~WidgetInfo() {}
 
   // Name, short name and description are i18n items, they will be set
-  // if their value were changed after loacle was changed.
+  // if their value were changed after locale was changed.
   void AddName(const std::string& locale, const std::string& name);
   void AddShortName(const std::string& locale, const std::string& short_name);
   void AddDescription(const std::string& locale,
                       const std::string& description);
 
-  const std::map<std::string, std::string>& name_set() const;
-  const std::map<std::string, std::string>& short_name_set() const;
-  const std::map<std::string, std::string>& description_set() const;
+  const LangValMap& name_set() const { return name_set_; }
+  const LangValMap& short_name_set() const { return short_name_set_; }
+  const LangValMap& description_set() const { return description_set_; }
 
-  const std::string& id() const;
-  const std::string& version() const;
-  const std::string& view_modes() const;
-  const std::string& default_locale() const;
-  const std::string& author() const;
-  const std::string& author_email() const;
-  const std::string& author_href() const;
-  const std::string& widget_namespace() const;
-  const std::vector<Preference*>& preferences() const;
-  unsigned int height() const;
-  unsigned int width() const;
+  const std::string& id() const { return id_; }
+  const std::string& version() const { return version_; }
+  const std::string& view_modes() const { return viewmodes_; }
+  const std::string& default_locale() const { return default_locale_; }
+  const std::string& author() const { return author_; }
+  const std::string& author_email() const { return author_email_; }
+  const std::string& author_href() const { return author_href_; }
+  const std::string& widget_namespace() const { return widget_namespace_; }
+  const std::vector<Preference*>& preferences() const { return preferences_; }
+  unsigned int height() const { return height_; }
+  unsigned int width() const { return width_; }
 
  private:
   std::vector<Preference*> preferences_;
@@ -68,9 +70,9 @@ class WidgetInfo : public parser::ManifestData {
   std::string viewmodes_;
   std::string default_locale_;
   std::string author_;
-  std::map<std::string, std::string> description_set_;
-  std::map<std::string, std::string> name_set_;
-  std::map<std::string, std::string> short_name_set_;
+  LangValMap description_set_;
+  LangValMap name_set_;
+  LangValMap short_name_set_;
   std::string author_email_;
   std::string author_href_;
   std::string widget_namespace_;
@@ -82,14 +84,14 @@ class WidgetInfo : public parser::ManifestData {
 
 class WidgetHandler : public parser::ManifestHandler {
  public:
-  WidgetHandler();
-  virtual ~WidgetHandler();
+  WidgetHandler() {}
+  virtual ~WidgetHandler() {}
 
   bool Parse(
       const parser::Manifest& manifest,
       std::shared_ptr<parser::ManifestData>* output,
       std::string* error) override;
-  bool AlwaysParseForType() const override;
+  bool AlwaysParseForType() const override { return true; }
   std::string Key() const override;
 
   void ParseSingleLocalizedDescriptionElement(
