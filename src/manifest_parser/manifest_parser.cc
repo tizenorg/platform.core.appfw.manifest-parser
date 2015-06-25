@@ -34,8 +34,13 @@ bool ManifestParser::ParseManifest(const boost::filesystem::path& path) {
 }
 
 std::shared_ptr<const ManifestData> ManifestParser::GetManifestData(
-    std::string key) {
+    const std::string& key) {
   return impl_->GetManifestData(key);
+}
+
+std::shared_ptr<ManifestData> ManifestParser::AccessManifestData(
+    const std::string& key) {
+  return impl_->AccessManifestData(key);
 }
 
 }  // namespace parser

@@ -117,7 +117,15 @@ void ManifestParserImpl::SetManifestData(const std::string& key,
 }
 
 std::shared_ptr<const ManifestData> ManifestParserImpl::GetManifestData(
-    std::string key) {
+    const std::string& key) {
+  ManifestDataMap::const_iterator iter = manifest_data_.find(key);
+  if (iter != manifest_data_.end())
+    return iter->second;
+  return nullptr;
+}
+
+std::shared_ptr<ManifestData> ManifestParserImpl::AccessManifestData(
+    const std::string& key) {
   ManifestDataMap::const_iterator iter = manifest_data_.find(key);
   if (iter != manifest_data_.end())
     return iter->second;
