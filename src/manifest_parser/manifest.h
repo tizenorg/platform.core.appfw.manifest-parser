@@ -38,6 +38,7 @@ class Manifest {
   bool Get(const std::string& path, Value** out_value) const;
   bool GetBoolean(const std::string& path, bool* out_value) const;
   bool GetInteger(const std::string& path, int* out_value) const;
+  bool CompareNamespace(const std::string& path, const std::string& comparedNamespace) const;
 
   // If the path is supported by i18n, we can get a locale string from
   // this two GetString function. The following is locale priority:
@@ -46,7 +47,8 @@ class Manifest {
   // Unlocalized (the element without xml:lang attribute)
   // Auto ("en-us"(tizen is "en-gb") will be considered as a default)
   // First (the worst case we get the first element)              | low
-  bool GetString(const std::string& path, std::string* out_value) const;
+  bool GetString(const std::string& path, std::string* out_value,
+                 const std::string comparedNamespace = "http://www.w3.org/ns/widgets") const;
 
   bool GetDictionary(const std::string& path,
                      const DictionaryValue** out_value) const;
