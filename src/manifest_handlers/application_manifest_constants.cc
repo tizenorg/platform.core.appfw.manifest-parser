@@ -83,7 +83,11 @@ const char kAccessOriginKey[] = "@origin";
 const char kAccessSubdomainsKey[] = "@subdomains";
 
 const char kTizenWidgetKey[] = "widget";
-const char kIcon128Key[] = "widget.icon.@src";
+
+// W3C icon
+const char kWidgetIconKey[] = "widget.icon";
+const char kWidgetIconSrcKey[] = "@src";
+
 const char kTizenApplicationKey[] = "widget.application";
 // Child keys inside 'kTizenApplicationKey'
 const char kTizenApplicationIdKey[] = "@id";

@@ -24,25 +24,6 @@ namespace parse {
 namespace keys = wgt::application_widget_keys;
 
 namespace {
-// Below key names are readable from Javascript widget interface.
-const char kAuthor[] = "author";
-const char kDecription[] = "description";
-const char kName[] = "name";
-const char kShortName[] = "shortName";
-const char kVersion[] = "version";
-const char kID[] = "id";
-const char kAuthorEmail[] = "authorEmail";
-const char kAuthorHref[] = "authorHref";
-const char kHeight[] = "height";
-const char kWidth[] = "width";
-const char kPreferences[] = "preferences";
-const char kDefaultLocale[] = "defaultlocale";
-const char kViewModes[] = "viewmodes";
-
-// Child keys inside 'preferences' key.
-const char kPreferencesName[] = "@name";
-const char kPreferencesValue[] = "@value";
-const char kPreferencesReadonly[] = "@readonly";
 
 bool ParserPreferenceItem(const parser::Value* val,
                           Preference** output,
@@ -55,9 +36,9 @@ bool ParserPreferenceItem(const parser::Value* val,
   std::string name;
   std::string value;
   std::string readonly = "false";
-  pref_dict->GetString(kPreferencesName, &name);
-  pref_dict->GetString(kPreferencesValue, &value);
-  pref_dict->GetString(kPreferencesReadonly, &readonly);
+  pref_dict->GetString(keys::kPreferencesNameKey, &name);
+  pref_dict->GetString(keys::kPreferencesValueKey, &value);
+  pref_dict->GetString(keys::kPreferencesReadonlyKey, &readonly);
   *output = new Preference(name, value, readonly == "true");
   return true;
 }

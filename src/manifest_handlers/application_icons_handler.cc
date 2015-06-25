@@ -11,10 +11,7 @@
 namespace wgt {
 namespace parse {
 
-namespace {
-  const char kWidgetIconFullKey[] = "widget.icon";
-  const char kWidgetIconSrcKey[] = "@src";
-}
+namespace keys = wgt::application_widget_keys;
 
 std::vector<std::string> ApplicationIconsInfo::get_icon_paths() const {
   return icon_paths_;
@@ -39,7 +36,7 @@ bool ApplicationIconsHandler::ExtractIconSrc(
     return true;
   }
   std::string src;
-  if (!inner_dict->GetString(kWidgetIconSrcKey, &src)) {
+  if (!inner_dict->GetString(keys::kWidgetIconSrcKey, &src)) {
     LOG(INFO) << "Cannot find mandatory key. Key name: .@src";
     return true;
   }
@@ -54,7 +51,7 @@ bool ApplicationIconsHandler::Parse(
   std::shared_ptr<ApplicationIconsInfo> app_icons_info =
       std::make_shared<ApplicationIconsInfo>();
   parser::Value* key_value;
-  if (!manifest.Get(kWidgetIconFullKey, &key_value)) {
+  if (!manifest.Get(keys::kWidgetIconKey, &key_value)) {
     return true;
   }
 
