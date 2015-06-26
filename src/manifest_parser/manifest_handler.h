@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "manifest_parser/manifest.h"
+#include "manifest_parser/manifest_constants.h"
 
 namespace parser {
 
@@ -77,6 +78,13 @@ class ManifestHandler {
 
   // The keys to register handler for (in Register).
   virtual std::string Key() const = 0;
+
+ protected:
+  virtual bool VerifyElementNamespace(const parser::Manifest& manifest,
+                                      const std::string& key_to_compare,
+                                      const std::string&
+                                      desired_namespace_value =
+      kW3CNamespacePrefix);
 };
 
 typedef std::map<std::string, ManifestHandler*> ManifestHandlerMap;

@@ -8,8 +8,6 @@
 #include <cassert>
 #include <set>
 
-#include "manifest_parser/manifest_constants.h"
-
 namespace parser {
 
 ManifestHandler::~ManifestHandler() {
@@ -20,6 +18,16 @@ bool ManifestHandler::Validate(
     const ManifestDataMap& /*handlers_output*/,
     std::string* /*error*/) const {
   return true;
+}
+
+bool ManifestHandler::VerifyElementNamespace(const parser::Manifest& manifest,
+                            const std::string& key_to_compare,
+                            const std::string& desired_namespace_value) {
+  std::string tmp;
+  if (!manifest.HasPath(key_to_compare))
+    return true;
+  manifest.GetString(key_to_compare + ".@namespace", &tmp);
+  return tmp.compare(desired_namespace_value) == 0;
 }
 
 bool ManifestHandler::AlwaysParseForType() const {
