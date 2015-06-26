@@ -6,6 +6,8 @@
 #define MANIFEST_PARSER_MANIFEST_CONSTANTS_H_
 
 namespace parser {
+
+  const char kW3CNamespacePrefix[] = "http://www.w3.org/ns/widgets";
   const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
 
   const char kLocaleUnlocalized[] = "@unlocalized";

@@ -64,8 +64,11 @@ const char kAuthorHrefKey[] = "widget.author.@href";
 const char kHeightKey[] = "widget.@height";
 const char kWidthKey[] = "widget.@width";
 const char kPreferencesKey[] = "widget.preference";
-const char kCSPKey[] = "widget.content-security-policy.#text";
+const char kCSPKey[] = "widget.content-security-policy";
+const char kCSPText[] = "widget.content-security-policy.#text";
 const char kCSPKeyReportOnly[] =
+    "widget.content-security-policy-report-only";
+const char kCSPTextReportOnly[] =
     "widget.content-security-policy-report-only.#text";
 const char kAccessKey[] = "widget.access";
 
