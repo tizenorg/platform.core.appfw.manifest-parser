@@ -37,7 +37,7 @@ bool ParseAndUpdateContentValue(const parser::DictionaryValue& dict,
     return false;
   }
 
-  if (!dict.GetString(keys::kTizenContentTypeKey, &type) &&
+  if (dict.GetString(keys::kTizenContentTypeKey, &type) &&
       !ValidateMimeTypeStartFile(type)) {
       *error = "Not proper type of starting file";
       return false;
