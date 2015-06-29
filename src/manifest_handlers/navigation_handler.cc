@@ -42,11 +42,13 @@ bool NavigationHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!manifest.HasPath(keys::kAllowNavigationKey)) {
-    return true;
-  }
+
+  if (!VerifyElementNamespace(
+        manifest, keys::kAllowNavigationKey, parser::kTizenNamespacePrefix))
+    return false;
+
   std::string allowed_domains;
-  if (!manifest.GetString(keys::kAllowNavigationKey, &allowed_domains)) {
+  if (!manifest.GetString(keys::kAllowNavigationText, &allowed_domains)) {
     *error = "Invalid value of allow-navigation.";
     return false;
   }

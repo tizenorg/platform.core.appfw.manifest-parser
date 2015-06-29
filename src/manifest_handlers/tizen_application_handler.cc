@@ -34,6 +34,9 @@ bool TizenApplicationHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
+  if (!VerifyElementNamespace(
+        manifest, keys::kTizenApplicationKey, parser::kTizenNamespacePrefix))
+    return false;
   std::shared_ptr<TizenApplicationInfo> app_info(new TizenApplicationInfo);
   parser::Value* app_value = nullptr;
   manifest.Get(keys::kTizenApplicationKey, &app_value);

@@ -61,6 +61,9 @@ bool ServiceHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
+  if (!VerifyElementNamespace(
+        manifest, keys::kTizenServiceKey, parser::kTizenNamespacePrefix))
+    return false;
   const parser::Value* services = nullptr;
   if (!manifest.Get(keys::kTizenServiceKey, &services)) {
     return true;
