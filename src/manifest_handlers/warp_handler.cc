@@ -59,6 +59,9 @@ bool WarpHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* /*error*/) {
+  if (!VerifyElementNamespace(manifest, keys::kAccessKey))
+    return false;
+
   std::shared_ptr<WarpInfo> info(new WarpInfo);
   ParseAccessElements(manifest, info);
   *output = std::static_pointer_cast<parser::ManifestData>(info);

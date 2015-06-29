@@ -221,6 +221,10 @@ bool WidgetHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
+  if (!VerifyElementNamespace(manifest, keys::kAuthorKey) ||
+      !VerifyElementNamespace(manifest, keys::kDescriptionKey) ||
+      !VerifyElementNamespace(manifest, keys::kNameKey))
+    return false;
   std::shared_ptr<WidgetInfo> widget_info(new WidgetInfo());
   widget_info->preferences_ = std::vector<Preference*>();
 

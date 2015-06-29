@@ -71,6 +71,10 @@ bool MetaDataHandler::Parse(
     std::string* error) {
   std::shared_ptr<MetaDataInfo> metadata_info(new MetaDataInfo);
   parser::Value* metadata_value = nullptr;
+  if (!VerifyElementNamespace(
+        manifest, keys::kTizenMetaDataKey, parser::kTizenNamespacePrefix))
+    return false;
+
   if (!manifest.Get(keys::kTizenMetaDataKey, &metadata_value)) {
     LOG(INFO) << "Failed to get value of tizen metaData";
     return true;

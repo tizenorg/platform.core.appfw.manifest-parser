@@ -41,8 +41,11 @@ bool SettingHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* /*error*/) {
-  std::shared_ptr<SettingInfo> app_info(new SettingInfo);
+  if (!VerifyElementNamespace(
+        manifest, keys::kTizenSettingKey, parser::kTizenNamespacePrefix))
+    return false;
 
+  std::shared_ptr<SettingInfo> app_info(new SettingInfo);
   std::string hwkey;
   manifest.GetString(keys::kTizenHardwareKey, &hwkey);
   app_info->set_hwkey_enabled(hwkey != "disable");
