@@ -11,8 +11,11 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/system/error_code.hpp>
 
+#include <xdgmime.h>
+
 #include <algorithm>
 #include <string>
+#include <map>
 #include <vector>
 
 #include "manifest_handlers/app_control_handler.h"
@@ -56,6 +59,63 @@ const char* kDefaultIconFiles[] = {
   "icon.gif",
   "icon.jpg"
 };
+
+const std::map<std::string, std::string> kFileIdenticationTable = {
+  {".html",  "text/html"},
+  {".htm",   "text/html"},
+  {".css",   "text/css"},
+  {".js",    "application/javascript"},
+  {".xml",   "application/xml"},
+  {".txt",   "text/plain"},
+  {".wav",   "audio/x-wav"},
+  {".xhtml", "application/xhtml+xml"},
+  {".xht",   "application/xhtml+xml"},
+  {".gif",   "image/gif"},
+  {".png",   "image/png"},
+  {".ico",   "image/vnd.microsoft.icon"},
+  {".svg",   "image/svg+xml"},
+  {".jpg",   "image/jpeg"},
+  {".mp3",   "audio/mpeg"}
+};
+
+const char* kIconsSupportedMimeTypes[] = {
+  "image/gif",
+  "image/png",
+  "image/vnd.microsoft.icon",
+  "image/svg+xml",
+  "image/jpeg"
+};
+
+bool IsAlphaCLocale(char c) {
+  if (0x41 <= c && c <= 0x5a)
+    return true;
+  if (0x61 <= c && c <= 0x7a)
+    return true;
+  return false;
+}
+
+// http://www.w3.org/TR/widgets/#rule-for-identifying-the-media-type-of-a-file-0
+bool IsIconMimeTypeSupported(const bf::path& icon_path) {
+  std::string ext = icon_path.extension().string();
+  std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+  std::string mime_type;
+  if (!ext.empty() && std::all_of(++ext.begin(), ext.end(), &IsAlphaCLocale)) {
+    auto iter = kFileIdenticationTable.find(ext);
+    if (iter != kFileIdenticationTable.end()) {
+      mime_type = iter->second;
+    }
+  }
+  if (mime_type.empty()) {
+    // sniff the mime type
+    mime_type =
+        xdg_mime_get_mime_type_for_file(icon_path.string().c_str(), nullptr);
+  }
+  for (auto mime : kIconsSupportedMimeTypes) {
+    if (mime_type == mime)
+      return true;
+  }
+  return false;
+}
 
 enum class FindResult {
   OK,
@@ -215,6 +275,10 @@ bool WidgetConfigParser::CheckWidgetIcons() {
   for (auto& icon : icons_info->get_icon_paths()) {
     bf::path result;
     if (FindFileWithinWidget(widget_path_, icon, &result) == FindResult::OK) {
+      if (!IsIconMimeTypeSupported(result)) {
+        LOG(WARNING) << "Unsupported icon: " << result;
+        continue;
+      }
       std::string relative =
           result.string().substr(widget_path_.string().size() + 1);
       icons.add_icon_path(relative);
@@ -224,6 +288,10 @@ bool WidgetConfigParser::CheckWidgetIcons() {
   for (auto& icon : kDefaultIconFiles) {
     bf::path result;
     if (FindFileWithinWidget(widget_path_, icon, &result) == FindResult::OK) {
+      if (!IsIconMimeTypeSupported(result)) {
+        LOG(WARNING) << "Unsupported icon: " << result;
+        continue;
+      }
       std::string relative =
           result.string().substr(widget_path_.string().size() + 1);
       icons.add_icon_path(relative);
