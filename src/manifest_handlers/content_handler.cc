@@ -53,9 +53,8 @@ bool ParseAndUpdateContentValue(const parser::DictionaryValue& dict,
 
   // error if empty
   if (src.empty()) {
-    *error = "<content> / <tizen:content> src attribute"
-             " should not be empty";
-    return false;
+    // ignore this element
+    return true;
   }
 
   if (element_namespace == keys::kTizenNamespacePrefix) {
@@ -124,7 +123,9 @@ bool ContentHandler::Parse(
     return true;
   }
 
-  *output = std::static_pointer_cast<parser::ManifestData>(content_info);
+  // found w3c or tizen content
+  if (w3c_content_found || content_info->is_tizen_content())
+    *output = std::static_pointer_cast<parser::ManifestData>(content_info);
   return true;
 }
 
