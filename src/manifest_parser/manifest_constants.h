@@ -23,6 +23,7 @@ namespace parser {
   const char kDefaultLocaleKey[] = "widget.@defaultlocale";
   const char kXmlLangKey[] = "@lang";
   const char kXmlTextKey[] = "#text";
+  const char kNamespaceKey[] = "@namespace";
 }  // namespace parser
 
 namespace application_manifest_errors {

@@ -43,7 +43,7 @@ bool SettingHandler::Parse(
     std::string* /*error*/) {
   if (!VerifyElementNamespace(
         manifest, keys::kTizenSettingKey, parser::kTizenNamespacePrefix))
-    return false;
+    return true;
 
   std::shared_ptr<SettingInfo> app_info(new SettingInfo);
   std::string hwkey;

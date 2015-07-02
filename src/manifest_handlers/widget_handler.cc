@@ -224,7 +224,7 @@ bool WidgetHandler::Parse(
   if (!VerifyElementNamespace(manifest, keys::kAuthorKey) ||
       !VerifyElementNamespace(manifest, keys::kDescriptionKey) ||
       !VerifyElementNamespace(manifest, keys::kNameKey))
-    return false;
+    return true;
   std::shared_ptr<WidgetInfo> widget_info(new WidgetInfo());
   widget_info->preferences_ = std::vector<Preference*>();
 

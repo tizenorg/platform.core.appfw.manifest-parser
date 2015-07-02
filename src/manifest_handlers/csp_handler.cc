@@ -26,7 +26,7 @@ bool CSPHandler::Parse(
 
   if (!VerifyElementNamespace(
         manifest, security_policy, parser::kTizenNamespacePrefix))
-    return false;
+    return true;
 
   std::shared_ptr<CSPInfo> info(new CSPInfo);
 

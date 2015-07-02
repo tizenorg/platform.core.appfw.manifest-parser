@@ -73,7 +73,7 @@ bool MetaDataHandler::Parse(
   parser::Value* metadata_value = nullptr;
   if (!VerifyElementNamespace(
         manifest, keys::kTizenMetaDataKey, parser::kTizenNamespacePrefix))
-    return false;
+    return true;
 
   if (!manifest.Get(keys::kTizenMetaDataKey, &metadata_value)) {
     LOG(INFO) << "Failed to get value of tizen metaData";

@@ -8,6 +8,8 @@
 #include <cassert>
 #include <set>
 
+#include "manifest_handlers/application_manifest_constants.h"
+
 namespace parser {
 
 ManifestHandler::~ManifestHandler() {
@@ -23,11 +25,37 @@ bool ManifestHandler::Validate(
 bool ManifestHandler::VerifyElementNamespace(const parser::Manifest& manifest,
                             const std::string& key_to_compare,
                             const std::string& desired_namespace_value) {
-  std::string tmp;
-  if (!manifest.HasPath(key_to_compare))
-    return true;
-  manifest.GetString(key_to_compare + ".@namespace", &tmp);
-  return tmp.compare(desired_namespace_value) == 0;
+  parser::Value* value = nullptr;
+  if (!manifest.Get(key_to_compare, &value))
+    return true;  // skip check as element is not what we expect
+  if (value->GetType() == parser::Value::TYPE_LIST) {
+    parser::ListValue* list = nullptr;
+    value->GetAsList(&list);
+    for (auto& value_ptr : *list) {
+      std::string namespace_value;
+      parser::DictionaryValue* dict = nullptr;
+      if (value_ptr->GetAsDictionary(&dict)) {
+        dict->GetString(kNamespaceKey,
+                        &namespace_value);
+        if (namespace_value != desired_namespace_value)
+          return false;
+      }
+    }
+  } else if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
+    std::string namespace_value;
+    parser::DictionaryValue* dict = nullptr;
+    if (value->GetAsDictionary(&dict)) {
+      dict->GetString(kNamespaceKey,
+                      &namespace_value);
+      if (namespace_value != desired_namespace_value)
+        return false;
+    }
+  } else {
+    return true;  // skip check as element is not what we expect
+  }
+
+  // all check successfull
+  return true;
 }
 
 bool ManifestHandler::AlwaysParseForType() const {
