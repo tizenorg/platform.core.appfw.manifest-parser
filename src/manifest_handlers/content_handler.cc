@@ -14,6 +14,9 @@
 namespace keys = wgt::application_widget_keys;
 
 namespace {
+
+const char kDefaultMimeType[] = "text/html";
+
 const std::set<std::string> ValidMimeTypeStartFile = {
   "text/html",
   "application/xhtml+xml",
@@ -30,15 +33,15 @@ bool ParseAndUpdateContentValue(const parser::DictionaryValue& dict,
     std::shared_ptr<wgt::parse::ContentInfo> content, bool* w3c_content_found,
     std::string* error) {
   std::string src;
-  std::string type;
+  std::string type = kDefaultMimeType;
   // src is mandatory
   if (!dict.GetString(keys::kTizenContentSrcKey, &src)) {
     *error = "<content> / <tizen:content> tags requires src attribute";
     return false;
   }
 
-  if (dict.GetString(keys::kTizenContentTypeKey, &type) &&
-      !ValidateMimeTypeStartFile(type)) {
+  dict.GetString(keys::kTizenContentTypeKey, &type);
+  if (!ValidateMimeTypeStartFile(type)) {
       *error = "Not proper type of starting file";
       return false;
   }
@@ -66,12 +69,14 @@ bool ParseAndUpdateContentValue(const parser::DictionaryValue& dict,
     if (!content->is_tizen_content()) {
       // override normal content
       content->set_src(src);
+      content->set_type(type);
       content->set_encoding(encoding);
       content->set_is_tizen_content(true);
     }
   } else {
     if (!*w3c_content_found && !content->is_tizen_content()) {
       content->set_src(src);
+      content->set_type(type);
       content->set_encoding(encoding);
       content->set_is_tizen_content(false);
     }
