@@ -31,6 +31,7 @@
 #include "manifest_handlers/setting_handler.h"
 #include "manifest_handlers/splash_screen_handler.h"
 #include "manifest_handlers/tizen_application_handler.h"
+#include "manifest_handlers/warp_handler.h"
 #include "manifest_handlers/widget_handler.h"
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/manifest_constants.h"
@@ -212,6 +213,7 @@ WidgetConfigParser::WidgetConfigParser() {
     new SettingHandler,
     new SplashScreenHandler,
     new TizenApplicationHandler,
+    new WarpHandler,
     new WidgetHandler
   };
 
