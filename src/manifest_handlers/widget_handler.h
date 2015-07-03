@@ -98,27 +98,27 @@ class WidgetHandler : public parser::ManifestHandler {
   bool AlwaysParseForType() const override { return true; }
   std::string Key() const override;
 
-  void ParseSingleLocalizedLicenseElement(
+  bool ParseSingleLocalizedLicenseElement(
       const parser::DictionaryValue* item_dict,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
-  void ParseLocalizedLicenseElements(
+  bool ParseLocalizedLicenseElements(
       const parser::Manifest& manifest,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
-  void ParseSingleLocalizedDescriptionElement(
+  bool ParseSingleLocalizedDescriptionElement(
       const parser::DictionaryValue* item_dict,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
-  void ParseLocalizedDescriptionElements(
+  bool ParseLocalizedDescriptionElements(
       const parser::Manifest& manifest,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
-  void ParseSingleLocalizedNameElement(
+  bool ParseSingleLocalizedNameElement(
       const parser::DictionaryValue* item_dict,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
-  void ParseLocalizedNameElements(
+  bool ParseLocalizedNameElements(
       const parser::Manifest& manifest,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);

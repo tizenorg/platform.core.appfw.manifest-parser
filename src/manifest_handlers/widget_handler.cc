@@ -17,6 +17,7 @@
 #include "manifest_parser/manifest_constants.h"
 #include "manifest_parser/values.h"
 #include "utils/iri_util.h"
+#include "utils/language_tag_validator.h"
 #include "utils/logging.h"
 
 namespace wgt {
@@ -54,7 +55,7 @@ void WidgetInfo::AddLicense(const std::string& locale,
   license_set_.insert(std::make_pair(locale, license));
 }
 
-void WidgetHandler::ParseSingleLocalizedLicenseElement(
+bool WidgetHandler::ParseSingleLocalizedLicenseElement(
     const parser::DictionaryValue* item_dict, const std::string& parent_lang,
     std::shared_ptr<WidgetInfo> info) {
   bool lang_overwriten = false;
@@ -65,41 +66,49 @@ void WidgetHandler::ParseSingleLocalizedLicenseElement(
   if (item_dict->HasKey(keys::kXmlLangKey)) {
     lang_overwriten = true;
     item_dict->GetString(keys::kXmlLangKey, &lang);
+    if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
+      LOG(ERROR) << "Tag " << lang << " is invalid";
+      return false;
+    }
   }
   if (item_dict->HasKey(keys::kXmlHrefKey)) {
     item_dict->GetString(keys::kXmlHrefKey, &href);
   }
   item_dict->GetString(parser::kXmlTextKey, &text);
-  // TODO(w.kosowicz) check internationalization tag validity...
   // TODO(w.kosowicz) check where href should be put...
+
   if (lang_overwriten) {
     info->license_set_.insert(std::make_pair(lang, text + href));
   } else {
     info->license_set_.insert(std::make_pair(parent_lang, text + href));
   }
+  return true;
 }
 
-void WidgetHandler::ParseLocalizedLicenseElements(
+bool WidgetHandler::ParseLocalizedLicenseElements(
     const parser::Manifest& manifest,
     const std::string& parent_lang,
     std::shared_ptr<WidgetInfo> info) {
   if (!manifest.HasPath(keys::kLicenseKey))
-    return;
+    return true;
 
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
   if (manifest.Get(keys::kLicenseKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
-      ParseSingleLocalizedLicenseElement(dict, parent_lang, info);
+      if (!ParseSingleLocalizedLicenseElement(dict, parent_lang, info))
+        return false;
     } else if (val->GetAsList(&list)) {
       for_each(list->begin(), list->end(), [list, &dict,
                parent_lang, info, this](parser::Value* item) {
-        if (item->GetAsDictionary(&dict))
-          ParseSingleLocalizedLicenseElement(dict, parent_lang, info);
+        if (item->GetAsDictionary(&dict) &&
+          !ParseSingleLocalizedLicenseElement(dict, parent_lang, info))
+            return false;
       });
     }
   }
+  return true;
 }
 
 void WidgetInfo::AddName(const std::string& locale, const std::string& name) {
@@ -122,7 +131,7 @@ void WidgetInfo::AddDescription(const std::string& locale,
   description_set_.insert(std::make_pair(locale, description));
 }
 
-void WidgetHandler::ParseSingleLocalizedDescriptionElement(
+bool WidgetHandler::ParseSingleLocalizedDescriptionElement(
     const parser::DictionaryValue* item_dict, const std::string& parent_lang,
     std::shared_ptr<WidgetInfo> info) {
   bool lang_overwriten = false;
@@ -132,39 +141,46 @@ void WidgetHandler::ParseSingleLocalizedDescriptionElement(
   if (item_dict->HasKey(keys::kXmlLangKey)) {
     lang_overwriten = true;
     item_dict->GetString(keys::kXmlLangKey, &lang);
+    if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
+      LOG(ERROR) << "Tag " << lang << " is invalid";
+      return false;
+    }
   }
   item_dict->GetString(parser::kXmlTextKey, &text);
-  // TODO(t.iwanek): check internationalization tag validity...
   if (lang_overwriten) {
     info->description_set_.insert(std::make_pair(lang, text));
   } else {
     info->description_set_.insert(std::make_pair(parent_lang, text));
   }
+  return true;
 }
 
-void WidgetHandler::ParseLocalizedDescriptionElements(
+bool WidgetHandler::ParseLocalizedDescriptionElements(
     const parser::Manifest& manifest,
     const std::string& parent_lang,
     std::shared_ptr<WidgetInfo> info) {
   if (!manifest.HasPath(keys::kDescriptionKey))
-    return;
+    return true;
 
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
   if (manifest.Get(keys::kDescriptionKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
-      ParseSingleLocalizedDescriptionElement(dict, parent_lang, info);
+      if (!ParseSingleLocalizedDescriptionElement(dict, parent_lang, info))
+        return false;
     } else if (val->GetAsList(&list)) {
       for (auto& item : *list)
-        if (item->GetAsDictionary(&dict))
-          ParseSingleLocalizedDescriptionElement(dict, parent_lang,
-              info);
+        if (item->GetAsDictionary(&dict) &&
+            !ParseSingleLocalizedDescriptionElement(dict, parent_lang,
+              info))
+            return false;
     }
   }
+  return true;
 }
 
-void WidgetHandler::ParseSingleLocalizedNameElement(
+bool WidgetHandler::ParseSingleLocalizedNameElement(
     const parser::DictionaryValue* item_dict, const std::string& parent_lang,
     std::shared_ptr<WidgetInfo> info) {
   bool lang_overwriten = false;
@@ -175,6 +191,10 @@ void WidgetHandler::ParseSingleLocalizedNameElement(
   if (item_dict->HasKey(keys::kXmlLangKey)) {
     lang_overwriten = true;
     item_dict->GetString(keys::kXmlLangKey, &lang);
+    if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
+      LOG(ERROR) << "Tag " << lang << " is invalid";
+      return false;
+    }
   }
   if (item_dict->HasKey(keys::kShortKey)) {
     item_dict->GetString(keys::kShortKey, &short_name);
@@ -183,10 +203,7 @@ void WidgetHandler::ParseSingleLocalizedNameElement(
 
   // ignore if given language already spotted
   if (info->name_set_.find(lang) != info->name_set_.end())
-    return;
-
-  // TODO(t.iwanek): check internationalization tag validity...
-
+    return true;
   if (lang_overwriten) {
     info->name_set_.insert(std::make_pair(lang, name));
     if (!short_name.empty())
@@ -196,25 +213,29 @@ void WidgetHandler::ParseSingleLocalizedNameElement(
     if (!short_name.empty())
       info->short_name_set_.insert(std::make_pair(parent_lang, short_name));
   }
+  return true;
 }
 
-void WidgetHandler::ParseLocalizedNameElements(const parser::Manifest& manifest,
+bool WidgetHandler::ParseLocalizedNameElements(const parser::Manifest& manifest,
     const std::string& parent_lang, std::shared_ptr<WidgetInfo> info) {
   if (!manifest.HasPath(keys::kNameKey))
-    return;
+    return true;
 
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
   if (manifest.Get(keys::kNameKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
-      ParseSingleLocalizedNameElement(dict, parent_lang, info);
+      if (!ParseSingleLocalizedNameElement(dict, parent_lang, info))
+        return false;
     } else if (val->GetAsList(&list)) {
       for (auto& item : *list)
-        if (item->GetAsDictionary(&dict))
-          ParseSingleLocalizedNameElement(dict, parent_lang, info);
+        if (item->GetAsDictionary(&dict) &&
+            !ParseSingleLocalizedNameElement(dict, parent_lang, info))
+          return false;
     }
   }
+  return true;
 }
 
 bool WidgetHandler::Parse(
@@ -239,9 +260,18 @@ bool WidgetHandler::Parse(
   if (manifest.HasPath(keys::kAuthorKeyText))
     manifest.GetString(keys::kAuthorKeyText, &widget_info->author_);
 
-  ParseLocalizedDescriptionElements(manifest, parent_lang, widget_info);
-  ParseLocalizedNameElements(manifest, parent_lang, widget_info);
-  ParseLocalizedLicenseElements(manifest, parent_lang, widget_info);
+  if (!ParseLocalizedDescriptionElements(manifest, parent_lang, widget_info)) {
+    *error = "Error during processing language of description element";
+    return false;
+  }
+  if (!ParseLocalizedNameElements(manifest, parent_lang, widget_info)) {
+    *error = "Error during processing language of name element";
+    return false;
+  }
+  if (!ParseLocalizedLicenseElements(manifest, parent_lang, widget_info)) {
+    *error = "Error during processing language of license element";
+    return false;
+  }
 
   if (manifest.HasPath(keys::kVersionKey))
     manifest.GetString(keys::kVersionKey, &widget_info->version_);
