@@ -49,13 +49,29 @@ class ContentInfo : public parser::ManifestData {
 
 class ContentHandler : public parser::ManifestHandler {
  public:
+  enum class ParseResult {
+    OK,
+    IGNORE,
+    ERROR,
+  };
+
   ContentHandler();
   virtual ~ContentHandler();
+
+  ParseResult ParseAndSetContentValue(
+      const parser::DictionaryValue& dict,
+      std::shared_ptr<wgt::parse::ContentInfo>* content,
+      std::string* error);
+
   bool Parse(
       const parser::Manifest& manifest,
       std::shared_ptr<parser::ManifestData>* output,
       std::string* error) override;
   std::string Key() const override;
+
+ private:
+  bool w3c_content_found_;
+  bool tizen_content_found_;
 };
 
 }  // namespace parse

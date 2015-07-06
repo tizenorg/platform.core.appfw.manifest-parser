@@ -132,6 +132,12 @@ std::shared_ptr<ManifestData> ManifestParserImpl::AccessManifestData(
   return nullptr;
 }
 
+void ManifestParserImpl::EraseManifestData(const std::string& key) {
+  ManifestDataMap::iterator iter = manifest_data_.find(key);
+  if (iter != manifest_data_.end())
+    manifest_data_.erase(iter);
+}
+
 }  // namespace parser
 
 

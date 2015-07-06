@@ -43,4 +43,8 @@ std::shared_ptr<ManifestData> ManifestParser::AccessManifestData(
   return impl_->AccessManifestData(key);
 }
 
+void ManifestParser::EraseManifestData(const std::string& key) {
+  return impl_->EraseManifestData(key);
+}
+
 }  // namespace parser
