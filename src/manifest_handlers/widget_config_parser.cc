@@ -35,6 +35,7 @@
 #include "manifest_handlers/widget_handler.h"
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/manifest_constants.h"
+#include "utils/iri_util.h"
 #include "utils/logging.h"
 
 namespace ba = boost::algorithm;
@@ -175,15 +176,19 @@ FindResult FindFileWithinWidget(const bf::path& widget_path,
   return FindResult::NUL;
 }
 
-// http://www.w3.org/TR/widgets/#step-8-locate-the-start-file
-bool CheckStartFileInWidget(const bf::path& widget_path,
-                            const std::string& content) {
+bool CheckW3CContentSrcExits(const bf::path& widget_path,
+                             const std::string& content) {
   if (!content.empty()) {
     if (FindFileWithinWidget(widget_path, content) == FindResult::OK) {
       LOG(INFO) << "Start file is: " << content;
       return true;
     }
   }
+  return false;
+}
+
+// http://www.w3.org/TR/widgets/#step-8-locate-the-start-file
+bool CheckStartFileInWidget(const bf::path& widget_path) {
   for (auto& file : kDefaultStartFiles) {
     if (FindFileWithinWidget(widget_path, file) == FindResult::OK) {
       LOG(INFO) << "Start file is: " << file;
@@ -237,19 +242,27 @@ const std::string& WidgetConfigParser::GetErrorMessage() const {
 }
 
 bool WidgetConfigParser::CheckStartFile() {
-  std::string content;
   std::shared_ptr<const ContentInfo> content_info =
       std::static_pointer_cast<const ContentInfo>(parser_->GetManifestData(
           application_widget_keys::kTizenContentKey));
   if (content_info) {
-    content = content_info->src();
+    std::string content = content_info->src();
     if (content_info->is_tizen_content()) {
-      // external url in tizen:content is outside of w3c p&c spec
+      // tizen:content may be external url
+      if (parser::utils::IsValidIRI(content))
+        return true;
+    }
+
+    if (CheckW3CContentSrcExits(widget_path_, content)) {
+      // Content is valid
       return true;
+    } else {
+      // Remove content as it is invalid
+      parser_->EraseManifestData(application_widget_keys::kTizenContentKey);
     }
   }
 
-  if (!CheckStartFileInWidget(widget_path_, content)) {
+  if (!CheckStartFileInWidget(widget_path_)) {
     error_ = "Could not find valid start file";
     return false;
   }

@@ -32,6 +32,7 @@ class ManifestParserImpl {
   std::shared_ptr<const ManifestData> GetManifestData(const std::string& key);
 
   std::shared_ptr<ManifestData> AccessManifestData(const std::string& key);
+  void EraseManifestData(const std::string& key);
 
  private:
   bool ParseManifestData(std::string* error);

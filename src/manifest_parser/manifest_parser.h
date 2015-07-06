@@ -33,6 +33,8 @@ class ManifestParser final {
   // Getter returning writable data so that value of key can be changed
   // used in WidgetConfigParser
   std::shared_ptr<ManifestData> AccessManifestData(const std::string& key);
+  // Removes data by given key
+  void EraseManifestData(const std::string& key);
 
   std::unique_ptr<ManifestParserImpl> impl_;
 };
