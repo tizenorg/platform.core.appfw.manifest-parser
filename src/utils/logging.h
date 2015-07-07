@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <string>
 
 namespace utils {
 
@@ -62,7 +63,7 @@ inline static const constexpr char* __tag_for_logging() {
 //       LEVEL = ERROR | WARNING | INFO | DEBUG
 #define LOG(LEVEL)                                                             \
     ::utils::LogCatcher() & std::ostringstream()                               \
-      << ::utils::LogTag<::utils::LogLevel::LOG_ ## LEVEL>::value              \
+      << std::string(::utils::LogTag<::utils::LogLevel::LOG_ ## LEVEL>::value) \
       << " " << std::setw(20) << std::left << __tag_for_logging()              \
       << std::setw(0) << " : "                                                 \
 
