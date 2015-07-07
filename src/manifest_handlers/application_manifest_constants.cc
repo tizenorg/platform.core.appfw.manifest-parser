@@ -93,6 +93,8 @@ const char kTizenWidgetKey[] = "widget";
 // W3C icon
 const char kWidgetIconKey[] = "widget.icon";
 const char kWidgetIconSrcKey[] = "@src";
+const char kWidgetIconWidthKey[] = "@width";
+const char kWidgetIconHeightKey[] = "@height";
 
 const char kTizenApplicationKey[] = "widget.application";
 // Child keys inside 'kTizenApplicationKey'
