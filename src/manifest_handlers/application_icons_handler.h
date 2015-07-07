@@ -14,21 +14,36 @@
 namespace wgt {
 namespace parse {
 
+class ApplicationIcon {
+ public:
+  explicit ApplicationIcon(const std::string& path, int height = -1,
+                           int width = -1);
+
+  bool GetWidth(int* width) const;
+  bool GetHeight(int* height) const;
+  const std::string& path() const;
+
+  void set_width(int width);
+  void set_height(int height);
+
+ private:
+  std::string path_;
+  int height_;
+  int width_;
+};
+
 class ApplicationIconsInfo : public parser::ManifestData {
  public:
-  const std::vector<std::string>& get_icon_paths() const;
-  void add_icon_path(const std::string& icon_path);
+  const std::vector<ApplicationIcon>& icons() const;
+  void AddIcon(const ApplicationIcon& icon_path);
  private:
-  std::vector<std::string> icon_paths_;
+  std::vector<ApplicationIcon> icons_;
 };
 
 class ApplicationIconsHandler : public parser::ManifestHandler {
  public:
   ApplicationIconsHandler();
   ~ApplicationIconsHandler();
-
-  bool ExtractIconSrc(const parser::Value& dict,
-                      std::string* value, std::string* error);
 
   bool Parse(
       const parser::Manifest& manifest,

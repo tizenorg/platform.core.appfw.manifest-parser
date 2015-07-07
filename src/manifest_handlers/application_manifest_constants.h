@@ -84,6 +84,8 @@ extern const char kTizenApplicationRequiredVersionKey[];
 extern const char kTizenAppIdKey[];
 extern const char kWidgetIconKey[];
 extern const char kWidgetIconSrcKey[];
+extern const char kWidgetIconWidthKey[];
+extern const char kWidgetIconHeightKey[];
 extern const char kAllowNavigationKey[];
 extern const char kAllowNavigationText[];
 extern const char kCSPReportOnlyKey[];

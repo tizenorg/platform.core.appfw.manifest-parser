@@ -282,33 +282,44 @@ bool WidgetConfigParser::CheckWidgetIcons() {
   }
   ApplicationIconsInfo icons;
   // custom icons
-  for (auto& icon : icons_info->get_icon_paths()) {
+  for (auto& icon : icons_info->icons()) {
     bf::path result;
-    if (FindFileWithinWidget(widget_path_, icon, &result) == FindResult::OK) {
+    if (FindFileWithinWidget(widget_path_, icon.path(), &result)
+        == FindResult::OK) {
       if (!IsIconMimeTypeSupported(result)) {
         LOG(WARNING) << "Unsupported icon: " << result;
         continue;
       }
       std::string relative =
           result.string().substr(widget_path_.string().size() + 1);
-      icons.add_icon_path(relative);
+      int width = -1;
+      int height = -1;
+      icon.GetWidth(&width);
+      icon.GetHeight(&height);
+      icons.AddIcon(ApplicationIcon(relative, height, width));
     }
   }
   // default icons
   for (auto& icon : kDefaultIconFiles) {
     bf::path result;
-    if (FindFileWithinWidget(widget_path_, icon, &result) == FindResult::OK) {
+    if (FindFileWithinWidget(widget_path_, icon, &result)
+        == FindResult::OK) {
       if (!IsIconMimeTypeSupported(result)) {
         LOG(WARNING) << "Unsupported icon: " << result;
         continue;
       }
       std::string relative =
           result.string().substr(widget_path_.string().size() + 1);
-      icons.add_icon_path(relative);
+      icons.AddIcon(ApplicationIcon(relative));
     }
   }
-  for (auto& icon : icons.get_icon_paths()) {
-    LOG(DEBUG) << "Valid icon: " << icon;
+  for (auto& icon : icons.icons()) {
+    LOG(DEBUG) << "Valid icon: " << icon.path();
+    int value = 0;
+    if (icon.GetWidth(&value))
+      LOG(DEBUG) << " with width: " << value;
+    if (icon.GetHeight(&value))
+      LOG(DEBUG) << " with height: " << value;
   }
   *icons_info = icons;
   return true;
