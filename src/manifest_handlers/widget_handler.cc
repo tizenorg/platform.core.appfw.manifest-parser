@@ -17,6 +17,7 @@
 #include "manifest_parser/manifest_constants.h"
 #include "manifest_parser/values.h"
 #include "utils/iri_util.h"
+#include "utils/language_tag_validator.h"
 #include "utils/logging.h"
 
 namespace wgt {
@@ -65,12 +66,15 @@ void WidgetHandler::ParseSingleLocalizedLicenseElement(
   if (item_dict->HasKey(keys::kXmlLangKey)) {
     lang_overwriten = true;
     item_dict->GetString(keys::kXmlLangKey, &lang);
+    if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
+      LOG(ERROR) << "Tag " << lang << " is invalid";
+      return;
+    }
   }
   if (item_dict->HasKey(keys::kXmlHrefKey)) {
     item_dict->GetString(keys::kXmlHrefKey, &href);
   }
   item_dict->GetString(parser::kXmlTextKey, &text);
-  // TODO(w.kosowicz) check internationalization tag validity...
   // TODO(w.kosowicz) check where href should be put...
   if (lang_overwriten) {
     info->license_set_.insert(std::make_pair(lang, text + href));
@@ -132,9 +136,12 @@ void WidgetHandler::ParseSingleLocalizedDescriptionElement(
   if (item_dict->HasKey(keys::kXmlLangKey)) {
     lang_overwriten = true;
     item_dict->GetString(keys::kXmlLangKey, &lang);
+    if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
+      LOG(ERROR) << "Tag " << lang << " is invalid";
+      return;
+    }
   }
   item_dict->GetString(parser::kXmlTextKey, &text);
-  // TODO(t.iwanek): check internationalization tag validity...
   if (lang_overwriten) {
     info->description_set_.insert(std::make_pair(lang, text));
   } else {
@@ -175,6 +182,10 @@ void WidgetHandler::ParseSingleLocalizedNameElement(
   if (item_dict->HasKey(keys::kXmlLangKey)) {
     lang_overwriten = true;
     item_dict->GetString(keys::kXmlLangKey, &lang);
+    if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
+      LOG(ERROR) << "Tag " << lang << " is invalid";
+      return;
+    }
   }
   if (item_dict->HasKey(keys::kShortKey)) {
     item_dict->GetString(keys::kShortKey, &short_name);
@@ -184,8 +195,6 @@ void WidgetHandler::ParseSingleLocalizedNameElement(
   // ignore if given language already spotted
   if (info->name_set_.find(lang) != info->name_set_.end())
     return;
-
-  // TODO(t.iwanek): check internationalization tag validity...
 
   if (lang_overwriten) {
     info->name_set_.insert(std::make_pair(lang, name));
