@@ -2,6 +2,8 @@
 SET(SRCS
   iri_util.cc
   string_util.cc
+  language_tag_validator.cc
+  w3c_languages.cc
 )
 # Target - definition
 ADD_LIBRARY(${TARGET_LIBNAME_UTILS} SHARED ${SRCS})
