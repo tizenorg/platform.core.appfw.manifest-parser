@@ -17,6 +17,7 @@
 #include "manifest_parser/manifest_constants.h"
 #include "manifest_parser/values.h"
 #include "utils/iri_util.h"
+#include "utils/language_tag_validator.h"
 #include "utils/logging.h"
 
 namespace wgt {
@@ -65,6 +66,10 @@ void WidgetHandler::ParseSingleLocalizedLicenseElement(
   if (item_dict->HasKey(keys::kXmlLangKey)) {
     lang_overwriten = true;
     item_dict->GetString(keys::kXmlLangKey, &lang);
+    if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
+      LOG(ERROR) << "Tag " << lang << " is invalid";
+      return;
+    }
   }
   if (item_dict->HasKey(keys::kXmlHrefKey)) {
     item_dict->GetString(keys::kXmlHrefKey, &href);
@@ -132,6 +137,10 @@ void WidgetHandler::ParseSingleLocalizedDescriptionElement(
   if (item_dict->HasKey(keys::kXmlLangKey)) {
     lang_overwriten = true;
     item_dict->GetString(keys::kXmlLangKey, &lang);
+    if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
+      LOG(ERROR) << "Tag " << lang << " is invalid";
+      return;
+    }
   }
   item_dict->GetString(parser::kXmlTextKey, &text);
   // TODO(t.iwanek): check internationalization tag validity...
@@ -175,6 +184,10 @@ void WidgetHandler::ParseSingleLocalizedNameElement(
   if (item_dict->HasKey(keys::kXmlLangKey)) {
     lang_overwriten = true;
     item_dict->GetString(keys::kXmlLangKey, &lang);
+    if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
+      LOG(ERROR) << "Tag " << lang << " is invalid";
+      return;
+    }
   }
   if (item_dict->HasKey(keys::kShortKey)) {
     item_dict->GetString(keys::kShortKey, &short_name);
