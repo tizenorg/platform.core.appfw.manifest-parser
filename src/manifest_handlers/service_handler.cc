@@ -26,7 +26,8 @@ std::unique_ptr<wgt::parse::ServiceInfo> ParseServiceInfo(
   }
   std::string id;
   if (!dict->GetString(keys::kTizenServiceIdKey, &id))
-    return false;
+    return nullptr;
+
   std::unique_ptr<wgt::parse::ServiceInfo> service(
       new wgt::parse::ServiceInfo(id));
 

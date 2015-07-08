@@ -76,7 +76,7 @@ bool CategoryHandler::Parse(
 
 bool CategoryHandler::Validate(
     const parser::ManifestData& data,
-    const parser::ManifestDataMap& handlers_output,
+    const parser::ManifestDataMap& /*handlers_output*/,
     std::string* error) const {
   const CategoryInfoList& categories_list =
       static_cast<const CategoryInfoList&>(data);

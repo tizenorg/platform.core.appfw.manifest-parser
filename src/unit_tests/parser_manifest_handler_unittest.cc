@@ -96,7 +96,7 @@ class ManifestHandlerTest : public testing::Test {
         : TestManifestHandler(name, key, prereqs, watcher) {
     }
     bool Parse(
-        const parser::Manifest& manifest,
+        const parser::Manifest& /*manifest*/,
         std::shared_ptr<ManifestData>* /*output*/,
         std::string* error) override {
       *error = name_;

@@ -23,7 +23,6 @@ namespace bf = boost::filesystem;
 
 namespace {
 const char kAttributePrefix[] = "@";
-const char kNamespaceKey[] = "@namespace";
 
 const xmlChar kWidgetNodeKey[] = "widget";
 const xmlChar kNameNodeKey[] = "name";

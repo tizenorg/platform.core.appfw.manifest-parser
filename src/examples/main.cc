@@ -16,7 +16,7 @@
 #include "custom_handlers/item_list_handler.h"
 #include "custom_handlers/item_handler.h"
 
-int main(int argc, char* argv[]) {
+int main() {
   boost::filesystem::path manifest_path =
       "/usr/share/manifest-parser/config.xml";
 
