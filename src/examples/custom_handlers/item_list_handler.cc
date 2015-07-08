@@ -30,7 +30,7 @@ ItemListHandler::~ItemListHandler() {
 
 bool ItemListHandler::ParseItemElement(parser::DictionaryValue* item_element,
                                        std::shared_ptr<ItemInfo> info_output,
-                                       std::string* error) {
+                                       std::string* /*error*/) {
   std::string item_value, item_type;
   if (item_element->GetString(std::string(attribute) + attribute_name,
                               &item_type))
@@ -89,7 +89,8 @@ bool ItemListHandler::Parse(const parser::Manifest& manifest,
 }
 
 bool ItemListHandler::Validate(const parser::ManifestData& data,
-                               const parser::ManifestDataMap& handlers_output,
+                               const parser::ManifestDataMap&
+                               /*handlers_output*/,
                                std::string* error) const {
   const ItemListInfo& info = static_cast<const ItemListInfo&>(data);
   const int item_count = info.items_size();

@@ -36,18 +36,6 @@ const char kErrMsgNoNamespace[] =
     "Element pointed by key has no namespace specified. Key name: ";
 const char kErrMsgInvalidNamespace[] =
     "Invalid namespace of element pointed by key. Key name: ";
-const char kErrMsgAppWidgetInfoNotFound[] =
-    "Cannot access app-widget info object.";
-const char kErrMsgApplicationInfoNotFound[] =
-    "Cannot access application info object.";
-const char kErrMsgDuplicatedAppWidgetId[] =
-    "Duplicated value of an id attribute in app-widget element. The value: ";
-const char kErrMsgInvalidAppWidgetIdBeginning[] =
-    "Invalid beginning of an id attribute value in app-widget element."
-    " The value: ";
-const char kErrMsgInvalidAppWidgetIdFormat[] =
-    "Invalid format of an id attribute value in app-widget element."
-    " The value: ";
 const char kErrMsgUpdatePeriodOutOfDomain[] =
     "Value of an update-period attribute in app-widget element out of domain."
     " The value: ";

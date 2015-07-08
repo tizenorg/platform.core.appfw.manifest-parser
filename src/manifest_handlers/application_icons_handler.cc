@@ -14,7 +14,7 @@ namespace keys = wgt::application_widget_keys;
 namespace {
 
 bool ExtractIconSrc(const parser::Value& dict, std::string* value,
-                    std::string* error) {
+                    std::string* /*error*/) {
   const parser::DictionaryValue* inner_dict;
   if (!dict.GetAsDictionary(&inner_dict)) {
     LOG(INFO) << "Cannot get key value as a dictionary. Key name: widget.icon";

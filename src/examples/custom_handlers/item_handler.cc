@@ -83,7 +83,7 @@ bool ItemHandler::Parse(const parser::Manifest& manifest,
 }
 
 bool ItemHandler::Validate(const parser::ManifestData& data,
-                           const parser::ManifestDataMap& handlers_output,
+                           const parser::ManifestDataMap& /*handlers_output*/,
                            std::string* error) const {
   const ItemInfo& info = static_cast<const ItemInfo&>(data);
   if (info.type().empty() || info.value().empty()) {

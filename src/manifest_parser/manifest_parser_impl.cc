@@ -22,11 +22,6 @@ void SetError(const std::string& message, std::string* error) {
   *error = message;
 }
 
-void SetError(const std::string& message, const std::string& arg,
-    std::string* error) {
-  *error = message + arg;
-}
-
 }  // namespace
 
 namespace parser {
