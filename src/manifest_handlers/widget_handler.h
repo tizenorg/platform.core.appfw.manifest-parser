@@ -40,15 +40,6 @@ class WidgetInfo : public parser::ManifestData {
   WidgetInfo() {}
   virtual ~WidgetInfo() {}
 
-  // Name, short name and description are i18n items, they will be set
-  // if their value were changed after locale was changed.
-  void AddName(const std::string& locale, const std::string& name);
-  void AddShortName(const std::string& locale, const std::string& short_name);
-  void AddDescription(const std::string& locale,
-                      const std::string& description);
-  void AddLicense(const std::string& locale,
-                      const std::string& description);
-
   const LangValMap& name_set() const { return name_set_; }
   const LangValMap& short_name_set() const { return short_name_set_; }
   const LangValMap& description_set() const { return description_set_; }

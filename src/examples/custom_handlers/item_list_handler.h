@@ -38,8 +38,9 @@ class ItemListHandler : public parser::ManifestHandler {
 class ItemListInfo : public parser::ManifestData {
   int items_size_;
   std::vector<std::shared_ptr<ItemInfo>> items_;
+
  public:
-  ItemListInfo() {}
+  ItemListInfo() : items_size_(0) {}
   ~ItemListInfo() {}
   void AppendItem(std::shared_ptr<ItemInfo> info) {
     items_.push_back(info);

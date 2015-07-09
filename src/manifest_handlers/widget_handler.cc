@@ -47,14 +47,6 @@ bool ParserPreferenceItem(const parser::Value* val,
 
 }  // namespace
 
-
-void WidgetInfo::AddLicense(const std::string& locale,
-                    const std::string& license) {
-  if (license_set_.find(locale) != license_set_.end())
-    return;
-  license_set_.insert(std::make_pair(locale, license));
-}
-
 void WidgetHandler::ParseSingleLocalizedLicenseElement(
     const parser::DictionaryValue* item_dict, const std::string& parent_lang,
     std::shared_ptr<WidgetInfo> info) {
@@ -104,26 +96,6 @@ void WidgetHandler::ParseLocalizedLicenseElements(
       });
     }
   }
-}
-
-void WidgetInfo::AddName(const std::string& locale, const std::string& name) {
-  if (name_set_.find(locale) != name_set_.end())
-    return;
-  name_set_.insert(std::make_pair(locale, name));
-}
-
-void WidgetInfo::AddShortName(const std::string& locale,
-                              const std::string& short_name) {
-  if (short_name_set_.find(locale) != short_name_set_.end())
-    return;
-  short_name_set_.insert(std::make_pair(locale, short_name));
-}
-
-void WidgetInfo::AddDescription(const std::string& locale,
-                    const std::string& description) {
-  if (description_set_.find(locale) != description_set_.end())
-    return;
-  description_set_.insert(std::make_pair(locale, description));
 }
 
 void WidgetHandler::ParseSingleLocalizedDescriptionElement(
