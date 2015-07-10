@@ -4,6 +4,11 @@
 
 #include "manifest_handlers/content_handler.h"
 
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/trim.hpp>
+
+#include <map>
 #include <set>
 
 #include "manifest_handlers/application_manifest_constants.h"
@@ -11,17 +16,45 @@
 #include "utils/logging.h"
 #include "utils/string_util.h"
 
+namespace ba = boost::algorithm;
 namespace keys = wgt::application_widget_keys;
 
 namespace {
 
+const char kMimeMainComponent[] = "";
+const char kMimeCharsetComponent[] = "charset";
 const char kDefaultMimeType[] = "text/html";
+const char kDefaultEncoding[] = "UTF-8";
 
 const std::set<std::string> ValidMimeTypeStartFile = {
   "text/html",
   "application/xhtml+xml",
   "image/svg+xml"
 };
+
+std::map<std::string, std::string> ParseMimeComponents(
+    const std::string& type) {
+  std::map<std::string, std::string> mime_components;
+  std::vector<std::string> components;
+
+  ba::split(components, type, ba::is_any_of(";"));
+  for (auto& component : components) {
+    auto split = component.find("=");
+    std::string key;
+    std::string value;
+    if (split != std::string::npos) {
+      key = component.substr(0, split);
+      value = component.substr(split + 1);
+    } else {
+      key = kMimeMainComponent;
+      value = component;
+    }
+    ba::trim(key);
+    ba::trim(value);
+    mime_components.insert(std::make_pair(key, value));
+  }
+  return mime_components;
+}
 
 bool ValidateMimeTypeStartFile(const std::string& type) {
   return ValidMimeTypeStartFile.find(
@@ -87,15 +120,26 @@ ContentHandler::ParseResult ContentHandler::ParseAndSetContentValue(
 
   std::string type = kDefaultMimeType;
   dict.GetString(keys::kTizenContentTypeKey, &type);
-  if (!ValidateMimeTypeStartFile(type)) {
-      *error = "Not proper type of starting file";
-      return ParseResult::IGNORE;
+  // TODO(t.iwanek): this will fail for "quoted-string"
+  //                 use/implement proper mime parsing...
+  std::map<std::string, std::string> mime_components =
+      ParseMimeComponents(type);
+
+  auto mime_iter = mime_components.find(kMimeMainComponent);
+  if (mime_iter != mime_components.end()) {
+    if (!ValidateMimeTypeStartFile(mime_iter->second)) {
+        *error = "Not proper type of starting file";
+        return ParseResult::IGNORE;
+    }
   }
 
-  std::string encoding;
-  // default encoding setting
-  if (!dict.GetString(keys::kTizenContentEncodingKey, &encoding))
-    encoding = "UTF-8";
+  std::string encoding = kDefaultEncoding;
+  if (!dict.GetString(keys::kTizenContentEncodingKey, &encoding)) {
+    auto charset_iter = mime_components.find(kMimeCharsetComponent);
+    if (charset_iter != mime_components.end()) {
+      encoding = charset_iter->second;
+    }
+  }
 
   if (*content && (*content)->is_tizen_content()) {
     // Prefer tizen:content if both are correct
