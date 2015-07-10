@@ -4,7 +4,11 @@
 
 #include "manifest_handlers/content_handler.h"
 
+#include <gmime-2.6/gmime/gmime.h>
+
+#include <map>
 #include <set>
+#include <utility>
 
 #include "manifest_handlers/application_manifest_constants.h"
 #include "utils/iri_util.h"
@@ -15,13 +19,34 @@ namespace keys = wgt::application_widget_keys;
 
 namespace {
 
+const char kMimeCharsetComponent[] = "charset";
 const char kDefaultMimeType[] = "text/html";
+const char kDefaultEncoding[] = "UTF-8";
 
 const std::set<std::string> ValidMimeTypeStartFile = {
   "text/html",
   "application/xhtml+xml",
   "image/svg+xml"
 };
+
+std::pair<std::string, std::string> GetMediaTypeAndCharset(
+    const std::string& type) {
+  GMimeContentType* content_type =
+      g_mime_content_type_new_from_string(type.c_str());
+  if (!content_type)
+    return nullptr;
+  std::string mime;
+  const char* mime_str = g_mime_content_type_get_media_type(content_type);
+  if (mime_str)
+    mime = mime_str;
+  std::string charset;
+  const char* charset_str = g_mime_content_type_get_parameter(content_type,
+                              kMimeCharsetComponent);
+  if (charset_str)
+    charset = charset_str;
+  gfree(content_type);
+  return std::make_pair(mime, charset);
+}
 
 bool ValidateMimeTypeStartFile(const std::string& type) {
   return ValidMimeTypeStartFile.find(
@@ -87,15 +112,25 @@ ContentHandler::ParseResult ContentHandler::ParseAndSetContentValue(
 
   std::string type = kDefaultMimeType;
   dict.GetString(keys::kTizenContentTypeKey, &type);
-  if (!ValidateMimeTypeStartFile(type)) {
+  // TODO(t.iwanek): this will fail for "quoted-string"
+  //                 use/implement proper mime parsing...
+  std::string mime;
+  std::string charset;
+  std::tie(mime, charset) = GetMediaTypeAndCharset(type);
+
+  if (!mime.empty()) {
+    if (!ValidateMimeTypeStartFile(mime)) {
       *error = "Not proper type of starting file";
       return ParseResult::IGNORE;
+    }
   }
 
-  std::string encoding;
-  // default encoding setting
-  if (!dict.GetString(keys::kTizenContentEncodingKey, &encoding))
-    encoding = "UTF-8";
+  std::string encoding = kDefaultEncoding;
+  if (!dict.GetString(keys::kTizenContentEncodingKey, &encoding)) {
+    if (!charset.empty()) {
+      encoding = charset;
+    }
+  }
 
   if (*content && (*content)->is_tizen_content()) {
     // Prefer tizen:content if both are correct

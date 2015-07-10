@@ -180,7 +180,6 @@ bool CheckW3CContentSrcExits(const bf::path& widget_path,
                              const std::string& content) {
   if (!content.empty()) {
     if (FindFileWithinWidget(widget_path, content) == FindResult::OK) {
-      LOG(INFO) << "Start file is: " << content;
       return true;
     }
   }
@@ -255,6 +254,10 @@ bool WidgetConfigParser::CheckStartFile() {
 
     if (CheckW3CContentSrcExits(widget_path_, content)) {
       // Content is valid
+      LOG(INFO) << "Start file is: " << content
+                << ", type: " << content_info->type()
+                << ", encoding: " << content_info->encoding();
+
       return true;
     } else {
       // Remove content as it is invalid
