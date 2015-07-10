@@ -16,6 +16,7 @@ BuildRequires:  pkgconfig(libxml-2.0)
 BuildRequires:  pkgconfig(vconf)
 BuildRequires:  pkgconfig(capi-system-info)
 BuildRequires:  pkgconfig(xdgmime)
+BuildRequires:  gmime-devel
 
 Requires: ca-certificates-tizen
 Requires: libtzplatform-config
