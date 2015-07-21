@@ -42,6 +42,14 @@ extern const char kLaunchScreenReadyWhen[];
 }  // namespace application_manifest_keys
 
 namespace application_widget_keys {
+extern const char kAccountKey[];
+extern const char kAccountMASKey[];
+extern const char kAccountIconKey[];
+extern const char kAccountNameKey[];
+extern const char kAccountSectionKey[];
+extern const char kAccountTextKey[];
+extern const char kAccountCapabilityKey[];
+extern const char kAccountLangKey[];
 extern const char kNamespaceKey[];
 extern const char kXmlLangKey[];
 extern const char kXmlHrefKey[];

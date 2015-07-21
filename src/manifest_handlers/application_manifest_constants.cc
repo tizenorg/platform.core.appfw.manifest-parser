@@ -46,6 +46,14 @@ const char kLaunchScreenReadyWhen[] =
 // manifest keys for widget applications.
 namespace application_widget_keys {
 
+const char kAccountKey[] = "widget.account";
+const char kAccountMASKey[] = "@multiple-account-support";
+const char kAccountIconKey[] = "icon";
+const char kAccountNameKey[] = "display-name";
+const char kAccountSectionKey[] = "@section";
+const char kAccountTextKey[] = "#text";
+const char kAccountCapabilityKey[] = "capability";
+const char kAccountLangKey[] = "@lang";
 const char kNamespaceKey[] = "@namespace";
 const char kXmlLangKey[] = "@lang";
 const char kXmlHrefKey[] = "@href";
