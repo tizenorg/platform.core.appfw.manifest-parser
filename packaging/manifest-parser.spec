@@ -67,6 +67,7 @@ make %{?_smp_mflags}
 
 %files
 %defattr(-,root,root)
+%{_datarootdir}/manifest-parser/languages-only.txt
 %{_libdir}/libmanifest-parser.so*
 %{_libdir}/libmanifest-parser-utils.so*
 %{_libdir}/libmanifest-handlers.so*

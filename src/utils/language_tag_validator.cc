@@ -29,7 +29,7 @@ bool ValidateLanguageTag(const std::string& tag) {
   auto current_item = splitted_tag.begin();
   // main language validation
   if (current_item != splitted_tag.end() &&
-      kW3CLanguages.find(*current_item) == kW3CLanguages.end()) {
+      !lang_set::ValidateOnlyLanguage(*current_item)) {
     LOG(ERROR) << "Invalid main language tag given";
     return false;
   }
