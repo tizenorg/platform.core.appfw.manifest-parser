@@ -10,7 +10,9 @@
 
 namespace utils {
 namespace w3c_languages {
-extern const std::unordered_set<std::string> kW3CLanguages;
+namespace lang_set {
+extern const bool ValidateOnlyLanguage(const std::string& language);
+}  // namespace lang_set
 extern const std::map<std::string, std::string> kW3CExtLang;
 extern const std::unordered_set<std::string> kW3CScript;
 extern const std::unordered_set<std::string> kW3CRegion;
