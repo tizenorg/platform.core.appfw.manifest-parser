@@ -8,8 +8,6 @@
 #include <cassert>
 #include <set>
 
-#include "manifest_handlers/application_manifest_constants.h"
-
 namespace parser {
 
 ManifestHandler::~ManifestHandler() {
