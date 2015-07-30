@@ -1,5 +1,6 @@
 ADD_SUBDIRECTORY(manifest_parser)
 ADD_SUBDIRECTORY(manifest_handlers)
+ADD_SUBDIRECTORY(tpk_manifest_handlers)
 ADD_SUBDIRECTORY(unit_tests)
 ADD_SUBDIRECTORY(utils)
 ADD_SUBDIRECTORY(examples)
