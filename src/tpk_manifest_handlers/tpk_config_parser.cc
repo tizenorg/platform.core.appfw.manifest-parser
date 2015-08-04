@@ -14,6 +14,7 @@
 #include "manifest_parser/manifest_constants.h"
 #include "utils/iri_util.h"
 #include "utils/logging.h"
+#include "tpk_manifest_handlers/author_handler.h"
 
 namespace bf = boost::filesystem;
 
@@ -28,7 +29,7 @@ namespace parse {
 
 TPKConfigParser::TPKConfigParser() {
   std::vector<parser::ManifestHandler*> handlers = {
-  // TODO(m.socha): Insert here created handlers for tpk manifest file.
+  new AuthorHandler
   };
 
   std::unique_ptr<parser::ManifestHandlerRegistry> registry(
