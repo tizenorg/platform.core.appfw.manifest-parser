@@ -1,6 +1,7 @@
 # Target - sources
 SET(SRCS
   application_manifest_constants.cc
+  author_handler.cc
   tpk_config_parser.cc
 )
 
