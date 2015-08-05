@@ -70,9 +70,10 @@ extern const char kLableKey[];
 extern const char kLableLangKey[];
 
 // metadata
-extern const char kMetadata[];
-extern const char kMetadataKey[];
-extern const char kMatadataValueKey[];
+extern const char kMetaData[];
+extern const char kMetaDataKey[];
+extern const char kMetaDataValueKey[];
+extern const char kMetaDataTypeChildNameAttrKey[];
 
 // ui-application
 extern const char kUIApplicationKey[];
