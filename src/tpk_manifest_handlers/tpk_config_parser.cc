@@ -16,6 +16,7 @@
 #include "utils/logging.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 #include "tpk_manifest_handlers/author_handler.h"
+#include "tpk_manifest_handlers/datacontrol_handler.h"
 #include "tpk_manifest_handlers/description_handler.h"
 
 namespace bf = boost::filesystem;
@@ -32,6 +33,7 @@ namespace parse {
 TPKConfigParser::TPKConfigParser() {
   std::vector<parser::ManifestHandler*> handlers = {
   new AuthorHandler,
+  new DataControlHandler,
   new DescriptionHandler
   };
 
