@@ -69,9 +69,10 @@ const char kLableKey[] = "label";
 const char kLableLangKey[] = "xml:lang";
 
 // metadata
-const char kMetadata[] = "metadata";
-const char kMetadataKey[] = "key";
-const char kMatadataValueKey[] = "value";
+const char kMetaData[] = "metadata";
+const char kMetaDataKey[] = "key";
+const char kMetaDataValueKey[] = "value";
+const char kMetaDataTypeChildNameAttrKey[] = "@name";
 
 // ui-application
 const char kUIApplicationKey[] = "ui-application";
