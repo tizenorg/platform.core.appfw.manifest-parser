@@ -2,6 +2,7 @@
 SET(SRCS
   application_manifest_constants.cc
   author_handler.cc
+  datacontrol_handler.cc
   description_handler.cc
   tpk_config_parser.cc
 )
