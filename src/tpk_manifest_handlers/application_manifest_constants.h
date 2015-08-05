@@ -60,6 +60,7 @@ extern const char kDataControlKey[];
 extern const char kDataControlAccessKey[];
 extern const char kDataControlProviderIDKey[];
 extern const char kDataControlTypeKey[];
+extern const char kDataControlTypeChildNameAttrKey[];
 
 // icon
 extern const char kIconKey[];

@@ -59,6 +59,7 @@ const char kDataControlKey[] = "datacontrol";
 const char kDataControlAccessKey[] = "access";
 const char kDataControlProviderIDKey[] = "providerid";
 const char kDataControlTypeKey[] = "type";
+const char kDataControlTypeChildNameAttrKey[] = "@name";
 
 // icon
 const char kIconKey[] = "icon";
