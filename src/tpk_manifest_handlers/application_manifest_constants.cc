@@ -48,6 +48,7 @@ const char kServiceApplicationAutoRestartKey[] = "auto-restart";
 const char kServiceApplicationExecKey[] = "exec";
 const char kServiceApplicationOnBootKey[] = "on-boot";
 const char kServiceApplicationTypeKey[] = "type";
+const char kServiceApplicationKeyText[] = "#text";
 
 // app-control
 const char kAppControlKey[] = "app-control";

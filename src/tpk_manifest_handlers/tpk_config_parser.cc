@@ -19,6 +19,7 @@
 #include "tpk_manifest_handlers/datacontrol_handler.h"
 #include "tpk_manifest_handlers/description_handler.h"
 #include "tpk_manifest_handlers/metadata_handler.h"
+#include "tpk_manifest_handlers/service_application_handler.h"
 
 namespace bf = boost::filesystem;
 
@@ -36,7 +37,8 @@ TPKConfigParser::TPKConfigParser() {
   new AuthorHandler,
   new DataControlHandler,
   new DescriptionHandler,
-  new MetaDataHandler
+  new MetaDataHandler,
+  new ServiceApplicationHandler
   };
 
   std::unique_ptr<parser::ManifestHandlerRegistry> registry(
