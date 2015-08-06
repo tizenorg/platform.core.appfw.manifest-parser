@@ -70,6 +70,8 @@ const char kIconSrcKey[] = "@src";
 
 // label
 const char kLableKey[] = "label";
+const char kLableKeyText[] = "#text";
+const char kLableKeyName[] = "@name";
 const char kLableLangKey[] = "xml:lang";
 
 // metadata

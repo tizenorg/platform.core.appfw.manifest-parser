@@ -71,6 +71,8 @@ extern const char kIconSrcKey[];
 
 // label
 extern const char kLableKey[];
+extern const char kLableKeyText[];
+extern const char kLableKeyName[];
 extern const char kLableLangKey[];
 
 // metadata

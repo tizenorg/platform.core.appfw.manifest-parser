@@ -6,6 +6,7 @@ SET(SRCS
   author_handler.cc
   datacontrol_handler.cc
   description_handler.cc
+  label_handler.cc
   metadata_handler.cc
   privileges_handler.cc
   service_application_handler.cc
