@@ -49,6 +49,7 @@ extern const char kServiceApplicationAutoRestartKey[];
 extern const char kServiceApplicationExecKey[];
 extern const char kServiceApplicationOnBootKey[];
 extern const char kServiceApplicationTypeKey[];
+extern const char kServiceApplicationKeyText[];
 
 // app-control
 extern const char kAppControlKey[];
