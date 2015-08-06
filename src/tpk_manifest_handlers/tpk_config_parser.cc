@@ -14,12 +14,14 @@
 #include "manifest_parser/manifest_constants.h"
 #include "utils/iri_util.h"
 #include "utils/logging.h"
+
 #include "tpk_manifest_handlers/app_control_handler.h"
 #include "tpk_manifest_handlers/application_icons_handler.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 #include "tpk_manifest_handlers/author_handler.h"
 #include "tpk_manifest_handlers/datacontrol_handler.h"
 #include "tpk_manifest_handlers/description_handler.h"
+#include "tpk_manifest_handlers/label_handler.h"
 #include "tpk_manifest_handlers/metadata_handler.h"
 #include "tpk_manifest_handlers/privileges_handler.h"
 #include "tpk_manifest_handlers/service_application_handler.h"
@@ -43,6 +45,7 @@ TPKConfigParser::TPKConfigParser() {
   new AuthorHandler,
   new DataControlHandler,
   new DescriptionHandler,
+  new LabelHandler,
   new MetaDataHandler,
   new PrivilegesHandler,
   new ServiceApplicationHandler,
