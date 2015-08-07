@@ -36,6 +36,7 @@ enum StoredPermission {
 
 typedef std::map<std::string, StoredPermission> StoredPermissionMap;
 typedef std::set<std::string> PermissionSet;
+typedef std::set<std::string> PrivilegesSet;
 
 }  // namespace parser
 
