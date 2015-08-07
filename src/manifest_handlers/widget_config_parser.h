@@ -17,7 +17,12 @@ namespace parse {
 
 class WidgetConfigParser {
  public:
-  WidgetConfigParser();
+  enum Flags {
+    NONE = 0,
+    IGNORE_FS_ERRORS = (1 << 0)
+  };
+
+  explicit WidgetConfigParser(Flags flags = NONE);
 
   std::shared_ptr<const parser::ManifestData> GetManifestData(
       const std::string& key);
@@ -35,6 +40,7 @@ class WidgetConfigParser {
   std::unique_ptr<parser::ManifestParser> parser_;
   boost::filesystem::path widget_path_;
   std::string error_;
+  Flags flags_;
 };
 
 }  // namespace parse

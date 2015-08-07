@@ -203,7 +203,8 @@ bool CheckStartFileInWidget(const bf::path& widget_path) {
 namespace wgt {
 namespace parse {
 
-WidgetConfigParser::WidgetConfigParser() {
+WidgetConfigParser::WidgetConfigParser(Flags flags)
+    : flags_(flags) {
   std::vector<parser::ManifestHandler*> handlers = {
     new AppControlHandler,
     new ApplicationIconsHandler,
@@ -266,6 +267,7 @@ bool WidgetConfigParser::CheckStartFile() {
   }
 
   if (!CheckStartFileInWidget(widget_path_)) {
+    parser_->EraseManifestData(application_widget_keys::kTizenContentKey);
     error_ = "Could not find valid start file";
     return false;
   }
@@ -330,10 +332,10 @@ bool WidgetConfigParser::ParseManifest(const boost::filesystem::path& path) {
   if (!parser_->ParseManifest(path))
     return false;
 
-  if (!CheckStartFile())
+  if (!CheckStartFile() && !(flags_ & IGNORE_FS_ERRORS))
     return false;
 
-  if (!CheckWidgetIcons())
+  if (!CheckWidgetIcons() && !(flags_ & IGNORE_FS_ERRORS))
     return false;
 
   return true;
