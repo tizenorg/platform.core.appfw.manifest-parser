@@ -19,6 +19,7 @@
 #include "tpk_manifest_handlers/datacontrol_handler.h"
 #include "tpk_manifest_handlers/description_handler.h"
 #include "tpk_manifest_handlers/metadata_handler.h"
+#include "tpk_manifest_handlers/privileges_handler.h"
 #include "tpk_manifest_handlers/service_application_handler.h"
 #include "tpk_manifest_handlers/ui_application_handler.h"
 
@@ -39,6 +40,7 @@ TPKConfigParser::TPKConfigParser() {
   new DataControlHandler,
   new DescriptionHandler,
   new MetaDataHandler,
+  new PrivilegesHandler,
   new ServiceApplicationHandler,
   new UIApplicationHandler
   };

@@ -38,9 +38,8 @@ extern const char kDescriptionKeyText[];
 extern const char kDescriptionLangKey[];
 
 // privileges
-extern const char kPrivilegesKey[];
-// privilege
 extern const char kPrivilegeKey[];
+extern const char kPrivilegeTextKey[];
 
 // service-application
 extern const char kServiceApplicationKey[];
