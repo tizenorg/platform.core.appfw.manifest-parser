@@ -7,6 +7,7 @@ SET(SRCS
   metadata_handler.cc
   service_application_handler.cc
   tpk_config_parser.cc
+  ui_application_handler.cc
 )
 
 # Target - definition

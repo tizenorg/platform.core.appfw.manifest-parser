@@ -83,6 +83,7 @@ const char kUIApplicationMultipleKey[] = "multiple";
 const char kUIApplicationNoDisplayKey[] = "nodisplay";
 const char kUIApplicationTaskManageKey[] = "taskmanage";
 const char kUIApplicationTypeKey[] = "type";
+const char kUIApplicationKeyText[] = "#text";
 
 }  // namespace application_keys
 
