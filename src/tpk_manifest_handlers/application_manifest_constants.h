@@ -84,6 +84,7 @@ extern const char kUIApplicationMultipleKey[];
 extern const char kUIApplicationNoDisplayKey[];
 extern const char kUIApplicationTaskManageKey[];
 extern const char kUIApplicationTypeKey[];
+extern const char kUIApplicationKeyText[];
 
 // datacontrol
 extern const char kDataControlKey[];
