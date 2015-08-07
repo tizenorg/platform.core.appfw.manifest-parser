@@ -268,6 +268,7 @@ bool WidgetConfigParser::CheckStartFile() {
   }
 
   if (!CheckStartFileInWidget(widget_path_)) {
+    parser_->EraseManifestData(application_widget_keys::kTizenContentKey);
     error_ = "Could not find valid start file";
     return false;
   }
@@ -332,13 +333,16 @@ bool WidgetConfigParser::ParseManifest(const boost::filesystem::path& path) {
   if (!parser_->ParseManifest(path))
     return false;
 
-  if (!CheckStartFile())
-    return false;
-
   if (!CheckWidgetIcons())
     return false;
 
+  has_valid_start_file_ = CheckStartFile();
+
   return true;
+}
+
+bool WidgetConfigParser::HasValidStartFile() const {
+  return has_valid_start_file_;
 }
 
 }  // namespace parse

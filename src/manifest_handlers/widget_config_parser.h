@@ -23,6 +23,7 @@ class WidgetConfigParser {
       const std::string& key);
   const std::string& GetErrorMessage() const;
   bool ParseManifest(const boost::filesystem::path& path);
+  bool HasValidStartFile() const;
 
  private:
   bool CheckStartFile();
@@ -35,6 +36,7 @@ class WidgetConfigParser {
   std::unique_ptr<parser::ManifestParser> parser_;
   boost::filesystem::path widget_path_;
   std::string error_;
+  bool has_valid_start_file_;
 };
 
 }  // namespace parse
