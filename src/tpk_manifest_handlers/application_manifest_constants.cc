@@ -37,9 +37,8 @@ const char kDescriptionKeyText[] = "#text";
 const char kDescriptionLangKey[] = "xml:lang";
 
 // privileges
-const char kPrivilegesKey[] = "privileges";
-// privilege
 const char kPrivilegeKey[] = "privilege";
+const char kPrivilegeTextKey[] = "#text";
 
 // service-application
 const char kServiceApplicationKey[] = "service-application";
