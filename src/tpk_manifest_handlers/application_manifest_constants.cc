@@ -63,6 +63,8 @@ const char kDataControlTypeChildNameAttrKey[] = "@name";
 
 // icon
 const char kIconKey[] = "icon";
+const char kIconsKey[] = "icons";
+const char kIconSrcKey[] = "@src";
 
 // label
 const char kLableKey[] = "label";
