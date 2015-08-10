@@ -64,6 +64,8 @@ extern const char kDataControlTypeChildNameAttrKey[];
 
 // icon
 extern const char kIconKey[];
+extern const char kIconsKey[];
+extern const char kIconSrcKey[];
 
 // label
 extern const char kLableKey[];
