@@ -53,7 +53,9 @@ extern const char kServiceApplicationKeyText[];
 // app-control
 extern const char kAppControlKey[];
 extern const char kAppControlOperationKey[];
-extern const char kAppControlNameKey[];
+extern const char kAppControlURIKey[];
+extern const char kAppControlMimeKey[];
+extern const char kAppControlNameChildKey[];
 
 // datacontrol
 extern const char kDataControlKey[];

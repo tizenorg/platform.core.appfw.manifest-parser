@@ -1,5 +1,6 @@
 # Target - sources
 SET(SRCS
+  app_control_handler.cc
   application_icons_handler.cc
   application_manifest_constants.cc
   author_handler.cc

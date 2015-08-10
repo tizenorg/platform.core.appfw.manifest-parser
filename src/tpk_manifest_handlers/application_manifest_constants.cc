@@ -52,7 +52,9 @@ const char kServiceApplicationKeyText[] = "#text";
 // app-control
 const char kAppControlKey[] = "app-control";
 const char kAppControlOperationKey[] = "operation";
-const char kAppControlNameKey[] = "name";
+const char kAppControlURIKey[] = "uri";
+const char kAppControlMimeKey[] = "mime";
+const char kAppControlNameChildKey[] = "@name";
 
 // datacontrol
 const char kDataControlKey[] = "datacontrol";
