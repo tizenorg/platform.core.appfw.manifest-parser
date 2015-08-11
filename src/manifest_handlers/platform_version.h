@@ -7,8 +7,12 @@
 
 #include <string>
 
+#include "utils/version_number.h"
+
 namespace parser {
-std::string GetCurrentPlatformVersion();
+
+utils::VersionNumber GetCurrentPlatformVersion();
+
 }  // namespace parser
 
 #endif  // MANIFEST_HANDLERS_PLATFORM_VERSION_H_

@@ -13,7 +13,7 @@
 #include "manifest_parser/manifest_util.h"
 #include "manifest_handlers/platform_version.h"
 #include "manifest_parser/values.h"
-#include "utils/logging.h"
+#include "utils/version_number.h"
 
 namespace wgt {
 namespace parse {
@@ -105,8 +105,6 @@ bool TizenApplicationHandler::Validate(
   if (app_info.id().find(app_info.package()) != 0) {
     *error = "The application element property id "
              "does not start with package.\n";
-    LOG(ERROR) << "app_info->id() = " << app_info.id();
-    LOG(ERROR) << "app_info->package() = " << app_info.package();
     return false;
   }
   if (app_info.required_version().empty()) {
@@ -115,10 +113,17 @@ bool TizenApplicationHandler::Validate(
     return false;
   }
 
-  const std::string supported_version = parser::GetCurrentPlatformVersion();
-  // TODO(w.kosowicz) write better mechanism of version comparison
-  if (supported_version.empty() ||
-      supported_version.compare(app_info.required_version()) < 0) {
+  utils::VersionNumber supported_version = parser::GetCurrentPlatformVersion();
+  if (!supported_version.IsValid()) {
+    *error = "Cannot retrieve supported API version from platform";
+    return false;
+  }
+  utils::VersionNumber required_version(app_info.required_version());
+  if (!required_version.IsValid()) {
+    *error = "Cannot retrieve supported API version from widget";
+    return false;
+  }
+  if (supported_version < required_version) {
     *error = "The required_version of Tizen Web API "
              "is not supported.\n";
     return false;
