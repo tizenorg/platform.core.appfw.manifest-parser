@@ -3,6 +3,7 @@ SET(SRCS
   iri_util.cc
   string_util.cc
   language_tag_validator.cc
+  version_number.cc
   w3c_languages.cc
 )
 # Target - definition
