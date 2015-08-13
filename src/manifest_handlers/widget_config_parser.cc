@@ -18,6 +18,7 @@
 #include <map>
 #include <vector>
 
+#include "manifest_handlers/account_handler.h"
 #include "manifest_handlers/app_control_handler.h"
 #include "manifest_handlers/application_icons_handler.h"
 #include "manifest_handlers/application_manifest_constants.h"
@@ -205,6 +206,7 @@ namespace parse {
 
 WidgetConfigParser::WidgetConfigParser() {
   std::vector<parser::ManifestHandler*> handlers = {
+    new AccountHandler,
     new AppControlHandler,
     new ApplicationIconsHandler,
     new AppWidgetHandler,
