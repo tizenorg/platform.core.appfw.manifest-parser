@@ -24,7 +24,9 @@ const int kLanguagesNumber = 8094;
 namespace utils {
 namespace w3c_languages {
 namespace lang_set {
+
 std::vector<std::string> w3c_languages;
+
 bool InitializeLanguageSet() {
   if (!w3c_languages.empty())
     return true;
@@ -46,7 +48,7 @@ bool InitializeLanguageSet() {
   return true;
 }
 
-const bool ValidateOnlyLanguage(const std::string& language) {
+bool ValidateOnlyLanguage(const std::string& language) {
   if (!InitializeLanguageSet())
     return false;
   if (!std::binary_search(w3c_languages.begin(), w3c_languages.end(), language))
