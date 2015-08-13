@@ -26,7 +26,7 @@ class AccountInfo : public parser::ManifestData {
   AccountInfo() {}
   ~AccountInfo() override {}
 
-  const std::vector<SingleAccountInfo>& account() {
+  const std::vector<SingleAccountInfo>& accounts() const {
     return accounts_;
   }
 
