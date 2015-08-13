@@ -9,10 +9,32 @@
 #include "utils/logging.h"
 #include "utils/w3c_languages.h"
 
+namespace ba = boost::algorithm;
+
 namespace {
 const char kTagDelimiter[] = "-";
 const int kSingletonTagSize = 1;
 const int kMaximumExtensionTagSize = 8;
+
+std::string Capitalized(const std::string& input) {
+  std::string output = input;
+  ba::to_lower(output);
+  output[0] = toupper(output[0]);
+  return output;
+}
+
+std::string ToLower(const std::string& input) {
+  std::string output = input;
+  ba::to_lower(output);
+  return output;
+}
+
+std::string ToUpper(const std::string& input) {
+  std::string output = input;
+  ba::to_upper(output);
+  return output;
+}
+
 }  // namespace
 
 namespace utils {
@@ -38,7 +60,7 @@ bool ValidateLanguageTag(const std::string& tag) {
     return true;
   }
   // extlang validation
-  auto lang_pair = kW3CExtLang.find(*current_item);
+  auto lang_pair = kW3CExtLang.find(ToLower(*current_item));
   if (lang_pair != kW3CExtLang.end()) {
     if (splitted_tag.front() == lang_pair->second) {
       ++current_item;
@@ -50,20 +72,20 @@ bool ValidateLanguageTag(const std::string& tag) {
     }
   }
   // script subtag validation
-  if (kW3CScript.find(*current_item) != kW3CScript.end()) {
+  if (kW3CScript.find(Capitalized(*current_item)) != kW3CScript.end()) {
     ++current_item;
     if (current_item == splitted_tag.end())
       return true;
   }
   // region subtag validation
-  if (kW3CRegion.find(*current_item) != kW3CRegion.end()) {
+  if (kW3CRegion.find(ToUpper(*current_item)) != kW3CRegion.end()) {
     ++current_item;
     if (current_item == splitted_tag.end())
       return true;
   }
 
   // TODO(w.kosowicz): variant prefix check
-  if (kW3CVariant.find(*current_item) != kW3CVariant.end()) {
+  if (kW3CVariant.find(ToLower(*current_item)) != kW3CVariant.end()) {
     ++current_item;
     if (current_item == splitted_tag.end())
       return true;
