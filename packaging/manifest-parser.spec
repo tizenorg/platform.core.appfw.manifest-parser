@@ -1,7 +1,7 @@
 Name:           manifest-parser
 Summary:        Manifest parser
-Version:        1.0
-Release:        0
+Version:        1.1
+Release:        1
 Group:          Application Framework/Package Management
 License:        Apache-2.0
 Source0:        %{name}-%{version}.tar.gz
@@ -87,3 +87,7 @@ make %{?_smp_mflags}
 %{_bindir}/manifest-parser/*
 %{_datadir}/manifest-parser/*
 %license LICENSE LICENSE-xwalk
+
+%changelog
+* Fri Aug 14 2015 Pawel Sikorski <p.sikorski@samsung.com> 1.1-1
+-  Initial rpm changelog; AccountParser added to WGT parser; TPK parser initial patch
