@@ -68,9 +68,6 @@ class ManifestHandler {
   // application that don't declare our key in the manifest.
   virtual bool AlwaysParseForType() const;
 
-  // Same as AlwaysParseForType, but for Validate instead of Parse.
-  virtual bool AlwaysValidateForType() const;
-
   // The list of keys that, if present, should be parsed before calling our
   // Parse (typically, because our Parse needs to read those keys).
   // Defaults to empty.

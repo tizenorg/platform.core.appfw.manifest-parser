@@ -66,8 +66,7 @@ bool ManifestParserImpl::ValidateAppManifest(std::string* error) {
   const ManifestHandlerMap& handlers = registry_->handlers();
   for (auto p : handlers) {
     ManifestHandler* handler = p.second;
-    if ((manifest_data_.find(p.first) != manifest_data_.end() ||
-         handler->AlwaysValidateForType()) &&
+    if (manifest_data_.find(p.first) != manifest_data_.end() &&
         !handler->Validate(*GetManifestData(handler->Key()).get(),
             manifest_data_, error))
       return false;
