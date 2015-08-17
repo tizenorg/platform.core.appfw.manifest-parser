@@ -32,7 +32,7 @@ class ItemListHandler : public parser::ManifestHandler {
         const parser::ManifestDataMap& handlers_output,
         std::string* error) const override;
   std::string Key() const override;
-  bool AlwaysParseForType() const override;
+  bool AlwaysParseForKey() const override;
 };
 
 class ItemListInfo : public parser::ManifestData {

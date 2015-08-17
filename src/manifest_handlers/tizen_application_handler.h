@@ -61,7 +61,7 @@ class TizenApplicationHandler : public parser::ManifestHandler {
       const parser::ManifestData& data,
       const parser::ManifestDataMap& handlers_output,
       std::string* error) const override;
-  bool AlwaysParseForType() const override;
+  bool AlwaysParseForKey() const override;
   std::string Key() const override;
 };
 

@@ -171,7 +171,7 @@ bool ApplicationIconsHandler::Parse(
   return true;
 }
 
-bool ApplicationIconsHandler::AlwaysParseForType() const {
+bool ApplicationIconsHandler::AlwaysParseForKey() const {
   return true;
 }
 

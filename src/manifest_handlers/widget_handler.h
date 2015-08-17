@@ -86,7 +86,7 @@ class WidgetHandler : public parser::ManifestHandler {
       const parser::Manifest& manifest,
       std::shared_ptr<parser::ManifestData>* output,
       std::string* error) override;
-  bool AlwaysParseForType() const override { return true; }
+  bool AlwaysParseForKey() const override { return true; }
   std::string Key() const override;
 
   void ParseSingleLocalizedLicenseElement(
