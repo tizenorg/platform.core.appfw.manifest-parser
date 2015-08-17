@@ -141,10 +141,6 @@ class ManifestHandlerTest : public testing::Test {
       return return_value_;
     }
 
-    bool AlwaysValidateForType() const override {
-      return always_validate_;
-    }
-
     std::string Key() const override {
       return key_;
     }

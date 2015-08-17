@@ -60,10 +60,6 @@ bool ManifestHandler::AlwaysParseForType() const {
   return false;
 }
 
-bool ManifestHandler::AlwaysValidateForType() const {
-  return false;
-}
-
 std::vector<std::string> ManifestHandler::PrerequisiteKeys() const {
   return std::vector<std::string>();
 }
