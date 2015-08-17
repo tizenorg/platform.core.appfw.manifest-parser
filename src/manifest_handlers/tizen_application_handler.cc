@@ -136,7 +136,7 @@ std::string TizenApplicationHandler::Key() const {
   return keys::kTizenApplicationKey;
 }
 
-bool TizenApplicationHandler::AlwaysParseForType() const {
+bool TizenApplicationHandler::AlwaysParseForKey() const {
   return true;
 }
 

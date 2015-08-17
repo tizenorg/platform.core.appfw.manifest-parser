@@ -82,7 +82,7 @@ bool ManifestParserImpl::ParseAppManifest(std::string* error) {
   for (auto p : handlers) {
     ManifestHandler* handler = p.second;
     if (manifest_->HasPath(p.first) ||
-        handler->AlwaysParseForType()) {
+        handler->AlwaysParseForKey()) {
       handlers_by_order[order_map[handler]] = handler;
     }
   }

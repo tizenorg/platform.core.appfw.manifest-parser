@@ -49,7 +49,7 @@ class ApplicationIconsHandler : public parser::ManifestHandler {
       const parser::Manifest& manifest,
       std::shared_ptr<parser::ManifestData>* output,
       std::string* error) override;
-  bool AlwaysParseForType() const override;
+  bool AlwaysParseForKey() const override;
   std::string Key() const override;
 };
 

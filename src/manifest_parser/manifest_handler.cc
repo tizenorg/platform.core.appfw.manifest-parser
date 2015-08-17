@@ -56,7 +56,7 @@ bool ManifestHandler::VerifyElementNamespace(const parser::Manifest& manifest,
   return true;
 }
 
-bool ManifestHandler::AlwaysParseForType() const {
+bool ManifestHandler::AlwaysParseForKey() const {
   return false;
 }
 

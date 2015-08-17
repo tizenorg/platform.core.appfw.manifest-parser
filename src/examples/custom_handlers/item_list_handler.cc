@@ -107,7 +107,7 @@ std::string ItemListHandler::Key() const {
   return keys::item_handler_list_key;
 }
 
-bool ItemListHandler::AlwaysParseForType() const {
+bool ItemListHandler::AlwaysParseForKey() const {
   return true;
 }
 
