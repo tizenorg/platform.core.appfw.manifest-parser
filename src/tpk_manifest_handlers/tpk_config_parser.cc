@@ -9,7 +9,6 @@
 #include <string>
 #include <vector>
 
-
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/manifest_constants.h"
 #include "utils/iri_util.h"
@@ -25,6 +24,7 @@
 #include "tpk_manifest_handlers/metadata_handler.h"
 #include "tpk_manifest_handlers/privileges_handler.h"
 #include "tpk_manifest_handlers/service_application_handler.h"
+#include "tpk_manifest_handlers/tizen_application_handler.h"
 #include "tpk_manifest_handlers/ui_application_handler.h"
 
 namespace bf = boost::filesystem;
@@ -49,6 +49,7 @@ TPKConfigParser::TPKConfigParser() {
   new MetaDataHandler,
   new PrivilegesHandler,
   new ServiceApplicationHandler,
+  new TizenApplicationHandler,
   new UIApplicationHandler
   };
 
