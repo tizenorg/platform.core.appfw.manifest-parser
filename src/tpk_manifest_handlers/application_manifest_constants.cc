@@ -8,9 +8,11 @@ namespace tpk {
 
 namespace manifest_keys {
 
+const char kManifestKey[] = "manifest";
 const char kManifestFileName[] = "tizen-manifest.xml";
 const char kUIApplication[] = "ui-application";
 const char kServiceApplication[] = "service-application";
+const char kXMLS[] = "xmlns";
 const char kLable[] = "label";
 const char kAPI[] = "api-version";
 const char kPackage[] = "package";
@@ -18,6 +20,7 @@ const char kType[] = "tpk";
 const char kVersion[] = "version";
 const char kInstallLocation[] = "install-location";
 const char kMainAppID[] = "appid";
+const char kManifestTextKey[] = "#text";
 
 }  // namespace manifest_keys
 
