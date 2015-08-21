@@ -16,6 +16,9 @@
 
 namespace parser {
 
+// TODO(p.sikorski): temporary place for this key
+extern const char kW3CNamespacePrefix[];
+
 // A base class for parsed manifest data that APIs want to store on
 // the application.
 class ManifestData {

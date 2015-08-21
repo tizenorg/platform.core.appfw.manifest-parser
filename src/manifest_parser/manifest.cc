@@ -8,8 +8,6 @@
 #include <algorithm>
 #include <list>
 
-#include "manifest_parser/manifest_constants.h"
-
 namespace parser {
 
 Manifest::Manifest(std::unique_ptr<DictionaryValue> value)

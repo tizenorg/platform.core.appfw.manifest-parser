@@ -7,7 +7,6 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include "manifest_parser/manifest_constants.h"
 #include "manifest_parser/manifest_util.h"
 #include "manifest_parser/permission_types.h"
 #include "manifest_parser/values.h"
@@ -21,6 +20,9 @@ typedef std::string LocalError;
 void SetError(const std::string& message, std::string* error) {
   *error = message;
 }
+
+const char kErrMsgNoPath[] = "Path not specified.";
+const char kErrMsgInvalidPath[] = "Invalid path.";
 
 }  // namespace
 
@@ -42,11 +44,11 @@ const std::string& ManifestParserImpl::GetErrorMessage() const {
 bool ManifestParserImpl::ParseManifest(const bf::path& manifest_path) {
   error_.clear();
   if (manifest_path.empty()) {
-    SetError(application_manifest_errors::kErrMsgNoPath, &error_);
+    SetError(kErrMsgNoPath, &error_);
     return false;
   }
   if (!exists(manifest_path)) {
-    SetError(application_manifest_errors::kErrMsgInvalidPath, &error_);
+    SetError(kErrMsgInvalidPath, &error_);
     return false;
   }
 

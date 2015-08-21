@@ -11,37 +11,15 @@
 // Keys used in JSON representation of applications.
 namespace wgt {
 namespace application_manifest_keys {
-// Official fields (ordered as spec):
 
-extern const char kNameKey[];
-// extern const char kShortName[];
-// extern const char kIcons[];
-extern const char kDisplay[];
-// extern const char kOrientation[];
-extern const char kStartURLKey[];
-extern const char kCSPKey[];
-
+// TODO(p.sikorski): below key should be removed, when nwrt and app-installer
+// will stop use it. Now, it is just copied.
 extern const char kIconsKey[];
 
-// Deprecated fields:
-
-extern const char kAppKey[];
-extern const char kLaunchWebURLKey[];
-extern const char kDeprecatedURLKey[];
-extern const char kDeprecatedVersionKey[];
-extern const char kDeprecatedDescriptionKey[];
-extern const char kDeprecatedCSPKey[];
-extern const char kLaunchScreen[];
-extern const char kLaunchScreenDefault[];
-extern const char kLaunchScreenImageBorderDefault[];
-extern const char kLaunchScreenImageBorderLandscape[];
-extern const char kLaunchScreenImageBorderPortrait[];
-extern const char kLaunchScreenLandscape[];
-extern const char kLaunchScreenPortrait[];
-extern const char kLaunchScreenReadyWhen[];
 }  // namespace application_manifest_keys
 
 namespace application_widget_keys {
+extern const char kIconsKey[];
 extern const char kAccountKey[];
 extern const char kAccountMASKey[];
 extern const char kAccountIconKey[];
@@ -165,18 +143,9 @@ extern const char kTizenServiceKey[];
 extern const char kTizenServiceIdKey[];
 extern const char kTizenServiceAutoRestartKey[];
 extern const char kTizenServiceOnBootKey[];
+extern const char kXmlTextKey[];
 }  // namespace application_widget_keys
 
-
-namespace application_manifest_errors {
-extern const char kInvalidDescription[];
-extern const char kInvalidKey[];
-extern const char kInvalidName[];
-extern const char kInvalidVersion[];
-extern const char kManifestParseError[];
-// TODO(t.iwanek): fix unicode inconsistent usage
-extern const char kManifestUnreadable[];
-}  // namespace application_manifest_errors
 }  // namespace wgt
 
 #endif  // MANIFEST_HANDLERS_APPLICATION_MANIFEST_CONSTANTS_H_

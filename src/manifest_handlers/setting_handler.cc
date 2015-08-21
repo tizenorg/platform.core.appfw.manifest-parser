@@ -42,7 +42,7 @@ bool SettingHandler::Parse(
     std::shared_ptr<parser::ManifestData>* output,
     std::string* /*error*/) {
   if (!VerifyElementNamespace(
-        manifest, keys::kTizenSettingKey, parser::kTizenNamespacePrefix))
+        manifest, keys::kTizenSettingKey, keys::kTizenNamespacePrefix))
     return true;
 
   std::shared_ptr<SettingInfo> app_info(new SettingInfo);

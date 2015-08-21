@@ -9,43 +9,16 @@ namespace wgt {
 
 namespace application_manifest_keys {
 
-// Official fields (ordered as spec):
-
-const char kNameKey[] = "name";
-const char kDisplay[] = "display";
-const char kStartURLKey[] = "start_url";
-const char kCSPKey[] = "csp";
-
+// TODO(p.sikorski): below key should be removed, when nwrt and app-installer
+// will stop use it. Now, it is just copied.
 const char kIconsKey[] = "icons";
-
-// Deprecated entries:
-
-const char kAppKey[] = "app";
-const char kLaunchWebURLKey[] = "app.launch.web_url";
-const char kDeprecatedURLKey[] = "url";
-const char kDeprecatedVersionKey[] = "version";
-const char kDeprecatedDescriptionKey[] = "description";
-const char kDeprecatedCSPKey[] = "content_security_policy";
-const char kLaunchScreen[] = "launch_screen";
-const char kLaunchScreenDefault[] = "launch_screen.default";
-const char kLaunchScreenImageBorderDefault[] =
-    "launch_screen.default.image_border";
-const char kLaunchScreenImageBorderLandscape[] =
-    "launch_screen.landscape.image_border";
-const char kLaunchScreenImageBorderPortrait[] =
-    "launch_screen.portrait.image_border";
-const char kLaunchScreenLandscape[] =
-    "launch_screen.landscape";
-const char kLaunchScreenPortrait[] =
-    "launch_screen.portrait";
-const char kLaunchScreenReadyWhen[] =
-    "launch_screen.ready_when";
 
 }  // namespace application_manifest_keys
 
 // manifest keys for widget applications.
 namespace application_widget_keys {
 
+const char kIconsKey[] = "icons";
 const char kAccountKey[] = "widget.account";
 const char kAccountMASKey[] = "@multiple-account-support";
 const char kAccountIconKey[] = "icon";
@@ -192,18 +165,8 @@ const char kTizenServiceIdKey[] = "@id";
 const char kTizenServiceAutoRestartKey[] = "@auto-restart";
 const char kTizenServiceOnBootKey[] = "@on-boot";
 
+const char kXmlTextKey[] = "#text";
+
 }  // namespace application_widget_keys
 
-namespace application_manifest_errors {
-const char kInvalidDescription[] =
-    "Invalid value for 'description'.";
-const char kInvalidKey[] =
-    "Value 'key' is missing or invalid.";
-const char kInvalidName[] =
-    "Required value 'name' is missing or invalid.";
-const char kManifestParseError[] =
-    "Manifest is not valid JSON.";
-const char kManifestUnreadable[] =
-    "Manifest file is missing or unreadable.";
-}  // namespace application_manifest_errors
 }  // namespace wgt

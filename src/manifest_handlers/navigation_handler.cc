@@ -44,7 +44,7 @@ bool NavigationHandler::Parse(
     std::string* error) {
 
   if (!VerifyElementNamespace(
-        manifest, keys::kAllowNavigationKey, parser::kTizenNamespacePrefix))
+        manifest, keys::kAllowNavigationKey, keys::kTizenNamespacePrefix))
     return true;
 
   std::string allowed_domains;

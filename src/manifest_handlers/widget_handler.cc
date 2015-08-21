@@ -14,7 +14,6 @@
 #include <set>
 
 #include "manifest_handlers/application_manifest_constants.h"
-#include "manifest_parser/manifest_constants.h"
 #include "manifest_parser/values.h"
 #include "utils/iri_util.h"
 #include "utils/language_tag_validator.h"
@@ -66,7 +65,7 @@ void WidgetHandler::ParseSingleLocalizedLicenseElement(
   if (item_dict->HasKey(keys::kXmlHrefKey)) {
     item_dict->GetString(keys::kXmlHrefKey, &href);
   }
-  item_dict->GetString(parser::kXmlTextKey, &text);
+  item_dict->GetString(keys::kXmlTextKey, &text);
   // TODO(w.kosowicz) check where href should be put...
   if (lang_overwriten) {
     info->license_set_.insert(std::make_pair(lang, text + href));
@@ -113,7 +112,7 @@ void WidgetHandler::ParseSingleLocalizedDescriptionElement(
       return;
     }
   }
-  item_dict->GetString(parser::kXmlTextKey, &text);
+  item_dict->GetString(keys::kXmlTextKey, &text);
   if (lang_overwriten) {
     info->description_set_.insert(std::make_pair(lang, text));
   } else {
@@ -162,7 +161,7 @@ void WidgetHandler::ParseSingleLocalizedNameElement(
   if (item_dict->HasKey(keys::kShortKey)) {
     item_dict->GetString(keys::kShortKey, &short_name);
   }
-  item_dict->GetString(parser::kXmlTextKey, &name);
+  item_dict->GetString(keys::kXmlTextKey, &name);
 
   // ignore if given language already spotted
   if (info->name_set_.find(lang) != info->name_set_.end())

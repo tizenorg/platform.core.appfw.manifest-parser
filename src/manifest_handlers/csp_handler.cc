@@ -9,7 +9,6 @@
 #include <map>
 #include <utility>
 
-#include "manifest_parser/manifest_constants.h"
 #include "manifest_handlers/application_manifest_constants.h"
 
 namespace wgt {
@@ -25,7 +24,7 @@ bool CSPHandler::Parse(
       keys::kCSPKey : keys::kCSPKeyReportOnly;
 
   if (!VerifyElementNamespace(
-        manifest, security_policy, parser::kTizenNamespacePrefix))
+        manifest, security_policy, keys::kTizenNamespacePrefix))
     return true;
 
   std::shared_ptr<CSPInfo> info(new CSPInfo);

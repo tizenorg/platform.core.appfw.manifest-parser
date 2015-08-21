@@ -14,7 +14,6 @@
 #include <vector>
 
 #include "utils/string_util.h"
-#include "manifest_parser/manifest_constants.h"
 #include "manifest_parser/manifest.h"
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
@@ -44,6 +43,9 @@ const xmlChar kPathAttributeKey[] = "path";
 const xmlChar kNameAttributeKey[] = "name";
 const xmlChar kValueAttributeKey[] = "value";
 const xmlChar kSrcAttributeKey[] = "src";
+
+const char kXmlTextKey[] = "#text";
+const char kNamespaceKey[] = "@namespace";
 
 const char* kSingletonElements[] = {
   "author",
@@ -299,7 +301,7 @@ std::unique_ptr<DictionaryValue> LoadXMLNode(
     text = utils::CollapseWhitespaceUTF8(text);
 
   if (!text.empty())
-    value->SetString(parser::kXmlTextKey, text);
+    value->SetString(kXmlTextKey, text);
 
   return value;
 }
@@ -310,7 +312,7 @@ std::shared_ptr<Manifest> LoadManifest(const std::string& manifest_path,
   xmlNode* root_node = nullptr;
   doc = xmlReadFile(manifest_path.c_str(), nullptr, XML_PARSE_NOENT);
   if (!doc) {
-    *error = application_manifest_errors::kManifestUnreadable;
+    *error = "Manifest file is missing or unreadable.";
     return nullptr;
   }
   root_node = xmlDocGetRootElement(doc);

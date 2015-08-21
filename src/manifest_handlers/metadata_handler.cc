@@ -72,7 +72,7 @@ bool MetaDataHandler::Parse(
   std::shared_ptr<MetaDataInfo> metadata_info(new MetaDataInfo);
   parser::Value* metadata_value = nullptr;
   if (!VerifyElementNamespace(
-        manifest, keys::kTizenMetaDataKey, parser::kTizenNamespacePrefix))
+        manifest, keys::kTizenMetaDataKey, keys::kTizenNamespacePrefix))
     return true;
 
   if (!manifest.Get(keys::kTizenMetaDataKey, &metadata_value)) {

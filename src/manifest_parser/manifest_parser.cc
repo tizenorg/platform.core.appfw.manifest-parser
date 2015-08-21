@@ -7,7 +7,6 @@
 
 #include <memory>
 
-#include "manifest_parser/manifest_constants.h"
 #include "manifest_parser/manifest_parser_impl.h"
 #include "manifest_parser/manifest_util.h"
 #include "manifest_parser/permission_types.h"
