@@ -9,9 +9,11 @@
 namespace tpk {
 namespace manifest_keys {
 
+extern const char kManifestKey[];
 extern const char kManifestFileName[];
 extern const char kUIApplication[];
 extern const char kServiceApplication[];
+extern const char kXMLS[];
 extern const char kLable[];
 extern const char kAPI[];
 extern const char kPackage[];
@@ -19,6 +21,7 @@ extern const char kType[];
 extern const char kVersion[];
 extern const char kInstallLocation[];
 extern const char kMainAppID[];
+extern const char kManifestTextKey[];
 
 }  // namespace manifest_keys
 
