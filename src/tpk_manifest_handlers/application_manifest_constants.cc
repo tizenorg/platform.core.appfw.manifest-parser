@@ -93,6 +93,21 @@ const char kUIApplicationTaskManageKey[] = "taskmanage";
 const char kUIApplicationTypeKey[] = "type";
 const char kUIApplicationKeyText[] = "#text";
 
+// account
+const char kAccountKey[] = "account";
+const char kAccountProviderKey[] = "account-provider";
+const char kAccountAppIDKey[] = "appid";
+const char kAccountMASKey[] = "multiple-account-support";
+const char kAccountIconKey[] = "icon";
+const char kAccountSectionKey[] = "section";
+const char kAccountTextKey[] = "#text";
+const char kAccountNameKey[] = "@name";
+const char kAccountLabelKey[] = "label";
+const char kAccountCapabilityKey[] = "capability";
+const char kAccountLangKey[] = "xml:lang";
+const char kAccountIconNormalKey[] = "account";
+const char kAccountIconSmallKey[] = "account-small";
+
 }  // namespace application_keys
 
 namespace manifest_errors {
