@@ -100,6 +100,22 @@ extern const char kDataControlAccessKey[];
 extern const char kDataControlProviderIDKey[];
 extern const char kDataControlTypeKey[];
 
+// account
+extern const char kAccountKey[];
+extern const char kAccountProviderKey[];
+extern const char kAccountProviderIDKey[];
+extern const char kAccountAppIDKey[];
+extern const char kAccountMASKey[];
+extern const char kAccountIconKey[];
+extern const char kAccountSectionKey[];
+extern const char kAccountTextKey[];
+extern const char kAccountNameKey[];
+extern const char kAccountLabelKey[];
+extern const char kAccountCapabilityKey[];
+extern const char kAccountLangKey[];
+extern const char kAccountIconNormalKey[];
+extern const char kAccountIconSmallKey[];
+
 }  // namespace application_keys
 
 namespace manifest_errors {

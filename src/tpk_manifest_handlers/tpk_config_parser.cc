@@ -14,6 +14,7 @@
 #include "utils/iri_util.h"
 #include "utils/logging.h"
 
+#include "tpk_manifest_handlers/account_handler.h"
 #include "tpk_manifest_handlers/app_control_handler.h"
 #include "tpk_manifest_handlers/application_icons_handler.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
@@ -40,6 +41,7 @@ namespace parse {
 
 TPKConfigParser::TPKConfigParser() {
   std::vector<parser::ManifestHandler*> handlers = {
+  new AccountHandler,
   new AppControlHandler,
   new ApplicationIconsHandler,
   new AuthorHandler,
