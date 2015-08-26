@@ -1,6 +1,6 @@
 Name:           manifest-parser
 Summary:        Manifest parser
-Version:        1.3
+Version:        1.4
 Release:        1
 Group:          Application Framework/Package Management
 License:        Apache-2.0
@@ -89,6 +89,9 @@ make %{?_smp_mflags}
 %license LICENSE LICENSE-xwalk
 
 %changelog
+* Wed Aug 26 2015 Pawel Sikorski <p.sikorski@samsung.com> 1.4-1
+- String keys cleanup.
+
 * Thu Aug 20 2015 Pawel Sikorski <p.sikorski@samsung.com> 1.3-1
 - TPK handlers added
 
