@@ -14,7 +14,6 @@ BuildRequires:  pkgconfig(pkgmgr-info)
 BuildRequires:  pkgconfig(libiri)
 BuildRequires:  pkgconfig(libxml-2.0)
 BuildRequires:  pkgconfig(vconf)
-BuildRequires:  pkgconfig(capi-system-info)
 BuildRequires:  pkgconfig(xdgmime)
 
 Requires: ca-certificates-tizen
@@ -55,7 +54,8 @@ Examples of manifest-parser usage
 # with cmake, which are on one repository. Later this macro
 # is used in CMakeLists.txt files to distinguish, which project
 # is currently being build.
-%cmake . -DCMAKE_BUILD_TYPE=%{?build_type:%build_type}
+%cmake . -DCMAKE_BUILD_TYPE=%{?build_type:%build_type} \
+         -DTIZEN_VERSION=%{tizen_version}
 make %{?_smp_mflags}
 
 %install
