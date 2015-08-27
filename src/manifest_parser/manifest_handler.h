@@ -12,7 +12,6 @@
 #include <vector>
 
 #include "manifest_parser/manifest.h"
-#include "manifest_parser/manifest_constants.h"
 
 namespace parser {
 

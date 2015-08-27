@@ -6,16 +6,6 @@
 #include "manifest_handlers/application_manifest_constants.h"
 
 namespace wgt {
-
-namespace application_manifest_keys {
-
-// TODO(p.sikorski): below key should be removed, when nwrt and app-installer
-// will stop use it. Now, it is just copied.
-const char kIconsKey[] = "icons";
-
-}  // namespace application_manifest_keys
-
-// manifest keys for widget applications.
 namespace application_widget_keys {
 
 const char kIconsKey[] = "icons";
@@ -35,11 +25,9 @@ const char kNameKey[] = "widget.name";
 const char kVersionKey[] = "widget.@version";
 const char kViewModesKey[] = "widget.@viewmodes";
 const char kWidgetKey[] = "widget";
-const char kWebURLsKey[] = "widget.@id";
 const char kAuthorKey[] = "widget.author";
 const char kAuthorKeyText[] = "widget.author.#text";
 const char kDescriptionKey[] = "widget.description";
-const char kShortNameKey[] = "widget.name.@short";
 const char kShortKey[] = "@short";
 const char kIDKey[] = "widget.@id";
 const char kAuthorEmailKey[] = "widget.author.@email";
@@ -83,11 +71,8 @@ const char kTizenApplicationIdKey[] = "@id";
 const char kTizenApplicationPackageKey[] = "@package";
 const char kTizenApplicationRequiredVersionKey[] = "@required_version";
 
-const char kTizenAppIdKey[] = "widget.application.@package";
 const char kAllowNavigationKey[] = "widget.allow-navigation";
 const char kAllowNavigationText[] = "widget.allow-navigation.#text";
-const char kCSPReportOnlyKey[] =
-    "widget.content-security-policy-report-only.#text";
 const char kTizenSettingKey[] = "widget.setting";
 const char kTizenBackgroundSupportKey[] = "widget.setting.@background-support";
 const char kTizenContextMenuKey[] = "widget.setting.@context-menu";
@@ -110,7 +95,6 @@ const char kTizenPermissionsKey[] = "widget.privilege";
 const char kTizenPermissionsNameKey[] = "@name";
 const char kTizenSplashScreenKey[] = "widget.splash-screen";
 const char kTizenSplashScreenSrcKey[] = "@src";
-const char kContentNamespace[] = "widget.content.@namespace";
 const char kTizenScreenOrientationKey[] = "widget.setting.@screen-orientation";
 const char kTizenAppWidgetFullKey[] = "widget.app-widget";
 const char kTizenAppWidgetKey[] = "app-widget";
@@ -168,5 +152,4 @@ const char kTizenServiceOnBootKey[] = "@on-boot";
 const char kXmlTextKey[] = "#text";
 
 }  // namespace application_widget_keys
-
 }  // namespace wgt

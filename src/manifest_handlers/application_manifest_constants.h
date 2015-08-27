@@ -8,16 +8,7 @@
 
 #include "manifest_parser/manifest.h"
 
-// Keys used in JSON representation of applications.
 namespace wgt {
-namespace application_manifest_keys {
-
-// TODO(p.sikorski): below key should be removed, when nwrt and app-installer
-// will stop use it. Now, it is just copied.
-extern const char kIconsKey[];
-
-}  // namespace application_manifest_keys
-
 namespace application_widget_keys {
 extern const char kIconsKey[];
 extern const char kAccountKey[];
@@ -33,7 +24,6 @@ extern const char kXmlLangKey[];
 extern const char kXmlHrefKey[];
 extern const char kDefaultLocaleKey[];
 extern const char kNameKey[];
-extern const char kWebURLsKey[];
 extern const char kWidgetKey[];
 extern const char kVersionKey[];
 extern const char kViewModesKey[];
@@ -48,7 +38,6 @@ extern const char kCSPTextReportOnly[];
 extern const char kAuthorKey[];
 extern const char kAuthorKeyText[];
 extern const char kDescriptionKey[];
-extern const char kShortNameKey[];
 extern const char kShortKey[];
 extern const char kIDKey[];
 extern const char kAuthorEmailKey[];
@@ -67,14 +56,12 @@ extern const char kTizenApplicationKey[];
 extern const char kTizenApplicationIdKey[];
 extern const char kTizenApplicationPackageKey[];
 extern const char kTizenApplicationRequiredVersionKey[];
-extern const char kTizenAppIdKey[];
 extern const char kWidgetIconKey[];
 extern const char kWidgetIconSrcKey[];
 extern const char kWidgetIconWidthKey[];
 extern const char kWidgetIconHeightKey[];
 extern const char kAllowNavigationKey[];
 extern const char kAllowNavigationText[];
-extern const char kCSPReportOnlyKey[];
 extern const char kTizenSettingKey[];
 extern const char kTizenBackgroundSupportKey[];
 extern const char kTizenContextMenuKey[];
@@ -94,7 +81,6 @@ extern const char kTizenPermissionsKey[];
 extern const char kTizenPermissionsNameKey[];
 extern const char kTizenSplashScreenKey[];
 extern const char kTizenSplashScreenSrcKey[];
-extern const char kContentNamespace[];
 extern const char kTizenScreenOrientationKey[];
 extern const char kTizenAppWidgetFullKey[];
 extern const char kTizenAppWidgetKey[];

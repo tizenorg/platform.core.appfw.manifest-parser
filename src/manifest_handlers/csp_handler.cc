@@ -42,7 +42,7 @@ bool CSPHandler::Parse(
 
 std::string CSPHandler::Key() const {
   return security_type_ == SecurityType::CSP ?
-        keys::kCSPKey : keys::kCSPReportOnlyKey;
+        keys::kCSPKey : keys::kCSPTextReportOnly;
 }
 
 }  // namespace parse
