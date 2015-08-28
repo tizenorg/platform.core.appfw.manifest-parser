@@ -25,6 +25,7 @@
 #include "manifest_handlers/appwidget_handler.h"
 #include "manifest_handlers/category_handler.h"
 #include "manifest_handlers/content_handler.h"
+#include "manifest_handlers/csp_handler.h"
 #include "manifest_handlers/ime_handler.h"
 #include "manifest_handlers/metadata_handler.h"
 #include "manifest_handlers/navigation_handler.h"
@@ -211,6 +212,8 @@ WidgetConfigParser::WidgetConfigParser() {
     new AppWidgetHandler,
     new CategoryHandler,
     new ContentHandler,
+    new CSPHandler(CSPHandler::SecurityType::CSP),
+    new CSPHandler(CSPHandler::SecurityType::CSP_REPORT_ONLY),
     new ImeHandler,
     new MetaDataHandler,
     new NavigationHandler,
