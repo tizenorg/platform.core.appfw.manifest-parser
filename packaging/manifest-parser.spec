@@ -1,6 +1,6 @@
 Name:           manifest-parser
 Summary:        Manifest parser
-Version:        1.4
+Version:        1.5
 Release:        1
 Group:          Application Framework/Package Management
 License:        Apache-2.0
@@ -89,6 +89,10 @@ make %{?_smp_mflags}
 %license LICENSE LICENSE-xwalk
 
 %changelog
+* Tue Sep 01 2015 Pawel Sikorski <p.sikorski@samsung.com> 1.5-1
+- dependency removal; CSPHandler included in WidgetConfigParser;
+- new TPK handler added
+
 * Wed Aug 26 2015 Pawel Sikorski <p.sikorski@samsung.com> 1.4-1
 - String keys cleanup.
 
