@@ -140,6 +140,7 @@ ContentHandler::ParseResult ContentHandler::ParseAndSetContentValue(
       encoding = charset_iter->second;
     }
   }
+  ba::trim(encoding);
 
   if (*content && (*content)->is_tizen_content()) {
     // Prefer tizen:content if both are correct
