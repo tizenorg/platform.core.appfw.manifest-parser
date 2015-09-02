@@ -47,13 +47,6 @@ const xmlChar kSrcAttributeKey[] = "src";
 const char kXmlTextKey[] = "#text";
 const char kNamespaceKey[] = "@namespace";
 
-const char* kSingletonElements[] = {
-  "author",
-  "allow-navigation",
-  "content-security-policy-report-only",
-  "content-security-policy"
-};
-
 const char kIdPattern[] = "^[0-9a-zA-Z]{10}[.][0-9a-zA-Z]{1,52}$";
 const char kPackagePattern[] = "^[0-9a-zA-Z]{10}$";
 
@@ -118,13 +111,6 @@ bool IsElementSupportSpanAndDir(xmlNode* root) {
      || xmlStrEqual(root->name, kAuthorNodeKey)
      || xmlStrEqual(root->name, kLicenseNodeKey))
     return true;
-  return false;
-}
-
-bool IsSingletonElement(const std::string& name) {
-  for (const char* str : kSingletonElements)
-      if (name == str)
-        return true;
   return false;
 }
 
@@ -260,8 +246,6 @@ std::unique_ptr<DictionaryValue> LoadXMLNode(
 
     if (!value->HasKey(sub_node_name)) {
       value->Set(sub_node_name, sub_value.release());
-      continue;
-    } else if (IsSingletonElement(sub_node_name)) {
       continue;
     }
 

@@ -71,9 +71,6 @@ bool MetaDataHandler::Parse(
     std::string* error) {
   std::shared_ptr<MetaDataInfo> metadata_info(new MetaDataInfo);
   parser::Value* metadata_value = nullptr;
-  if (!VerifyElementNamespace(
-        manifest, keys::kTizenMetaDataKey, keys::kTizenNamespacePrefix))
-    return true;
 
   if (!manifest.Get(keys::kTizenMetaDataKey, &metadata_value)) {
     LOG(INFO) << "Failed to get value of tizen metaData";
@@ -85,8 +82,10 @@ bool MetaDataHandler::Parse(
           parser::Value::TYPE_DICTIONARY)) {
     parser::DictionaryValue* dict;
     metadata_value->GetAsDictionary(&dict);
-    metadata_item = ParseMetaDataItem(dict, error);
-    metadata_info->SetValue(metadata_item.first, metadata_item.second);
+    if (parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix)) {
+      metadata_item = ParseMetaDataItem(dict, error);
+      metadata_info->SetValue(metadata_item.first, metadata_item.second);
+    }
   } else if (metadata_value &&
         metadata_value->IsType(parser::Value::TYPE_LIST)) {
     parser::ListValue* list;
@@ -96,6 +95,8 @@ bool MetaDataHandler::Parse(
          it != list->end(); ++it) {
       parser::DictionaryValue* dict;
       (*it)->GetAsDictionary(&dict);
+      if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+        continue;
       metadata_item = ParseMetaDataItem(dict, error);
       metadata_info->SetValue(metadata_item.first, metadata_item.second);
     }

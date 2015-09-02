@@ -14,6 +14,8 @@
 
 #include "manifest_handlers/application_manifest_constants.h"
 
+namespace keys = wgt::application_widget_keys;
+
 namespace {
 
 const char kTrueValue[] = "true";
@@ -24,6 +26,8 @@ bool ForAllFindKey(const parser::Value* value, const std::string& key,
   if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
     const parser::DictionaryValue* dict = nullptr;
     value->GetAsDictionary(&dict);
+    if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+      return false;
     if (dict->GetString(key, result))
       return true;
   } else if (value->GetType() == parser::Value::TYPE_LIST) {
@@ -32,7 +36,8 @@ bool ForAllFindKey(const parser::Value* value, const std::string& key,
     for (auto& item : *list) {
       const parser::DictionaryValue* dict = nullptr;
       if (item->GetAsDictionary(&dict)) {
-        // find only first
+        if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+          continue;
         if (dict->GetString(key, result))
           return true;
       }
@@ -41,12 +46,10 @@ bool ForAllFindKey(const parser::Value* value, const std::string& key,
   return false;
 }
 
-}
+}  // namespace
 
 namespace wgt {
 namespace parse {
-
-namespace keys = wgt::application_widget_keys;
 
 SettingInfo::SettingInfo()
     : hwkey_enabled_(true),
@@ -71,10 +74,6 @@ bool SettingHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* /*error*/) {
-  if (!VerifyElementNamespace(
-        manifest, keys::kTizenSettingKey, keys::kTizenNamespacePrefix))
-    return true;
-
   const parser::Value* value = nullptr;
   manifest.Get(keys::kTizenSettingKey, &value);
 
@@ -140,7 +139,8 @@ bool SettingHandler::Parse(
   app_info->set_user_agent(user_agent);
 
   std::string background_vibration;
-  ForAllFindKey(value, keys::kTizenBackgroundVibrationKey, &background_vibration);
+  ForAllFindKey(value, keys::kTizenBackgroundVibrationKey,
+                &background_vibration);
   app_info->set_background_vibration(background_vibration == "enable");
 
   std::string sound_mode;

@@ -134,6 +134,8 @@ bool ImeHandler::Parse(
     // single entry
     const parser::DictionaryValue* dict;
     value->GetAsDictionary(&dict);
+    if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+      return nullptr;
     result = ParseImeEntryAndStore(*dict, ime_info.get(), error);
   } else if (value->GetType() == parser::Value::TYPE_LIST) {
     *error = kErrMsgParsingIme;

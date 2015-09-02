@@ -113,6 +113,12 @@ class WidgetHandler : public parser::ManifestHandler {
       const parser::Manifest& manifest,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
+  void ParseAuthorElements(
+      const parser::Manifest& manifest,
+      std::shared_ptr<WidgetInfo> info);
+  void ParseSingleAuthorElement(
+      const parser::DictionaryValue* author_dict,
+      std::shared_ptr<WidgetInfo> info);
 
   bool Validate(
       const parser::ManifestData& data,

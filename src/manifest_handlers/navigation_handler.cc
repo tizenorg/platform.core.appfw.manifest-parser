@@ -43,12 +43,31 @@ bool NavigationHandler::Parse(
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
 
-  if (!VerifyElementNamespace(
-        manifest, keys::kAllowNavigationKey, keys::kTizenNamespacePrefix))
+  const parser::Value* value = nullptr;
+  if (!manifest.Get(keys::kAllowNavigationKey, &value))
+    return true;
+  const parser::DictionaryValue* dict = nullptr;
+  if (!value->GetAsDictionary(&dict)) {
+    const parser::ListValue* list = nullptr;
+    if (value->GetAsList(&list)) {
+      for (auto& item : *list) {
+        const parser::DictionaryValue* candidate = nullptr;
+        if (item->GetAsDictionary(&candidate) &&
+            parser::VerifyElementNamespace(
+              *candidate, keys::kTizenNamespacePrefix)) {
+          dict = candidate;
+          break;
+        }
+      }
+    }
+  }
+  if (!dict)
+    return true;
+  if (!VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
     return true;
 
   std::string allowed_domains;
-  if (!manifest.GetString(keys::kAllowNavigationText, &allowed_domains)) {
+  if (!dict->GetString(keys::kXmlTextKey, &allowed_domains)) {
     *error = "Invalid value of allow-navigation.";
     return false;
   }

@@ -37,22 +37,18 @@ const char kViewModesKey[] = "widget.@viewmodes";
 const char kWidgetKey[] = "widget";
 const char kWebURLsKey[] = "widget.@id";
 const char kAuthorKey[] = "widget.author";
-const char kAuthorKeyText[] = "widget.author.#text";
 const char kDescriptionKey[] = "widget.description";
 const char kShortNameKey[] = "widget.name.@short";
 const char kShortKey[] = "@short";
 const char kIDKey[] = "widget.@id";
-const char kAuthorEmailKey[] = "widget.author.@email";
-const char kAuthorHrefKey[] = "widget.author.@href";
+const char kAuthorEmailKey[] = "@email";
+const char kAuthorHrefKey[] = "@href";
 const char kHeightKey[] = "widget.@height";
 const char kWidthKey[] = "widget.@width";
 const char kPreferencesKey[] = "widget.preference";
 const char kCSPKey[] = "widget.content-security-policy";
-const char kCSPText[] = "widget.content-security-policy.#text";
 const char kCSPKeyReportOnly[] =
     "widget.content-security-policy-report-only";
-const char kCSPTextReportOnly[] =
-    "widget.content-security-policy-report-only.#text";
 const char kAccessKey[] = "widget.access";
 const char kLicenseKey[] = "widget.license";
 
@@ -85,7 +81,6 @@ const char kTizenApplicationRequiredVersionKey[] = "@required_version";
 
 const char kTizenAppIdKey[] = "widget.application.@package";
 const char kAllowNavigationKey[] = "widget.allow-navigation";
-const char kAllowNavigationText[] = "widget.allow-navigation.#text";
 const char kCSPReportOnlyKey[] =
     "widget.content-security-policy-report-only.#text";
 const char kTizenSettingKey[] = "widget.setting";
