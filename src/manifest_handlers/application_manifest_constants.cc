@@ -89,19 +89,19 @@ const char kAllowNavigationText[] = "widget.allow-navigation.#text";
 const char kCSPReportOnlyKey[] =
     "widget.content-security-policy-report-only.#text";
 const char kTizenSettingKey[] = "widget.setting";
-const char kTizenBackgroundSupportKey[] = "widget.setting.@background-support";
-const char kTizenContextMenuKey[] = "widget.setting.@context-menu";
-const char kTizenHardwareKey[] = "widget.setting.@hwkey-event";
-const char kTizenEncryptionKey[] = "widget.setting.@encryption";
-const char kTizenInstallLocationKey[] = "widget.setting.@install-location";
-const char kTizenNoDisplayKey[] = "widget.setting.@nodisplay";
-const char kTizenIndicatorPresenceKey[] = "widget.setting.@indicator-presence";
+const char kTizenBackgroundSupportKey[] = "@background-support";
+const char kTizenContextMenuKey[] = "@context-menu";
+const char kTizenHardwareKey[] = "@hwkey-event";
+const char kTizenEncryptionKey[] = "@encryption";
+const char kTizenInstallLocationKey[] = "@install-location";
+const char kTizenNoDisplayKey[] = "@nodisplay";
+const char kTizenIndicatorPresenceKey[] = "@indicator-presence";
 const char kTizenBackbuttonPresenceKey[] =
-    "widget.setting.@backbutton-presence";
-const char kTizenUserAgentKey[] = "widget.setting.@user-agent";
-const char kTizenSoundModeKey[] = "widget.setting.@sound-mode";
+    "@backbutton-presence";
+const char kTizenUserAgentKey[] = "@user-agent";
+const char kTizenSoundModeKey[] = "@sound-mode";
 const char kTizenBackgroundVibrationKey[] =
-    "widget.setting.@background-vibration";
+    "@background-vibration";
 const char kTizenMetaDataKey[] = "widget.metadata";
 // Child keys inside 'kTizenMetaDataKey'
 const char kTizenMetaDataNameKey[] = "@key";
@@ -111,7 +111,7 @@ const char kTizenPermissionsNameKey[] = "@name";
 const char kTizenSplashScreenKey[] = "widget.splash-screen";
 const char kTizenSplashScreenSrcKey[] = "@src";
 const char kContentNamespace[] = "widget.content.@namespace";
-const char kTizenScreenOrientationKey[] = "widget.setting.@screen-orientation";
+const char kTizenScreenOrientationKey[] = "@screen-orientation";
 const char kTizenAppWidgetFullKey[] = "widget.app-widget";
 const char kTizenAppWidgetKey[] = "app-widget";
 const char kTizenAppWidgetIdKey[] = "@id";
