@@ -19,6 +19,7 @@ namespace bf = boost::filesystem;
 
 namespace {
 
+const char kNamespaceKey[] = "@namespace";
 const char kServiceKey[] = "service";
 
 std::unique_ptr<parser::ManifestHandlerRegistry> GetRegistryForTest() {
@@ -77,6 +78,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryDefault) {
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
+  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -102,6 +104,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryOnBootOn) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   service->SetString(keys::kTizenServiceIdKey, "correct002.appId");
   service->SetString(keys::kTizenServiceOnBootKey, "true");
+  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -128,6 +131,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryAutoRestartOn) {
   service->SetString(keys::kTizenServiceIdKey, "correct003.appId");
   service->SetString(keys::kTizenServiceOnBootKey, "false");
   service->SetString(keys::kTizenServiceAutoRestartKey, "true");
+  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -152,6 +156,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryWrongId) {
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   service->SetString(keys::kTizenServiceIdKey, "wrongid.appId");
+  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -167,6 +172,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryIdTypeMismatch) {
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   service->SetInteger(keys::kTizenServiceIdKey, 1410);
+  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -185,7 +191,9 @@ TEST_F(ServiceHandlerTest, MultipleServiceEntry) {
   std::unique_ptr<DictionaryValue> service2(
       new DictionaryValue());
   service1->SetString(keys::kTizenServiceIdKey, "correct004.appId");
+  service1->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
   service2->SetString(keys::kTizenServiceIdKey, "correct005.appId");
+  service2->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
   list->Append(service1.release());
   list->Append(service2.release());
   widget->Set(kServiceKey, list.release());

@@ -85,20 +85,6 @@ TEST_F(ManifestUtilTest, IsElementSupportSpanAndDirTest) {
   }
 }
 
-// Tests IsSingletonElement method
-TEST_F(ManifestUtilTest, IsSingletonElementTest) {
-  std::map<const char*, bool> kSingletonElements = {
-    { "allow-navigation", true },
-    { "author", true },
-    { "content-security-policy-report-only", true },
-    { "content-security-policy", true },
-    { "content", false },
-    { "badsingleton", false }
-  };
-  for (const auto& p : kSingletonElements)
-    EXPECT_TRUE(IsSingletonElement(p.first) == p.second);
-}
-
 // Tests IsTrimRequiredForElement
 TEST_F(ManifestUtilTest, IsTrimRequiredForElementTest) {
   std::map<const char*, bool> elements {

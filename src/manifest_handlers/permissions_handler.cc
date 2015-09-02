@@ -61,10 +61,13 @@ bool PermissionsHandler::Parse(
        it != permission_list->end(); ++it) {
     parser::DictionaryValue* dictionary_value = nullptr;
     (*it)->GetAsDictionary(&dictionary_value);
-
+    if (!dictionary_value)
+      continue;
+    if (!parser::VerifyElementNamespace(*dictionary_value,
+                                        keys::kTizenNamespacePrefix))
+      continue;
     std::string permission;
-    if (!dictionary_value ||
-        !dictionary_value->GetString(
+    if (!dictionary_value->GetString(
             keys::kTizenPermissionsNameKey, &permission) ||
         permission.empty())
       continue;

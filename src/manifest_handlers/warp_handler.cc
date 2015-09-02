@@ -46,11 +46,17 @@ void WarpHandler::ParseAccessElements(
   const parser::ListValue* list = nullptr;
   if (manifest.Get(keys::kAccessKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
-      ParseSingleAccessElement(*dict, info);
+      if (parser::VerifyElementNamespace(*dict, keys::kWidgetNamespacePrefix))
+        ParseSingleAccessElement(*dict, info);
     } else if (val->GetAsList(&list)) {
-      for (auto& item : *list)
-        if (item->GetAsDictionary(&dict))
+      for (auto& item : *list) {
+        if (item->GetAsDictionary(&dict)) {
+          if (!parser::VerifyElementNamespace(*dict,
+                                              keys::kWidgetNamespacePrefix))
+            continue;
           ParseSingleAccessElement(*dict, info);
+        }
+      }
     }
   }
 }
@@ -59,9 +65,6 @@ bool WarpHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* /*error*/) {
-  if (!VerifyElementNamespace(manifest, keys::kAccessKey))
-    return true;
-
   std::shared_ptr<WarpInfo> info(new WarpInfo);
   ParseAccessElements(manifest, info);
   *output = std::static_pointer_cast<parser::ManifestData>(info);

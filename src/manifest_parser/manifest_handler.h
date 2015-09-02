@@ -78,14 +78,10 @@ class ManifestHandler {
 
   // The keys to register handler for (in Register).
   virtual std::string Key() const = 0;
-
- protected:
-  virtual bool VerifyElementNamespace(const parser::Manifest& manifest,
-                                      const std::string& key_to_compare,
-                                      const std::string&
-                                      desired_namespace_value =
-      kW3CNamespacePrefix);
 };
+
+bool VerifyElementNamespace(const parser::DictionaryValue& dict,
+                            const std::string& requested_namespace);
 
 typedef std::map<std::string, ManifestHandler*> ManifestHandlerMap;
 typedef std::map<ManifestHandler*, int> ManifestHandlerOrderMap;
