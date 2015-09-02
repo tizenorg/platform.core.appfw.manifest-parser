@@ -86,12 +86,15 @@ void WidgetHandler::ParseLocalizedLicenseElements(
   const parser::ListValue* list = nullptr;
   if (manifest.Get(keys::kLicenseKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
-      ParseSingleLocalizedLicenseElement(dict, parent_lang, info);
+      if (parser::VerifyElementNamespace(*dict, keys::kWidgetNamespacePrefix))
+        ParseSingleLocalizedLicenseElement(dict, parent_lang, info);
     } else if (val->GetAsList(&list)) {
       for_each(list->begin(), list->end(), [list, &dict,
                parent_lang, info, this](parser::Value* item) {
         if (item->GetAsDictionary(&dict))
-          ParseSingleLocalizedLicenseElement(dict, parent_lang, info);
+          if (parser::VerifyElementNamespace(*dict,
+                                             keys::kWidgetNamespacePrefix))
+            ParseSingleLocalizedLicenseElement(dict, parent_lang, info);
       });
     }
   }
@@ -132,12 +135,14 @@ void WidgetHandler::ParseLocalizedDescriptionElements(
   const parser::ListValue* list = nullptr;
   if (manifest.Get(keys::kDescriptionKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
-      ParseSingleLocalizedDescriptionElement(dict, parent_lang, info);
+      if (parser::VerifyElementNamespace(*dict, keys::kWidgetNamespacePrefix))
+        ParseSingleLocalizedDescriptionElement(dict, parent_lang, info);
     } else if (val->GetAsList(&list)) {
       for (auto& item : *list)
         if (item->GetAsDictionary(&dict))
-          ParseSingleLocalizedDescriptionElement(dict, parent_lang,
-              info);
+          if (parser::VerifyElementNamespace(*dict,
+                                             keys::kWidgetNamespacePrefix))
+            ParseSingleLocalizedDescriptionElement(dict, parent_lang, info);
     }
   }
 }
@@ -188,11 +193,58 @@ void WidgetHandler::ParseLocalizedNameElements(const parser::Manifest& manifest,
   const parser::ListValue* list = nullptr;
   if (manifest.Get(keys::kNameKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
-      ParseSingleLocalizedNameElement(dict, parent_lang, info);
+      if (parser::VerifyElementNamespace(*dict, keys::kWidgetNamespacePrefix))
+        ParseSingleLocalizedNameElement(dict, parent_lang, info);
     } else if (val->GetAsList(&list)) {
       for (auto& item : *list)
         if (item->GetAsDictionary(&dict))
-          ParseSingleLocalizedNameElement(dict, parent_lang, info);
+          if (parser::VerifyElementNamespace(*dict,
+                                             keys::kWidgetNamespacePrefix))
+            ParseSingleLocalizedNameElement(dict, parent_lang, info);
+    }
+  }
+}
+
+void WidgetHandler::ParseSingleAuthorElement(
+    const parser::DictionaryValue* author_dict,
+    std::shared_ptr<WidgetInfo> info) {
+  author_dict->GetString(keys::kXmlTextKey, &info->author_);
+  author_dict->GetString(keys::kAuthorEmailKey, &info->author_email_);
+  std::string author_href;
+  author_dict->GetString(keys::kAuthorHrefKey, &author_href);
+  if (!author_href.empty() && parser::utils::IsValidIRI(author_href))
+    info->author_href_ = author_href;
+}
+
+void WidgetHandler::ParseAuthorElements(
+    const parser::Manifest& manifest,
+    std::shared_ptr<WidgetInfo> info) {
+  if (manifest.HasPath(keys::kAuthorKey)) {
+    const parser::Value* author_value = nullptr;
+    manifest.Get(keys::kAuthorKey, &author_value);
+    if (author_value->GetType() == parser::Value::TYPE_DICTIONARY) {
+      const parser::DictionaryValue* author_dict = nullptr;
+      author_value->GetAsDictionary(&author_dict);
+      if (!parser::VerifyElementNamespace(*author_dict,
+                                          keys::kWidgetNamespacePrefix))
+        return;
+      ParseSingleAuthorElement(author_dict, info);
+    } else if (author_value->GetType() == parser::Value::TYPE_LIST) {
+      const parser::ListValue* author_list = nullptr;
+      author_value->GetAsList(&author_list);
+      for (auto& item : *author_list) {
+        const parser::DictionaryValue* author_dict = nullptr;
+        if (item->GetAsDictionary(&author_dict)) {
+          if (!parser::VerifyElementNamespace(*author_dict,
+                                              keys::kWidgetNamespacePrefix)) {
+            // not W3C author
+            continue;
+          } else {
+            ParseSingleAuthorElement(author_dict, info);
+            break;
+          }
+        }
+      }
     }
   }
 }
@@ -201,10 +253,6 @@ bool WidgetHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!VerifyElementNamespace(manifest, keys::kAuthorKey) ||
-      !VerifyElementNamespace(manifest, keys::kDescriptionKey) ||
-      !VerifyElementNamespace(manifest, keys::kNameKey))
-    return true;
   std::shared_ptr<WidgetInfo> widget_info(new WidgetInfo());
   widget_info->preferences_ = std::vector<Preference*>();
 
@@ -216,8 +264,12 @@ bool WidgetHandler::Parse(
                        &parent_lang);
   }
 
-  if (manifest.HasPath(keys::kAuthorKeyText))
-    manifest.GetString(keys::kAuthorKeyText, &widget_info->author_);
+  if (widget_info->widget_namespace_ != keys::kWidgetNamespacePrefix) {
+    *error = "Wrong namespace of <widget> element. Config.xml is invalid";
+    return false;
+  }
+
+  ParseAuthorElements(manifest, widget_info);
 
   ParseLocalizedDescriptionElements(manifest, parent_lang, widget_info);
   ParseLocalizedNameElements(manifest, parent_lang, widget_info);
@@ -230,14 +282,6 @@ bool WidgetHandler::Parse(
     manifest.GetString(keys::kIDKey, &id);
     if (!id.empty() && parser::utils::IsValidIRI(id))
       widget_info->id_ = id;
-  }
-  if (manifest.HasPath(keys::kAuthorEmailKey))
-    manifest.GetString(keys::kAuthorEmailKey, &widget_info->author_email_);
-  if (manifest.HasPath(keys::kAuthorHrefKey)) {
-    std::string author_href;
-    manifest.GetString(keys::kAuthorHrefKey, &author_href);
-    if (!author_href.empty() && parser::utils::IsValidIRI(author_href))
-      widget_info->author_href_ = author_href;
   }
   if (manifest.HasPath(keys::kHeightKey)) {
     int h;

@@ -22,18 +22,33 @@ bool CSPHandler::Parse(
     std::string* /*error*/) {
   std::string security_policy = (security_type_ == SecurityType::CSP) ?
       keys::kCSPKey : keys::kCSPKeyReportOnly;
-
-  if (!VerifyElementNamespace(
-        manifest, security_policy, keys::kTizenNamespacePrefix))
+  const parser::Value* value = nullptr;
+  if (!manifest.Get(security_policy, &value))
+    return true;
+  const parser::DictionaryValue* dict = nullptr;
+  if (!value->GetAsDictionary(&dict)) {
+    const parser::ListValue* list = nullptr;
+    if (value->GetAsList(&list)) {
+      const parser::DictionaryValue* candidate = nullptr;
+      for (auto& item : *list) {
+        if (item->GetAsDictionary(&candidate) &&
+            parser::VerifyElementNamespace(
+              *candidate, keys::kTizenNamespacePrefix)) {
+          dict = candidate;
+          break;
+        }
+      }
+    }
+  }
+  if (!dict)
+    return true;
+  if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
     return true;
 
   std::shared_ptr<CSPInfo> info(new CSPInfo);
 
   std::string security_rules;
-  if (security_type_ == SecurityType::CSP)
-    manifest.GetString(keys::kCSPText, &security_rules);
-  else
-    manifest.GetString(keys::kCSPTextReportOnly, &security_rules);
+  dict->GetString(keys::kXmlTextKey, &security_rules);
   info->set_security_rules(security_rules);
 
   *output = std::static_pointer_cast<parser::ManifestData>(info);

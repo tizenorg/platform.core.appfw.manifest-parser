@@ -54,8 +54,12 @@ bool CategoryHandler::Parse(
     value->GetAsList(&list);
     for (const auto& item : *list) {
       const parser::DictionaryValue* control_dict;
-      if (!item->GetAsDictionary(&control_dict) ||
-          !ParseCategoryEntryAndStore(*control_dict, aplist.get())) {
+      if (!item->GetAsDictionary(&control_dict))
+        continue;
+      if (!parser::VerifyElementNamespace(
+          *control_dict, keys::kTizenNamespacePrefix))
+        continue;
+      if (!ParseCategoryEntryAndStore(*control_dict, aplist.get())) {
         *error = kErrMsgCategory;
         return nullptr;
       }
@@ -64,6 +68,8 @@ bool CategoryHandler::Parse(
     // single entry
     const parser::DictionaryValue* dict;
     value->GetAsDictionary(&dict);
+    if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+      return nullptr;
     if (!ParseCategoryEntryAndStore(*dict, aplist.get()))
       return nullptr;
   } else {

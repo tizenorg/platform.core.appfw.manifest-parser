@@ -19,11 +19,7 @@ namespace keys = wgt::application_widget_keys;
 namespace {
 
 std::unique_ptr<wgt::parse::ServiceInfo> ParseServiceInfo(
-    const parser::Value& service_value) {
-  const parser::DictionaryValue* dict = nullptr;
-  if (!service_value.GetAsDictionary(&dict)) {
-    return nullptr;
-  }
+    const parser::DictionaryValue* dict) {
   std::string id;
   if (!dict->GetString(keys::kTizenServiceIdKey, &id))
     return nullptr;
@@ -62,9 +58,6 @@ bool ServiceHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!VerifyElementNamespace(
-        manifest, keys::kTizenServiceKey, keys::kTizenNamespacePrefix))
-    return true;
   const parser::Value* services = nullptr;
   if (!manifest.Get(keys::kTizenServiceKey, &services)) {
     return true;
@@ -73,18 +66,27 @@ bool ServiceHandler::Parse(
   std::shared_ptr<ServiceList> services_data(new ServiceList());
 
   if (services->IsType(parser::Value::TYPE_DICTIONARY)) {
-    auto service = ParseServiceInfo(*services);
-    if (!service) {
-      *error = "Cannot parse tizen:service element";
-      return false;
+    const parser::DictionaryValue* dict = nullptr;
+    services->GetAsDictionary(&dict);
+    if (parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix)) {
+      auto service = ParseServiceInfo(dict);
+      if (!service) {
+        *error = "Cannot parse tizen:service element";
+        return false;
+      }
+      services_data->services.push_back(*service);
     }
-    services_data->services.push_back(*service);
   } else if (services->IsType(parser::Value::TYPE_LIST)) {
     const parser::ListValue* list;
     services->GetAsList(&list);
     for (parser::ListValue::const_iterator it = list->begin();
          it != list->end(); ++it) {
-      auto service = ParseServiceInfo(**it);
+      const parser::DictionaryValue* dict = nullptr;
+      if (!(**it).GetAsDictionary(&dict))
+        continue;
+      if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+        continue;
+      auto service = ParseServiceInfo(dict);
       if (!service) {
         *error = "Cannot parse tizen:service element";
         return false;
