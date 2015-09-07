@@ -33,10 +33,10 @@ bool ExtractIconSrc(const parser::Value& dict, std::string* value,
 namespace tpk {
 namespace parse {
 
-void ApplicationIconsInfo::AddIcon(const ApplicationIcon& new_icon) {
+void MainApplicationIconsInfo::AddIcon(const MainApplicationIcon& new_icon) {
   // Eliminate duplicates, keep order
   if (std::find_if(icons_.begin(), icons_.end(),
-      [&new_icon](const ApplicationIcon& icon) {
+      [&new_icon](const MainApplicationIcon& icon) {
         return icon.path() == new_icon.path();
       })
       != icons_.end()) {
@@ -45,12 +45,12 @@ void ApplicationIconsInfo::AddIcon(const ApplicationIcon& new_icon) {
   icons_.push_back(new_icon);
 }
 
-bool ApplicationIconsHandler::Parse(
+bool MainApplicationIconsHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  std::shared_ptr<ApplicationIconsInfo> app_icons_info =
-      std::make_shared<ApplicationIconsInfo>();
+  std::shared_ptr<MainApplicationIconsInfo> app_icons_info =
+      std::make_shared<MainApplicationIconsInfo>();
   parser::Value* key_value;
   if (!manifest.Get(keys::kIconKey, &key_value)) {
     *output = std::static_pointer_cast<parser::ManifestData>(app_icons_info);
@@ -63,7 +63,7 @@ bool ApplicationIconsHandler::Parse(
       *error = "Cannot get key value as a dictionary. Key name: icon";
       return false;
     }
-    app_icons_info->AddIcon(ApplicationIcon(icon_path));
+    app_icons_info->AddIcon(MainApplicationIcon(icon_path));
   } else if (key_value->IsType(parser::Value::TYPE_LIST)) {
     const parser::ListValue* list;
     if (!key_value->GetAsList(&list)) {
@@ -77,14 +77,14 @@ bool ApplicationIconsHandler::Parse(
             std::static_pointer_cast<parser::ManifestData>(app_icons_info);
         return true;
       }
-      app_icons_info->AddIcon(ApplicationIcon(icon_path));
+      app_icons_info->AddIcon(MainApplicationIcon(icon_path));
     }
   }
   *output = std::static_pointer_cast<parser::ManifestData>(app_icons_info);
   return true;
 }
 
-std::string ApplicationIconsHandler::Key() const {
+std::string MainApplicationIconsHandler::Key() const {
   return tpk::application_keys::kIconsKey;
 }
 

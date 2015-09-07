@@ -14,9 +14,9 @@
 namespace tpk {
 namespace parse {
 
-class ApplicationIcon {
+class MainApplicationIcon {
  public:
-  explicit ApplicationIcon(const std::string& path)
+  explicit MainApplicationIcon(const std::string& path)
                           : path_(path) {}
 
 const std::string& path() const {
@@ -27,19 +27,19 @@ const std::string& path() const {
   std::string path_;
 };
 
-class ApplicationIconsInfo : public parser::ManifestData {
+class MainApplicationIconsInfo : public parser::ManifestData {
  public:
-  const std::vector<ApplicationIcon>& icons() const {
+  const std::vector<MainApplicationIcon>& icons() const {
   return icons_;
 }
 
-  void AddIcon(const ApplicationIcon& icon_path);
+  void AddIcon(const MainApplicationIcon& icon_path);
 
  private:
-  std::vector<ApplicationIcon> icons_;
+  std::vector<MainApplicationIcon> icons_;
 };
 
-class ApplicationIconsHandler : public parser::ManifestHandler {
+class MainApplicationIconsHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,
