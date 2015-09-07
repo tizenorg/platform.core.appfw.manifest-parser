@@ -12,24 +12,31 @@
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
+#include "tpk_manifest_handlers/ui_and_service_application_infos.h"
 
 namespace tpk {
 namespace parse {
 
 class UIApplicationInfo : public parser::ManifestData {
  public:
-  UIApplicationInfo(const std::string& appid,
-                    const std::string& exec,
-                    const std::string& multiple,
-                    const std::string& nodisplay,
-                    const std::string& taskmanage,
-                    const std::string& type)
-                    : appid_(appid),
-                      exec_(exec),
-                      multiple_(multiple),
-                      nodisplay_(nodisplay),
-                      taskmanage_(taskmanage),
-                      type_(type) {}
+  void set_appid(const std::string& appid) {
+    appid_ = appid;
+  }
+  void set_exec(const std::string& exec) {
+    exec_ = exec;
+  }
+  void set_multiple(const std::string& multiple) {
+    multiple_ = multiple;
+  }
+  void set_nodisplay(const std::string& nodisplay) {
+    nodisplay_ = nodisplay;
+  }
+  void set_taskmanage(const std::string& taskmanage) {
+    taskmanage_ = taskmanage;
+  }
+  void set_type(const std::string& type) {
+    type_ = type;
+  }
 
   const std::string& appid() const {
     return appid_;
@@ -59,8 +66,17 @@ class UIApplicationInfo : public parser::ManifestData {
   std::string type_;
 };
 
+struct UIApplicationSingleEntry : public parser::ManifestData {
+  UIApplicationInfo ui_info;
+  std::vector<AppControlInfo> app_control;
+  std::vector<DataControlInfo> data_control;
+  std::vector<MetaDataInfo> meta_data;
+  ApplicationIconsInfo app_icons;
+  std::vector<LabelInfo> label;
+};
+
 struct UIApplicationInfoList : public parser::ManifestData {
-  std::vector<UIApplicationInfo> items;
+  std::vector<UIApplicationSingleEntry> items;
 };
 
 class UIApplicationHandler : public parser::ManifestHandler {
