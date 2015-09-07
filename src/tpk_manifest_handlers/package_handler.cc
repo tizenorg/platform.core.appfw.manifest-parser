@@ -2,7 +2,7 @@
 // Use of this source code is governed by an apache 2.0 license that can be
 // found in the LICENSE file.
 
-#include "tpk_manifest_handlers/tizen_application_handler.h"
+#include "tpk_manifest_handlers/package_handler.h"
 
 #include <cassert>
 #include <map>
@@ -34,7 +34,7 @@ std::string GetParsedValue(const char* key_main, const char* key,
 
 void ParseTizenApplicationAndStore(
     const parser::DictionaryValue& control_dict,
-    TizenApplicationInfo* app_info) {
+    PackageInfo* app_info) {
 
   std::string xmlns =
     GetParsedValue(keys::kXMLS,
@@ -70,11 +70,11 @@ void ParseTizenApplicationAndStore(
 
 }  // namespace
 
-bool TizenApplicationHandler::Parse(
+bool PackageHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  std::shared_ptr<TizenApplicationInfo> app_info(new TizenApplicationInfo());
+  std::shared_ptr<PackageInfo> app_info(new PackageInfo());
   parser::Value* value = nullptr;
   if (!manifest.Get(keys::kManifestKey, &value)) {
     *error = "Manifest element not found";
@@ -94,12 +94,12 @@ bool TizenApplicationHandler::Parse(
   return true;
 }
 
-bool TizenApplicationHandler::Validate(
+bool PackageHandler::Validate(
     const parser::ManifestData& data,
     const parser::ManifestDataMap& /*handlers_output*/,
     std::string* error) const {
-  const TizenApplicationInfo& app_info =
-       static_cast<const TizenApplicationInfo&>(data);
+  const PackageInfo& app_info =
+       static_cast<const PackageInfo&>(data);
 
   if (app_info.xmlns().empty()) {
     *error = "The xmlns child element of manifest element is obligatory";
@@ -137,7 +137,7 @@ bool TizenApplicationHandler::Validate(
   return true;
 }
 
-std::string TizenApplicationHandler::Key() const {
+std::string PackageHandler::Key() const {
   return keys::kManifestKey;
 }
 

@@ -2,8 +2,8 @@
 // Use of this source code is governed by an apache 2.0 license that can be
 // found in the LICENSE file.
 
-#ifndef TPK_MANIFEST_HANDLERS_TIZEN_APPLICATION_HANDLER_H_
-#define TPK_MANIFEST_HANDLERS_TIZEN_APPLICATION_HANDLER_H_
+#ifndef TPK_MANIFEST_HANDLERS_PACKAGE_HANDLER_H_
+#define TPK_MANIFEST_HANDLERS_PACKAGE_HANDLER_H_
 
 #include <memory>
 #include <string>
@@ -15,7 +15,7 @@
 namespace tpk {
 namespace parse {
 
-class TizenApplicationInfo : public parser::ManifestData {
+class PackageInfo : public parser::ManifestData {
  public:
   void set_xmlns(const std::string& xmlns) {
     xmlns_ = xmlns;
@@ -58,7 +58,7 @@ class TizenApplicationInfo : public parser::ManifestData {
   std::string install_location_;
 };
 
-class TizenApplicationHandler : public parser::ManifestHandler {
+class PackageHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,
@@ -74,4 +74,4 @@ class TizenApplicationHandler : public parser::ManifestHandler {
 }   // namespace parse
 }   // namespace tpk
 
-#endif  // TPK_MANIFEST_HANDLERS_TIZEN_APPLICATION_HANDLER_H_
+#endif  // TPK_MANIFEST_HANDLERS_PACKAGE_HANDLER_H_
