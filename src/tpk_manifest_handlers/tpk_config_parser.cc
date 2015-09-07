@@ -15,14 +15,9 @@
 #include "utils/logging.h"
 
 #include "tpk_manifest_handlers/account_handler.h"
-#include "tpk_manifest_handlers/app_control_handler.h"
-#include "tpk_manifest_handlers/application_icons_handler.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 #include "tpk_manifest_handlers/author_handler.h"
-#include "tpk_manifest_handlers/datacontrol_handler.h"
 #include "tpk_manifest_handlers/description_handler.h"
-#include "tpk_manifest_handlers/label_handler.h"
-#include "tpk_manifest_handlers/metadata_handler.h"
 #include "tpk_manifest_handlers/privileges_handler.h"
 #include "tpk_manifest_handlers/service_application_handler.h"
 #include "tpk_manifest_handlers/tizen_application_handler.h"
@@ -42,13 +37,8 @@ namespace parse {
 TPKConfigParser::TPKConfigParser() {
   std::vector<parser::ManifestHandler*> handlers = {
   new AccountHandler,
-  new AppControlHandler,
-  new ApplicationIconsHandler,
   new AuthorHandler,
-  new DataControlHandler,
   new DescriptionHandler,
-  new LabelHandler,
-  new MetaDataHandler,
   new PrivilegesHandler,
   new ServiceApplicationHandler,
   new TizenApplicationHandler,
@@ -77,6 +67,18 @@ bool TPKConfigParser::ParseManifest(const boost::filesystem::path& path) {
     return false;
 
   return true;
+}
+
+void ApplicationIconsInfo::AddIcon(const ApplicationIcon& new_icon) {
+  // Eliminate duplicates, keep order
+  if (std::find_if(icons_.begin(), icons_.end(),
+      [&new_icon](const ApplicationIcon& icon) {
+        return icon.path() == new_icon.path();
+      })
+      != icons_.end()) {
+    return;
+  }
+  icons_.push_back(new_icon);
 }
 
 }  // namespace parse

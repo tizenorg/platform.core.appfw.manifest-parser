@@ -1,14 +1,9 @@
 # Target - sources
 SET(SRCS
   account_handler.cc
-  app_control_handler.cc
-  application_icons_handler.cc
   application_manifest_constants.cc
   author_handler.cc
-  datacontrol_handler.cc
   description_handler.cc
-  label_handler.cc
-  metadata_handler.cc
   privileges_handler.cc
   service_application_handler.cc
   tizen_application_handler.cc

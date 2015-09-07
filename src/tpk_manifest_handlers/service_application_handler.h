@@ -12,22 +12,28 @@
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
+#include "tpk_manifest_handlers/ui_and_service_application_handlers.h"
 
 namespace tpk {
 namespace parse {
 
 class ServiceApplicationInfo : public parser::ManifestData {
  public:
-  ServiceApplicationInfo(const std::string& appid,
-                         const std::string& auto_restart,
-                         const std::string& exec,
-                         const std::string& on_boot,
-                         const std::string& type)
-                         : appid_(appid),
-                           auto_restart_(auto_restart),
-                           exec_(exec),
-                           on_boot_(on_boot),
-                           type_(type) {}
+  void set_appid(const std::string& appid) {
+    appid_ = appid;
+  }
+  void set_auto_restart(const std::string& auto_restart) {
+    auto_restart_ = auto_restart;
+  }
+  void set_exec(const std::string& exec) {
+    exec_ = exec;
+  }
+  void set_on_boot(const std::string& on_boot) {
+    on_boot_ = on_boot;
+  }
+  void set_type(const std::string& type) {
+    type_ = type;
+  }
 
   const std::string& appid() const {
     return appid_;
@@ -53,8 +59,17 @@ class ServiceApplicationInfo : public parser::ManifestData {
   std::string type_;
 };
 
+struct ServiceApplicationSingleEntry : public parser::ManifestData {
+  ServiceApplicationInfo sa_info;
+  std::vector<AppControlInfo> app_control;
+  std::vector<DataControlInfo> data_control;
+  std::vector<MetaDataInfo> meta_data;
+  ApplicationIconsInfo app_icons;
+  std::vector<LabelInfo> label;
+};
+
 struct ServiceApplicationInfoList : public parser::ManifestData {
-  std::vector<ServiceApplicationInfo> items;
+  std::vector<ServiceApplicationSingleEntry> items;
 };
 
 class ServiceApplicationHandler : public parser::ManifestHandler {
