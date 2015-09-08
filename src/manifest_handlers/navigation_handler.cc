@@ -49,8 +49,7 @@ bool NavigationHandler::Parse(
 
   std::string allowed_domains;
   if (!manifest.GetString(keys::kAllowNavigationText, &allowed_domains)) {
-    *error = "Invalid value of allow-navigation.";
-    return false;
+    return true;
   }
   if (allowed_domains.empty()) {
     *output = std::static_pointer_cast<parser::ManifestData>(
