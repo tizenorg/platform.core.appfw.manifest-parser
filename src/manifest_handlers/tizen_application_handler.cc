@@ -18,6 +18,10 @@
 namespace wgt {
 namespace parse {
 
+namespace {
+const char kMinimumAPIVersion[] = "2.2.1";
+}  // namespace
+
 namespace keys = wgt::application_widget_keys;
 
 TizenApplicationInfo::TizenApplicationInfo() {
@@ -76,8 +80,16 @@ bool TizenApplicationHandler::Parse(
   if (app_dict->GetString(keys::kTizenApplicationPackageKey, &value)) {
     app_info->set_package(value);
   }
-  if (app_dict->GetString(keys::kTizenApplicationRequiredVersionKey, &value))
-    app_info->set_required_version(value);
+  if (app_dict->GetString(keys::kTizenApplicationRequiredVersionKey, &value)) {
+    utils::VersionNumber min_version(kMinimumAPIVersion);
+    utils::VersionNumber req_version(value);
+    if (req_version < min_version) {
+      // TODO(wy80.choi): should be consider minimum API version for each profile.
+      app_info->set_required_version(kMinimumAPIVersion);
+    } else {
+      app_info->set_required_version(value);
+    }
+  }
 
   *output = std::static_pointer_cast<parser::ManifestData>(app_info);
   return true;
