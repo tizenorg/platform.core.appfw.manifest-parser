@@ -43,7 +43,7 @@ class Manifest {
   // this two GetString function. The following is locale priority:
   // Application locale (locale get from system).                 | high
   // Default locale (defaultlocale attribute of widget element)
-  // Unlocalized (the element without xml:lang attribute)
+  // Unlocalized (the element without lang attribute)
   // Auto ("en-us"(tizen is "en-gb") will be considered as a default)
   // First (the worst case we get the first element)              | low
   bool GetString(const std::string& path, std::string* out_value) const;

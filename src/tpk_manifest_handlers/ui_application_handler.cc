@@ -19,18 +19,6 @@ namespace keys = tpk::application_keys;
 
 namespace {
 
-std::string GetParsedValue(const char *key_main, const char *key,
-                           const parser::DictionaryValue& control_dict) {
-  std::string tmp;
-  const parser::DictionaryValue *dict;
-
-  if (control_dict.GetDictionary(key_main, &dict))
-    dict->GetString(key, &tmp);
-
-  return tmp;
-}
-
-// Parsing AppControl
 bool ParseAppControl(
   const parser::DictionaryValue* dict,
   UIApplicationSingleEntry* info) {
@@ -62,120 +50,51 @@ bool ParseAppControl(
   return true;
 }
 
-// Parsing DataControl
 bool ParseDataControl(
   const parser::DictionaryValue* dict,
   UIApplicationSingleEntry* info) {
   std::string access;
-  const parser::DictionaryValue* access_dict;
-  if (dict->GetDictionary(keys::kDataControlAccessKey,
-                                 &access_dict)) {
-    access_dict->GetString(
-        keys::kDataControlTypeChildNameAttrKey, &access);
-  }
-
+  dict->GetString(keys::kDataControlAccessKey, &access);
   std::string providerid;
-  const parser::DictionaryValue* providerid_dict;
-  if (dict->GetDictionary(keys::kDataControlProviderIDKey,
-                                 &providerid_dict)) {
-    providerid_dict->GetString(
-        keys::kDataControlTypeChildNameAttrKey, &providerid);
-  }
-
+  dict->GetString(keys::kDataControlProviderIDKey, &providerid);
   std::string type;
-  const parser::DictionaryValue* type_dict;
-  if (dict->GetDictionary(keys::kDataControlTypeKey,
-                                 &type_dict)) {
-    type_dict->GetString(
-        keys::kDataControlTypeChildNameAttrKey, &type);
-  }
-
+  dict->GetString(keys::kDataControlTypeKey, &type);
   info->data_control.emplace_back(access, providerid, type);
   return true;
 }
 
-// Parsing Metadata
 bool ParseMetaData(
   const parser::DictionaryValue* dict,
   UIApplicationSingleEntry* info) {
   std::string key;
-  const parser::DictionaryValue* key_dict;
-  if (dict->GetDictionary(keys::kMetaDataKey,
-                                 &key_dict)) {
-    key_dict->GetString(
-        keys::kMetaDataTypeChildNameAttrKey, &key);
-  }
-
+  dict->GetString(keys::kMetaDataKey, &key);
   std::string val;
-  const parser::DictionaryValue* value_dict;
-  if (dict->GetDictionary(keys::kMetaDataValueKey,
-                                 &value_dict)) {
-    value_dict->GetString(
-        keys::kMetaDataTypeChildNameAttrKey, &val);
-  }
-
+  dict->GetString(keys::kMetaDataValueKey, &val);
   info->meta_data.emplace_back(key, val);
   return true;
 }
 
-// Parsing Icon
-bool ExtractIconSrc(const parser::DictionaryValue* dict, std::string* value,
-                    std::string* error) {
-  std::string src;
-  if (!dict->GetString(keys::kIconSrcKey, &src)) {
-    *error = "Cannot find mandatory key. Key name: @src";
-    return false;
-  }
-  *value = src;
-  return  true;
-}
-
 bool ParseAppIcon(
   const parser::DictionaryValue* dict,
-  UIApplicationSingleEntry* info,
-  std::string* error) {
+  UIApplicationSingleEntry* info) {
   std::string icon_path;
-  if (!ExtractIconSrc(dict, &icon_path, error)) {
+  if (!dict->GetString(keys::kIconTextKey, &icon_path))
     return false;
-  }
   info->app_icons.AddIcon(ApplicationIcon(icon_path));
   return true;
 }
 
-// Parsing Label
 bool ParseLabel(
   const parser::DictionaryValue* dict,
   UIApplicationSingleEntry* info) {
   std::string text;
-  const parser::DictionaryValue* text_dict;
-  if (dict->GetDictionary(keys::kLableKey,
-                                 &text_dict)) {
-    text_dict->GetString(
-        keys::kLableKeyText, &text);
-  }
-
-  std::string name;
-  const parser::DictionaryValue* name_dict;
-  if (dict->GetDictionary(keys::kLableKey,
-                                 &name_dict)) {
-    name_dict->GetString(
-        keys::kLableKeyName, &name);
-  }
-
+  dict->GetString(keys::kLabelKeyText, &text);
   std::string xml_lang;
-  const parser::DictionaryValue* xml_lang_dict;
-  if (dict->GetDictionary(keys::kLableLangKey,
-                                 &xml_lang_dict)) {
-    xml_lang_dict->GetString(
-        keys::kLableKeyText, &xml_lang);
-  }
-
-  info->label.emplace_back(text, name, xml_lang);
+  dict->GetString(keys::kLabelLangKey, &xml_lang);
+  info->label.emplace_back(text, text, xml_lang);
   return true;
 }
 
-// Parsing Initialization
-// AppControl
 bool InitializeAppControlParsing(
     const parser::DictionaryValue& control_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
@@ -204,7 +123,6 @@ bool InitializeAppControlParsing(
   return true;
 }
 
-// DataControl
 bool InitializeDataControlParsing(
     const parser::DictionaryValue& control_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
@@ -233,16 +151,15 @@ bool InitializeDataControlParsing(
   return true;
 }
 
-// Matadata
 bool InitializeMetaDataParsing(
-    const parser::DictionaryValue& control_dict,
+    const parser::DictionaryValue& app_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
     std::string* error) {
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
 
-  if (control_dict.Get(keys::kMetaData, &val)) {
+  if (app_dict.Get(keys::kMetaData, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (!ParseMetaData(dict, uiapplicationinfo)) {
         *error = "Parsing Metadata failed";
@@ -262,27 +179,24 @@ bool InitializeMetaDataParsing(
   return true;
 }
 
-// Icon
 bool InitializeIconParsing(
-    const parser::DictionaryValue& control_dict,
+    const parser::DictionaryValue& app_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
     std::string* error) {
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
 
-  if (control_dict.Get(keys::kIconKey, &val)) {
+  if (app_dict.Get(keys::kIconKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
-      std::string icon_path;
-      if (!ExtractIconSrc(dict, &icon_path, error)) {
-        *error = "Cannot get key value as a dictionary. Key name: icon";
+      if (!ParseAppIcon(dict, uiapplicationinfo)) {
+        *error = "Parsing Icon failed";
         return false;
       }
-      uiapplicationinfo->app_icons.AddIcon(ApplicationIcon(icon_path));
     } else if (val->GetAsList(&list)) {
       for (auto& item : *list) {
         if (item->GetAsDictionary(&dict)) {
-          if (!ParseAppIcon(dict, uiapplicationinfo, error)) {
+          if (!ParseAppIcon(dict, uiapplicationinfo)) {
             *error = "Parsing Icon failed";
             return false;
           }
@@ -293,7 +207,6 @@ bool InitializeIconParsing(
   return true;
 }
 
-// Label
 bool InitializeLabelParsing(
     const parser::DictionaryValue& control_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
@@ -302,7 +215,7 @@ bool InitializeLabelParsing(
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
 
-  if (control_dict.Get(keys::kLableKey, &val)) {
+  if (control_dict.Get(keys::kLabelKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (!ParseLabel(dict, uiapplicationinfo)) {
         *error = "Parsing Label failed";
@@ -322,27 +235,22 @@ bool InitializeLabelParsing(
   return true;
 }
 
-// Validation Functions
-// UIApplication
 bool UIAppValidation(const UIApplicationSingleEntry& item, std::string* error) {
   if (item.ui_info.appid().empty()) {
-    *error =
-        "The appid child element "
-        "of ui-application element is obligatory";
+    *error = "The appid child element of ui-application element is obligatory";
     return false;
   }
 
   const std::string& exec = item.ui_info.exec();
   if (exec.empty()) {
-    *error =
-        "The exec child element of ui-application element is obligatory";
+    *error = "The exec child element of ui-application element is obligatory";
     return false;
   }
 
   const std::string& multiple = item.ui_info.multiple();
   if (multiple.empty()) {
-    *error = "The multiple child element of "
-             "ui-application element is obligatory";
+    *error =
+        "The multiple child element of ui-application element is obligatory";
     return false;
   }
 
@@ -371,7 +279,6 @@ bool UIAppValidation(const UIApplicationSingleEntry& item, std::string* error) {
   return true;
 }
 
-// AppControl
 bool AppControlValidation(
     const UIApplicationSingleEntry& it,
     std::string* error) {
@@ -381,31 +288,23 @@ bool AppControlValidation(
           "The operation child element of app-control element is obligatory";
       return false;
     }
-
+    if (!parser::utils::IsValidIRI(item.operation())) {
+      *error =
+          "The operation child element of app-control element is not valid url";
+      return false;
+    }
     const std::string& uri = item.uri();
-    if (uri.empty()) {
-      *error =
-          "The uri child element of app-control element is obligatory";
-      return false;
-    }
-
-    if (!parser::utils::IsValidIRI(uri)) {
-      *error =
-          "The uri child element of app-control element is not valid url";
-      return false;
-    }
-
-    const std::string& mime = item.mime();
-    if (mime.empty()) {
-      *error =
-          "The mime child element of app-control element is obligatory";
-      return false;
+    if (!uri.empty()) {
+      if (!parser::utils::IsValidIRI(uri)) {
+        *error =
+            "The uri child element of app-control element is not valid url";
+        return false;
+      }
     }
   }
   return true;
 }
 
-// DataControl
 bool DataControlValidation(
     const UIApplicationSingleEntry& it,
     std::string* error) {
@@ -433,7 +332,6 @@ bool DataControlValidation(
   return true;
 }
 
-// MetaData
 bool MetadataValidation(
     const UIApplicationSingleEntry& it,
     std::string* error) {
@@ -443,18 +341,10 @@ bool MetadataValidation(
           "The key child element of metadata element is obligatory";
       return false;
     }
-
-    const std::string& val = item.val();
-    if (val.empty()) {
-      *error =
-          "The val child element of metadata element is obligatory";
-      return false;
-    }
   }
   return true;
 }
 
-// Label
 bool LabelValidation(const UIApplicationSingleEntry& it, std::string* error) {
   for (const auto& item : it.label) {
     if (item.text().empty()) {
@@ -473,33 +363,21 @@ bool LabelValidation(const UIApplicationSingleEntry& it, std::string* error) {
 }
 
 bool ParseUIApplicationAndStore(
-    const parser::DictionaryValue& control_dict,
+    const parser::DictionaryValue& app_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
     std::string* error) {
-
-  std::string appid = GetParsedValue(keys::kUIApplicationAppIDKey,
-                                     keys::kUIApplicationKeyText,
-                                     control_dict);
-
-  std::string exec = GetParsedValue(keys::kUIApplicationExecKey,
-                                    keys::kUIApplicationKeyText,
-                                    control_dict);
-
-  std::string multiple = GetParsedValue(keys::kUIApplicationMultipleKey,
-                                        keys::kUIApplicationKeyText,
-                                        control_dict);
-
-  std::string nodisplay = GetParsedValue(keys::kUIApplicationNoDisplayKey,
-                                         keys::kUIApplicationKeyText,
-                                         control_dict);
-
-  std::string taskmanage = GetParsedValue(keys::kUIApplicationTaskManageKey,
-                                          keys::kUIApplicationKeyText,
-                                          control_dict);
-
-  std::string type = GetParsedValue(keys::kUIApplicationTypeKey,
-                                    keys::kUIApplicationKeyText,
-                                    control_dict);
+  std::string appid;
+  app_dict.GetString(keys::kUIApplicationAppIDKey, &appid);
+  std::string exec;
+  app_dict.GetString(keys::kUIApplicationExecKey, &exec);
+  std::string multiple;
+  app_dict.GetString(keys::kUIApplicationMultipleKey, &multiple);
+  std::string nodisplay;
+  app_dict.GetString(keys::kUIApplicationNoDisplayKey, &nodisplay);
+  std::string taskmanage;
+  app_dict.GetString(keys::kUIApplicationTaskManageKey, &taskmanage);
+  std::string type;
+  app_dict.GetString(keys::kUIApplicationTypeKey, &type);
 
   uiapplicationinfo->ui_info.set_appid(appid);
   uiapplicationinfo->ui_info.set_exec(exec);
@@ -508,11 +386,11 @@ bool ParseUIApplicationAndStore(
   uiapplicationinfo->ui_info.set_taskmanage(taskmanage);
   uiapplicationinfo->ui_info.set_type(type);
 
-  if (!InitializeAppControlParsing(control_dict, uiapplicationinfo, error) ||
-     !InitializeDataControlParsing(control_dict, uiapplicationinfo, error) ||
-     !InitializeMetaDataParsing(control_dict, uiapplicationinfo, error) ||
-     !InitializeIconParsing(control_dict, uiapplicationinfo, error) ||
-     !InitializeLabelParsing(control_dict, uiapplicationinfo, error)) {
+  if (!InitializeAppControlParsing(app_dict, uiapplicationinfo, error) ||
+     !InitializeDataControlParsing(app_dict, uiapplicationinfo, error) ||
+     !InitializeMetaDataParsing(app_dict, uiapplicationinfo, error) ||
+     !InitializeIconParsing(app_dict, uiapplicationinfo, error) ||
+     !InitializeLabelParsing(app_dict, uiapplicationinfo, error)) {
     return false;
   }
   return true;
@@ -532,27 +410,27 @@ bool UIApplicationHandler::Parse(
 
   if (value->GetType() == parser::Value::TYPE_LIST) {
     // multiple entries
-    const parser::ListValue* list;
+    const parser::ListValue* list = nullptr;
     value->GetAsList(&list);
     for (const auto& item : *list) {
-      const parser::DictionaryValue* control_dict;
-      if (!item->GetAsDictionary(&control_dict)) {
+      const parser::DictionaryValue* ui_dict = nullptr;
+      if (!item->GetAsDictionary(&ui_dict)) {
         *error = "Parsing ui-application element failed";
         return false;
       }
 
       UIApplicationSingleEntry uiappentry;
-      if (!ParseUIApplicationAndStore(*control_dict, &uiappentry, error))
+      if (!ParseUIApplicationAndStore(*ui_dict, &uiappentry, error))
         return false;
       uiapplicationinfo->items.push_back(uiappentry);
     }
   } else if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
     // single entry
-    const parser::DictionaryValue* dict;
-    value->GetAsDictionary(&dict);
+    const parser::DictionaryValue* ui_dict = nullptr;
+    value->GetAsDictionary(&ui_dict);
 
     UIApplicationSingleEntry uiappentry;
-    if (!ParseUIApplicationAndStore(*dict, &uiappentry, error))
+    if (!ParseUIApplicationAndStore(*ui_dict, &uiappentry, error))
       return false;
     uiapplicationinfo->items.push_back(uiappentry);
   } else {

@@ -31,11 +31,9 @@ bool AccountHandler::Parse(const parser::Manifest& manifest,
       if (!ParseSingleAccountElement(dict, info, error))
         return false;
     } else if (val->GetAsList(&list)) {
-      for (auto& item : *list)
-        if (item->GetAsDictionary(&dict))
-          if (!ParseSingleAccountElement(dict, info, error))
-            return false;
-      }
+      *error = "<account> may be declared only once";
+      return false;
+    }
   }
   *output = std::static_pointer_cast<AccountInfo>(info);
   return true;
@@ -147,8 +145,8 @@ bool AccountHandler::ParseSingleAccountIcon(
     SingleAccountInfo* info) {
   std::string section;
   item_dict->GetString(keys::kAccountSectionKey, &section);
-  if (section.compare(keys::kAccountIconNormalKey) != 0 &&
-      section.compare(keys::kAccountIconSmallKey) != 0)
+  if (section != keys::kAccountIconNormalKey &&
+      section != keys::kAccountIconSmallKey)
     return false;
   std::string icon_path;
   item_dict->GetString(keys::kAccountTextKey, &icon_path);
@@ -162,19 +160,18 @@ bool AccountHandler::ParseLabels(
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
-  std::string string_value;
   if (item_dict->Get(keys::kAccountLabelKey, &val)) {
     std::string label;
     std::string lang;
     if (val->GetAsDictionary(&dict)) {
       dict->GetString(keys::kAccountLangKey, &lang);
-      dict->GetString(keys::kAccountNameKey, &label);
+      dict->GetString(keys::kAccountTextKey, &label);
       info->labels.push_back(std::make_pair(label, lang));
     } else if (val->GetAsList(&list)) {
       for (auto& item : *list)
         if (item->GetAsDictionary(&dict)) {
           dict->GetString(keys::kAccountLangKey, &lang);
-          dict->GetString(keys::kAccountNameKey, &label);
+          dict->GetString(keys::kAccountTextKey, &label);
           info->labels.push_back(std::make_pair(label, lang));
         }
     }
