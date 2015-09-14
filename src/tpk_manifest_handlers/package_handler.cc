@@ -21,51 +21,31 @@ namespace keys = tpk::manifest_keys;
 
 namespace {
 
-std::string GetParsedValue(const char* key_main, const char* key,
-                           const parser::DictionaryValue& control_dict) {
-  std::string tmp;
-  const parser::DictionaryValue *dict;
+const char kAutoInstallLocation[] = "auto";
 
-  if (control_dict.GetDictionary(key_main, &dict))
-    dict->GetString(key, &tmp);
+void ParsePackageAndStore(
+    const parser::DictionaryValue& manifest_dict,
+    PackageInfo* pkg_info) {
+  std::string xmlns;
+  manifest_dict.GetString(keys::kNamespace, &xmlns);
+  std::string api_version;
+  manifest_dict.GetString(keys::kAPI, &api_version);
+  std::string package;
+  manifest_dict.GetString(keys::kPackage, &package);
+  std::string version;
+  manifest_dict.GetString(keys::kVersion, &version);
+  std::string install_location;
+  manifest_dict.GetString(keys::kInstallLocation, &install_location);
 
-  return tmp;
-}
-
-void ParseTizenApplicationAndStore(
-    const parser::DictionaryValue& control_dict,
-    PackageInfo* app_info) {
-
-  std::string xmlns =
-    GetParsedValue(keys::kXMLS,
-                   keys::kManifestTextKey,
-                   control_dict);
-
-  std::string api_version =
-    GetParsedValue(keys::kAPI,
-                   keys::kManifestTextKey,
-                   control_dict);
-
-  std::string package =
-    GetParsedValue(keys::kPackage,
-                   keys::kManifestTextKey,
-                   control_dict);
-
-  std::string version =
-    GetParsedValue(keys::kVersion,
-                   keys::kManifestTextKey,
-                   control_dict);
-
-  std::string install_location =
-    GetParsedValue(keys::kInstallLocation,
-                   keys::kManifestTextKey,
-                   control_dict);
-
-  app_info->set_xmlns(xmlns);
-  app_info->set_api_version(api_version);
-  app_info->set_package(package);
-  app_info->set_version(version);
-  app_info->set_install_location(install_location);
+  pkg_info->set_xmlns(xmlns);
+  pkg_info->set_api_version(api_version);
+  pkg_info->set_package(package);
+  pkg_info->set_version(version);
+  if (install_location.empty()) {
+    pkg_info->set_install_location(kAutoInstallLocation);
+  } else {
+    pkg_info->set_install_location(install_location);
+  }
 }
 
 }  // namespace
@@ -74,7 +54,7 @@ bool PackageHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  std::shared_ptr<PackageInfo> app_info(new PackageInfo());
+  std::shared_ptr<PackageInfo> pkg_info(new PackageInfo());
   parser::Value* value = nullptr;
   if (!manifest.Get(keys::kManifestKey, &value)) {
     *error = "Manifest element not found";
@@ -82,15 +62,15 @@ bool PackageHandler::Parse(
   }
 
   if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
-    const parser::DictionaryValue* dict;
+    const parser::DictionaryValue* dict = nullptr;
     value->GetAsDictionary(&dict);
-    ParseTizenApplicationAndStore(*dict, app_info.get());
+    ParsePackageAndStore(*dict, pkg_info.get());
   } else {
     *error = "Cannot parse manifest element";
     return false;
   }
 
-  *output = std::static_pointer_cast<parser::ManifestData>(app_info);
+  *output = std::static_pointer_cast<parser::ManifestData>(pkg_info);
   return true;
 }
 
@@ -127,13 +107,6 @@ bool PackageHandler::Validate(
     return false;
   }
 
-  const std::string& install_location = app_info.install_location();
-  if (install_location.empty()) {
-    *error =
-        "The install_location child element "
-        "of manifest element is obligatory";
-    return false;
-  }
   return true;
 }
 

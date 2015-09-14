@@ -13,8 +13,8 @@ extern const char kManifestKey[];
 extern const char kManifestFileName[];
 extern const char kUIApplication[];
 extern const char kServiceApplication[];
-extern const char kXMLS[];
-extern const char kLable[];
+extern const char kNamespace[];
+extern const char kLabel[];
 extern const char kAPI[];
 extern const char kPackage[];
 extern const char kType[];
@@ -41,6 +41,7 @@ extern const char kDescriptionKeyText[];
 extern const char kDescriptionLangKey[];
 
 // privileges
+extern const char kPrivilegesKey[];
 extern const char kPrivilegeKey[];
 extern const char kPrivilegeTextKey[];
 
@@ -65,24 +66,20 @@ extern const char kDataControlKey[];
 extern const char kDataControlAccessKey[];
 extern const char kDataControlProviderIDKey[];
 extern const char kDataControlTypeKey[];
-extern const char kDataControlTypeChildNameAttrKey[];
 
 // icon
 extern const char kIconKey[];
-extern const char kIconsKey[];
-extern const char kIconSrcKey[];
+extern const char kIconTextKey[];
 
 // label
-extern const char kLableKey[];
-extern const char kLableKeyText[];
-extern const char kLableKeyName[];
-extern const char kLableLangKey[];
+extern const char kLabelKey[];
+extern const char kLabelKeyText[];
+extern const char kLabelLangKey[];
 
 // metadata
 extern const char kMetaData[];
 extern const char kMetaDataKey[];
 extern const char kMetaDataValueKey[];
-extern const char kMetaDataTypeChildNameAttrKey[];
 
 // ui-application
 extern const char kUIApplicationKey[];
@@ -109,7 +106,6 @@ extern const char kAccountMASKey[];
 extern const char kAccountIconKey[];
 extern const char kAccountSectionKey[];
 extern const char kAccountTextKey[];
-extern const char kAccountNameKey[];
 extern const char kAccountLabelKey[];
 extern const char kAccountCapabilityKey[];
 extern const char kAccountLangKey[];
