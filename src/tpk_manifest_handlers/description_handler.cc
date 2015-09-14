@@ -75,13 +75,13 @@ bool DescriptionHandler::Validate(
     const parser::ManifestDataMap& /*handlers_output*/,
     std::string* error) const {
   const DescriptionInfo& elements =
-       static_cast<const DescriptionInfo&>(data);
+      static_cast<const DescriptionInfo&>(data);
 
-    if (elements.description().empty()) {
-      *error =
-          "The description child element of description element is obligatory";
-      return false;
-    }
+  if (elements.description().empty()) {
+    *error =
+        "The description child element of description element is obligatory";
+    return false;
+  }
   return true;
 }
 
