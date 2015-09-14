@@ -25,8 +25,17 @@ bool PrivilegesHandler::Parse(
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
   std::shared_ptr<PrivilegesInfo> privileges_info(new PrivilegesInfo());
+  parser::Value* privileges_value = nullptr;
+  if (!manifest.Get(keys::kPrivilegesKey, &privileges_value))
+    return true;
+  parser::DictionaryValue* privileges_dict = nullptr;
+  if (!privileges_value->GetAsDictionary(&privileges_dict)) {
+    *error = "Failed to parse <privileges> tag";
+    return false;
+  }
+
   parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kPrivilegeKey, &value))
+  if (!privileges_dict->Get(keys::kPrivilegeKey, &value))
     return true;
 
   std::unique_ptr<parser::ListValue> privileges_list;
@@ -63,18 +72,8 @@ bool PrivilegesHandler::Parse(
   return true;
 }
 
-bool PrivilegesHandler::Validate(
-    const parser::ManifestData& data,
-    const parser::ManifestDataMap& /*handlers_output*/,
-    std::string* /*error*/) const {
-  const PrivilegesInfo& elements =
-       static_cast<const PrivilegesInfo&>(data);
-  // TODO(m.socha): There should be 'privileges' validation.
-  return true;
-}
-
 std::string PrivilegesHandler::Key() const {
-  return keys::kPrivilegeKey;
+  return keys::kPrivilegesKey;
 }
 
 }   // namespace parse

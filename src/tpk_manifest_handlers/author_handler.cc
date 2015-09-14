@@ -85,32 +85,32 @@ bool AuthorHandler::Validate(
     const parser::ManifestDataMap& /*handlers_output*/,
     std::string* error) const {
   const AuthorInfo& author =
-       static_cast<const AuthorInfo&>(data);
+      static_cast<const AuthorInfo&>(data);
 
-    if (author.email().empty()) {
-      *error = "The email child element of author element is obligatory";
-      return false;
-    }
+  if (author.email().empty()) {
+    *error = "The email child element of author element is obligatory";
+    return false;
+  }
 
-    const std::string& href = author.href();
-    if (href.empty()) {
-      *error =
-          "The href child element of author element is obligatory";
-      return false;
-    }
+  const std::string& href = author.href();
+  if (href.empty()) {
+    *error =
+        "The href child element of author element is obligatory";
+    return false;
+  }
 
-    if (!parser::utils::IsValidIRI(href)) {
-      *error =
-          "The href child element of author element is not valid url";
-      return false;
-    }
+  if (!parser::utils::IsValidIRI(href)) {
+    *error =
+        "The href child element of author element is not valid url";
+    return false;
+  }
 
-    const std::string& name = author.name();
-    if (name.empty()) {
-      *error =
-          "The name child element of author element is obligatory";
-      return false;
-    }
+  const std::string& name = author.name();
+  if (name.empty()) {
+    *error =
+        "The name child element of author element is obligatory";
+    return false;
+  }
   return true;
 }
 

@@ -31,11 +31,9 @@ bool AccountHandler::Parse(const parser::Manifest& manifest,
       if (!ParseSingleAccountElement(dict, info, error))
         return false;
     } else if (val->GetAsList(&list)) {
-      for (auto& item : *list)
-        if (item->GetAsDictionary(&dict))
-          if (!ParseSingleAccountElement(dict, info, error))
-            return false;
-      }
+      *error = "<account> may be declared only once";
+      return false;
+    }
   }
   *output = std::static_pointer_cast<AccountInfo>(info);
   return true;
