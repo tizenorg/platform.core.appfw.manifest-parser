@@ -141,7 +141,7 @@ const char kTizenApplicationAppControlSrcKey[] = "src";
 const char kTizenApplicationAppControlOperationKey[] = "operation";
 const char kTizenApplicationAppControlUriKey[] = "uri";
 const char kTizenApplicationAppControlMimeKey[] = "mime";
-const char kTizenApplicationAppControlOnResetKey[] = "on-reset";
+const char kTizenApplicationAppControlReloadKey[] = "@reload";
 const char kTizenApplicationAppControlChildNameAttrKey[] = "@name";
 // IME
 const char kTizenImeKey[] = "widget.ime";
