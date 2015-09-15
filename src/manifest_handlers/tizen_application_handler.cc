@@ -78,13 +78,15 @@ bool TizenApplicationHandler::Parse(
     app_info->set_package(value);
   }
   if (app_dict->GetString(keys::kTizenApplicationRequiredVersionKey, &value)) {
-    utils::VersionNumber min_version(kMinimumAPIVersion);
-    utils::VersionNumber req_version(value);
-    if (req_version < min_version) {
-      // TODO(wy80.choi): should be consider minimum API version for each profile.
-      app_info->set_required_version(kMinimumAPIVersion);
-    } else {
-      app_info->set_required_version(value);
+    if (!value.empty()) {
+      // TODO(wy80.choi): should consider minimum API version for each profile.
+      utils::VersionNumber min_version(kMinimumAPIVersion);
+      utils::VersionNumber req_version(value);
+      if (req_version < min_version) {
+        app_info->set_required_version(kMinimumAPIVersion);
+      } else {
+        app_info->set_required_version(value);
+      }
     }
   }
 
