@@ -35,7 +35,7 @@ class AppControlInfo {
  public:
   AppControlInfo(const std::string& src, const std::string& operation,
       const std::string& uri, const std::string& mime,
-      const std::string& onreset);
+      const std::string& reload);
   const std::string& src() const {
     return src_;
   }
@@ -49,8 +49,8 @@ class AppControlInfo {
     return mime_;
   }
 
-  const std::string& onreset() const {
-    return onreset_;
+  const std::string& reload() const {
+    return reload_;
   }
 
  private:
@@ -58,7 +58,7 @@ class AppControlInfo {
   std::string operation_;
   std::string uri_;
   std::string mime_;
-  std::string onreset_;
+  std::string reload_;
 };
 
 struct AppControlInfoList : public parser::ManifestData {

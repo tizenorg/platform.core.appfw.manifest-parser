@@ -8,6 +8,9 @@
 #include "manifest_parser/values.h"
 #include "manifest_handlers/application_manifest_constants.h"
 #include "utils/iri_util.h"
+#include "utils/version_number.h"
+#include "manifest_handlers/platform_version.h"
+#include "manifest_handlers/tizen_application_handler.h"
 
 namespace {
 const char kEnabledValue[] = "enabled";
@@ -57,15 +60,15 @@ void ParseAppControlEntryAndStore(
         keys::kTizenApplicationAppControlChildNameAttrKey, &mime);
   }
 
-  std::string onreset(kEnabledValue);
-  const parser::DictionaryValue* onreset_dict;
-  if (control_dict.GetDictionary(keys::kTizenApplicationAppControlOnResetKey,
-      &onreset_dict)) {
-    onreset_dict->GetString(
-        keys::kTizenApplicationAppControlChildNameAttrKey, &onreset);
+  std::string reload(kEnabledValue);
+  const parser::DictionaryValue* reload_dict;
+  if (control_dict.GetDictionary(keys::kTizenApplicationAppControlReloadKey,
+      &reload_dict)) {
+    reload_dict->GetString(
+        keys::kTizenApplicationAppControlChildNameAttrKey, &reload);
   }
 
-  aplist->controls.emplace_back(src, operation, uri, mime, onreset);
+  aplist->controls.emplace_back(src, operation, uri, mime, reload);
 }
 
 }  // namespace
@@ -138,10 +141,30 @@ bool AppControlHandler::Validate(
       return false;
     }
 
-    const std::string& onreset = item.onreset();
-    if (onreset != kEnabledValue && onreset != kDisabledValue) {
-      *error =
-          "The improper value was given for appcontrol on-reset";
+    const std::string& reload = item.reload();
+    if (reload != kEnabledValue && reload != kDisabledValue) {
+      *error = "The improper value was given for appcontrol reload";
+      return false;
+    }
+
+    const TizenApplicationInfo& app_info =
+        static_cast<const TizenApplicationInfo&>(data);
+
+    utils::VersionNumber supported_version =
+        parser::GetCurrentPlatformVersion();
+    if (!supported_version.IsValid()) {
+      *error = "Cannot retrieve supported API version from platform";
+      return false;
+    }
+
+    utils::VersionNumber required_version(app_info.required_version());
+    if (!required_version.IsValid()) {
+      *error = "Cannot retrieve supported API version from widget";
+      return false;
+    }
+
+    if (supported_version < required_version) {
+      *error = "The required_version of Tizen Web API is not supported.\n";
       return false;
     }
   }
@@ -157,12 +180,12 @@ AppControlInfo::AppControlInfo(
     const std::string& operation,
     const std::string& uri,
     const std::string& mime,
-    const std::string& onreset)
+    const std::string& reload)
     : src_(src),
       operation_(operation),
       uri_(uri),
       mime_(mime),
-      onreset_(onreset) {}
+      reload_(reload) {}
 
 }   // namespace parse
 }   // namespace wgt
