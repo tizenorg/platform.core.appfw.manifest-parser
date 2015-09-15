@@ -5,6 +5,7 @@ Release:        1
 Group:          Application Framework/Package Management
 License:        Apache-2.0
 Source0:        %{name}-%{version}.tar.gz
+Source100:      %{name}.manifest
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
@@ -48,6 +49,7 @@ Examples of manifest-parser usage
 
 %prep
 %setup -q
+cp %{SOURCE100} .
 
 %build
 # BUILD_PARSER macro is defined so we can build two separate projects
@@ -66,6 +68,7 @@ make %{?_smp_mflags}
 %postun -p /sbin/ldconfig
 
 %files
+%manifest %{name}.manifest
 %defattr(-,root,root)
 %{_datarootdir}/manifest-parser/languages-only.txt
 %{_libdir}/libmanifest-parser.so*
@@ -75,14 +78,17 @@ make %{?_smp_mflags}
 %license LICENSE LICENSE-xwalk
 
 %files devel
+%manifest %{name}.manifest
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/*
 
 %files tests
+%manifest %{name}.manifest
 %{_bindir}/manifest-parser-ut/*
 %{_datadir}/manifest-parser-ut/*
 
 %files examples
+%manifest %{name}.manifest
 %defattr(-,root,root)
 %{_bindir}/manifest-parser/*
 %{_datadir}/manifest-parser/*
