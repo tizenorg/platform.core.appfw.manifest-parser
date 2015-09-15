@@ -11,6 +11,7 @@
 
 namespace parser {
 
+
 utils::VersionNumber GetCurrentPlatformVersion();
 
 }  // namespace parser
