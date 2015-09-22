@@ -19,11 +19,15 @@ namespace parse {
 
 class UIApplicationInfo : public parser::ManifestData {
  public:
+
   void set_appid(const std::string& appid) {
     appid_ = appid;
   }
   void set_exec(const std::string& exec) {
     exec_ = exec;
+  }
+  void set_launch_mode(const std::string& launch_mode) {
+    launch_mode_ = launch_mode;
   }
   void set_multiple(const std::string& multiple) {
     multiple_ = multiple;
@@ -44,6 +48,9 @@ class UIApplicationInfo : public parser::ManifestData {
   const std::string& exec() const {
     return exec_;
   }
+  const std::string& launch_mode() const {
+    return launch_mode_;
+  }
   const std::string& multiple() const {
     return multiple_;
   }
@@ -60,6 +67,7 @@ class UIApplicationInfo : public parser::ManifestData {
  private:
   std::string appid_;
   std::string exec_;
+  std::string launch_mode_;
   std::string multiple_;
   std::string nodisplay_;
   std::string taskmanage_;
