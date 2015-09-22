@@ -76,6 +76,7 @@ const char kWidgetIconHeightKey[] = "@height";
 const char kTizenApplicationKey[] = "widget.application";
 // Child keys inside 'kTizenApplicationKey'
 const char kTizenApplicationIdKey[] = "@id";
+const char kTizenApplicationLaunchModeKey[] = "@launch_mode";
 const char kTizenApplicationPackageKey[] = "@package";
 const char kTizenApplicationRequiredVersionKey[] = "@required_version";
 

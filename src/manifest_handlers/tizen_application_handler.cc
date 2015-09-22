@@ -24,7 +24,7 @@ const char kMinimumAPIVersion[] = "2.2.1";
 
 namespace keys = wgt::application_widget_keys;
 
-TizenApplicationInfo::TizenApplicationInfo() {
+TizenApplicationInfo::TizenApplicationInfo(): launch_mode_("single") {
 }
 
 TizenApplicationInfo::~TizenApplicationInfo() {
@@ -74,6 +74,20 @@ bool TizenApplicationHandler::Parse(
   }
   if (app_dict->GetString(keys::kTizenApplicationIdKey, &value))
     app_info->set_id(value);
+
+  if (app_dict->GetString(keys::kTizenApplicationLaunchModeKey, &value)) {
+    app_info->set_empty(false);
+    if (value == "caller")
+      app_info->set_launch_mode("caller");
+    else if (value == "group")
+      app_info->set_launch_mode("group");
+    else if (value == "single")
+      app_info->set_launch_mode("single");
+    else
+      app_info->set_launch_mode(value);
+  } else {
+    app_info->set_empty(true);
+    }
   if (app_dict->GetString(keys::kTizenApplicationPackageKey, &value)) {
     app_info->set_package(value);
   }
@@ -121,7 +135,11 @@ bool TizenApplicationHandler::Validate(
              "element does not exist.\n";
     return false;
   }
-
+  if (!app_info.empty() && app_info.launch_mode() != "caller"
+      && app_info.launch_mode() != "group"
+      && app_info.launch_mode() != "single") {
+    *error = "Wrong value of launch mode";
+  }
   utils::VersionNumber supported_version = parser::GetCurrentPlatformVersion();
   if (!supported_version.IsValid()) {
     *error = "Cannot retrieve supported API version from platform";
@@ -137,7 +155,13 @@ bool TizenApplicationHandler::Validate(
              "is not supported.\n";
     return false;
   }
-
+  utils::VersionNumber valid_version("2.4");
+  if (!app_info.empty()) {
+       if (required_version < valid_version) {
+          *error = "The launch_mode attribute is applicable to platform >= 2.4";
+          return false;
+       }
+  }
   return true;
 }
 

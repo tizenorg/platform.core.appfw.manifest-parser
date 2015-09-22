@@ -84,6 +84,7 @@ const char kMetaDataValueKey[] = "@value";
 const char kUIApplicationKey[] = "manifest.ui-application";
 const char kUIApplicationAppIDKey[] = "@appid";
 const char kUIApplicationExecKey[] = "@exec";
+const char kUIApplicationLaunchModeKey[] = "@launch_mode";
 const char kUIApplicationMultipleKey[] = "@multiple";
 const char kUIApplicationNoDisplayKey[] = "@nodisplay";
 const char kUIApplicationTaskManageKey[] = "@taskmanage";
