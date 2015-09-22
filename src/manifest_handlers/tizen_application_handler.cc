@@ -19,12 +19,13 @@ namespace wgt {
 namespace parse {
 
 namespace {
-const char kMinimumAPIVersion[] = "2.2.1";
+const utils::VersionNumber kMinimumAPIVersion("2.2.1");
+const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
 }  // namespace
 
 namespace keys = wgt::application_widget_keys;
 
-TizenApplicationInfo::TizenApplicationInfo() {
+TizenApplicationInfo::TizenApplicationInfo(): launch_mode_("single") {
 }
 
 TizenApplicationInfo::~TizenApplicationInfo() {
@@ -74,21 +75,23 @@ bool TizenApplicationHandler::Parse(
   }
   if (app_dict->GetString(keys::kTizenApplicationIdKey, &value))
     app_info->set_id(value);
-  if (app_dict->GetString(keys::kTizenApplicationPackageKey, &value)) {
+  if (app_dict->GetString(keys::kTizenApplicationPackageKey, &value))
     app_info->set_package(value);
-  }
   if (app_dict->GetString(keys::kTizenApplicationRequiredVersionKey, &value)) {
     if (!value.empty()) {
       // TODO(wy80.choi): should consider minimum API version for each profile.
-      utils::VersionNumber min_version(kMinimumAPIVersion);
       utils::VersionNumber req_version(value);
-      if (req_version < min_version) {
-        app_info->set_required_version(kMinimumAPIVersion);
+      if (req_version < kMinimumAPIVersion) {
+        app_info->set_required_version(kMinimumAPIVersion.ToString());
       } else {
         app_info->set_required_version(value);
       }
     }
   }
+  if (utils::VersionNumber(app_info->required_version()) >=
+      kLaunchModeRequiredVersion)
+    if (app_dict->GetString(keys::kTizenApplicationLaunchModeKey, &value))
+      app_info->set_launch_mode(value);
 
   *output = std::static_pointer_cast<parser::ManifestData>(app_info);
   return true;
@@ -123,7 +126,6 @@ bool TizenApplicationHandler::Validate(
              "element does not exist.\n";
     return false;
   }
-
   utils::VersionNumber supported_version = parser::GetCurrentPlatformVersion();
   if (!supported_version.IsValid()) {
     *error = "Cannot retrieve supported API version from platform";
@@ -139,7 +141,15 @@ bool TizenApplicationHandler::Validate(
              "is not supported.\n";
     return false;
   }
-
+  if (required_version >= kLaunchModeRequiredVersion) {
+    if (!app_info.launch_mode().empty() &&
+        app_info.launch_mode() != "caller" &&
+        app_info.launch_mode() != "group" &&
+        app_info.launch_mode() != "single") {
+      *error = "Wrong value of launch mode";
+      return false;
+    }
+  }
   return true;
 }
 

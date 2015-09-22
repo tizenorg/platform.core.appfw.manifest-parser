@@ -5,9 +5,11 @@
 #include "utils/version_number.h"
 
 #include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/join.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
 
+#include <algorithm>
 #include <cstdlib>
 
 namespace ba = boost::algorithm;
@@ -80,6 +82,13 @@ bool VersionNumber::operator>(const VersionNumber& other) const {
 
 bool VersionNumber::operator<=(const VersionNumber& other) const {
   return !this->operator>(other);
+}
+
+std::string VersionNumber::ToString() const {
+  std::vector<std::string> strings;
+  std::transform(parts_.begin(), parts_.end(), std::back_inserter(strings),
+                 static_cast<std::string(*)(int)>(&std::to_string));
+  return ba::join(strings, ".");
 }
 
 }  // namespace utils
