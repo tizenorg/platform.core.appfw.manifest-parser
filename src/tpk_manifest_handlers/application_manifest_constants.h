@@ -85,6 +85,7 @@ extern const char kMetaDataValueKey[];
 extern const char kUIApplicationKey[];
 extern const char kUIApplicationAppIDKey[];
 extern const char kUIApplicationExecKey[];
+extern const char kUIApplicationLaunchModeKey[];
 extern const char kUIApplicationMultipleKey[];
 extern const char kUIApplicationNoDisplayKey[];
 extern const char kUIApplicationTaskManageKey[];

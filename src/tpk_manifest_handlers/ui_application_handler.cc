@@ -10,14 +10,20 @@
 #include "manifest_parser/values.h"
 #include "utils/iri_util.h"
 #include "utils/logging.h"
+#include "utils/version_number.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
+#include "tpk_manifest_handlers/package_handler.h"
+
+namespace {
+
+const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
+
+}  // namespace
 
 namespace tpk {
 namespace parse {
 
 namespace keys = tpk::application_keys;
-
-namespace {
 
 bool ParseAppControl(
   const parser::DictionaryValue* dict,
@@ -235,7 +241,8 @@ bool InitializeLabelParsing(
   return true;
 }
 
-bool UIAppValidation(const UIApplicationSingleEntry& item, std::string* error) {
+bool UIAppValidation(const UIApplicationSingleEntry& item,
+                     const std::string& api_version, std::string* error) {
   if (item.ui_info.appid().empty()) {
     *error = "The appid child element of ui-application element is obligatory";
     return false;
@@ -245,6 +252,21 @@ bool UIAppValidation(const UIApplicationSingleEntry& item, std::string* error) {
   if (exec.empty()) {
     *error = "The exec child element of ui-application element is obligatory";
     return false;
+  }
+
+  const std::string& launch_mode = item.ui_info.launch_mode();
+  if (!launch_mode.empty()) {
+    if (utils::VersionNumber(api_version) < kLaunchModeRequiredVersion) {
+      *error = "launch_mode attribute cannot be used for api version lower"
+              " than 2.4";
+      return false;
+    }
+    if (launch_mode != "group" &&
+        launch_mode != "caller" &&
+        launch_mode != "single") {
+      *error = "The improper value was given for ui-application launch_mode";
+      return false;
+    }
   }
 
   const std::string& multiple = item.ui_info.multiple();
@@ -386,6 +408,15 @@ bool ParseUIApplicationAndStore(
   uiapplicationinfo->ui_info.set_taskmanage(taskmanage);
   uiapplicationinfo->ui_info.set_type(type);
 
+  std::string launch_mode;
+  if (app_dict.GetString(keys::kUIApplicationLaunchModeKey, &launch_mode)) {
+    if (launch_mode.empty()) {
+      *error = "launch_mode attribute is empty";
+      return false;
+    }
+    uiapplicationinfo->ui_info.set_launch_mode(launch_mode);
+  }
+
   if (!InitializeAppControlParsing(app_dict, uiapplicationinfo, error) ||
      !InitializeDataControlParsing(app_dict, uiapplicationinfo, error) ||
      !InitializeMetaDataParsing(app_dict, uiapplicationinfo, error) ||
@@ -395,8 +426,6 @@ bool ParseUIApplicationAndStore(
   }
   return true;
 }
-
-}  // namespace
 
 bool UIApplicationHandler::Parse(
     const parser::Manifest& manifest,
@@ -444,13 +473,18 @@ bool UIApplicationHandler::Parse(
 
 bool UIApplicationHandler::Validate(
     const parser::ManifestData& data,
-    const parser::ManifestDataMap& /*handlers_output*/,
+    const parser::ManifestDataMap& handlers_output,
     std::string* error) const {
   const UIApplicationInfoList& elements =
-       static_cast<const UIApplicationInfoList&>(data);
+      static_cast<const UIApplicationInfoList&>(data);
+
+
+  std::shared_ptr<const PackageInfo> package_info =
+      std::static_pointer_cast<const PackageInfo>(
+          handlers_output.find(manifest_keys::kManifestKey)->second);
 
   for (const auto& item : elements.items) {
-    if (!UIAppValidation(item, error) ||
+    if (!UIAppValidation(item, package_info->api_version(), error) ||
        !AppControlValidation(item, error) ||
        !DataControlValidation(item, error) ||
        !MetadataValidation(item, error) ||
@@ -463,6 +497,10 @@ bool UIApplicationHandler::Validate(
 
 std::string UIApplicationHandler::Key() const {
   return keys::kUIApplicationKey;
+}
+
+std::vector<std::string> UIApplicationHandler::PrerequisiteKeys() const {
+  return {manifest_keys::kManifestKey};
 }
 
 }   // namespace parse

@@ -24,6 +24,8 @@ class VersionNumber {
   bool operator>(const VersionNumber& other) const;
   bool operator<=(const VersionNumber& other) const;
 
+  std::string ToString() const;
+
  private:
   std::vector<int> parts_;
 };

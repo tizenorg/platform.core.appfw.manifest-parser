@@ -85,4 +85,10 @@ TEST(VersionNumber_LE, Basic) {
   ASSERT_LE(VersionNumber("4.3.2.1"), VersionNumber("4.3.2.1"));
 }
 
+TEST(VersionNumber_ToString, Basic) {
+  ASSERT_EQ(VersionNumber("1").ToString(), "1");
+  ASSERT_EQ(VersionNumber("0.3.2").ToString(), "0.3.2");
+  ASSERT_EQ(VersionNumber("7.7.7.7.7.7.7").ToString(), "7.7.7.7.7.7.7");
+}
+
 }  // namespace utils
