@@ -18,6 +18,7 @@ namespace parse {
 namespace keys = tpk::application_keys;
 
 namespace {
+const char kSingleLaunchMode[] = "single";
 
 bool ParseAppControl(
   const parser::DictionaryValue* dict,
@@ -247,6 +248,12 @@ bool UIAppValidation(const UIApplicationSingleEntry& item, std::string* error) {
     return false;
   }
 
+  const std::string& launch_mode = item.ui_info.launch_mode();
+  if (launch_mode != "group" && launch_mode != "caller"
+      && launch_mode != "single") {
+    *error = "The improper value was given for ui-application launch_mode";
+    return false;
+  }
   const std::string& multiple = item.ui_info.multiple();
   if (multiple.empty()) {
     *error =
@@ -370,6 +377,8 @@ bool ParseUIApplicationAndStore(
   app_dict.GetString(keys::kUIApplicationAppIDKey, &appid);
   std::string exec;
   app_dict.GetString(keys::kUIApplicationExecKey, &exec);
+  std::string launch_mode;
+  app_dict.GetString(keys::kUIApplicationLaunchModeKey, &launch_mode);
   std::string multiple;
   app_dict.GetString(keys::kUIApplicationMultipleKey, &multiple);
   std::string nodisplay;
@@ -385,6 +394,11 @@ bool ParseUIApplicationAndStore(
   uiapplicationinfo->ui_info.set_nodisplay(nodisplay);
   uiapplicationinfo->ui_info.set_taskmanage(taskmanage);
   uiapplicationinfo->ui_info.set_type(type);
+  if (launch_mode.empty()) {
+    uiapplicationinfo->ui_info.set_launch_mode(kSingleLaunchMode);
+  } else {
+    uiapplicationinfo->ui_info.set_launch_mode(launch_mode);
+  }
 
   if (!InitializeAppControlParsing(app_dict, uiapplicationinfo, error) ||
      !InitializeDataControlParsing(app_dict, uiapplicationinfo, error) ||

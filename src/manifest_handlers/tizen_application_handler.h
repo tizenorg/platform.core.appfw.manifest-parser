@@ -19,11 +19,20 @@ namespace parse {
 
 class TizenApplicationInfo : public parser::ManifestData {
  public:
+  enum class LaunchMode {
+    GROUP,
+    CALLER,
+    SINGLE
+  };
+
   TizenApplicationInfo();
   virtual ~TizenApplicationInfo();
 
   void set_id(const std::string& id) {
     id_ = id;
+  }
+  void set_launch_mode(LaunchMode launch_mode) {
+    launch_mode_ = launch_mode;
   }
   void set_package(const std::string& package) {
     package_ = package;
@@ -35,6 +44,9 @@ class TizenApplicationInfo : public parser::ManifestData {
   const std::string& id() const {
     return id_;
   }
+  LaunchMode launch_mode() const {
+    return launch_mode_;
+  }
   const std::string& package() const {
     return package_;
   }
@@ -44,6 +56,7 @@ class TizenApplicationInfo : public parser::ManifestData {
 
  private:
   std::string id_;
+  LaunchMode launch_mode_;
   std::string package_;
   std::string required_version_;
 };

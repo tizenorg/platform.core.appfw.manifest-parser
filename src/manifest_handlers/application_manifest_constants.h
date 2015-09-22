@@ -62,6 +62,7 @@ extern const char kWidgetNamespacePrefix[];
 extern const char kTizenWidgetKey[];
 extern const char kTizenApplicationKey[];
 extern const char kTizenApplicationIdKey[];
+extern const char kTizenApplicationLaunchModeKey[];
 extern const char kTizenApplicationPackageKey[];
 extern const char kTizenApplicationRequiredVersionKey[];
 extern const char kTizenAppIdKey[];

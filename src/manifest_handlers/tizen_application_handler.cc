@@ -74,6 +74,15 @@ bool TizenApplicationHandler::Parse(
   }
   if (app_dict->GetString(keys::kTizenApplicationIdKey, &value))
     app_info->set_id(value);
+
+  app_dict->GetString(keys::kTizenApplicationLaunchModeKey, &value);
+  if (strcasecmp("caller", value.c_str()) == 0)
+    app_info->set_launch_mode(TizenApplicationInfo::LaunchMode::CALLER);
+  else if (strcasecmp("group", value.c_str()) == 0)
+    app_info->set_launch_mode(TizenApplicationInfo::LaunchMode::GROUP);
+  else
+    app_info->set_launch_mode(TizenApplicationInfo::LaunchMode::SINGLE);
+
   if (app_dict->GetString(keys::kTizenApplicationPackageKey, &value)) {
     app_info->set_package(value);
   }
@@ -121,6 +130,15 @@ bool TizenApplicationHandler::Validate(
              "element does not exist.\n";
     return false;
   }
+  if (app_info.launch_mode() !=
+      TizenApplicationInfo::LaunchMode::CALLER &&
+      app_info.launch_mode() !=
+      TizenApplicationInfo::LaunchMode::GROUP &&
+      app_info.launch_mode() !=
+      TizenApplicationInfo::LaunchMode::SINGLE) {
+    *error = "Wrong value of launch mode";
+    return false;
+  }
 
   utils::VersionNumber supported_version = parser::GetCurrentPlatformVersion();
   if (!supported_version.IsValid()) {
@@ -137,7 +155,15 @@ bool TizenApplicationHandler::Validate(
              "is not supported.\n";
     return false;
   }
-
+  utils::VersionNumber valid_version("2.4");
+  if (app_info.launch_mode() == TizenApplicationInfo::LaunchMode::CALLER ||
+      app_info.launch_mode() == TizenApplicationInfo::LaunchMode::GROUP ||
+      app_info.launch_mode() == TizenApplicationInfo::LaunchMode::SINGLE) {
+    if (required_version < valid_version) {
+      *error = "The launch_mode attribute is applicable to platform >= 2.4";
+      return false;
+    }
+  }
   return true;
 }
 
