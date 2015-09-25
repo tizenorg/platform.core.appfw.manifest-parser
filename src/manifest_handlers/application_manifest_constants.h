@@ -42,7 +42,7 @@ extern const char kLicenseKey[];
 extern const char kAccessOriginKey[];
 extern const char kAccessSubdomainsKey[];
 extern const char kCSPKey[];
-extern const char kCSPKeyReportOnly[];
+extern const char kCSPReportOnlyKey[];
 extern const char kAuthorKey[];
 extern const char kDescriptionKey[];
 extern const char kShortNameKey[];

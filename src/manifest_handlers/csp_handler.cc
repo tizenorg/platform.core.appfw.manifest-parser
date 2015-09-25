@@ -21,7 +21,7 @@ bool CSPHandler::Parse(
     std::shared_ptr<parser::ManifestData>* output,
     std::string* /*error*/) {
   std::string security_policy = (security_type_ == SecurityType::CSP) ?
-      keys::kCSPKey : keys::kCSPKeyReportOnly;
+      keys::kCSPKey : keys::kCSPReportOnlyKey;
   const parser::Value* value = nullptr;
   if (!manifest.Get(security_policy, &value))
     return true;
@@ -46,12 +46,11 @@ bool CSPHandler::Parse(
     return true;
 
   std::shared_ptr<CSPInfo> info(new CSPInfo);
-
   std::string security_rules;
-  dict->GetString(keys::kXmlTextKey, &security_rules);
-  info->set_security_rules(security_rules);
-
-  *output = std::static_pointer_cast<parser::ManifestData>(info);
+  if (dict->GetString(keys::kXmlTextKey, &security_rules)) {
+    info->set_security_rules(security_rules);
+    *output = std::static_pointer_cast<parser::ManifestData>(info);
+  }
   return true;
 }
 

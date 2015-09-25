@@ -47,8 +47,7 @@ const char kHeightKey[] = "widget.@height";
 const char kWidthKey[] = "widget.@width";
 const char kPreferencesKey[] = "widget.preference";
 const char kCSPKey[] = "widget.content-security-policy";
-const char kCSPKeyReportOnly[] =
-    "widget.content-security-policy-report-only";
+const char kCSPReportOnlyKey[] = "widget.content-security-policy-report-only";
 const char kAccessKey[] = "widget.access";
 const char kLicenseKey[] = "widget.license";
 
@@ -81,8 +80,6 @@ const char kTizenApplicationRequiredVersionKey[] = "@required_version";
 
 const char kTizenAppIdKey[] = "widget.application.@package";
 const char kAllowNavigationKey[] = "widget.allow-navigation";
-const char kCSPReportOnlyKey[] =
-    "widget.content-security-policy-report-only.#text";
 const char kTizenSettingKey[] = "widget.setting";
 const char kTizenBackgroundSupportKey[] = "@background-support";
 const char kTizenContextMenuKey[] = "@context-menu";
