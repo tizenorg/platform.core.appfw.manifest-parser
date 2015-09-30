@@ -21,48 +21,46 @@ namespace keys = wgt::application_widget_keys;
 
 namespace {
 
-void ParseAppControlEntryAndStore(
-    const parser::DictionaryValue& control_dict,
-    AppControlInfoList* aplist) {
+void ParseAppControlEntryAndStore(const parser::DictionaryValue& control_dict,
+                                  AppControlInfoList* aplist) {
   std::string src;
   const parser::DictionaryValue* src_dict;
   if (control_dict.GetDictionary(keys::kTizenApplicationAppControlSrcKey,
-      &src_dict)) {
-    src_dict->GetString(
-        keys::kTizenApplicationAppControlChildNameAttrKey, &src);
+                                 &src_dict)) {
+    src_dict->GetString(keys::kTizenApplicationAppControlChildNameAttrKey,
+                        &src);
   }
 
   std::string operation;
   const parser::DictionaryValue* operation_dict;
-  if (control_dict.GetDictionary(
-      keys::kTizenApplicationAppControlOperationKey,
-      &operation_dict)) {
-    operation_dict->GetString(
-        keys::kTizenApplicationAppControlChildNameAttrKey, &operation);
+  if (control_dict.GetDictionary(keys::kTizenApplicationAppControlOperationKey,
+                                 &operation_dict)) {
+    operation_dict->GetString(keys::kTizenApplicationAppControlChildNameAttrKey,
+                              &operation);
   }
 
   std::string uri;
   const parser::DictionaryValue* uri_dict;
   if (control_dict.GetDictionary(keys::kTizenApplicationAppControlUriKey,
-      &uri_dict)) {
-    uri_dict->GetString(
-        keys::kTizenApplicationAppControlChildNameAttrKey, &uri);
+                                 &uri_dict)) {
+    uri_dict->GetString(keys::kTizenApplicationAppControlChildNameAttrKey,
+                        &uri);
   }
 
   std::string mime;
   const parser::DictionaryValue* mime_dict;
   if (control_dict.GetDictionary(keys::kTizenApplicationAppControlMimeKey,
-      &mime_dict)) {
-    mime_dict->GetString(
-        keys::kTizenApplicationAppControlChildNameAttrKey, &mime);
+                                 &mime_dict)) {
+    mime_dict->GetString(keys::kTizenApplicationAppControlChildNameAttrKey,
+                         &mime);
   }
 
   std::string onreset(kEnabledValue);
   const parser::DictionaryValue* onreset_dict;
   if (control_dict.GetDictionary(keys::kTizenApplicationAppControlOnResetKey,
-      &onreset_dict)) {
-    onreset_dict->GetString(
-        keys::kTizenApplicationAppControlChildNameAttrKey, &onreset);
+                                 &onreset_dict)) {
+    onreset_dict->GetString(keys::kTizenApplicationAppControlChildNameAttrKey,
+                            &onreset);
   }
 
   aplist->controls.emplace_back(src, operation, uri, mime, onreset);
@@ -70,20 +68,16 @@ void ParseAppControlEntryAndStore(
 
 }  // namespace
 
-AppControlHandler::AppControlHandler() {
-}
+AppControlHandler::AppControlHandler() {}
 
-AppControlHandler::~AppControlHandler() {
-}
+AppControlHandler::~AppControlHandler() {}
 
-bool AppControlHandler::Parse(
-    const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+bool AppControlHandler::Parse(const parser::Manifest& manifest,
+                              std::shared_ptr<parser::ManifestData>* output,
+                              std::string* error) {
   std::shared_ptr<AppControlInfoList> aplist(new AppControlInfoList());
   parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kTizenApplicationAppControlsKey, &value))
-    return true;
+  if (!manifest.Get(keys::kTizenApplicationAppControlsKey, &value)) return true;
 
   if (value->GetType() == parser::Value::TYPE_LIST) {
     // multiple entries
@@ -117,7 +111,7 @@ bool AppControlHandler::Validate(
     const parser::ManifestDataMap& /*handlers_output*/,
     std::string* error) const {
   const AppControlInfoList& app_controls =
-       static_cast<const AppControlInfoList&>(data);
+      static_cast<const AppControlInfoList&>(data);
 
   for (const auto& item : app_controls.controls) {
     if (item.src().empty()) {
@@ -140,8 +134,7 @@ bool AppControlHandler::Validate(
 
     const std::string& onreset = item.onreset();
     if (onreset != kEnabledValue && onreset != kDisabledValue) {
-      *error =
-          "The improper value was given for appcontrol on-reset";
+      *error = "The improper value was given for appcontrol on-reset";
       return false;
     }
   }
@@ -152,17 +145,15 @@ std::string AppControlHandler::Key() const {
   return keys::kTizenApplicationAppControlsKey;
 }
 
-AppControlInfo::AppControlInfo(
-    const std::string& src,
-    const std::string& operation,
-    const std::string& uri,
-    const std::string& mime,
-    const std::string& onreset)
+AppControlInfo::AppControlInfo(const std::string& src,
+                               const std::string& operation,
+                               const std::string& uri, const std::string& mime,
+                               const std::string& onreset)
     : src_(src),
       operation_(operation),
       uri_(uri),
       mime_(mime),
       onreset_(onreset) {}
 
-}   // namespace parse
-}   // namespace wgt
+}  // namespace parse
+}  // namespace wgt

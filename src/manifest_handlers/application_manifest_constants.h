@@ -140,6 +140,8 @@ extern const char kTizenServiceIdKey[];
 extern const char kTizenServiceAutoRestartKey[];
 extern const char kTizenServiceOnBootKey[];
 extern const char kXmlTextKey[];
+extern const char kSplashScreen[];
+
 }  // namespace application_widget_keys
 
 }  // namespace wgt
