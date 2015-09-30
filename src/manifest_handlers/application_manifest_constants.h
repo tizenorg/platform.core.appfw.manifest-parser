@@ -152,6 +152,8 @@ extern const char kTizenServiceMetadataKey[];
 extern const char kTizenServiceMetadataKeyKey[];
 extern const char kTizenServiceMetadataValueKey[];
 extern const char kXmlTextKey[];
+extern const char kSplashScreen[];
+
 }  // namespace application_widget_keys
 
 }  // namespace wgt

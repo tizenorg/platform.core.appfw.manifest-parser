@@ -26,14 +26,12 @@ class AppControlHandler : public parser::ManifestHandler {
  public:
   AppControlHandler();
   ~AppControlHandler() override;
-  bool Parse(
-      const parser::Manifest& manifest,
-      std::shared_ptr<parser::ManifestData>* output,
-      std::string* error) override;
-  bool Validate(
-      const parser::ManifestData& data,
-      const parser::ManifestDataMap& handlers_output,
-      std::string* error) const override;
+  bool Parse(const parser::Manifest& manifest,
+             std::shared_ptr<parser::ManifestData>* output,
+             std::string* error) override;
+  bool Validate(const parser::ManifestData& data,
+                const parser::ManifestDataMap& handlers_output,
+                std::string* error) const override;
   std::string Key() const override;
   std::vector<std::string> PrerequisiteKeys() const override;
 };
@@ -76,7 +74,7 @@ struct AppControlInfoList : public parser::ManifestData {
   std::vector<AppControlInfo> controls;
 };
 
-}   // namespace parse
-}   // namespace wgt
+}  // namespace parse
+}  // namespace wgt
 
 #endif  // MANIFEST_HANDLERS_APP_CONTROL_HANDLER_H_
