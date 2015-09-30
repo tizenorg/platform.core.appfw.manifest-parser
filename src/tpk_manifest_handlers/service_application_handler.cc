@@ -101,7 +101,7 @@ bool ParseLabel(
   std::string text;
   dict->GetString(keys::kLabelKeyText, &text);
   std::string xml_lang;
-  dict->GetString( keys::kLabelLangKey, &xml_lang);
+  dict->GetString(keys::kLabelLangKey, &xml_lang);
   info->label.emplace_back(text, text, xml_lang);
   return true;
 }
