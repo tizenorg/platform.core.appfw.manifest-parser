@@ -43,6 +43,7 @@ extern const char kTizenSplashScreenKey[];
 extern const char kTizenWidgetKey[];
 extern const char kVersionKey[];
 extern const char kWidgetKey[];
+extern const char kSplashScreenKey[];
 
 }  // namespace application_widget_keys
 
