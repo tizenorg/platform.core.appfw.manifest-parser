@@ -51,6 +51,10 @@ const char kTizenApplicationPackageKey[] = "@package";
 const char kAllowNavigationKey[] = "widget.allow-navigation";
 const char kTizenSettingKey[] = "widget.setting";
 const char kTizenInstallLocationKey[] = "@install-location";
+
+const char kTizenNoDisplayKey[] = "@nodisplay";
+const char kTizenIndicatorPresenceKey[] = "@indicator-presence";
+const char kTizenBackbuttonPresenceKey[] = "@backbutton-presence";
 const char kTizenUserAgentKey[] = "@user-agent";
 const char kTizenSoundModeKey[] = "@sound-mode";
 const char kTizenBackgroundVibrationKey[] = "@background-vibration";
@@ -69,6 +73,9 @@ const char kTizenContentKey[] = "widget.content";
 const char kTizenCategoryKey[] = "widget.category";
 // Service
 const char kTizenServiceKey[] = "widget.service";
+
+// launch_screen
+const char kSplashScreenKey[] = "widget.launch_screen";
 
 }  // namespace application_widget_keys
 
