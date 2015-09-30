@@ -159,6 +159,17 @@ const char kTizenServiceOnBootKey[] = "@on-boot";
 
 const char kXmlTextKey[] = "#text";
 
+// launch_screen
+const char kSplashScreen[] = "widget.launch_screen";
+const char kSplashScreenDefault[] = "widget.launch_screen.ls_default";
+const char kSplashScreenPortrait[] = "widget.launch_screen.ls_portrait";
+const char kSplashScreenLandscape[] = "widget.launch_screen.ls_landscape";
+const char kSplashScreenReadyWhen[] = "widget.launch_screen.@ready_when";
+const char kSplashScreenBgColor[] = "@background_color";
+const char kSplashScreenBgImage[] = "@background_image";
+const char kSplashScreenImage[] = "@image";
+const char kSplashScreenImageBorder[] = "@image_border";
+
 }  // namespace application_widget_keys
 
 }  // namespace wgt

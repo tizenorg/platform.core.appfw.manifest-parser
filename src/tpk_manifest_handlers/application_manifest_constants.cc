@@ -104,7 +104,6 @@ const char kAccountCapabilityKey[] = "capability";
 const char kAccountLangKey[] = "@lang";
 const char kAccountIconNormalKey[] = "account";
 const char kAccountIconSmallKey[] = "account-small";
-
 }  // namespace application_keys
 
 namespace manifest_errors {
