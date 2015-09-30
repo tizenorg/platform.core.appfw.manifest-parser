@@ -20,38 +20,26 @@ class AppControlHandler : public parser::ManifestHandler {
  public:
   AppControlHandler();
   ~AppControlHandler() override;
-  bool Parse(
-      const parser::Manifest& manifest,
-      std::shared_ptr<parser::ManifestData>* output,
-      std::string* error) override;
-  bool Validate(
-      const parser::ManifestData& data,
-      const parser::ManifestDataMap& handlers_output,
-      std::string* error) const override;
+  bool Parse(const parser::Manifest& manifest,
+             std::shared_ptr<parser::ManifestData>* output,
+             std::string* error) override;
+  bool Validate(const parser::ManifestData& data,
+                const parser::ManifestDataMap& handlers_output,
+                std::string* error) const override;
   std::string Key() const override;
 };
 
 class AppControlInfo {
  public:
   AppControlInfo(const std::string& src, const std::string& operation,
-      const std::string& uri, const std::string& mime,
-      const std::string& onreset);
-  const std::string& src() const {
-    return src_;
-  }
-  const std::string& operation() const {
-    return operation_;
-  }
-  const std::string& uri() const {
-    return uri_;
-  }
-  const std::string& mime() const {
-    return mime_;
-  }
+                 const std::string& uri, const std::string& mime,
+                 const std::string& onreset);
+  const std::string& src() const { return src_; }
+  const std::string& operation() const { return operation_; }
+  const std::string& uri() const { return uri_; }
+  const std::string& mime() const { return mime_; }
 
-  const std::string& onreset() const {
-    return onreset_;
-  }
+  const std::string& onreset() const { return onreset_; }
 
  private:
   std::string src_;
@@ -65,7 +53,7 @@ struct AppControlInfoList : public parser::ManifestData {
   std::vector<AppControlInfo> controls;
 };
 
-}   // namespace parse
-}   // namespace wgt
+}  // namespace parse
+}  // namespace wgt
 
 #endif  // MANIFEST_HANDLERS_APP_CONTROL_HANDLER_H_
