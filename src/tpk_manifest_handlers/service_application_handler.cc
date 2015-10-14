@@ -256,12 +256,14 @@ bool ServiceAppValidation(
   }
 
   const std::string& auto_restart = item.sa_info.auto_restart();
+  /*
   if (auto_restart.empty()) {
     *error =
         "The auto_restart child element of "
         "service application element is obligatory";
     return false;
   }
+  */
 
   const std::string& exec = item.sa_info.exec();
   if (exec.empty()) {
@@ -271,12 +273,14 @@ bool ServiceAppValidation(
   }
 
   const std::string& on_boot = item.sa_info.on_boot();
+  /*
   if (on_boot.empty()) {
     *error =
         "The on_boot child element of "
         "service application element is obligatory";
     return false;
   }
+  */
 
   const std::string& type = item.sa_info.type();
   if (type.empty()) {
