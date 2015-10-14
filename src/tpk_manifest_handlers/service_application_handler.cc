@@ -256,6 +256,7 @@ bool ServiceAppValidation(
   }
 
   const std::string& auto_restart = item.sa_info.auto_restart();
+  // TODO(p.sikorski): wait until rules/policies for that element will be set
   /*
   if (auto_restart.empty()) {
     *error =
@@ -273,6 +274,7 @@ bool ServiceAppValidation(
   }
 
   const std::string& on_boot = item.sa_info.on_boot();
+  // TODO(p.sikorski): wait until rules/policies for that element will be set
   /*
   if (on_boot.empty()) {
     *error =
