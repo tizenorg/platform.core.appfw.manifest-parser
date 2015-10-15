@@ -29,14 +29,13 @@ class AppControlHandler : public parser::ManifestHandler {
       const parser::ManifestDataMap& handlers_output,
       std::string* error) const override;
   std::string Key() const override;
-  std::vector<std::string> PrerequisiteKeys() const override;
 };
 
 class AppControlInfo {
  public:
   AppControlInfo(const std::string& src, const std::string& operation,
       const std::string& uri, const std::string& mime,
-      const std::string& reload);
+      const std::string& onreset);
   const std::string& src() const {
     return src_;
   }
@@ -50,8 +49,8 @@ class AppControlInfo {
     return mime_;
   }
 
-  const std::string& reload() const {
-    return reload_;
+  const std::string& onreset() const {
+    return onreset_;
   }
 
  private:
@@ -59,7 +58,7 @@ class AppControlInfo {
   std::string operation_;
   std::string uri_;
   std::string mime_;
-  std::string reload_;
+  std::string onreset_;
 };
 
 struct AppControlInfoList : public parser::ManifestData {

@@ -5,11 +5,9 @@
 
 #include "manifest_handlers/app_control_handler.h"
 
-#include "manifest_handlers/application_manifest_constants.h"
-#include "manifest_handlers/tizen_application_handler.h"
 #include "manifest_parser/values.h"
+#include "manifest_handlers/application_manifest_constants.h"
 #include "utils/iri_util.h"
-#include "utils/version_number.h"
 
 namespace {
 const char kEnabledValue[] = "enabled";
@@ -59,10 +57,15 @@ void ParseAppControlEntryAndStore(
         keys::kTizenApplicationAppControlChildNameAttrKey, &mime);
   }
 
-  std::string reload(kEnabledValue);
-  control_dict.GetString(keys::kTizenApplicationAppControlReloadKey, &reload);
+  std::string onreset(kEnabledValue);
+  const parser::DictionaryValue* onreset_dict;
+  if (control_dict.GetDictionary(keys::kTizenApplicationAppControlOnResetKey,
+      &onreset_dict)) {
+    onreset_dict->GetString(
+        keys::kTizenApplicationAppControlChildNameAttrKey, &onreset);
+  }
 
-  aplist->controls.emplace_back(src, operation, uri, mime, reload);
+  aplist->controls.emplace_back(src, operation, uri, mime, onreset);
 }
 
 }  // namespace
@@ -111,7 +114,7 @@ bool AppControlHandler::Parse(
 
 bool AppControlHandler::Validate(
     const parser::ManifestData& data,
-    const parser::ManifestDataMap& handlers_output,
+    const parser::ManifestDataMap& /*handlers_output*/,
     std::string* error) const {
   const AppControlInfoList& app_controls =
        static_cast<const AppControlInfoList&>(data);
@@ -135,34 +138,14 @@ bool AppControlHandler::Validate(
       return false;
     }
 
-    const std::string& reload = item.reload();
-    if (reload != kEnabledValue && reload != kDisabledValue) {
-      *error = "The improper value was given for appcontrol reload";
+    const std::string& onreset = item.onreset();
+    if (onreset != kEnabledValue && onreset != kDisabledValue) {
+      *error =
+          "The improper value was given for appcontrol on-reset";
       return false;
-    }
-
-    utils::VersionNumber supported_version("2.4");
-    if (reload == kEnabledValue) {
-      const TizenApplicationInfo& app_info =
-          static_cast<const TizenApplicationInfo&>(
-              *handlers_output.find(keys::kTizenApplicationKey)->second);
-      utils::VersionNumber required_version(app_info.required_version());
-      if (!required_version.IsValid()) {
-        *error = "Cannot retrieve required API version from widget";
-        return false;
-      }
-      if (required_version < supported_version) {
-        *error = "The reload attribute of app-control is applicable to"
-            "platform >= 2.4";
-        return false;
-      }
     }
   }
   return true;
-}
-
-std::vector<std::string> AppControlHandler::PrerequisiteKeys() const {
-  return {keys::kTizenApplicationKey};
 }
 
 std::string AppControlHandler::Key() const {
@@ -174,12 +157,12 @@ AppControlInfo::AppControlInfo(
     const std::string& operation,
     const std::string& uri,
     const std::string& mime,
-    const std::string& reload)
+    const std::string& onreset)
     : src_(src),
       operation_(operation),
       uri_(uri),
       mime_(mime),
-      reload_(reload) {}
+      onreset_(onreset) {}
 
 }   // namespace parse
 }   // namespace wgt
