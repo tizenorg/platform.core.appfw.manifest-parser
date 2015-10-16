@@ -105,6 +105,18 @@ const char kAccountLangKey[] = "@lang";
 const char kAccountIconNormalKey[] = "account";
 const char kAccountIconSmallKey[] = "account-small";
 
+// shortcuts
+const char kShortcutListKey[] = "manifest.shortcut-list";
+const char kShortcutKey[] = "shortcut";
+const char kShortcutAppidKey[] = "@appid";
+const char kShortcutExtraDataKey[] = "@extra_data";
+const char kShortcutExtraKeyKey[] = "@extra_key";
+const char kShortcutIconKey[] = "icon";
+const char kShortcutIconTextKey[] = "#text";
+const char kShortcutLabelKey[] = "label";
+const char kShortcutLabelTextKey[] = "#text";
+const char kShortcutLabelLangKey[] = "@lang";
+
 }  // namespace application_keys
 
 namespace manifest_errors {
