@@ -7,6 +7,7 @@ SET(SRCS
   package_handler.cc
   privileges_handler.cc
   service_application_handler.cc
+  shortcut_handler.cc
   tpk_config_parser.cc
   ui_application_handler.cc
 )

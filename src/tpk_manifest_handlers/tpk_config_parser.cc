@@ -21,6 +21,7 @@
 #include "tpk_manifest_handlers/package_handler.h"
 #include "tpk_manifest_handlers/privileges_handler.h"
 #include "tpk_manifest_handlers/service_application_handler.h"
+#include "tpk_manifest_handlers/shortcut_handler.h"
 #include "tpk_manifest_handlers/ui_application_handler.h"
 
 namespace bf = boost::filesystem;
@@ -42,7 +43,8 @@ TPKConfigParser::TPKConfigParser() {
   new PackageHandler,
   new PrivilegesHandler,
   new ServiceApplicationHandler,
-  new UIApplicationHandler
+  new UIApplicationHandler,
+  new ShortcutHandler
   };
 
   std::unique_ptr<parser::ManifestHandlerRegistry> registry(

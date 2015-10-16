@@ -113,6 +113,18 @@ extern const char kAccountLangKey[];
 extern const char kAccountIconNormalKey[];
 extern const char kAccountIconSmallKey[];
 
+// shortcuts
+extern const char kShortcutListKey[];
+extern const char kShortcutKey[];
+extern const char kShortcutAppidKey[];
+extern const char kShortcutExtraDataKey[];
+extern const char kShortcutExtraKeyKey[];
+extern const char kShortcutIconKey[];
+extern const char kShortcutIconTextKey[];
+extern const char kShortcutLabelKey[];
+extern const char kShortcutLabelTextKey[];
+extern const char kShortcutLabelLangKey[];
+
 }  // namespace application_keys
 
 namespace manifest_errors {
