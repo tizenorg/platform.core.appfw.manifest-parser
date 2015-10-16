@@ -267,6 +267,10 @@ bool UIAppValidation(const UIApplicationSingleEntry& item,
       *error = "The improper value was given for ui-application launch_mode";
       return false;
     }
+  } else {
+    // FIXME currently const_cast used, but it is not the best way.
+    UIApplicationInfo &tmp = const_cast<UIApplicationInfo &>(item.ui_info);
+    tmp.set_launch_mode("single");
   }
 
   const std::string& multiple = item.ui_info.multiple();
