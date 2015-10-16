@@ -254,24 +254,12 @@ bool ServiceAppValidation(
              "service application element is obligatory";
     return false;
   }
-
-  const std::string& auto_restart = item.sa_info.auto_restart();
-  if (auto_restart.empty()) {
-    const_cast<ServiceApplicationSingleEntry&>(item).sa_info.set_auto_restart("false");
-  }
-
   const std::string& exec = item.sa_info.exec();
   if (exec.empty()) {
     *error =
         "The exec child element of service application element is obligatory";
     return false;
   }
-
-  const std::string& on_boot = item.sa_info.on_boot();
-  if (on_boot.empty()) {
-    const_cast<ServiceApplicationSingleEntry&>(item).sa_info.set_on_boot("false");
-  }
-
   const std::string& type = item.sa_info.type();
   if (type.empty()) {
     *error =
@@ -374,9 +362,9 @@ bool ParseServiceApplicationAndStore(
   app_dict.GetString(keys::kServiceApplicationAppIDKey, &appid);
   std::string exec;
   app_dict.GetString(keys::kServiceApplicationExecKey, &exec);
-  std::string auto_restart;
+  std::string auto_restart("false");
   app_dict.GetString(keys::kServiceApplicationAutoRestartKey, &auto_restart);
-  std::string on_boot;
+  std::string on_boot("false");
   app_dict.GetString(keys::kServiceApplicationOnBootKey, &on_boot);
   std::string type;
   app_dict.GetString(keys::kServiceApplicationTypeKey, &type);
