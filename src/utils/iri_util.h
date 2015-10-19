@@ -10,6 +10,15 @@
 namespace parser {
 namespace utils {
 
+/**
+ * @brief IsValidIRI
+ *        Validate IRI with libiri.
+ *
+ * Valid IRI is the one that have at least scheme part and any other component.
+ *
+ * @param iri_string iri string to check
+ * @return bool if iri is valid
+ */
 bool IsValidIRI(const std::string& iri_string);
 
 }  // namespace utils

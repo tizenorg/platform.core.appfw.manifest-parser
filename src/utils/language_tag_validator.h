@@ -6,9 +6,22 @@
 
 #include <string>
 #include <unordered_set>
+
 namespace utils {
 namespace w3c_languages {
+
+/**
+ * @brief ValidateLanguageTag
+ *        Checks validity of language tag.
+ *
+ * Languauge tag reference:
+ *  - http://www.w3.org/International/articles/language-tags/
+ *
+ * @param language tag string
+ * @return true if tag is correct
+ */
 bool ValidateLanguageTag(const std::string& tag);
+
 }  // namespace w3c_languages
 }  // namespace utils
 #endif  // UTILS_LANGUAGE_TAG_VALIDATOR_H_

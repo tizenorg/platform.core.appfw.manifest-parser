@@ -1,6 +1,7 @@
 // Copyright (c) 2015 Samsung Electronics Co., Ltd All Rights Reserved
 // Use of this source code is governed by an apache 2.0 license that can be
 // found in the LICENSE file.
+
 #ifndef UTILS_W3C_LANGUAGES_H_
 #define UTILS_W3C_LANGUAGES_H_
 
@@ -12,6 +13,16 @@ namespace utils {
 namespace w3c_languages {
 namespace lang_set {
 
+/**
+ * @brief ValidateOnlyLanguage
+ *        Checks validity of language part of language tag.
+ *
+ * Languauge part is described:
+ *  - http://www.w3.org/International/articles/language-tags/#language
+ *
+ * @param language language
+ * @return true if language is correct
+ */
 bool ValidateOnlyLanguage(const std::string& language);
 
 }  // namespace lang_set
