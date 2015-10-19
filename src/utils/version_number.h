@@ -10,6 +10,16 @@
 
 namespace utils {
 
+/**
+ * @brief The VersionNumber class
+ *        Representation of version number
+ *
+ * This class should be used to store version number. Version number is allowed
+ * to be constructed of number segments connected with single dot character.
+ *
+ * Every new version number should be validate be check result of member
+ * function call @ref IsValid()
+ */
 class VersionNumber {
  public:
   explicit VersionNumber(const std::string& str);

@@ -184,8 +184,8 @@ std::string GetDirUTF8End() {
   return std::string(kPopDirectionalFormatting);
 }
 
-std::string DecodePercentEscapedCharacter(const std::string& path) {
-  std::vector<int> input(path.begin(), path.end());
+std::string DecodePercentEscapedCharacter(const std::string& text) {
+  std::vector<int> input(text.begin(), text.end());
   std::vector<char> output;
   unsigned i = 0;
   while (i < input.size()) {
