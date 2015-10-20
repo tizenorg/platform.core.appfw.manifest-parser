@@ -20,6 +20,12 @@ namespace keys = wgt::application_widget_keys;
 
 namespace {
 
+const char kTizenImeUuidKey[] = "uuid";
+const char kTizenImeUuidTextKey[] = "#text";
+const char kTizenImeLanguagesKey[] = "languages";
+const char kTizenImeLanguageKey[] = "language";
+const char kTizenImeLanguageTextKey[] = "#text";
+
 const char kErrMsgLanguages[] =
     "At least and only ONE tizen:languages tag should be specified";
 const char kErrMsgEmptyLanguage[] =
@@ -43,7 +49,7 @@ bool GetLanguage(const parser::Value* item, ImeInfo* ime_info,
   const parser::DictionaryValue* language_dict;
   if (item->GetAsDictionary(&language_dict)) {
     std::string language;
-    if (!language_dict->GetString(keys::kTizenImeLanguageTextKey, &language) ||
+    if (!language_dict->GetString(kTizenImeLanguageTextKey, &language) ||
         language.empty()) {
       *error = kErrMsgEmptyLanguage;
       return false;
@@ -59,8 +65,8 @@ bool ParseImeEntryAndStore(const parser::DictionaryValue& control_dict,
   // parsing uuid element
   const parser::DictionaryValue* uuid_dict;
   std::string uuid;
-  if (control_dict.GetDictionary(keys::kTizenImeUuidKey, &uuid_dict) &&
-      uuid_dict->GetString(keys::kTizenImeUuidTextKey, &uuid)) {
+  if (control_dict.GetDictionary(kTizenImeUuidKey, &uuid_dict) &&
+      uuid_dict->GetString(kTizenImeUuidTextKey, &uuid)) {
     ime_info->set_uuid(uuid);
   } else {
     *error = kErrMsgParsingUuid;
@@ -69,13 +75,13 @@ bool ParseImeEntryAndStore(const parser::DictionaryValue& control_dict,
 
   const parser::DictionaryValue* languages_dict;
   if (!control_dict.GetDictionary(
-      keys::kTizenImeLanguagesKey, &languages_dict)) {
+      kTizenImeLanguagesKey, &languages_dict)) {
     *error = kErrMsgLanguages;
     return false;
   }
 
   const parser::Value* languages;
-  if (!languages_dict->Get(keys::kTizenImeLanguageKey, &languages)) {
+  if (!languages_dict->Get(kTizenImeLanguageKey, &languages)) {
     *error = kErrMsgNoLanguages;
     return false;
   }
