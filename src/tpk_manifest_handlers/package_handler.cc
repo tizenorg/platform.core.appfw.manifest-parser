@@ -17,9 +17,12 @@
 namespace tpk {
 namespace parse {
 
-namespace keys = tpk::manifest_keys;
-
 namespace {
+const char kNamespace[] = "@namespace";
+const char kAPI[] = "@api-version";
+const char kPackage[] = "@package";
+const char kVersion[] = "@version";
+const char kInstallLocation[] = "@install-location";
 
 const char kAutoInstallLocation[] = "auto";
 
@@ -27,15 +30,15 @@ void ParsePackageAndStore(
     const parser::DictionaryValue& manifest_dict,
     PackageInfo* pkg_info) {
   std::string xmlns;
-  manifest_dict.GetString(keys::kNamespace, &xmlns);
+  manifest_dict.GetString(kNamespace, &xmlns);
   std::string api_version;
-  manifest_dict.GetString(keys::kAPI, &api_version);
+  manifest_dict.GetString(kAPI, &api_version);
   std::string package;
-  manifest_dict.GetString(keys::kPackage, &package);
+  manifest_dict.GetString(kPackage, &package);
   std::string version;
-  manifest_dict.GetString(keys::kVersion, &version);
+  manifest_dict.GetString(kVersion, &version);
   std::string install_location;
-  manifest_dict.GetString(keys::kInstallLocation, &install_location);
+  manifest_dict.GetString(kInstallLocation, &install_location);
 
   pkg_info->set_xmlns(xmlns);
   pkg_info->set_api_version(api_version);
@@ -56,7 +59,7 @@ bool PackageHandler::Parse(
     std::string* error) {
   std::shared_ptr<PackageInfo> pkg_info(new PackageInfo());
   parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kManifestKey, &value)) {
+  if (!manifest.Get(application_keys::kManifestKey, &value)) {
     *error = "Manifest element not found";
     return false;
   }
@@ -111,7 +114,7 @@ bool PackageHandler::Validate(
 }
 
 std::string PackageHandler::Key() const {
-  return keys::kManifestKey;
+  return application_keys::kManifestKey;
 }
 
 }   // namespace parse
