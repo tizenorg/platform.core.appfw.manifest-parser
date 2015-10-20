@@ -18,6 +18,40 @@ namespace parse {
 namespace keys = tpk::application_keys;
 
 namespace {
+// service-application
+const char kServiceApplicationAppIDKey[] = "@appid";
+const char kServiceApplicationAutoRestartKey[] = "@auto-restart";
+const char kServiceApplicationExecKey[] = "@exec";
+const char kServiceApplicationOnBootKey[] = "@on-boot";
+const char kServiceApplicationTypeKey[] = "@type";
+const char kServiceApplicationKeyText[] = "#text";
+
+// app-control
+const char kAppControlKey[] = "app-control";
+const char kAppControlOperationKey[] = "operation";
+const char kAppControlURIKey[] = "uri";
+const char kAppControlMimeKey[] = "mime";
+const char kAppControlNameChildKey[] = "@name";
+
+// datacontrol
+const char kDataControlKey[] = "datacontrol";
+const char kDataControlAccessKey[] = "@access";
+const char kDataControlProviderIDKey[] = "@providerid";
+const char kDataControlTypeKey[] = "@type";
+
+// icon
+const char kIconKey[] = "icon";
+const char kIconTextKey[] = "#text";
+
+// label
+const char kLabelKey[] = "label";
+const char kLabelTextKey[] = "#text";
+const char kLabelLangKey[] = "@lang";
+
+// metadata
+const char kMetaDataKey[] = "metadata";
+const char kMetaDataKeyKey[] = "@key";
+const char kMetaDataValueKey[] = "@value";
 
 std::string GetParsedValue(const char *key_main, const char *key,
                            const parser::DictionaryValue& control_dict) {
@@ -35,26 +69,26 @@ bool ParseAppControl(
   ServiceApplicationSingleEntry* info) {
   std::string operation;
   const parser::DictionaryValue* operation_dict;
-  if (dict->GetDictionary(keys::kAppControlOperationKey,
+  if (dict->GetDictionary(kAppControlOperationKey,
                                  &operation_dict)) {
     operation_dict->GetString(
-        keys::kAppControlNameChildKey, &operation);
+        kAppControlNameChildKey, &operation);
   }
 
   std::string uri;
   const parser::DictionaryValue* uri_dict;
-  if (dict->GetDictionary(keys::kAppControlURIKey,
+  if (dict->GetDictionary(kAppControlURIKey,
                                  &uri_dict)) {
     uri_dict->GetString(
-        keys::kAppControlNameChildKey, &uri);
+        kAppControlNameChildKey, &uri);
   }
 
   std::string mime;
   const parser::DictionaryValue* mime_dict;
-  if (dict->GetDictionary(keys::kAppControlMimeKey,
+  if (dict->GetDictionary(kAppControlMimeKey,
                                  &mime_dict)) {
     mime_dict->GetString(
-        keys::kAppControlNameChildKey, &mime);
+        kAppControlNameChildKey, &mime);
   }
 
   info->app_control.emplace_back(operation, uri, mime);
@@ -65,11 +99,11 @@ bool ParseDataControl(
   const parser::DictionaryValue* dict,
   ServiceApplicationSingleEntry* info) {
   std::string access;
-  dict->GetString(keys::kDataControlAccessKey, &access);
+  dict->GetString(kDataControlAccessKey, &access);
   std::string providerid;
-  dict->GetString(keys::kDataControlProviderIDKey, &providerid);
+  dict->GetString(kDataControlProviderIDKey, &providerid);
   std::string type;
-  dict->GetString(keys::kDataControlTypeKey, &type);
+  dict->GetString(kDataControlTypeKey, &type);
   info->data_control.emplace_back(access, providerid, type);
   return true;
 }
@@ -78,9 +112,9 @@ bool ParseMetaData(
   const parser::DictionaryValue* dict,
   ServiceApplicationSingleEntry* info) {
   std::string key;
-  dict->GetString(keys::kMetaDataKey, &key);
+  dict->GetString(kMetaDataKeyKey, &key);
   std::string val;
-  dict->GetString(keys::kMetaDataValueKey, &val);
+  dict->GetString(kMetaDataValueKey, &val);
   info->meta_data.emplace_back(key, val);
   return true;
 }
@@ -89,7 +123,7 @@ bool ParseAppIcon(
   const parser::DictionaryValue* dict,
   ServiceApplicationSingleEntry* info) {
   std::string icon_path;
-  if (!dict->GetString(keys::kIconTextKey, &icon_path))
+  if (!dict->GetString(kIconTextKey, &icon_path))
     return false;
   info->app_icons.AddIcon(ApplicationIcon(icon_path));
   return true;
@@ -99,9 +133,9 @@ bool ParseLabel(
   const parser::DictionaryValue* dict,
   ServiceApplicationSingleEntry* info) {
   std::string text;
-  dict->GetString(keys::kLabelKeyText, &text);
+  dict->GetString(kLabelTextKey, &text);
   std::string xml_lang;
-  dict->GetString(keys::kLabelLangKey, &xml_lang);
+  dict->GetString(kLabelLangKey, &xml_lang);
   info->label.emplace_back(text, text, xml_lang);
   return true;
 }
@@ -114,7 +148,7 @@ bool InitializeAppControlParsing(
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
 
-  if (app_dict.Get(keys::kAppControlKey, &val)) {
+  if (app_dict.Get(kAppControlKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (!ParseAppControl(dict, serviceapplicationinfo)) {
         *error = "Parsing AppControl failed";
@@ -142,7 +176,7 @@ bool InitializeDataControlParsing(
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
 
-  if (app_dict.Get(keys::kDataControlKey, &val)) {
+  if (app_dict.Get(kDataControlKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (!ParseDataControl(dict, serviceapplicationinfo)) {
         *error = "Parsing DataControl failed";
@@ -170,7 +204,7 @@ bool InitializeMetaDataParsing(
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
 
-  if (app_dict.Get(keys::kMetaData, &val)) {
+  if (app_dict.Get(kMetaDataKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (!ParseMetaData(dict, serviceapplicationinfo)) {
         *error = "Parsing Metadata failed";
@@ -198,7 +232,7 @@ bool InitializeIconParsing(
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
 
-  if (app_dict.Get(keys::kIconKey, &val)) {
+  if (app_dict.Get(kIconKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (!ParseAppIcon(dict, serviceapplicationinfo)) {
         *error = "Parsing Icon failed";
@@ -226,7 +260,7 @@ bool InitializeLabelParsing(
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
 
-  if (app_dict.Get(keys::kLabelKey, &val)) {
+  if (app_dict.Get(kLabelKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (!ParseLabel(dict, serviceapplicationinfo)) {
         *error = "Parsing Label failed";
@@ -359,15 +393,15 @@ bool ParseServiceApplicationAndStore(
     ServiceApplicationSingleEntry* serviceapplicationinfo,
     std::string* error) {
   std::string appid;
-  app_dict.GetString(keys::kServiceApplicationAppIDKey, &appid);
+  app_dict.GetString(kServiceApplicationAppIDKey, &appid);
   std::string exec;
-  app_dict.GetString(keys::kServiceApplicationExecKey, &exec);
+  app_dict.GetString(kServiceApplicationExecKey, &exec);
   std::string auto_restart("false");
-  app_dict.GetString(keys::kServiceApplicationAutoRestartKey, &auto_restart);
+  app_dict.GetString(kServiceApplicationAutoRestartKey, &auto_restart);
   std::string on_boot("false");
-  app_dict.GetString(keys::kServiceApplicationOnBootKey, &on_boot);
+  app_dict.GetString(kServiceApplicationOnBootKey, &on_boot);
   std::string type;
-  app_dict.GetString(keys::kServiceApplicationTypeKey, &type);
+  app_dict.GetString(kServiceApplicationTypeKey, &type);
 
   serviceapplicationinfo->sa_info.set_appid(appid);
   serviceapplicationinfo->sa_info.set_exec(exec);
