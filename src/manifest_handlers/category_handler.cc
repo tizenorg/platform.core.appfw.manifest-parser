@@ -15,38 +15,33 @@ namespace parse {
 namespace keys = wgt::application_widget_keys;
 
 namespace {
-
-const char kErrMsgCategory[] =
-    "Parsing category element failed";
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
+const char kTizenCategoryNameKey[] = "@name";
+const char kErrMsgCategory[] = "Parsing category element failed";
 const char kErrMsgCategoryName[] =
     "The name element inside category element is obligatory";
 
-bool ParseCategoryEntryAndStore(
-    const parser::DictionaryValue& control_dict,
-    CategoryInfoList* aplist) {
+bool ParseCategoryEntryAndStore(const parser::DictionaryValue& control_dict,
+                                CategoryInfoList* aplist) {
   std::string name;
-  if (!control_dict.GetString(keys::kTizenCategoryNameKey, &name))
-    return false;
+  if (!control_dict.GetString(kTizenCategoryNameKey, &name)) return false;
   aplist->categories.push_back(name);
   return true;
 }
 
 }  // namespace
 
-CategoryHandler::CategoryHandler() {
-}
+CategoryHandler::CategoryHandler() {}
 
-CategoryHandler::~CategoryHandler() {
-}
+CategoryHandler::~CategoryHandler() {}
 
-bool CategoryHandler::Parse(
-    const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+bool CategoryHandler::Parse(const parser::Manifest& manifest,
+                            std::shared_ptr<parser::ManifestData>* output,
+                            std::string* error) {
   std::shared_ptr<CategoryInfoList> aplist(new CategoryInfoList());
   parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kTizenCategoryKey, &value))
-    return true;
+  if (!manifest.Get(keys::kTizenCategoryKey, &value)) return true;
 
   if (value->GetType() == parser::Value::TYPE_LIST) {
     // multiple entries
@@ -54,10 +49,8 @@ bool CategoryHandler::Parse(
     value->GetAsList(&list);
     for (const auto& item : *list) {
       const parser::DictionaryValue* control_dict;
-      if (!item->GetAsDictionary(&control_dict))
-        continue;
-      if (!parser::VerifyElementNamespace(
-          *control_dict, keys::kTizenNamespacePrefix))
+      if (!item->GetAsDictionary(&control_dict)) continue;
+      if (!parser::VerifyElementNamespace(*control_dict, kTizenNamespacePrefix))
         continue;
       if (!ParseCategoryEntryAndStore(*control_dict, aplist.get())) {
         *error = kErrMsgCategory;
@@ -68,10 +61,9 @@ bool CategoryHandler::Parse(
     // single entry
     const parser::DictionaryValue* dict;
     value->GetAsDictionary(&dict);
-    if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+    if (!parser::VerifyElementNamespace(*dict, kTizenNamespacePrefix))
       return nullptr;
-    if (!ParseCategoryEntryAndStore(*dict, aplist.get()))
-      return nullptr;
+    if (!ParseCategoryEntryAndStore(*dict, aplist.get())) return nullptr;
   } else {
     LOG(INFO) << "Category element is not defined.";
     return true;
@@ -96,9 +88,7 @@ bool CategoryHandler::Validate(
   return true;
 }
 
-std::string CategoryHandler::Key() const {
-  return keys::kTizenCategoryKey;
-}
+std::string CategoryHandler::Key() const { return keys::kTizenCategoryKey; }
 
 }  // namespace parse
 }  // namespace wgt

@@ -23,15 +23,18 @@ typedef std::map<std::string, std::string> MetaDataMap;
 typedef std::map<std::string, std::string>::const_iterator MetaDataIter;
 
 namespace {
-
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
+const char kTizenMetaDataNameKey[] = "@key";
+const char kTizenMetaDataValueKey[] = "@value";
 MetaDataPair ParseMetaDataItem(const parser::DictionaryValue* dict,
                                std::string* error) {
   assert(dict && dict->IsType(parser::Value::TYPE_DICTIONARY));
   MetaDataPair result;
-  if (!dict->GetString(keys::kTizenMetaDataNameKey, &result.first)) {
+  if (!dict->GetString(kTizenMetaDataNameKey, &result.first)) {
     *error = "Invalid key of tizen metaData.";
   } else {
-    if (!dict->GetString(keys::kTizenMetaDataValueKey, &result.second)) {
+    if (!dict->GetString(kTizenMetaDataValueKey, &result.second)) {
       result.second = "";
     }
   }
@@ -51,13 +54,11 @@ bool MetaDataInfo::HasKey(const std::string& key) const {
 
 std::string MetaDataInfo::GetValue(const std::string& key) const {
   MetaDataIter it = metadata_.find(key);
-  if (it != metadata_.end())
-    return it->second;
+  if (it != metadata_.end()) return it->second;
   return std::string("");
 }
 
-void MetaDataInfo::SetValue(const std::string& key,
-                                 const std::string& value) {
+void MetaDataInfo::SetValue(const std::string& key, const std::string& value) {
   metadata_.insert(MetaDataPair(key, value));
 }
 
@@ -65,10 +66,9 @@ MetaDataHandler::MetaDataHandler() {}
 
 MetaDataHandler::~MetaDataHandler() {}
 
-bool MetaDataHandler::Parse(
-    const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+bool MetaDataHandler::Parse(const parser::Manifest& manifest,
+                            std::shared_ptr<parser::ManifestData>* output,
+                            std::string* error) {
   std::shared_ptr<MetaDataInfo> metadata_info(new MetaDataInfo);
   parser::Value* metadata_value = nullptr;
 
@@ -78,31 +78,32 @@ bool MetaDataHandler::Parse(
   }
 
   MetaDataPair metadata_item;
-  if (metadata_value && metadata_value->IsType(
-          parser::Value::TYPE_DICTIONARY)) {
+  if (metadata_value &&
+      metadata_value->IsType(parser::Value::TYPE_DICTIONARY)) {
     parser::DictionaryValue* dict;
     metadata_value->GetAsDictionary(&dict);
-    if (parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix)) {
+    if (parser::VerifyElementNamespace(*dict, kTizenNamespacePrefix)) {
       metadata_item = ParseMetaDataItem(dict, error);
       metadata_info->SetValue(metadata_item.first, metadata_item.second);
     }
   } else if (metadata_value &&
-        metadata_value->IsType(parser::Value::TYPE_LIST)) {
+             metadata_value->IsType(parser::Value::TYPE_LIST)) {
     parser::ListValue* list;
     metadata_value->GetAsList(&list);
 
-    for (parser::ListValue::iterator it = list->begin();
-         it != list->end(); ++it) {
+    for (parser::ListValue::iterator it = list->begin(); it != list->end();
+         ++it) {
       parser::DictionaryValue* dict;
       (*it)->GetAsDictionary(&dict);
-      if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+      if (!parser::VerifyElementNamespace(*dict, kTizenNamespacePrefix))
         continue;
       metadata_item = ParseMetaDataItem(dict, error);
       metadata_info->SetValue(metadata_item.first, metadata_item.second);
     }
   } else {
-    *error = "tizen metaData element exists and its type is neither "
-             "TYPE_LIST nor TYPE_DICTIONARY.";
+    *error =
+        "tizen metaData element exists and its type is neither "
+        "TYPE_LIST nor TYPE_DICTIONARY.";
     return false;
   }
 
@@ -117,13 +118,11 @@ bool MetaDataHandler::Validate(
   const MetaDataInfo& mdata_info = static_cast<const MetaDataInfo&>(data);
   // TODO(j.izydorczyk):
   // Here should be performed *info class members validity check
-  (void) mdata_info;
+  (void)mdata_info;
   return true;
 }
 
-std::string MetaDataHandler::Key() const {
-  return keys::kTizenMetaDataKey;
-}
+std::string MetaDataHandler::Key() const { return keys::kTizenMetaDataKey; }
 
 }  // namespace parse
 }  // namespace wgt

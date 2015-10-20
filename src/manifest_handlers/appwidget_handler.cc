@@ -21,17 +21,38 @@ namespace parse {
 namespace keys = wgt::application_widget_keys;
 
 namespace {
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
+const char kNamespaceKey[] = "@namespace";
+const char kTizenAppWidgetKey[] = "app-widget";
+const char kTizenAppWidgetBoxLabelLangKey[] = "@lang";
+const char kTizenAppWidgetBoxIconSrcKey[] = "@src";
+const char kTizenAppWidgetBoxContentSizePreviewKey[] = "@preview";
+const char kTizenAppWidgetBoxContentSizeUseDecorationKey[] = "@use-decoration";
+const char kTizenAppWidgetBoxContentDropViewSrcKey[] = "@src";
+const char kTizenAppWidgetBoxContentDropViewWidthKey[] = "@width";
+const char kTizenAppWidgetBoxContentDropViewHeightKey[] = "@height";
+const char kTizenAppWidgetBoxContentSrcKey[] = "@src";
+const char kTizenAppWidgetBoxContentMouseEventKey[] = "@mouse-event";
+const char kTizenAppWidgetBoxContentTouchEffectKey[] = "@touch-effect";
+const char kTizenAppWidgetBoxContentSizeKey[] = "box-size";
+const char kTizenAppWidgetBoxContentDropViewKey[] = "pd";
+const char kTizenAppWidgetAutoLaunchKey[] = "@auto-launch";
+const char kTizenAppWidgetBoxLabelKey[] = "box-label";
+const char kTizenAppWidgetBoxIconKey[] = "box-icon";
+const char kTizenAppWidgetBoxContentKey[] = "box-content";
+const char kTizenAppWidgetIdKey[] = "@id";
+const char kTizenAppWidgetPrimaryKey[] = "@primary";
+const char kTizenAppWidgetUpdatePeriodKey[] = "@update-period";
+const char kTizenAppWidgetBoxLabelTextKey[] = "#text";
+const char kTizenAppWidgetBoxContentSizeTextKey[] = "#text";
 
 const char kErrMsgInvalidDictionary[] =
     "Cannot get key value as a dictionary. Key name: ";
-const char kErrMsgInvalidList[] =
-    "Cannot get key value as a list. Key name: ";
-const char kErrMsgNoMandatoryKey[] =
-    "Cannot find mandatory key. Key name: ";
-const char kErrMsgInvalidKeyValue[] =
-    "Invalid key value. Key name: ";
-const char kErrMsgMultipleKeys[] =
-    "Too many keys found. Key name: ";
+const char kErrMsgInvalidList[] = "Cannot get key value as a list. Key name: ";
+const char kErrMsgNoMandatoryKey[] = "Cannot find mandatory key. Key name: ";
+const char kErrMsgInvalidKeyValue[] = "Invalid key value. Key name: ";
+const char kErrMsgMultipleKeys[] = "Too many keys found. Key name: ";
 const char kErrMsgNoNamespace[] =
     "Element pointed by key has no namespace specified. Key name: ";
 const char kErrMsgInvalidNamespace[] =
@@ -39,8 +60,7 @@ const char kErrMsgInvalidNamespace[] =
 const char kErrMsgUpdatePeriodOutOfDomain[] =
     "Value of an update-period attribute in app-widget element out of domain."
     " The value: ";
-const char kErrMsgNoLabel[] =
-    "No box-label element in app-widget element.";
+const char kErrMsgNoLabel[] = "No box-label element in app-widget element.";
 const char kErrMsgInvalidIconSrc[] =
     "Invalid path in a src attribute of box-icon element. The value: ";
 const char kErrMsgInvalidContentSrc[] =
@@ -60,26 +80,24 @@ const std::regex kStringRegex("[.][0-9a-zA-Z]+");
 
 // If the error parameter is specified, it is filled with the given message
 // otherwise it does nothing.
-void SetError(const std::string& message,
-    std::string* error) {
-  if (error)
-    *error = message;
+void SetError(const std::string& message, std::string* error) {
+  if (error) *error = message;
 }
 
 // If the error parameter is specified, it is filled with concatenation
 // of message and arg parameters otherwise it does nothing.
-void SetError(const std::string& message,
-    const std::string& arg, std::string* error) {
-  if (error)
-    *error = message + arg;
+void SetError(const std::string& message, const std::string& arg,
+              std::string* error) {
+  if (error) *error = message + arg;
 }
 
 // Retrieves a mandatory dictionary from specified manifest and specified key.
 // Returns true, if the ditionary is found or false otherwise. If the error
 // parameter is specified, it is also filled with proper message.
 bool GetMandatoryDictionary(const parser::Manifest& manifest,
-    const std::string& key, const parser::DictionaryValue** dict,
-    std::string* error) {
+                            const std::string& key,
+                            const parser::DictionaryValue** dict,
+                            std::string* error) {
   assert(dict);
   if (!manifest.HasPath(key)) {
     SetError(kErrMsgNoMandatoryKey, key, error);
@@ -96,8 +114,9 @@ bool GetMandatoryDictionary(const parser::Manifest& manifest,
 // if convertion is successful or false otherwise.
 template <typename ValueType>
 bool ConvertValue(const std::string& /*str_value*/, ValueType* /*value*/) {
-  assert(false && "Use one of already defined template specializations"
-                  " or define a new one.");
+  assert(false &&
+         "Use one of already defined template specializations"
+         " or define a new one.");
   return false;
 }
 
@@ -151,7 +170,8 @@ bool ConvertValue(const std::string& str_value, double* value) {
 // parameter is specified, it is also filled with proper message.
 template <typename ValueType>
 bool GetMandatoryValue(const parser::DictionaryValue& dict,
-    const std::string& key, ValueType* value, std::string* error) {
+                       const std::string& key, ValueType* value,
+                       std::string* error) {
   assert(value);
   std::string tmp;
   if (!dict.GetString(key, &tmp)) {
@@ -159,8 +179,7 @@ bool GetMandatoryValue(const parser::DictionaryValue& dict,
     return false;
   }
   bool result = ConvertValue(tmp, value);
-  if (!result)
-    SetError(kErrMsgInvalidKeyValue, key, error);
+  if (!result) SetError(kErrMsgInvalidKeyValue, key, error);
   return result;
 }
 
@@ -171,8 +190,8 @@ bool GetMandatoryValue(const parser::DictionaryValue& dict,
 // and fills error parameter if it is set.
 template <typename ValueType>
 bool GetOptionalValue(const parser::DictionaryValue& dict,
-    const std::string& key, ValueType default_value, ValueType* value,
-    std::string* error) {
+                      const std::string& key, ValueType default_value,
+                      ValueType* value, std::string* error) {
   assert(value);
   std::string tmp;
   if (!dict.GetString(key, &tmp)) {
@@ -180,24 +199,22 @@ bool GetOptionalValue(const parser::DictionaryValue& dict,
     return true;
   }
   bool result = ConvertValue(tmp, value);
-  if (!result)
-    SetError(kErrMsgInvalidKeyValue, key, error);
+  if (!result) SetError(kErrMsgInvalidKeyValue, key, error);
   return result;
 }
 
 // Helper function for ParseEach. Do not use directly.
 template <typename ParseSingleType, typename DataContainerType>
-bool ParseEachInternal(const parser::Value& value,
-    const std::string& key, ParseSingleType parse_single,
-    DataContainerType* data_container, std::string* error) {
+bool ParseEachInternal(const parser::Value& value, const std::string& key,
+                       ParseSingleType parse_single,
+                       DataContainerType* data_container, std::string* error) {
   assert(data_container);
   const parser::DictionaryValue* inner_dict;
   if (!value.GetAsDictionary(&inner_dict)) {
     SetError(kErrMsgInvalidDictionary, key, error);
     return false;
   }
-  if (!parse_single(*inner_dict, key, data_container, error))
-    return false;
+  if (!parse_single(*inner_dict, key, data_container, error)) return false;
   return true;
 }
 
@@ -209,10 +226,9 @@ bool ParseEachInternal(const parser::Value& value,
 //    std::string* error);
 //  - a DataContainerType object where the above function stores data
 template <typename ParseSingleType, typename DataContainerType>
-bool ParseEach(const parser::DictionaryValue& dict,
-               const std::string& key, bool mandatory,
-               ParseSingleType parse_single, DataContainerType* data_container,
-               std::string* error) {
+bool ParseEach(const parser::DictionaryValue& dict, const std::string& key,
+               bool mandatory, ParseSingleType parse_single,
+               DataContainerType* data_container, std::string* error) {
   assert(data_container);
 
   const parser::Value* value = nullptr;
@@ -246,11 +262,11 @@ bool ParseEach(const parser::DictionaryValue& dict,
 // one or false otherwise. If the error parameter is specified, it is also
 // filled with proper message.
 bool VerifyElementNamespace(const parser::DictionaryValue& dict,
-    const std::string& key, const std::string& desired_namespace_value,
-    std::string* error) {
+                            const std::string& key,
+                            const std::string& desired_namespace_value,
+                            std::string* error) {
   std::string namespace_value;
-  if (!GetMandatoryValue(dict, keys::kNamespaceKey,
-      &namespace_value, nullptr)) {
+  if (!GetMandatoryValue(dict, kNamespaceKey, &namespace_value, nullptr)) {
     SetError(kErrMsgNoNamespace, key, error);
     return false;
   }
@@ -262,21 +278,20 @@ bool VerifyElementNamespace(const parser::DictionaryValue& dict,
 }
 
 // Parses box-label part
-bool ParseLabel(const parser::DictionaryValue& dict,
-    const std::string& key, AppWidget* app_widget, std::string* error) {
+bool ParseLabel(const parser::DictionaryValue& dict, const std::string& key,
+                AppWidget* app_widget, std::string* error) {
   assert(app_widget);
 
-  if (!VerifyElementNamespace(dict, key, keys::kTizenNamespacePrefix, error))
+  if (!VerifyElementNamespace(dict, key, kTizenNamespacePrefix, error))
     return false;
 
   std::string lang;
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetBoxLabelLangKey,
-      std::string(), &lang, error))
+  if (!GetOptionalValue(dict, kTizenAppWidgetBoxLabelLangKey, std::string(),
+                        &lang, error))
     return false;
 
   std::string text;
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetBoxLabelTextKey,
-      &text, error))
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxLabelTextKey, &text, error))
     return false;
 
   if (lang.empty()) {
@@ -293,19 +308,19 @@ bool ParseLabel(const parser::DictionaryValue& dict,
 }
 
 // Parses box-icon part
-bool ParseIcon(const parser::DictionaryValue& dict,
-    const std::string& key, AppWidget* app_widget, std::string* error) {
+bool ParseIcon(const parser::DictionaryValue& dict, const std::string& key,
+               AppWidget* app_widget, std::string* error) {
   assert(app_widget);
 
-  if (!VerifyElementNamespace(dict, key, keys::kTizenNamespacePrefix, error))
+  if (!VerifyElementNamespace(dict, key, kTizenNamespacePrefix, error))
     return false;
 
   if (!app_widget->icon_src.empty()) {
     SetError(kErrMsgMultipleKeys, key, error);
     return false;
   }
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetBoxIconSrcKey,
-      &app_widget->icon_src, error))
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxIconSrcKey,
+                         &app_widget->icon_src, error))
     return false;
 
   return true;
@@ -313,7 +328,7 @@ bool ParseIcon(const parser::DictionaryValue& dict,
 
 // Converts size type from text to enum representation
 bool StringToSizeType(const std::string& str_type,
-    AppWidgetSizeType* enum_type) {
+                      AppWidgetSizeType* enum_type) {
   assert(enum_type);
   if (str_type == "1x1") {
     *enum_type = AppWidgetSizeType::k1x1;
@@ -332,34 +347,34 @@ bool StringToSizeType(const std::string& str_type,
 
 // Parses box-size part
 bool ParseContentSizes(const parser::DictionaryValue& dict,
-    const std::string& key, AppWidget* app_widget, std::string* error) {
+                       const std::string& key, AppWidget* app_widget,
+                       std::string* error) {
   assert(app_widget);
 
-  if (!VerifyElementNamespace(dict, key, keys::kTizenNamespacePrefix, error))
+  if (!VerifyElementNamespace(dict, key, kTizenNamespacePrefix, error))
     return false;
 
   AppWidgetSize size;
 
   std::string str_type;
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetBoxContentSizeTextKey,
-      &str_type, error))
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxContentSizeTextKey, &str_type,
+                         error))
     return false;
 
   AppWidgetSizeType type;
   if (!StringToSizeType(str_type, &type)) {
-    SetError(kErrMsgInvalidKeyValue,
-        keys::kTizenAppWidgetBoxContentSizeTextKey, error);
+    SetError(kErrMsgInvalidKeyValue, kTizenAppWidgetBoxContentSizeTextKey,
+             error);
     return false;
   }
   size.type = type;
 
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetBoxContentSizePreviewKey,
-      std::string(), &size.preview, error))
+  if (!GetOptionalValue(dict, kTizenAppWidgetBoxContentSizePreviewKey,
+                        std::string(), &size.preview, error))
     return false;
 
-  if (!GetOptionalValue(dict,
-      keys::kTizenAppWidgetBoxContentSizeUseDecorationKey,
-      true, &size.use_decoration, error))
+  if (!GetOptionalValue(dict, kTizenAppWidgetBoxContentSizeUseDecorationKey,
+                        true, &size.use_decoration, error))
     return false;
 
   app_widget->content_size.push_back(size);
@@ -369,10 +384,11 @@ bool ParseContentSizes(const parser::DictionaryValue& dict,
 
 // Parses pd part
 bool ParseContentDropView(const parser::DictionaryValue& dict,
-    const std::string& key, AppWidget* app_widget, std::string* error) {
+                          const std::string& key, AppWidget* app_widget,
+                          std::string* error) {
   assert(app_widget);
 
-  if (!VerifyElementNamespace(dict, key, keys::kTizenNamespacePrefix, error))
+  if (!VerifyElementNamespace(dict, key, kTizenNamespacePrefix, error))
     return false;
 
   if (!app_widget->content_drop_view.empty()) {
@@ -382,18 +398,16 @@ bool ParseContentDropView(const parser::DictionaryValue& dict,
 
   AppWidgetDropView drop_view;
 
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetBoxContentDropViewSrcKey,
-      &drop_view.src, error))
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxContentDropViewSrcKey,
+                         &drop_view.src, error))
     return false;
 
-  if (!GetMandatoryValue(dict,
-      keys::kTizenAppWidgetBoxContentDropViewWidthKey,
-      &drop_view.width, error))
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxContentDropViewWidthKey,
+                         &drop_view.width, error))
     return false;
 
-  if (!GetMandatoryValue(dict,
-      keys::kTizenAppWidgetBoxContentDropViewHeightKey,
-      &drop_view.height, error))
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxContentDropViewHeightKey,
+                         &drop_view.height, error))
     return false;
 
   app_widget->content_drop_view.push_back(drop_view);
@@ -402,81 +416,79 @@ bool ParseContentDropView(const parser::DictionaryValue& dict,
 }
 
 // Parses box-content part
-bool ParseContent(const parser::DictionaryValue& dict,
-    const std::string& key, AppWidget* app_widget, std::string* error) {
+bool ParseContent(const parser::DictionaryValue& dict, const std::string& key,
+                  AppWidget* app_widget, std::string* error) {
   assert(app_widget);
 
-  if (!VerifyElementNamespace(dict, key, keys::kTizenNamespacePrefix, error))
+  if (!VerifyElementNamespace(dict, key, kTizenNamespacePrefix, error))
     return false;
 
   if (!app_widget->content_src.empty()) {
     SetError(kErrMsgMultipleKeys, key, error);
     return false;
   }
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetBoxContentSrcKey,
-      &app_widget->content_src, error))
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxContentSrcKey,
+                         &app_widget->content_src, error))
     return false;
 
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetBoxContentMouseEventKey,
-      false, &app_widget->content_mouse_event, error))
+  if (!GetOptionalValue(dict, kTizenAppWidgetBoxContentMouseEventKey, false,
+                        &app_widget->content_mouse_event, error))
     return false;
 
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetBoxContentTouchEffectKey,
-      true, &app_widget->content_touch_effect, error))
+  if (!GetOptionalValue(dict, kTizenAppWidgetBoxContentTouchEffectKey, true,
+                        &app_widget->content_touch_effect, error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxContentSizeKey,
-      true, ParseContentSizes, app_widget, error))
+  if (!ParseEach(dict, kTizenAppWidgetBoxContentSizeKey, true,
+                 ParseContentSizes, app_widget, error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxContentDropViewKey,
-      false, ParseContentDropView, app_widget, error))
+  if (!ParseEach(dict, kTizenAppWidgetBoxContentDropViewKey, false,
+                 ParseContentDropView, app_widget, error))
     return false;
 
   return true;
 }
 
 // Parses app-widget part
-bool ParseAppWidget(const parser::DictionaryValue& dict,
-    const std::string& key, AppWidgetVector* app_widgets,
-    std::string* error) {
+bool ParseAppWidget(const parser::DictionaryValue& dict, const std::string& key,
+                    AppWidgetVector* app_widgets, std::string* error) {
   assert(app_widgets);
 
-  if (!VerifyElementNamespace(dict, key, keys::kTizenNamespacePrefix, error))
+  if (!VerifyElementNamespace(dict, key, kTizenNamespacePrefix, error))
     return false;
 
   AppWidget app_widget;
 
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetIdKey,
-      &app_widget.id, error))
+  if (!GetMandatoryValue(dict, kTizenAppWidgetIdKey, &app_widget.id, error))
     return false;
 
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetPrimaryKey,
-      &app_widget.primary, error))
+  if (!GetMandatoryValue(dict, kTizenAppWidgetPrimaryKey, &app_widget.primary,
+                         error))
     return false;
 
   double update_period;
   double no_update_period = std::numeric_limits<double>::min();
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetUpdatePeriodKey,
-      no_update_period, &update_period, error))
+  if (!GetOptionalValue(dict, kTizenAppWidgetUpdatePeriodKey, no_update_period,
+                        &update_period, error))
     return false;
   if (update_period != no_update_period)
     app_widget.update_period.push_back(update_period);
 
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetAutoLaunchKey,
-      false, &app_widget.auto_launch, error))
+  if (!GetOptionalValue(dict, kTizenAppWidgetAutoLaunchKey, false,
+                        &app_widget.auto_launch, error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxLabelKey,
-      true, ParseLabel, &app_widget, error))
+  if (!ParseEach(dict, kTizenAppWidgetBoxLabelKey, true, ParseLabel,
+                 &app_widget, error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxIconKey,
-      false, ParseIcon, &app_widget, error))
+  if (!ParseEach(dict, kTizenAppWidgetBoxIconKey, false, ParseIcon, &app_widget,
+                 error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxContentKey,
-      true, ParseContent, &app_widget, error))
+  if (!ParseEach(dict, kTizenAppWidgetBoxContentKey, true, ParseContent,
+                 &app_widget, error))
     return false;
 
   app_widgets->push_back(app_widget);
@@ -503,7 +515,7 @@ bool IsValidPathOrUrl(const std::string& value) {
 
 // Validates all content sizes in an app-widget
 bool ValidateContentSize(const AppWidgetSizeVector& content_size,
-    std::string* error) {
+                         std::string* error) {
   bool mandatory_1x1_found = false;
 
   for (const AppWidgetSize& size : content_size) {
@@ -526,31 +538,25 @@ bool ValidateContentSize(const AppWidgetSizeVector& content_size,
 }  // namespace
 
 AppWidgetInfo::AppWidgetInfo(const AppWidgetVector& app_widgets)
-    : app_widgets_(app_widgets) {
-}
+    : app_widgets_(app_widgets) {}
 
-AppWidgetInfo::~AppWidgetInfo() {
-}
+AppWidgetInfo::~AppWidgetInfo() {}
 
-AppWidgetHandler::AppWidgetHandler() {
-}
+AppWidgetHandler::AppWidgetHandler() {}
 
-AppWidgetHandler::~AppWidgetHandler() {
-}
+AppWidgetHandler::~AppWidgetHandler() {}
 
-bool AppWidgetHandler::Parse(
-    const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+bool AppWidgetHandler::Parse(const parser::Manifest& manifest,
+                             std::shared_ptr<parser::ManifestData>* output,
+                             std::string* error) {
   const parser::DictionaryValue* dict = nullptr;
-  if (!GetMandatoryDictionary(manifest, keys::kTizenWidgetKey,
-                              &dict, error))
+  if (!GetMandatoryDictionary(manifest, keys::kTizenWidgetKey, &dict, error))
     return false;
 
   AppWidgetVector app_widgets;
 
-  if (!ParseEach(*dict, keys::kTizenAppWidgetKey,
-      false, ParseAppWidget, &app_widgets, error))
+  if (!ParseEach(*dict, kTizenAppWidgetKey, false, ParseAppWidget, &app_widgets,
+                 error))
     return false;
 
   *output = std::static_pointer_cast<parser::ManifestData>(
@@ -567,21 +573,21 @@ bool AppWidgetHandler::Validate(
   const AppWidgetVector& app_widgets = app_widget_info.app_widgets();
 
   for (const AppWidget& app_widget : app_widgets) {
-    if (!app_widget.update_period.empty()
-        && app_widget.update_period.front() < 1800) {
+    if (!app_widget.update_period.empty() &&
+        app_widget.update_period.front() < 1800) {
       SetError(kErrMsgUpdatePeriodOutOfDomain,
-          std::to_string(app_widget.update_period.front()), error);
+               std::to_string(app_widget.update_period.front()), error);
       return false;
     }
 
-    if (app_widget.label.default_value.empty()
-        && app_widget.label.lang_value_map.empty()) {
+    if (app_widget.label.default_value.empty() &&
+        app_widget.label.lang_value_map.empty()) {
       SetError(kErrMsgNoLabel, error);
       return false;
     }
 
-    if (!app_widget.icon_src.empty()
-        && !IsValidPathOrUrl(app_widget.icon_src)) {
+    if (!app_widget.icon_src.empty() &&
+        !IsValidPathOrUrl(app_widget.icon_src)) {
       SetError(kErrMsgInvalidIconSrc, app_widget.icon_src, error);
       return false;
     }
@@ -591,12 +597,10 @@ bool AppWidgetHandler::Validate(
       return false;
     }
 
-    if (!ValidateContentSize(app_widget.content_size, error))
-      return false;
+    if (!ValidateContentSize(app_widget.content_size, error)) return false;
 
     if (!app_widget.content_drop_view.empty()) {
-      const AppWidgetDropView& drop_view
-          = app_widget.content_drop_view.front();
+      const AppWidgetDropView& drop_view = app_widget.content_drop_view.front();
 
       if (!IsValidPathOrUrl(drop_view.src)) {
         SetError(kErrMsgInvalidContentDropViewSrc, drop_view.src, error);
@@ -605,7 +609,7 @@ bool AppWidgetHandler::Validate(
 
       if (drop_view.height < 1 || drop_view.height > 380) {
         SetError(kErrMsgContentDropViewHeightOutOfDomain,
-            std::to_string(drop_view.height), error);
+                 std::to_string(drop_view.height), error);
         return false;
       }
     }
