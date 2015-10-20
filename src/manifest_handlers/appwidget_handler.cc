@@ -22,6 +22,30 @@ namespace keys = wgt::application_widget_keys;
 
 namespace {
 
+
+const char kTizenAppWidgetKey[] = "app-widget";
+const char kTizenAppWidgetBoxLabelLangKey[] = "@lang";
+const char kTizenAppWidgetBoxIconSrcKey[] = "@src";
+const char kTizenAppWidgetBoxContentSizePreviewKey[] = "@preview";
+const char kTizenAppWidgetBoxContentSizeUseDecorationKey[] = "@use-decoration";
+const char kTizenAppWidgetBoxContentDropViewSrcKey[] = "@src";
+const char kTizenAppWidgetBoxContentDropViewWidthKey[] = "@width";
+const char kTizenAppWidgetBoxContentDropViewHeightKey[] = "@height";
+const char kTizenAppWidgetBoxContentSrcKey[] = "@src";
+const char kTizenAppWidgetBoxContentMouseEventKey[] = "@mouse-event";
+const char kTizenAppWidgetBoxContentTouchEffectKey[] = "@touch-effect";
+const char kTizenAppWidgetBoxContentSizeKey[] = "box-size";
+const char kTizenAppWidgetBoxContentDropViewKey[] = "pd";
+const char kTizenAppWidgetAutoLaunchKey[] = "@auto-launch";
+const char kTizenAppWidgetBoxLabelKey[] = "box-label";
+const char kTizenAppWidgetBoxIconKey[] = "box-icon";
+const char kTizenAppWidgetBoxContentKey[] = "box-content";
+const char kTizenAppWidgetIdKey[] = "@id";
+const char kTizenAppWidgetPrimaryKey[] = "@primary";
+const char kTizenAppWidgetUpdatePeriodKey[] = "@update-period";
+const char kTizenAppWidgetBoxLabelTextKey[] = "#text";
+const char kTizenAppWidgetBoxContentSizeTextKey[] = "#text";
+
 const char kErrMsgInvalidDictionary[] =
     "Cannot get key value as a dictionary. Key name: ";
 const char kErrMsgInvalidList[] =
@@ -270,12 +294,12 @@ bool ParseLabel(const parser::DictionaryValue& dict,
     return false;
 
   std::string lang;
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetBoxLabelLangKey,
+  if (!GetOptionalValue(dict, kTizenAppWidgetBoxLabelLangKey,
       std::string(), &lang, error))
     return false;
 
   std::string text;
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetBoxLabelTextKey,
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxLabelTextKey,
       &text, error))
     return false;
 
@@ -304,7 +328,7 @@ bool ParseIcon(const parser::DictionaryValue& dict,
     SetError(kErrMsgMultipleKeys, key, error);
     return false;
   }
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetBoxIconSrcKey,
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxIconSrcKey,
       &app_widget->icon_src, error))
     return false;
 
@@ -341,24 +365,24 @@ bool ParseContentSizes(const parser::DictionaryValue& dict,
   AppWidgetSize size;
 
   std::string str_type;
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetBoxContentSizeTextKey,
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxContentSizeTextKey,
       &str_type, error))
     return false;
 
   AppWidgetSizeType type;
   if (!StringToSizeType(str_type, &type)) {
     SetError(kErrMsgInvalidKeyValue,
-        keys::kTizenAppWidgetBoxContentSizeTextKey, error);
+        kTizenAppWidgetBoxContentSizeTextKey, error);
     return false;
   }
   size.type = type;
 
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetBoxContentSizePreviewKey,
+  if (!GetOptionalValue(dict, kTizenAppWidgetBoxContentSizePreviewKey,
       std::string(), &size.preview, error))
     return false;
 
   if (!GetOptionalValue(dict,
-      keys::kTizenAppWidgetBoxContentSizeUseDecorationKey,
+      kTizenAppWidgetBoxContentSizeUseDecorationKey,
       true, &size.use_decoration, error))
     return false;
 
@@ -382,17 +406,17 @@ bool ParseContentDropView(const parser::DictionaryValue& dict,
 
   AppWidgetDropView drop_view;
 
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetBoxContentDropViewSrcKey,
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxContentDropViewSrcKey,
       &drop_view.src, error))
     return false;
 
   if (!GetMandatoryValue(dict,
-      keys::kTizenAppWidgetBoxContentDropViewWidthKey,
+      kTizenAppWidgetBoxContentDropViewWidthKey,
       &drop_view.width, error))
     return false;
 
   if (!GetMandatoryValue(dict,
-      keys::kTizenAppWidgetBoxContentDropViewHeightKey,
+      kTizenAppWidgetBoxContentDropViewHeightKey,
       &drop_view.height, error))
     return false;
 
@@ -413,23 +437,23 @@ bool ParseContent(const parser::DictionaryValue& dict,
     SetError(kErrMsgMultipleKeys, key, error);
     return false;
   }
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetBoxContentSrcKey,
+  if (!GetMandatoryValue(dict, kTizenAppWidgetBoxContentSrcKey,
       &app_widget->content_src, error))
     return false;
 
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetBoxContentMouseEventKey,
+  if (!GetOptionalValue(dict, kTizenAppWidgetBoxContentMouseEventKey,
       false, &app_widget->content_mouse_event, error))
     return false;
 
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetBoxContentTouchEffectKey,
+  if (!GetOptionalValue(dict, kTizenAppWidgetBoxContentTouchEffectKey,
       true, &app_widget->content_touch_effect, error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxContentSizeKey,
+  if (!ParseEach(dict, kTizenAppWidgetBoxContentSizeKey,
       true, ParseContentSizes, app_widget, error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxContentDropViewKey,
+  if (!ParseEach(dict, kTizenAppWidgetBoxContentDropViewKey,
       false, ParseContentDropView, app_widget, error))
     return false;
 
@@ -447,35 +471,35 @@ bool ParseAppWidget(const parser::DictionaryValue& dict,
 
   AppWidget app_widget;
 
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetIdKey,
+  if (!GetMandatoryValue(dict, kTizenAppWidgetIdKey,
       &app_widget.id, error))
     return false;
 
-  if (!GetMandatoryValue(dict, keys::kTizenAppWidgetPrimaryKey,
+  if (!GetMandatoryValue(dict, kTizenAppWidgetPrimaryKey,
       &app_widget.primary, error))
     return false;
 
   double update_period;
   double no_update_period = std::numeric_limits<double>::min();
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetUpdatePeriodKey,
+  if (!GetOptionalValue(dict, kTizenAppWidgetUpdatePeriodKey,
       no_update_period, &update_period, error))
     return false;
   if (update_period != no_update_period)
     app_widget.update_period.push_back(update_period);
 
-  if (!GetOptionalValue(dict, keys::kTizenAppWidgetAutoLaunchKey,
+  if (!GetOptionalValue(dict, kTizenAppWidgetAutoLaunchKey,
       false, &app_widget.auto_launch, error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxLabelKey,
+  if (!ParseEach(dict, kTizenAppWidgetBoxLabelKey,
       true, ParseLabel, &app_widget, error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxIconKey,
+  if (!ParseEach(dict, kTizenAppWidgetBoxIconKey,
       false, ParseIcon, &app_widget, error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxContentKey,
+  if (!ParseEach(dict, kTizenAppWidgetBoxContentKey,
       true, ParseContent, &app_widget, error))
     return false;
 
@@ -549,7 +573,7 @@ bool AppWidgetHandler::Parse(
 
   AppWidgetVector app_widgets;
 
-  if (!ParseEach(*dict, keys::kTizenAppWidgetKey,
+  if (!ParseEach(*dict, kTizenAppWidgetKey,
       false, ParseAppWidget, &app_widgets, error))
     return false;
 

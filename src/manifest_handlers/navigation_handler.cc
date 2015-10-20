@@ -15,7 +15,6 @@ namespace parse {
 namespace keys = wgt::application_widget_keys;
 
 namespace {
-
 const boost::char_separator<char> navigation_separator(" ");
 
 }  // namespace
