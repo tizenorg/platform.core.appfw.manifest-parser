@@ -21,6 +21,9 @@ namespace parse {
 namespace {
 const utils::VersionNumber kMinimumAPIVersion("2.2.1");
 const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
+const char kTizenApplicationPackageKey[] = "@package";
+const char kTizenApplicationLaunchModeKey[] = "@launch_mode";
+const char kTizenApplicationRequiredVersionKey[] = "@required_version";
 }  // namespace
 
 namespace keys = wgt::application_widget_keys;
@@ -75,9 +78,10 @@ bool TizenApplicationHandler::Parse(
   }
   if (app_dict->GetString(keys::kTizenApplicationIdKey, &value))
     app_info->set_id(value);
-  if (app_dict->GetString(keys::kTizenApplicationPackageKey, &value))
+  if (app_dict->GetString(kTizenApplicationPackageKey, &value)) {
     app_info->set_package(value);
-  if (app_dict->GetString(keys::kTizenApplicationRequiredVersionKey, &value)) {
+  }
+  if (app_dict->GetString(kTizenApplicationRequiredVersionKey, &value)) {
     if (!value.empty()) {
       // TODO(wy80.choi): should consider minimum API version for each profile.
       utils::VersionNumber req_version(value);
@@ -88,7 +92,7 @@ bool TizenApplicationHandler::Parse(
       }
     }
   }
-  if (app_dict->GetString(keys::kTizenApplicationLaunchModeKey, &value)) {
+  if (app_dict->GetString(kTizenApplicationLaunchModeKey, &value)) {
     if (utils::VersionNumber(app_info->required_version()) <
         kLaunchModeRequiredVersion) {
       *error = "launch_mode attribute cannot be used for api version lower"

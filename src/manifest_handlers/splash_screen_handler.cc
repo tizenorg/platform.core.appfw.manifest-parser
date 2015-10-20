@@ -21,6 +21,10 @@ namespace parse {
 
 namespace keys = wgt::application_widget_keys;
 
+namespace {
+const char kTizenSplashScreenSrcKey[] = "@src";
+}
+
 SplashScreenInfo::SplashScreenInfo() {}
 SplashScreenInfo::~SplashScreenInfo() {}
 
@@ -40,7 +44,7 @@ bool SplashScreenHandler::Parse(
     parser::DictionaryValue* ss_dict = nullptr;
     splash_screen->GetAsDictionary(&ss_dict);
     std::string src;
-    ss_dict->GetString(keys::kTizenSplashScreenSrcKey, &src);
+    ss_dict->GetString(kTizenSplashScreenSrcKey, &src);
     ss_info->set_src(src);
   } else if (splash_screen && !splash_screen->IsType(
                  parser::Value::TYPE_DICTIONARY)) {

@@ -14,6 +14,10 @@ namespace parse {
 
 namespace keys = wgt::application_widget_keys;
 
+namespace {
+const char kTizenPermissionsNameKey[] = "@name";
+}
+
 PermissionsInfo::PermissionsInfo() {
 }
 
@@ -68,7 +72,7 @@ bool PermissionsHandler::Parse(
       continue;
     std::string permission;
     if (!dictionary_value->GetString(
-            keys::kTizenPermissionsNameKey, &permission) ||
+            kTizenPermissionsNameKey, &permission) ||
         permission.empty())
       continue;
 

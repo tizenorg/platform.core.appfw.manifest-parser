@@ -13,6 +13,13 @@ const char kSectionIconAccount[] = "Account";
 const char kSectionIconAccountSmall[] = "AccountSmall";
 const char kTrueValueString[] = "true";
 const char kFalseValueString[] = "false";
+const char kAccountMASKey[] = "@multiple-account-support";
+const char kAccountSectionKey[] = "@section";
+const char kAccountTextKey[] = "#text";
+const char kAccountNameKey[] = "display-name";
+const char kAccountLangKey[] = "@lang";
+const char kAccountIconKey[] = "icon";
+const char kAccountCapabilityKey[] = "capability";
 }
 
 namespace wgt {
@@ -52,7 +59,7 @@ bool AccountHandler::ParseSingleAccountElement(
     std::string* error) {
   std::string multiple_apps_support;
   SingleAccountInfo single_account;
-  if (!item_dict->GetString(keys::kAccountMASKey, &multiple_apps_support)) {
+  if (!item_dict->GetString(kAccountMASKey, &multiple_apps_support)) {
     *error = "Error while parsing multiple apps support in account";
     return false;
   }
@@ -88,7 +95,7 @@ bool AccountHandler::ParseAccountIcons(
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
-  if (item_dict->Get(keys::kAccountIconKey, &val)) {
+  if (item_dict->Get(kAccountIconKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (!ParseSingleAccountIcon(dict, info))
         return false;
@@ -107,12 +114,12 @@ bool AccountHandler::ParseSingleAccountIcon(
     const parser::DictionaryValue* item_dict,
     SingleAccountInfo* info) {
   std::string section;
-  item_dict->GetString(keys::kAccountSectionKey, &section);
+  item_dict->GetString(kAccountSectionKey, &section);
   if (section.compare(kSectionIconAccount) != 0 &&
       section.compare(kSectionIconAccountSmall) != 0)
     return false;
   std::string icon_path;
-  item_dict->GetString(keys::kAccountTextKey, &icon_path);
+  item_dict->GetString(kAccountTextKey, &icon_path);
   info->icon_paths.push_back(std::make_pair(section, icon_path));
   return true;
 }
@@ -123,7 +130,7 @@ bool AccountHandler::ParseAccountNames(
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
-  if (item_dict->Get(keys::kAccountNameKey, &val)) {
+  if (item_dict->Get(kAccountNameKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (!ParseSingleAccountName(dict, info))
         return false;
@@ -142,12 +149,12 @@ bool AccountHandler::ParseSingleAccountName(
     const parser::DictionaryValue* item_dict,
     SingleAccountInfo* info) {
   std::string lang;
-  if (item_dict->GetString(keys::kAccountLangKey, &lang) &&
+  if (item_dict->GetString(kAccountLangKey, &lang) &&
       !utils::w3c_languages::ValidateLanguageTag(lang)) {
     return false;
   }
   std::string name;
-  item_dict->GetString(keys::kAccountTextKey, &name);
+  item_dict->GetString(kAccountTextKey, &name);
   info->names.push_back(std::make_pair(name, lang));
   return true;
 }
@@ -160,15 +167,15 @@ bool AccountHandler::ParseCapabilities(
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
   std::string string_value;
-  if (item_dict->Get(keys::kAccountCapabilityKey, &val)) {
+  if (item_dict->Get(kAccountCapabilityKey, &val)) {
     std::string capability;
     if (val->GetAsDictionary(&dict)) {
-      dict->GetString(keys::kAccountTextKey, &capability);
+      dict->GetString(kAccountTextKey, &capability);
       info->capabilities.push_back(capability);
     } else if (val->GetAsList(&list)) {
       for (auto& item : *list)
         if (item->GetAsDictionary(&dict)) {
-          dict->GetString(keys::kAccountTextKey, &capability);
+          dict->GetString(kAccountTextKey, &capability);
           info->capabilities.push_back(capability);
         }
     }

@@ -20,6 +20,20 @@ namespace {
 
 const char kTrueValue[] = "true";
 const char kFalseValue[] = "false";
+const char kTizenHardwareKey[] = "@hwkey-event";
+const char kTizenScreenOrientationKey[] = "@screen-orientation";
+const char kTizenEncryptionKey[] = "@encryption";
+const char kTizenContextMenuKey[] = "@context-menu";
+const char kTizenBackgroundSupportKey[] = "@background-support";
+const char kTizenNoDisplayKey[] = "@nodisplay";
+const char kTizenIndicatorPresenceKey[] = "@indicator-presence";
+const char kTizenBackbuttonPresenceKey[] =
+    "@backbutton-presence";
+const char kTizenInstallLocationKey[] = "@install-location";
+const char kTizenUserAgentKey[] = "@user-agent";
+const char kTizenSoundModeKey[] = "@sound-mode";
+const char kTizenBackgroundVibrationKey[] =
+    "@background-vibration";
 
 bool ForAllFindKey(const parser::Value* value, const std::string& key,
                    std::string* result) {
@@ -79,11 +93,11 @@ bool SettingHandler::Parse(
 
   std::shared_ptr<SettingInfo> app_info(new SettingInfo);
   std::string hwkey;
-  ForAllFindKey(value, keys::kTizenHardwareKey, &hwkey);
+  ForAllFindKey(value, kTizenHardwareKey, &hwkey);
   app_info->set_hwkey_enabled(hwkey != "disable");
 
   std::string screen_orientation;
-  ForAllFindKey(value, keys::kTizenScreenOrientationKey, &screen_orientation);
+  ForAllFindKey(value, kTizenScreenOrientationKey, &screen_orientation);
   if (strcasecmp("portrait", screen_orientation.c_str()) == 0)
     app_info->set_screen_orientation(SettingInfo::ScreenOrientation::PORTRAIT);
   else if (strcasecmp("landscape", screen_orientation.c_str()) == 0)
@@ -92,30 +106,30 @@ bool SettingHandler::Parse(
     app_info->set_screen_orientation(SettingInfo::ScreenOrientation::AUTO);
 
   std::string encryption;
-  ForAllFindKey(value, keys::kTizenEncryptionKey, &encryption);
+  ForAllFindKey(value, kTizenEncryptionKey, &encryption);
   app_info->set_encryption_enabled(encryption == "enable");
 
   std::string context_menu;
-  ForAllFindKey(value, keys::kTizenContextMenuKey, &context_menu);
+  ForAllFindKey(value, kTizenContextMenuKey, &context_menu);
   app_info->set_context_menu_enabled(context_menu != "disable");
 
   std::string background_support;
-  ForAllFindKey(value, keys::kTizenBackgroundSupportKey, &background_support);
+  ForAllFindKey(value, kTizenBackgroundSupportKey, &background_support);
   app_info->set_background_support_enabled(background_support == "enable");
 
   std::string install_location;
-  ForAllFindKey(value, keys::kTizenInstallLocationKey, &install_location);
+  ForAllFindKey(value, kTizenInstallLocationKey, &install_location);
   if (strcasecmp("internal-only", install_location.c_str()) == 0)
     app_info->set_install_location(SettingInfo::InstallLocation::INTERNAL);
   else if (strcasecmp("prefer-external", install_location.c_str()) == 0)
     app_info->set_install_location(SettingInfo::InstallLocation::EXTERNAL);
 
   std::string no_display;
-  ForAllFindKey(value, keys::kTizenNoDisplayKey, &no_display);
+  ForAllFindKey(value, kTizenNoDisplayKey, &no_display);
   app_info->set_no_display(boost::iequals(no_display, kTrueValue));
 
   std::string indicator_presence;
-  if (ForAllFindKey(value, keys::kTizenIndicatorPresenceKey,
+  if (ForAllFindKey(value, kTizenIndicatorPresenceKey,
                     &indicator_presence)) {
     if (boost::iequals(indicator_presence, kTrueValue)) {
       app_info->set_indicator_presence(true);
@@ -125,7 +139,7 @@ bool SettingHandler::Parse(
   }
 
   std::string backbutton_presence;
-  if (ForAllFindKey(value, keys::kTizenBackbuttonPresenceKey,
+  if (ForAllFindKey(value, kTizenBackbuttonPresenceKey,
                     &backbutton_presence)) {
     if (boost::iequals(backbutton_presence, kTrueValue)) {
       app_info->set_backbutton_presence(true);
@@ -135,16 +149,16 @@ bool SettingHandler::Parse(
   }
 
   std::string user_agent;
-  ForAllFindKey(value, keys::kTizenUserAgentKey, &user_agent);
+  ForAllFindKey(value, kTizenUserAgentKey, &user_agent);
   app_info->set_user_agent(user_agent);
 
   std::string background_vibration;
-  ForAllFindKey(value, keys::kTizenBackgroundVibrationKey,
+  ForAllFindKey(value, kTizenBackgroundVibrationKey,
                 &background_vibration);
   app_info->set_background_vibration(background_vibration == "enable");
 
   std::string sound_mode;
-  ForAllFindKey(value, keys::kTizenSoundModeKey, &sound_mode);
+  ForAllFindKey(value, kTizenSoundModeKey, &sound_mode);
   if (strcasecmp("exclusive", sound_mode.c_str()) == 0)
     app_info->set_sound_mode(SettingInfo::SoundMode::EXCLUSIVE);
 

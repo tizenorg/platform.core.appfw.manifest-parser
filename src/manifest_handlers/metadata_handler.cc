@@ -23,15 +23,16 @@ typedef std::map<std::string, std::string> MetaDataMap;
 typedef std::map<std::string, std::string>::const_iterator MetaDataIter;
 
 namespace {
-
+const char kTizenMetaDataNameKey[] = "@key";
+const char kTizenMetaDataValueKey[] = "@value";
 MetaDataPair ParseMetaDataItem(const parser::DictionaryValue* dict,
                                std::string* error) {
   assert(dict && dict->IsType(parser::Value::TYPE_DICTIONARY));
   MetaDataPair result;
-  if (!dict->GetString(keys::kTizenMetaDataNameKey, &result.first)) {
+  if (!dict->GetString(kTizenMetaDataNameKey, &result.first)) {
     *error = "Invalid key of tizen metaData.";
   } else {
-    if (!dict->GetString(keys::kTizenMetaDataValueKey, &result.second)) {
+    if (!dict->GetString(kTizenMetaDataValueKey, &result.second)) {
       result.second = "";
     }
   }
