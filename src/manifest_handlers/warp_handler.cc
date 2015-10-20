@@ -16,6 +16,11 @@ namespace parse {
 
 namespace keys = wgt::application_widget_keys;
 
+namespace {
+const char kAccessSubdomainsKey[] = "@subdomains";
+const char kAccessOriginKey[] = "@origin";
+}
+
 void WarpHandler::ParseSingleAccessElement(
     const parser::DictionaryValue& item_dict,
     std::shared_ptr<WarpInfo> info) {
@@ -23,13 +28,13 @@ void WarpHandler::ParseSingleAccessElement(
   std::string subdomains_str;
   bool subdomains = false;
 
-  if (item_dict.HasKey(keys::kAccessSubdomainsKey)) {
-    item_dict.GetString(keys::kAccessSubdomainsKey, &subdomains_str);
+  if (item_dict.HasKey(kAccessSubdomainsKey)) {
+    item_dict.GetString(kAccessSubdomainsKey, &subdomains_str);
     if (subdomains_str == "true")
       subdomains = true;
   }
   // TODO(w.kosowicz): address validation
-  item_dict.GetString(keys::kAccessOriginKey, &domain_name);
+  item_dict.GetString(kAccessOriginKey, &domain_name);
   if (domain_name == "*")
     subdomains = true;
   info->set_access_element(std::make_pair(domain_name, subdomains));

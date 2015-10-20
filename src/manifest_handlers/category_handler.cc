@@ -15,7 +15,7 @@ namespace parse {
 namespace keys = wgt::application_widget_keys;
 
 namespace {
-
+const char kTizenCategoryNameKey[] = "@name";
 const char kErrMsgCategory[] =
     "Parsing category element failed";
 const char kErrMsgCategoryName[] =
@@ -25,7 +25,7 @@ bool ParseCategoryEntryAndStore(
     const parser::DictionaryValue& control_dict,
     CategoryInfoList* aplist) {
   std::string name;
-  if (!control_dict.GetString(keys::kTizenCategoryNameKey, &name))
+  if (!control_dict.GetString(kTizenCategoryNameKey, &name))
     return false;
   aplist->categories.push_back(name);
   return true;

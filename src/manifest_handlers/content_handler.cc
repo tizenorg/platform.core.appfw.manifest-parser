@@ -21,6 +21,8 @@ namespace keys = wgt::application_widget_keys;
 
 namespace {
 
+const char kTizenContentEncodingKey[] = "@encoding";
+const char kTizenContentTypeKey[] = "@type";
 const char kMimeMainComponent[] = "";
 const char kMimeCharsetComponent[] = "charset";
 const char kDefaultMimeType[] = "text/html";
@@ -119,7 +121,7 @@ ContentHandler::ParseResult ContentHandler::ParseAndSetContentValue(
   }
 
   std::string type = kDefaultMimeType;
-  dict.GetString(keys::kTizenContentTypeKey, &type);
+  dict.GetString(kTizenContentTypeKey, &type);
   // TODO(t.iwanek): this will fail for "quoted-string"
   //                 use/implement proper mime parsing...
   std::map<std::string, std::string> mime_components =
@@ -134,7 +136,7 @@ ContentHandler::ParseResult ContentHandler::ParseAndSetContentValue(
   }
 
   std::string encoding = kDefaultEncoding;
-  if (!dict.GetString(keys::kTizenContentEncodingKey, &encoding)) {
+  if (!dict.GetString(kTizenContentEncodingKey, &encoding)) {
     auto charset_iter = mime_components.find(kMimeCharsetComponent);
     if (charset_iter != mime_components.end()) {
       encoding = charset_iter->second;

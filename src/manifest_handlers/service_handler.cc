@@ -41,8 +41,9 @@ bool ParseServiceContent(const parser::DictionaryValue* dict,
         continue;
       }
       if (found) {
-        *error = "tizen:content element of tizen:service "
-                 "should be declared only once";
+        *error =
+            "tizen:content element of tizen:service "
+            "should be declared only once";
         return false;
       }
       found = true;
@@ -77,11 +78,10 @@ bool ParseServiceContent(const parser::DictionaryValue* dict,
 }
 
 bool ParseServiceIcon(const parser::DictionaryValue* dict,
-                  wgt::parse::ServiceInfo* service_info,
-                  std::string* error) {
+                      wgt::parse::ServiceInfo* service_info,
+                      std::string* error) {
   const parser::Value* value = nullptr;
-  if (!dict->Get(keys::kTizenServiceIconKey, &value))
-    return true;
+  if (!dict->Get(keys::kTizenServiceIconKey, &value)) return true;
   std::string icon;
   if (value->GetType() == parser::Value::TYPE_LIST) {
     const parser::ListValue* list = nullptr;
@@ -97,14 +97,14 @@ bool ParseServiceIcon(const parser::DictionaryValue* dict,
         continue;
       }
       if (found) {
-        *error = "tizen:icon element of tizen:service "
-                 "should be declared only once";
+        *error =
+            "tizen:icon element of tizen:service "
+            "should be declared only once";
         return false;
       }
       found = true;
       if (!dict->GetString(keys::kTizenServiceIconSrcKey, &icon)) {
-        *error =
-            "Missing 'src' attribute in tizen:icon tag in tizen:service";
+        *error = "Missing 'src' attribute in tizen:icon tag in tizen:service";
         return false;
       }
     }
@@ -131,8 +131,7 @@ bool ParseServiceDescription(const parser::DictionaryValue* dict,
                              wgt::parse::ServiceInfo* service_info,
                              std::string* error) {
   const parser::Value* value = nullptr;
-  if (!dict->Get(keys::kTizenServiceDescriptionKey, &value))
-    return true;
+  if (!dict->Get(keys::kTizenServiceDescriptionKey, &value)) return true;
   std::string description;
   if (value->GetType() == parser::Value::TYPE_LIST) {
     const parser::ListValue* list = nullptr;
@@ -148,8 +147,9 @@ bool ParseServiceDescription(const parser::DictionaryValue* dict,
         continue;
       }
       if (found) {
-        *error = "tizen:description element of tizen:service "
-                 "should be declared only once";
+        *error =
+            "tizen:description element of tizen:service "
+            "should be declared only once";
         return false;
       }
       found = true;
@@ -173,8 +173,7 @@ bool ParseServiceCategory(const parser::DictionaryValue* dict,
                           wgt::parse::ServiceInfo* service_info,
                           std::string* error) {
   const parser::Value* value = nullptr;
-  if (!dict->Get(keys::kTizenServiceCategoryKey, &value))
-    return true;
+  if (!dict->Get(keys::kTizenServiceCategoryKey, &value)) return true;
   std::vector<std::string> categories;
   if (value->GetType() == parser::Value::TYPE_LIST) {
     const parser::ListValue* list = nullptr;
@@ -221,8 +220,9 @@ bool ParseServiceName(const parser::DictionaryValue* dict,
                       std::string* error) {
   const parser::Value* value = nullptr;
   if (!dict->Get(keys::kTizenServiceNameKey, &value)) {
-    *error = "Missing tizen:name tag in tizen:service. "
-             "At least one must be declared";
+    *error =
+        "Missing tizen:name tag in tizen:service. "
+        "At least one must be declared";
     return false;
   }
   wgt::parse::LangNameVector names;
@@ -270,8 +270,7 @@ bool ParseServiceMetadata(const parser::DictionaryValue* dict,
                           wgt::parse::ServiceInfo* service_info,
                           std::string* error) {
   const parser::Value* value = nullptr;
-  if (!dict->Get(keys::kTizenServiceMetadataKey, &value))
-    return true;
+  if (!dict->Get(keys::kTizenServiceMetadataKey, &value)) return true;
   wgt::parse::KeyValueVector metadata_set;
   if (value->GetType() == parser::Value::TYPE_LIST) {
     const parser::ListValue* list = nullptr;
@@ -328,23 +327,17 @@ std::unique_ptr<wgt::parse::ServiceInfo> ParseService(
   if (dict->GetString(keys::kTizenServiceOnBootKey, &on_boot))
     service->set_on_boot(on_boot == "true");
 
-  if (!ParseServiceContent(dict, service.get(), error))
-    return nullptr;
+  if (!ParseServiceContent(dict, service.get(), error)) return nullptr;
 
-  if (!ParseServiceIcon(dict, service.get(), error))
-    return nullptr;
+  if (!ParseServiceIcon(dict, service.get(), error)) return nullptr;
 
-  if (!ParseServiceDescription(dict, service.get(), error))
-    return nullptr;
+  if (!ParseServiceDescription(dict, service.get(), error)) return nullptr;
 
-  if (!ParseServiceCategory(dict, service.get(), error))
-    return nullptr;
+  if (!ParseServiceCategory(dict, service.get(), error)) return nullptr;
 
-  if (!ParseServiceName(dict, service.get(), error))
-    return nullptr;
+  if (!ParseServiceName(dict, service.get(), error)) return nullptr;
 
-  if (!ParseServiceMetadata(dict, service.get(), error))
-    return nullptr;
+  if (!ParseServiceMetadata(dict, service.get(), error)) return nullptr;
 
   return service;
 }
@@ -356,8 +349,7 @@ namespace wgt {
 namespace parse {
 
 ServiceInfo::ServiceInfo(const std::string& id, bool auto_restart, bool on_boot)
-    : id_(id), auto_restart_(auto_restart), on_boot_(on_boot) {
-}
+    : id_(id), auto_restart_(auto_restart), on_boot_(on_boot) {}
 
 ServiceInfo::~ServiceInfo() {}
 
@@ -365,10 +357,9 @@ ServiceHandler::ServiceHandler() {}
 
 ServiceHandler::~ServiceHandler() {}
 
-bool ServiceHandler::Parse(
-    const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+bool ServiceHandler::Parse(const parser::Manifest& manifest,
+                           std::shared_ptr<parser::ManifestData>* output,
+                           std::string* error) {
   const parser::Value* services = nullptr;
   if (!manifest.Get(keys::kTizenServiceKey, &services)) {
     return true;
@@ -381,8 +372,7 @@ bool ServiceHandler::Parse(
     services->GetAsDictionary(&dict);
     if (parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix)) {
       auto service = ParseService(dict, error);
-      if (!service)
-        return false;
+      if (!service) return false;
       services_data->services.push_back(*service);
     }
   } else if (services->IsType(parser::Value::TYPE_LIST)) {
@@ -391,13 +381,11 @@ bool ServiceHandler::Parse(
     for (parser::ListValue::const_iterator it = list->begin();
          it != list->end(); ++it) {
       const parser::DictionaryValue* dict = nullptr;
-      if (!(**it).GetAsDictionary(&dict))
-        continue;
+      if (!(**it).GetAsDictionary(&dict)) continue;
       if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
         continue;
       auto service = ParseService(dict, error);
-      if (!service)
-        return false;
+      if (!service) return false;
       services_data->services.push_back(*service);
     }
   }
@@ -414,8 +402,9 @@ bool ServiceHandler::Validate(
 
   for (auto& service : services.services) {
     if (!parser::ValidateTizenApplicationId(service.id())) {
-      *error = "The id property of application element "
-               "does not match the format\n";
+      *error =
+          "The id property of application element "
+          "does not match the format\n";
       return false;
     }
   }
@@ -423,9 +412,7 @@ bool ServiceHandler::Validate(
   return true;
 }
 
-std::string ServiceHandler::Key() const {
-  return keys::kTizenServiceKey;
-}
+std::string ServiceHandler::Key() const { return keys::kTizenServiceKey; }
 
 }  // namespace parse
 }  // namespace wgt

@@ -25,6 +25,20 @@ namespace parse {
 namespace keys = wgt::application_widget_keys;
 
 namespace {
+const char kPreferencesNameKey[] = "@name";
+const char kPreferencesValueKey[] = "@value";
+const char kPreferencesReadonlyKey[] = "@readonly";
+const char kXmlLangKey[] = "@lang";
+const char kXmlHrefKey[] = "@href";
+const char kLicenseKey[] = "widget.license";
+const char kShortKey[] = "@short";
+const char kWidgetLangKey[] = "widget.@lang";
+const char kIDKey[] = "widget.@id";
+const char kHeightKey[] = "widget.@height";
+const char kWidthKey[] = "widget.@width";
+const char kDefaultLocaleKey[] = "widget.@defaultlocale";
+const char kViewModesKey[] = "widget.@viewmodes";
+const char kPreferencesKey[] = "widget.preference";
 
 bool ParserPreferenceItem(const parser::Value* val,
                           Preference** output,
@@ -37,9 +51,9 @@ bool ParserPreferenceItem(const parser::Value* val,
   std::string name;
   std::string value;
   std::string readonly = "false";
-  pref_dict->GetString(keys::kPreferencesNameKey, &name);
-  pref_dict->GetString(keys::kPreferencesValueKey, &value);
-  pref_dict->GetString(keys::kPreferencesReadonlyKey, &readonly);
+  pref_dict->GetString(kPreferencesNameKey, &name);
+  pref_dict->GetString(kPreferencesValueKey, &value);
+  pref_dict->GetString(kPreferencesReadonlyKey, &readonly);
   *output = new Preference(name, value, readonly == "true");
   return true;
 }
@@ -54,16 +68,16 @@ void WidgetHandler::ParseSingleLocalizedLicenseElement(
   std::string text;
   std::string href;
 
-  if (item_dict->HasKey(keys::kXmlLangKey)) {
+  if (item_dict->HasKey(kXmlLangKey)) {
     lang_overwriten = true;
-    item_dict->GetString(keys::kXmlLangKey, &lang);
+    item_dict->GetString(kXmlLangKey, &lang);
     if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
       LOG(ERROR) << "Tag " << lang << " is invalid";
       return;
     }
   }
-  if (item_dict->HasKey(keys::kXmlHrefKey)) {
-    item_dict->GetString(keys::kXmlHrefKey, &href);
+  if (item_dict->HasKey(kXmlHrefKey)) {
+    item_dict->GetString(kXmlHrefKey, &href);
   }
   item_dict->GetString(keys::kXmlTextKey, &text);
   // TODO(w.kosowicz) check where href should be put...
@@ -78,13 +92,13 @@ void WidgetHandler::ParseLocalizedLicenseElements(
     const parser::Manifest& manifest,
     const std::string& parent_lang,
     std::shared_ptr<WidgetInfo> info) {
-  if (!manifest.HasPath(keys::kLicenseKey))
+  if (!manifest.HasPath(kLicenseKey))
     return;
 
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
-  if (manifest.Get(keys::kLicenseKey, &val)) {
+  if (manifest.Get(kLicenseKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (parser::VerifyElementNamespace(*dict, keys::kWidgetNamespacePrefix))
         ParseSingleLocalizedLicenseElement(dict, parent_lang, info);
@@ -107,9 +121,9 @@ void WidgetHandler::ParseSingleLocalizedDescriptionElement(
   std::string lang;
   std::string text;
 
-  if (item_dict->HasKey(keys::kXmlLangKey)) {
+  if (item_dict->HasKey(kXmlLangKey)) {
     lang_overwriten = true;
-    item_dict->GetString(keys::kXmlLangKey, &lang);
+    item_dict->GetString(kXmlLangKey, &lang);
     if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
       LOG(ERROR) << "Tag " << lang << " is invalid";
       return;
@@ -155,16 +169,16 @@ void WidgetHandler::ParseSingleLocalizedNameElement(
   std::string name;
   std::string short_name;
 
-  if (item_dict->HasKey(keys::kXmlLangKey)) {
+  if (item_dict->HasKey(kXmlLangKey)) {
     lang_overwriten = true;
-    item_dict->GetString(keys::kXmlLangKey, &lang);
+    item_dict->GetString(kXmlLangKey, &lang);
     if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
       LOG(ERROR) << "Tag " << lang << " is invalid";
       return;
     }
   }
-  if (item_dict->HasKey(keys::kShortKey)) {
-    item_dict->GetString(keys::kShortKey, &short_name);
+  if (item_dict->HasKey(kShortKey)) {
+    item_dict->GetString(kShortKey, &short_name);
   }
   item_dict->GetString(keys::kXmlTextKey, &name);
 
@@ -260,7 +274,7 @@ bool WidgetHandler::Parse(
   if (manifest.HasPath(keys::kWidgetNamespaceKey)) {
     manifest.GetString(keys::kWidgetNamespaceKey,
                        &widget_info->widget_namespace_);
-    manifest.GetString(keys::kWidgetLangKey,
+    manifest.GetString(kWidgetLangKey,
                        &parent_lang);
   }
 
@@ -277,30 +291,30 @@ bool WidgetHandler::Parse(
 
   if (manifest.HasPath(keys::kVersionKey))
     manifest.GetString(keys::kVersionKey, &widget_info->version_);
-  if (manifest.HasPath(keys::kIDKey)) {
+  if (manifest.HasPath(kIDKey)) {
     std::string id;
-    manifest.GetString(keys::kIDKey, &id);
+    manifest.GetString(kIDKey, &id);
     if (!id.empty() && parser::utils::IsValidIRI(id))
       widget_info->id_ = id;
   }
-  if (manifest.HasPath(keys::kHeightKey)) {
+  if (manifest.HasPath(kHeightKey)) {
     int h;
-    manifest.GetInteger(keys::kHeightKey, &h);
+    manifest.GetInteger(kHeightKey, &h);
     widget_info->height_ = static_cast<unsigned int>(h);
   }
-  if (manifest.HasPath(keys::kWidthKey)) {
+  if (manifest.HasPath(kWidthKey)) {
     int w;
-    manifest.GetInteger(keys::kWidthKey, &w);
+    manifest.GetInteger(kWidthKey, &w);
     widget_info->width_ = static_cast<unsigned int>(w);
   }
-  if (manifest.HasPath(keys::kDefaultLocaleKey))
-    manifest.GetString(keys::kDefaultLocaleKey, &widget_info->default_locale_);
-  if (manifest.HasPath(keys::kViewModesKey))
-    manifest.GetString(keys::kViewModesKey, &widget_info->viewmodes_);
+  if (manifest.HasPath(kDefaultLocaleKey))
+    manifest.GetString(kDefaultLocaleKey, &widget_info->default_locale_);
+  if (manifest.HasPath(kViewModesKey))
+    manifest.GetString(kViewModesKey, &widget_info->viewmodes_);
 
-  if (manifest.HasPath(keys::kPreferencesKey)) {
+  if (manifest.HasPath(kPreferencesKey)) {
     const parser::Value* val = nullptr;
-    if (manifest.Get(keys::kPreferencesKey, &val)) {
+    if (manifest.Get(kPreferencesKey, &val)) {
       if (val->GetType() == parser::Value::TYPE_LIST) {
         // list of preferences
         const parser::ListValue* pref_list;
