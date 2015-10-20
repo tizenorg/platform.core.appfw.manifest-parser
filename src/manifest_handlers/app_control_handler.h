@@ -16,6 +16,12 @@
 namespace wgt {
 namespace parse {
 
+/**
+ * @brief The AppControlHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:app-control>.
+ */
 class AppControlHandler : public parser::ManifestHandler {
  public:
   AppControlHandler();

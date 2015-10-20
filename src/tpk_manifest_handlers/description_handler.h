@@ -37,6 +37,12 @@ class DescriptionInfo : public parser::ManifestData {
   std::string xml_lang_;
 };
 
+/**
+ * @brief The DescriptionHandler class
+ *
+ * Handler of tizen-manifest.xml for xml elements:
+ *  <description>
+ */
 class DescriptionHandler : public parser::ManifestHandler {
  public:
   bool Parse(

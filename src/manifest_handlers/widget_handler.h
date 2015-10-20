@@ -77,6 +77,19 @@ class WidgetInfo : public parser::ManifestData {
   friend class WidgetHandler;
 };
 
+/**
+ * @brief The WidgetHandler class
+ *
+ * Handler of config.xml for root xml element <w3c:widget>.
+ * Children parsed within this handlers:
+ *  - <w3c:author>,
+ *  - <w3c:description>,
+ *  - <w3c:license>,
+ *  - <w3c:name>,
+ *  - <w3c:preference>.
+ *
+ * Code parsing rest of children is located in other handlers.
+ */
 class WidgetHandler : public parser::ManifestHandler {
  public:
   WidgetHandler() {}

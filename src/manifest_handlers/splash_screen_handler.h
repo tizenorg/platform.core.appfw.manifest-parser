@@ -29,6 +29,12 @@ class SplashScreenInfo : public parser::ManifestData {
   std::string src_;
 };
 
+/**
+ * @brief The SplashScreenHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:splash-screen>.
+ */
 class SplashScreenHandler : public parser::ManifestHandler {
  public:
   SplashScreenHandler();

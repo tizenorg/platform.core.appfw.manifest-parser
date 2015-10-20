@@ -28,6 +28,12 @@ class AllowedNavigationInfo : public parser::ManifestData {
   std::vector<std::string> allowed_domains_;
 };
 
+/**
+ * @brief The NavigationHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:allow-navigation>.
+ */
 class NavigationHandler : public parser::ManifestHandler {
  public:
   NavigationHandler();

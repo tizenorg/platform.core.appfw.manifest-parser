@@ -37,6 +37,16 @@ class AccountInfo : public parser::ManifestData {
   std::vector<SingleAccountInfo> accounts_;
 };
 
+/**
+ * @brief The AccountHandler class
+ *
+ * Handler of tizen-manifest.xml for xml elements:
+ *  <account>
+ *  \_  <account-provider>
+ *      \_  <icon>
+ *      \_  <label>
+ *      \_  <capability>
+ */
 class AccountHandler : public parser::ManifestHandler {
  public:
   bool Parse(

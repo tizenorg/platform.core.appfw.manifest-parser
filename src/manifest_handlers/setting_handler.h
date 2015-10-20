@@ -103,6 +103,12 @@ class SettingInfo : public parser::ManifestData {
   bool background_vibration_;
 };
 
+/**
+ * @brief The SettingHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:setting>.
+ */
 class SettingHandler : public parser::ManifestHandler {
  public:
   SettingHandler();

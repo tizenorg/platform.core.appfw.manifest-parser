@@ -40,6 +40,12 @@ class ApplicationIconsInfo : public parser::ManifestData {
   std::vector<ApplicationIcon> icons_;
 };
 
+/**
+ * @brief The ApplicationIconsHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <w3c:icon>.
+ */
 class ApplicationIconsHandler : public parser::ManifestHandler {
  public:
   ApplicationIconsHandler();

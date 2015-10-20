@@ -55,6 +55,12 @@ class TizenApplicationInfo : public parser::ManifestData {
   std::string required_version_;
 };
 
+/**
+ * @brief The TizenApplicationHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:application>.
+ */
 class TizenApplicationHandler : public parser::ManifestHandler {
  public:
   TizenApplicationHandler();
