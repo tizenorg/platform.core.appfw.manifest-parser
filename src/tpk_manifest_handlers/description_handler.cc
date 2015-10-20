@@ -20,6 +20,8 @@ namespace parse {
 namespace keys = tpk::application_keys;
 
 namespace {
+const char kDescriptionKeyText[] = "#text";
+const char kDescriptionLangKey[] = "@lang";
 
 void ParseDescriptionAndStore(
     const parser::DictionaryValue& control_dict,
@@ -30,15 +32,15 @@ void ParseDescriptionAndStore(
   if (control_dict.GetDictionary(keys::kDescriptionKey,
                                  &description_dict)) {
     description_dict->GetString(
-        keys::kDescriptionKeyText, &description);
+        kDescriptionKeyText, &description);
   }
 
   std::string xml_lang;
   const parser::DictionaryValue* xml_lang_dict;
-  if (control_dict.GetDictionary(keys::kDescriptionLangKey,
+  if (control_dict.GetDictionary(kDescriptionLangKey,
                                  &xml_lang_dict)) {
     xml_lang_dict->GetString(
-        keys::kDescriptionKeyText, &xml_lang);
+        kDescriptionKeyText, &xml_lang);
   }
 
   descriptioninfo->set_description(description);
