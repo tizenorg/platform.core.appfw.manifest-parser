@@ -15,6 +15,26 @@
 namespace wgt {
 namespace parse {
 
+/**
+ * @brief The WidgetConfigParser class
+ *        Parser class of widget's config.xml configuration file.
+ *
+ * Instance of this class may be used to parse single configuration file.
+ * Depending on boolean result of @ref ParseManifest method, client code may
+ * call:
+ *  - on success -> @ref GetManifestData(), passing the key of ManifestData
+ *                  instance that it is interested in.
+ *  - on failure -> @ref GetErrorMessage(), to get value of error which was set
+ *                  during the processing of config.xml
+ *
+ * Additional check of presence of start files may be done via calling
+ * @ref HasValidStartFile(). This method is extracted separetly as missing start
+ * file will not cause the failure of parsing the config.xml file.
+ *
+ * To investigate which key do you need to get certain parsed piece of data,
+ * check the key reported by handler's @ref ManifestHandler::Key() method.
+ * Key returned by this method is the key to access data set by handler.
+ */
 class WidgetConfigParser {
  public:
   WidgetConfigParser();
