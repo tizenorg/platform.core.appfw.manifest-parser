@@ -53,7 +53,7 @@ ManifestHandlerRegistry::ManifestHandlerRegistry(
     const std::vector<ManifestHandler*>& handlers) {
   for (std::vector<ManifestHandler*>::const_iterator it = handlers.begin();
        it != handlers.end(); ++it) {
-    RegisterManifestHandler(*it);
+    handlers_[(*it)->Key()] = *it;
   }
 
   ReorderHandlersGivenDependencies();
