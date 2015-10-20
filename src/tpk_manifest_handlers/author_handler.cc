@@ -20,6 +20,11 @@ namespace parse {
 namespace keys = tpk::application_keys;
 
 namespace {
+const char kAuthorKeyText[] = "#text";
+const char kAuthorEmailKey[] = "email";
+const char kAuthorEmailChildKey[] = "@email";
+const char kAuthorHrefKey[] = "href";
+const char kAuthorHrefChildKey[] = "@href";
 
 void ParseAuthorAndStore(
     const parser::DictionaryValue& control_dict,
@@ -27,18 +32,18 @@ void ParseAuthorAndStore(
 
   std::string email;
   const parser::DictionaryValue* email_dict;
-  if (control_dict.GetDictionary(keys::kAuthorEmailKey,
+  if (control_dict.GetDictionary(kAuthorEmailKey,
                                  &email_dict)) {
     email_dict->GetString(
-        keys::kAuthorEmailChildKey, &email);
+        kAuthorEmailChildKey, &email);
   }
 
   std::string href;
   const parser::DictionaryValue* href_dict;
-  if (control_dict.GetDictionary(keys::kAuthorHrefKey,
+  if (control_dict.GetDictionary(kAuthorHrefKey,
                                  &href_dict)) {
     href_dict->GetString(
-        keys::kAuthorHrefChildKey, &href);
+        kAuthorHrefChildKey, &href);
   }
 
   std::string name;
@@ -46,7 +51,7 @@ void ParseAuthorAndStore(
   if (control_dict.GetDictionary(keys::kAuthorKey,
                                  &name_dict)) {
     name_dict->GetString(
-        keys::kAuthorKeyText, &name);
+        kAuthorKeyText, &name);
   }
 
   author->set_email(email);
