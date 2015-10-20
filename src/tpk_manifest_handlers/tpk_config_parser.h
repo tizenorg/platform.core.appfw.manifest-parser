@@ -15,6 +15,22 @@
 namespace tpk {
 namespace parse {
 
+/**
+ * @brief The TPKConfigParser class
+ *        Parser class of tpk package tizen-manifest.xml manifest file.
+ *
+ * Instance of this class may be used to parse single configuration file.
+ * Depending on boolean result of @ref ParseManifest method, client code may
+ * call:
+ *  - on success -> @ref GetManifestData(), passing the key of ManifestData
+ *                  instance that it is interested in.
+ *  - on failure -> @ref GetErrorMessage(), to get value of error which was set
+ *                  during the processing of config.xml
+ *
+ * To investigate which key do you need to get certain parsed piece of data,
+ * check the key reported by handler's @ref ManifestHandler::Key() method.
+ * Key returned by this method is the key to access data set by handler.
+ */
 class TPKConfigParser {
  public:
   TPKConfigParser();
