@@ -12,6 +12,10 @@
 namespace keys = wgt::application_widget_keys;
 
 namespace {
+const char kWidgetIconKey[] = "widget.icon";
+const char kWidgetIconSrcKey[] = "@src";
+const char kWidgetIconWidthKey[] = "@width";
+const char kWidgetIconHeightKey[] = "@height";
 
 bool ExtractIconSrc(const parser::Value& dict, std::string* value,
                     std::string* /*error*/) {
@@ -21,7 +25,7 @@ bool ExtractIconSrc(const parser::Value& dict, std::string* value,
     return true;
   }
   std::string src;
-  if (!inner_dict->GetString(keys::kWidgetIconSrcKey, &src)) {
+  if (!inner_dict->GetString(kWidgetIconSrcKey, &src)) {
     LOG(INFO) << "Cannot find mandatory key. Key name: .@src";
     return true;
   }
@@ -47,7 +51,7 @@ void ExtractIconDimensions(const parser::Value& dict, int* height, int* width) {
   }
 
   std::string width_str;
-  if (inner_dict->GetString(keys::kWidgetIconWidthKey, &width_str)) {
+  if (inner_dict->GetString(kWidgetIconWidthKey, &width_str)) {
     try {
       *width = std::stoi(width_str);
     } catch (const std::logic_error&) {
@@ -56,7 +60,7 @@ void ExtractIconDimensions(const parser::Value& dict, int* height, int* width) {
   }
 
   std::string height_str;
-  if (inner_dict->GetString(keys::kWidgetIconHeightKey, &height_str)) {
+  if (inner_dict->GetString(kWidgetIconHeightKey, &height_str)) {
     try {
       *height = std::stoi(height_str);
     } catch (const std::logic_error&) {
@@ -133,7 +137,7 @@ bool ApplicationIconsHandler::Parse(
   std::shared_ptr<ApplicationIconsInfo> app_icons_info =
       std::make_shared<ApplicationIconsInfo>();
   parser::Value* key_value;
-  if (!manifest.Get(keys::kWidgetIconKey, &key_value)) {
+  if (!manifest.Get(kWidgetIconKey, &key_value)) {
     *output = std::static_pointer_cast<parser::ManifestData>(app_icons_info);
     return true;
   }

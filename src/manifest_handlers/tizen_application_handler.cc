@@ -21,15 +21,19 @@ namespace parse {
 namespace {
 const utils::VersionNumber kMinimumAPIVersion("2.2.1");
 const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kNamespaceKey[] = "@namespace";
+const char kTizenApplicationIdKey[] = "@id";
+const char kTizenApplicationPackageKey[] = "@package";
+const char kTizenApplicationLaunchModeKey[] = "@launch_mode";
+const char kTizenApplicationRequiredVersionKey[] = "@required_version";
 }  // namespace
 
 namespace keys = wgt::application_widget_keys;
 
-TizenApplicationInfo::TizenApplicationInfo(): launch_mode_("single") {
-}
+TizenApplicationInfo::TizenApplicationInfo() : launch_mode_("single") {}
 
-TizenApplicationInfo::~TizenApplicationInfo() {
-}
+TizenApplicationInfo::~TizenApplicationInfo() {}
 
 TizenApplicationHandler::TizenApplicationHandler() {}
 
@@ -37,8 +41,7 @@ TizenApplicationHandler::~TizenApplicationHandler() {}
 
 bool TizenApplicationHandler::Parse(
     const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+    std::shared_ptr<parser::ManifestData>* output, std::string* error) {
   std::shared_ptr<TizenApplicationInfo> app_info(new TizenApplicationInfo);
   parser::Value* app_value = nullptr;
   manifest.Get(keys::kTizenApplicationKey, &app_value);
@@ -48,16 +51,16 @@ bool TizenApplicationHandler::Parse(
   bool found = false;
   if (app_value && app_value->IsType(parser::Value::TYPE_DICTIONARY)) {
     app_value->GetAsDictionary(&app_dict);
-    found = app_dict->GetString(keys::kNamespaceKey, &value);
-    found = found && (value == keys::kTizenNamespacePrefix);
+    found = app_dict->GetString(kNamespaceKey, &value);
+    found = found && (value == kTizenNamespacePrefix);
   } else if (app_value && app_value->IsType(parser::Value::TYPE_LIST)) {
     parser::ListValue* list;
     app_value->GetAsList(&list);
-    for (parser::ListValue::iterator it = list->begin();
-         it != list->end(); ++it) {
+    for (parser::ListValue::iterator it = list->begin(); it != list->end();
+         ++it) {
       (*it)->GetAsDictionary(&app_dict);
-      app_dict->GetString(keys::kNamespaceKey, &value);
-      bool is_tizen = (value == keys::kTizenNamespacePrefix);
+      app_dict->GetString(kNamespaceKey, &value);
+      bool is_tizen = (value == kTizenNamespacePrefix);
       if (is_tizen) {
         if (found) {
           *error = "There should be no more than one tizen:application element";
@@ -69,15 +72,17 @@ bool TizenApplicationHandler::Parse(
   }
 
   if (!found) {
-    *error = "Cannot find application element with tizen namespace "
-             "or the tizen namespace prefix is incorrect.\n";
+    *error =
+        "Cannot find application element with tizen namespace "
+        "or the tizen namespace prefix is incorrect.\n";
     return false;
   }
-  if (app_dict->GetString(keys::kTizenApplicationIdKey, &value))
+  if (app_dict->GetString(kTizenApplicationIdKey, &value))
     app_info->set_id(value);
-  if (app_dict->GetString(keys::kTizenApplicationPackageKey, &value))
+  if (app_dict->GetString(kTizenApplicationPackageKey, &value)) {
     app_info->set_package(value);
-  if (app_dict->GetString(keys::kTizenApplicationRequiredVersionKey, &value)) {
+  }
+  if (app_dict->GetString(kTizenApplicationRequiredVersionKey, &value)) {
     if (!value.empty()) {
       // TODO(wy80.choi): should consider minimum API version for each profile.
       utils::VersionNumber req_version(value);
@@ -88,11 +93,12 @@ bool TizenApplicationHandler::Parse(
       }
     }
   }
-  if (app_dict->GetString(keys::kTizenApplicationLaunchModeKey, &value)) {
+  if (app_dict->GetString(kTizenApplicationLaunchModeKey, &value)) {
     if (utils::VersionNumber(app_info->required_version()) <
         kLaunchModeRequiredVersion) {
-      *error = "launch_mode attribute cannot be used for api version lower"
-               " than 2.4";
+      *error =
+          "launch_mode attribute cannot be used for api version lower"
+          " than 2.4";
       return false;
     } else {
       app_info->set_launch_mode(value);
@@ -111,25 +117,29 @@ bool TizenApplicationHandler::Validate(
       static_cast<const TizenApplicationInfo&>(data);
 
   if (!parser::ValidateTizenApplicationId(app_info.id())) {
-    *error = "The id property of application element "
-             "does not match the format\n";
+    *error =
+        "The id property of application element "
+        "does not match the format\n";
     return false;
   }
 
   if (!parser::ValidateTizenPackageId(app_info.package())) {
-    *error = "The package property of application element "
-             "does not match the format\n";
+    *error =
+        "The package property of application element "
+        "does not match the format\n";
     return false;
   }
 
   if (app_info.id().find(app_info.package()) != 0) {
-    *error = "The application element property id "
-             "does not start with package.\n";
+    *error =
+        "The application element property id "
+        "does not start with package.\n";
     return false;
   }
   if (app_info.required_version().empty()) {
-    *error = "The required_version property of application "
-             "element does not exist.\n";
+    *error =
+        "The required_version property of application "
+        "element does not exist.\n";
     return false;
   }
   utils::VersionNumber supported_version = parser::GetCurrentPlatformVersion();
@@ -143,13 +153,13 @@ bool TizenApplicationHandler::Validate(
     return false;
   }
   if (supported_version < required_version) {
-    *error = "The required_version of Tizen Web API "
-             "is not supported.\n";
+    *error =
+        "The required_version of Tizen Web API "
+        "is not supported.\n";
     return false;
   }
   if (required_version >= kLaunchModeRequiredVersion) {
-    if (!app_info.launch_mode().empty() &&
-        app_info.launch_mode() != "caller" &&
+    if (!app_info.launch_mode().empty() && app_info.launch_mode() != "caller" &&
         app_info.launch_mode() != "group" &&
         app_info.launch_mode() != "single") {
       *error = "Wrong value of launch mode";
@@ -163,9 +173,7 @@ std::string TizenApplicationHandler::Key() const {
   return keys::kTizenApplicationKey;
 }
 
-bool TizenApplicationHandler::AlwaysParseForKey() const {
-  return true;
-}
+bool TizenApplicationHandler::AlwaysParseForKey() const { return true; }
 
 }  // namespace parse
 }  // namespace wgt

@@ -20,18 +20,22 @@ namespace keys = wgt::application_widget_keys;
 
 namespace {
 
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
+const char kTizenImeUuidKey[] = "uuid";
+const char kTizenImeUuidTextKey[] = "#text";
+const char kTizenImeLanguagesKey[] = "languages";
+const char kTizenImeLanguageKey[] = "language";
+const char kTizenImeLanguageTextKey[] = "#text";
+
 const char kErrMsgLanguages[] =
     "At least and only ONE tizen:languages tag should be specified";
-const char kErrMsgEmptyLanguage[] =
-    "Language cannot be empty";
-const char kErrMsgParsingIme[] =
-    "Only one ime tag should be specified";
-const char kErrMsgParsingUuid[] =
-    "Only one uuid tag should be specified";
+const char kErrMsgEmptyLanguage[] = "Language cannot be empty";
+const char kErrMsgParsingIme[] = "Only one ime tag should be specified";
+const char kErrMsgParsingUuid[] = "Only one uuid tag should be specified";
 const char kErrMsgValidatingUuidEmpty[] =
     "The UUID of ime element is obligatory";
-const char kErrMsgUuidFormat[] =
-    "Uuid should be in proper format (8-4-4-4-12)";
+const char kErrMsgUuidFormat[] = "Uuid should be in proper format (8-4-4-4-12)";
 const char kErrMsgNoLanguages[] =
     "At least one language of ime element should be specified";
 
@@ -39,11 +43,11 @@ const std::regex kUuidRegex(
     "^[0-9a-zA-Z]{8}([-][0-9a-zA-Z]{4}){3}[-][0-9a-zA-Z]{12}$");
 
 bool GetLanguage(const parser::Value* item, ImeInfo* ime_info,
-    std::string* error) {
+                 std::string* error) {
   const parser::DictionaryValue* language_dict;
   if (item->GetAsDictionary(&language_dict)) {
     std::string language;
-    if (!language_dict->GetString(keys::kTizenImeLanguageTextKey, &language) ||
+    if (!language_dict->GetString(kTizenImeLanguageTextKey, &language) ||
         language.empty()) {
       *error = kErrMsgEmptyLanguage;
       return false;
@@ -54,13 +58,12 @@ bool GetLanguage(const parser::Value* item, ImeInfo* ime_info,
 }
 
 bool ParseImeEntryAndStore(const parser::DictionaryValue& control_dict,
-    ImeInfo* ime_info, std::string* error) {
-
+                           ImeInfo* ime_info, std::string* error) {
   // parsing uuid element
   const parser::DictionaryValue* uuid_dict;
   std::string uuid;
-  if (control_dict.GetDictionary(keys::kTizenImeUuidKey, &uuid_dict) &&
-      uuid_dict->GetString(keys::kTizenImeUuidTextKey, &uuid)) {
+  if (control_dict.GetDictionary(kTizenImeUuidKey, &uuid_dict) &&
+      uuid_dict->GetString(kTizenImeUuidTextKey, &uuid)) {
     ime_info->set_uuid(uuid);
   } else {
     *error = kErrMsgParsingUuid;
@@ -68,14 +71,13 @@ bool ParseImeEntryAndStore(const parser::DictionaryValue& control_dict,
   }
 
   const parser::DictionaryValue* languages_dict;
-  if (!control_dict.GetDictionary(
-      keys::kTizenImeLanguagesKey, &languages_dict)) {
+  if (!control_dict.GetDictionary(kTizenImeLanguagesKey, &languages_dict)) {
     *error = kErrMsgLanguages;
     return false;
   }
 
   const parser::Value* languages;
-  if (!languages_dict->Get(keys::kTizenImeLanguageKey, &languages)) {
+  if (!languages_dict->Get(kTizenImeLanguageKey, &languages)) {
     *error = kErrMsgNoLanguages;
     return false;
   }
@@ -85,12 +87,10 @@ bool ParseImeEntryAndStore(const parser::DictionaryValue& control_dict,
     const parser::ListValue* list;
     languages->GetAsList(&list);
     for (const auto& item : *list) {
-      if (!GetLanguage(item, ime_info, error))
-        return false;
+      if (!GetLanguage(item, ime_info, error)) return false;
     }
   } else if (languages->GetType() == parser::Value::TYPE_DICTIONARY) {
-    if (!GetLanguage(languages, ime_info, error))
-      return false;
+    if (!GetLanguage(languages, ime_info, error)) return false;
   }
 
   return true;
@@ -103,30 +103,24 @@ bool IsValidUuid(const std::string& uuid) {
 
 }  // namespace
 
-ImeInfo::ImeInfo() {
-}
+ImeInfo::ImeInfo() {}
 
-ImeInfo::~ImeInfo() {
-}
+ImeInfo::~ImeInfo() {}
 
-ImeHandler::ImeHandler() {
-}
+ImeHandler::ImeHandler() {}
 
-ImeHandler::~ImeHandler() {
-}
+ImeHandler::~ImeHandler() {}
 
 void ImeInfo::AddLanguage(const std::string& language) {
   languages_.push_back(language);
 }
 
-bool ImeHandler::Parse(
-    const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+bool ImeHandler::Parse(const parser::Manifest& manifest,
+                       std::shared_ptr<parser::ManifestData>* output,
+                       std::string* error) {
   std::shared_ptr<ImeInfo> ime_info(new ImeInfo);
   parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kTizenImeKey, &value))
-    return true;
+  if (!manifest.Get(keys::kTizenImeKey, &value)) return true;
 
   bool result = true;
 
@@ -134,7 +128,7 @@ bool ImeHandler::Parse(
     // single entry
     const parser::DictionaryValue* dict;
     value->GetAsDictionary(&dict);
-    if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+    if (!parser::VerifyElementNamespace(*dict, kTizenNamespacePrefix))
       return nullptr;
     result = ParseImeEntryAndStore(*dict, ime_info.get(), error);
   } else if (value->GetType() == parser::Value::TYPE_LIST) {
@@ -149,15 +143,12 @@ bool ImeHandler::Parse(
   return true;
 }
 
-bool ImeHandler::Validate(
-    const parser::ManifestData& data,
-    const parser::ManifestDataMap& /*handlers_output*/,
-    std::string* error) const {
-
+bool ImeHandler::Validate(const parser::ManifestData& data,
+                          const parser::ManifestDataMap& /*handlers_output*/,
+                          std::string* error) const {
   const ImeInfo& ime_info = static_cast<const ImeInfo&>(data);
 
-  if (!ime_info.exists())
-    return true;
+  if (!ime_info.exists()) return true;
 
   if (ime_info.uuid().empty()) {
     *error = kErrMsgValidatingUuidEmpty;
@@ -177,9 +168,7 @@ bool ImeHandler::Validate(
   return true;
 }
 
-std::string ImeHandler::Key() const {
-  return keys::kTizenImeKey;
-}
+std::string ImeHandler::Key() const { return keys::kTizenImeKey; }
 
 }  // namespace parse
 }  // namespace wgt
