@@ -26,8 +26,29 @@ namespace keys = wgt::application_widget_keys;
 
 namespace {
 
-bool ParserPreferenceItem(const parser::Value* val,
-                          Preference** output,
+const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
+const char kWidgetNamespaceKey[] = "widget.@namespace";
+const char kAuthorHrefKey[] = "@href";
+const char kAuthorEmailKey[] = "@email";
+const char kVersionKey[] = "widget.@version";
+const char kNameKey[] = "widget.name";
+const char kPreferencesNameKey[] = "@name";
+const char kPreferencesValueKey[] = "@value";
+const char kPreferencesReadonlyKey[] = "@readonly";
+const char kXmlLangKey[] = "@lang";
+const char kXmlHrefKey[] = "@href";
+const char kLicenseKey[] = "widget.license";
+const char kShortKey[] = "@short";
+const char kWidgetLangKey[] = "widget.@lang";
+const char kIDKey[] = "widget.@id";
+const char kHeightKey[] = "widget.@height";
+const char kWidthKey[] = "widget.@width";
+const char kDefaultLocaleKey[] = "widget.@defaultlocale";
+const char kViewModesKey[] = "widget.@viewmodes";
+const char kPreferencesKey[] = "widget.preference";
+const char kXmlTextKey[] = "#text";
+
+bool ParserPreferenceItem(const parser::Value* val, Preference** output,
                           std::string* error) {
   const parser::DictionaryValue* pref_dict;
   if (!val->GetAsDictionary(&pref_dict)) {
@@ -37,9 +58,9 @@ bool ParserPreferenceItem(const parser::Value* val,
   std::string name;
   std::string value;
   std::string readonly = "false";
-  pref_dict->GetString(keys::kPreferencesNameKey, &name);
-  pref_dict->GetString(keys::kPreferencesValueKey, &value);
-  pref_dict->GetString(keys::kPreferencesReadonlyKey, &readonly);
+  pref_dict->GetString(kPreferencesNameKey, &name);
+  pref_dict->GetString(kPreferencesValueKey, &value);
+  pref_dict->GetString(kPreferencesReadonlyKey, &readonly);
   *output = new Preference(name, value, readonly == "true");
   return true;
 }
@@ -54,18 +75,18 @@ void WidgetHandler::ParseSingleLocalizedLicenseElement(
   std::string text;
   std::string href;
 
-  if (item_dict->HasKey(keys::kXmlLangKey)) {
+  if (item_dict->HasKey(kXmlLangKey)) {
     lang_overwriten = true;
-    item_dict->GetString(keys::kXmlLangKey, &lang);
+    item_dict->GetString(kXmlLangKey, &lang);
     if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
       LOG(ERROR) << "Tag " << lang << " is invalid";
       return;
     }
   }
-  if (item_dict->HasKey(keys::kXmlHrefKey)) {
-    item_dict->GetString(keys::kXmlHrefKey, &href);
+  if (item_dict->HasKey(kXmlHrefKey)) {
+    item_dict->GetString(kXmlHrefKey, &href);
   }
-  item_dict->GetString(keys::kXmlTextKey, &text);
+  item_dict->GetString(kXmlTextKey, &text);
   // TODO(w.kosowicz) check where href should be put...
   if (lang_overwriten) {
     info->license_set_.insert(std::make_pair(lang, text + href));
@@ -75,25 +96,22 @@ void WidgetHandler::ParseSingleLocalizedLicenseElement(
 }
 
 void WidgetHandler::ParseLocalizedLicenseElements(
-    const parser::Manifest& manifest,
-    const std::string& parent_lang,
+    const parser::Manifest& manifest, const std::string& parent_lang,
     std::shared_ptr<WidgetInfo> info) {
-  if (!manifest.HasPath(keys::kLicenseKey))
-    return;
+  if (!manifest.HasPath(kLicenseKey)) return;
 
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
-  if (manifest.Get(keys::kLicenseKey, &val)) {
+  if (manifest.Get(kLicenseKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
-      if (parser::VerifyElementNamespace(*dict, keys::kWidgetNamespacePrefix))
+      if (parser::VerifyElementNamespace(*dict, kWidgetNamespacePrefix))
         ParseSingleLocalizedLicenseElement(dict, parent_lang, info);
     } else if (val->GetAsList(&list)) {
-      for_each(list->begin(), list->end(), [list, &dict,
-               parent_lang, info, this](parser::Value* item) {
+      for_each(list->begin(), list->end(),
+               [list, &dict, parent_lang, info, this](parser::Value* item) {
         if (item->GetAsDictionary(&dict))
-          if (parser::VerifyElementNamespace(*dict,
-                                             keys::kWidgetNamespacePrefix))
+          if (parser::VerifyElementNamespace(*dict, kWidgetNamespacePrefix))
             ParseSingleLocalizedLicenseElement(dict, parent_lang, info);
       });
     }
@@ -107,15 +125,15 @@ void WidgetHandler::ParseSingleLocalizedDescriptionElement(
   std::string lang;
   std::string text;
 
-  if (item_dict->HasKey(keys::kXmlLangKey)) {
+  if (item_dict->HasKey(kXmlLangKey)) {
     lang_overwriten = true;
-    item_dict->GetString(keys::kXmlLangKey, &lang);
+    item_dict->GetString(kXmlLangKey, &lang);
     if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
       LOG(ERROR) << "Tag " << lang << " is invalid";
       return;
     }
   }
-  item_dict->GetString(keys::kXmlTextKey, &text);
+  item_dict->GetString(kXmlTextKey, &text);
   if (lang_overwriten) {
     info->description_set_.insert(std::make_pair(lang, text));
   } else {
@@ -124,24 +142,21 @@ void WidgetHandler::ParseSingleLocalizedDescriptionElement(
 }
 
 void WidgetHandler::ParseLocalizedDescriptionElements(
-    const parser::Manifest& manifest,
-    const std::string& parent_lang,
+    const parser::Manifest& manifest, const std::string& parent_lang,
     std::shared_ptr<WidgetInfo> info) {
-  if (!manifest.HasPath(keys::kDescriptionKey))
-    return;
+  if (!manifest.HasPath(keys::kDescriptionKey)) return;
 
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
   if (manifest.Get(keys::kDescriptionKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
-      if (parser::VerifyElementNamespace(*dict, keys::kWidgetNamespacePrefix))
+      if (parser::VerifyElementNamespace(*dict, kWidgetNamespacePrefix))
         ParseSingleLocalizedDescriptionElement(dict, parent_lang, info);
     } else if (val->GetAsList(&list)) {
       for (auto& item : *list)
         if (item->GetAsDictionary(&dict))
-          if (parser::VerifyElementNamespace(*dict,
-                                             keys::kWidgetNamespacePrefix))
+          if (parser::VerifyElementNamespace(*dict, kWidgetNamespacePrefix))
             ParseSingleLocalizedDescriptionElement(dict, parent_lang, info);
     }
   }
@@ -155,22 +170,21 @@ void WidgetHandler::ParseSingleLocalizedNameElement(
   std::string name;
   std::string short_name;
 
-  if (item_dict->HasKey(keys::kXmlLangKey)) {
+  if (item_dict->HasKey(kXmlLangKey)) {
     lang_overwriten = true;
-    item_dict->GetString(keys::kXmlLangKey, &lang);
+    item_dict->GetString(kXmlLangKey, &lang);
     if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
       LOG(ERROR) << "Tag " << lang << " is invalid";
       return;
     }
   }
-  if (item_dict->HasKey(keys::kShortKey)) {
-    item_dict->GetString(keys::kShortKey, &short_name);
+  if (item_dict->HasKey(kShortKey)) {
+    item_dict->GetString(kShortKey, &short_name);
   }
-  item_dict->GetString(keys::kXmlTextKey, &name);
+  item_dict->GetString(kXmlTextKey, &name);
 
   // ignore if given language already spotted
-  if (info->name_set_.find(lang) != info->name_set_.end())
-    return;
+  if (info->name_set_.find(lang) != info->name_set_.end()) return;
 
   if (lang_overwriten) {
     info->name_set_.insert(std::make_pair(lang, name));
@@ -183,23 +197,22 @@ void WidgetHandler::ParseSingleLocalizedNameElement(
   }
 }
 
-void WidgetHandler::ParseLocalizedNameElements(const parser::Manifest& manifest,
-    const std::string& parent_lang, std::shared_ptr<WidgetInfo> info) {
-  if (!manifest.HasPath(keys::kNameKey))
-    return;
+void WidgetHandler::ParseLocalizedNameElements(
+    const parser::Manifest& manifest, const std::string& parent_lang,
+    std::shared_ptr<WidgetInfo> info) {
+  if (!manifest.HasPath(kNameKey)) return;
 
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
-  if (manifest.Get(keys::kNameKey, &val)) {
+  if (manifest.Get(kNameKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
-      if (parser::VerifyElementNamespace(*dict, keys::kWidgetNamespacePrefix))
+      if (parser::VerifyElementNamespace(*dict, kWidgetNamespacePrefix))
         ParseSingleLocalizedNameElement(dict, parent_lang, info);
     } else if (val->GetAsList(&list)) {
       for (auto& item : *list)
         if (item->GetAsDictionary(&dict))
-          if (parser::VerifyElementNamespace(*dict,
-                                             keys::kWidgetNamespacePrefix))
+          if (parser::VerifyElementNamespace(*dict, kWidgetNamespacePrefix))
             ParseSingleLocalizedNameElement(dict, parent_lang, info);
     }
   }
@@ -208,43 +221,40 @@ void WidgetHandler::ParseLocalizedNameElements(const parser::Manifest& manifest,
 void WidgetHandler::ParseSingleAuthorElement(
     const parser::DictionaryValue* author_dict,
     std::shared_ptr<WidgetInfo> info) {
-  author_dict->GetString(keys::kXmlTextKey, &info->author_);
-  author_dict->GetString(keys::kAuthorEmailKey, &info->author_email_);
+  author_dict->GetString(kXmlTextKey, &info->author_);
+  author_dict->GetString(kAuthorEmailKey, &info->author_email_);
   std::string author_href;
-  author_dict->GetString(keys::kAuthorHrefKey, &author_href);
+  author_dict->GetString(kAuthorHrefKey, &author_href);
   if (!author_href.empty() && parser::utils::IsValidIRI(author_href))
     info->author_href_ = author_href;
 }
 
-void WidgetHandler::ParseAuthorElements(
-    const parser::Manifest& manifest,
-    std::shared_ptr<WidgetInfo> info) {
+void WidgetHandler::ParseAuthorElements(const parser::Manifest& manifest,
+                                        std::shared_ptr<WidgetInfo> info) {
   if (manifest.HasPath(keys::kAuthorKey)) {
     const parser::Value* author_value = nullptr;
     manifest.Get(keys::kAuthorKey, &author_value);
+
     auto& authors = parser::GetOneOrMany(manifest.value(), keys::kAuthorKey,
-                                         keys::kWidgetNamespacePrefix);
+                                         kWidgetNamespacePrefix);
     if (!authors.empty())
       ParseSingleAuthorElement(authors[0], info);
   }
 }
 
-bool WidgetHandler::Parse(
-    const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+bool WidgetHandler::Parse(const parser::Manifest& manifest,
+                          std::shared_ptr<parser::ManifestData>* output,
+                          std::string* error) {
   std::shared_ptr<WidgetInfo> widget_info(new WidgetInfo());
   widget_info->preferences_ = std::vector<Preference*>();
 
   std::string parent_lang;
-  if (manifest.HasPath(keys::kWidgetNamespaceKey)) {
-    manifest.GetString(keys::kWidgetNamespaceKey,
-                       &widget_info->widget_namespace_);
-    manifest.GetString(keys::kWidgetLangKey,
-                       &parent_lang);
+  if (manifest.HasPath(kWidgetNamespaceKey)) {
+    manifest.GetString(kWidgetNamespaceKey, &widget_info->widget_namespace_);
+    manifest.GetString(kWidgetLangKey, &parent_lang);
   }
 
-  if (widget_info->widget_namespace_ != keys::kWidgetNamespacePrefix) {
+  if (widget_info->widget_namespace_ != kWidgetNamespacePrefix) {
     *error = "Wrong namespace of <widget> element. Config.xml is invalid";
     return false;
   }
@@ -255,32 +265,31 @@ bool WidgetHandler::Parse(
   ParseLocalizedNameElements(manifest, parent_lang, widget_info);
   ParseLocalizedLicenseElements(manifest, parent_lang, widget_info);
 
-  if (manifest.HasPath(keys::kVersionKey))
-    manifest.GetString(keys::kVersionKey, &widget_info->version_);
-  if (manifest.HasPath(keys::kIDKey)) {
+  if (manifest.HasPath(kVersionKey))
+    manifest.GetString(kVersionKey, &widget_info->version_);
+  if (manifest.HasPath(kIDKey)) {
     std::string id;
-    manifest.GetString(keys::kIDKey, &id);
-    if (!id.empty() && parser::utils::IsValidIRI(id))
-      widget_info->id_ = id;
+    manifest.GetString(kIDKey, &id);
+    if (!id.empty() && parser::utils::IsValidIRI(id)) widget_info->id_ = id;
   }
-  if (manifest.HasPath(keys::kHeightKey)) {
+  if (manifest.HasPath(kHeightKey)) {
     int h;
-    manifest.GetInteger(keys::kHeightKey, &h);
+    manifest.GetInteger(kHeightKey, &h);
     widget_info->height_ = static_cast<unsigned int>(h);
   }
-  if (manifest.HasPath(keys::kWidthKey)) {
+  if (manifest.HasPath(kWidthKey)) {
     int w;
-    manifest.GetInteger(keys::kWidthKey, &w);
+    manifest.GetInteger(kWidthKey, &w);
     widget_info->width_ = static_cast<unsigned int>(w);
   }
-  if (manifest.HasPath(keys::kDefaultLocaleKey))
-    manifest.GetString(keys::kDefaultLocaleKey, &widget_info->default_locale_);
-  if (manifest.HasPath(keys::kViewModesKey))
-    manifest.GetString(keys::kViewModesKey, &widget_info->viewmodes_);
+  if (manifest.HasPath(kDefaultLocaleKey))
+    manifest.GetString(kDefaultLocaleKey, &widget_info->default_locale_);
+  if (manifest.HasPath(kViewModesKey))
+    manifest.GetString(kViewModesKey, &widget_info->viewmodes_);
 
   for (auto& pref_dict : parser::GetOneOrMany(manifest.value(),
-                                              keys::kPreferencesKey,
-                                              keys::kWidgetNamespacePrefix)) {
+                                              kPreferencesKey,
+                                              kWidgetNamespacePrefix)) {
     Preference* preference = nullptr;
     if (!ParserPreferenceItem(pref_dict, &preference, error))
       return false;
@@ -291,21 +300,18 @@ bool WidgetHandler::Parse(
   return true;
 }
 
-bool WidgetHandler::Validate(
-    const parser::ManifestData& data,
-    const parser::ManifestDataMap& /*handlers_output*/,
-    std::string* error) const {
+bool WidgetHandler::Validate(const parser::ManifestData& data,
+                             const parser::ManifestDataMap& /*handlers_output*/,
+                             std::string* error) const {
   const WidgetInfo& widget_info = static_cast<const WidgetInfo&>(data);
-  if (widget_info.widget_namespace() != keys::kWidgetNamespacePrefix) {
+  if (widget_info.widget_namespace() != kWidgetNamespacePrefix) {
     *error = "The widget namespace is invalid.";
     return false;
   }
   return true;
 }
 
-std::string WidgetHandler::Key() const {
-  return keys::kTizenWidgetKey;
-}
+std::string WidgetHandler::Key() const { return keys::kTizenWidgetKey; }
 
 }  // namespace parse
 }  // namespace wgt

@@ -19,10 +19,25 @@
 namespace bf = boost::filesystem;
 
 namespace {
-
+const char kTizenServiceContentKey[] = "content";
+const char kTizenServiceContentSrcKey[] = "@src";
+const char kTizenServiceIdKey[] = "@id";
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kTizenServiceOnBootKey[] = "@on-boot";
+const char kTizenServiceNameKey[] = "name";
+const char kTizenServiceCategoryNameKey[] = "@name";
+const char kTizenServiceCategoryKey[] = "category";
+const char kTizenServiceIconKey[] = "icon";
 const char kNamespaceKey[] = "@namespace";
 const char kServiceKey[] = "service";
-
+const char kTizenServiceAutoRestartKey[] = "@auto-restart";
+const char kTizenServiceIconSrcKey[] = "@src";
+const char kTizenServiceDescriptionKey[] = "description";
+const char kTizenServiceMetadataKeyKey[] = "@key";
+const char kTizenServiceMetadataValueKey[] = "@value";
+const char kTizenServiceMetadataKey[] = "metadata";
+const char kXmlLangKey[] = "@lang";
+const char kXmlTextKey[] = "#text";
 std::unique_ptr<parser::ManifestHandlerRegistry> GetRegistryForTest() {
   std::unique_ptr<parser::ManifestHandlerRegistry> registry;
   registry.reset(new parser::ManifestHandlerRegistry());
@@ -41,9 +56,7 @@ class ServiceHandlerTest : public testing::Test {
   void SetUp() override {
     parser_.reset(new ManifestParserImpl((GetRegistryForTest())));
   }
-  void TearDown() override {
-    parser_.reset();
-  }
+  void TearDown() override { parser_.reset(); }
   void SetManifest(std::shared_ptr<Manifest> manifest) {
     parser_->manifest_ = manifest;
   }
@@ -80,14 +93,14 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryDefault) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -118,15 +131,15 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryOnBootOn) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct002.appId");
-  service->SetString(keys::kTizenServiceOnBootKey, "true");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(::kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct002.appId");
+  service->SetString(kTizenServiceOnBootKey, "true");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -155,16 +168,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryAutoRestartOn) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct003.appId");
-  service->SetString(keys::kTizenServiceOnBootKey, "false");
-  service->SetString(keys::kTizenServiceAutoRestartKey, "true");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct003.appId");
+  service->SetString(kTizenServiceOnBootKey, "false");
+  service->SetString(kTizenServiceAutoRestartKey, "true");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -193,14 +206,14 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryWrongId) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "wrongid.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "wrongid.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -217,14 +230,14 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryIdTypeMismatch) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetInteger(keys::kTizenServiceIdKey, 1410);
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetInteger(kTizenServiceIdKey, 1410);
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -239,11 +252,11 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryNameMissing) {
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->SetInteger(keys::kTizenServiceIdKey, 1410);
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  service->Set(kTizenServiceContentKey, content.release());
+  service->SetInteger(kTizenServiceIdKey, 1410);
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -259,13 +272,13 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryIdSingleNameNotInTizen) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->SetInteger(keys::kTizenServiceIdKey, 1410);
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  service->Set(kTizenServiceContentKey, content.release());
+  service->SetInteger(kTizenServiceIdKey, 1410);
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -280,27 +293,26 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleNames) {
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
 
   std::unique_ptr<ListValue> name_list(new ListValue());
   for (auto& pair : {std::make_pair(std::string(), "first"),
                      std::make_pair(std::string("en"), "second"),
                      std::make_pair(std::string("de"), "third")}) {
     std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-    name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-    if (!pair.first.empty())
-      name->SetString(keys::kXmlLangKey, pair.first);
-    name->SetString(keys::kXmlTextKey, pair.second);
+    name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+    if (!pair.first.empty()) name->SetString(kXmlLangKey, pair.first);
+    name->SetString(kXmlTextKey, pair.second);
     name_list->Append(name.release());
   }
-  service->Set(keys::kTizenServiceNameKey, name_list.release());
+  service->Set(kTizenServiceNameKey, name_list.release());
 
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct003.appId");
-  service->SetString(keys::kTizenServiceOnBootKey, "false");
-  service->SetString(keys::kTizenServiceAutoRestartKey, "true");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  service->Set(kTizenServiceContentKey, content.release());
+  service->SetString(kTizenServiceIdKey, "correct003.appId");
+  service->SetString(kTizenServiceOnBootKey, "false");
+  service->SetString(kTizenServiceAutoRestartKey, "true");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -334,13 +346,13 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryIdSingleContentNotInTizen) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetInteger(keys::kTizenServiceIdKey, 1410);
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetInteger(kTizenServiceIdKey, 1410);
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -355,11 +367,11 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryContentMissing) {
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetInteger(keys::kTizenServiceIdKey, 1410);
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetInteger(kTizenServiceIdKey, 1410);
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -378,17 +390,17 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleContents) {
   std::unique_ptr<ListValue> content_list(new ListValue());
   for (auto& start_file : {"content1.js", "content2.js"}) {
     std::unique_ptr<DictionaryValue> content(new DictionaryValue());
-    content->SetString(keys::kTizenServiceContentSrcKey, start_file);
-    content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+    content->SetString(kTizenServiceContentSrcKey, start_file);
+    content->SetString(kNamespaceKey, kTizenNamespacePrefix);
     content_list->Append(content.release());
   }
-  service->Set(keys::kTizenServiceContentKey, content_list.release());
+  service->Set(kTizenServiceContentKey, content_list.release());
 
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetInteger(keys::kTizenServiceIdKey, 1410);
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetInteger(kTizenServiceIdKey, 1410);
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -405,17 +417,17 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleIcon) {
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
   std::unique_ptr<DictionaryValue> icon(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  icon->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  icon->SetString(keys::kTizenServiceIconSrcKey, "my_icon.png");
-  service->Set(keys::kTizenServiceIconKey, icon.release());
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  icon->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  icon->SetString(kTizenServiceIconSrcKey, "my_icon.png");
+  service->Set(kTizenServiceIconKey, icon.release());
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -446,16 +458,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleIconNotInTizen) {
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
   std::unique_ptr<DictionaryValue> icon(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  icon->SetString(keys::kTizenServiceIconSrcKey, "my_icon.png");
-  service->Set(keys::kTizenServiceIconKey, icon.release());
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  icon->SetString(kTizenServiceIconSrcKey, "my_icon.png");
+  service->Set(kTizenServiceIconKey, icon.release());
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -485,24 +497,24 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleIcon) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
 
   std::unique_ptr<ListValue> icon_list(new ListValue());
   for (auto& icon_value : {"icon1.png", "icon2.png"}) {
     std::unique_ptr<DictionaryValue> icon(new DictionaryValue());
-    icon->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-    icon->SetString(keys::kTizenServiceIconSrcKey, icon_value);
+    icon->SetString(kNamespaceKey, kTizenNamespacePrefix);
+    icon->SetString(kTizenServiceIconSrcKey, icon_value);
     icon_list->Append(icon.release());
   }
 
-  service->Set(keys::kTizenServiceIconKey, icon_list.release());
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  service->Set(kTizenServiceIconKey, icon_list.release());
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -519,17 +531,17 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleDescription) {
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
   std::unique_ptr<DictionaryValue> description(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  description->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  description->SetString(keys::kXmlTextKey, "my description");
-  service->Set(keys::kTizenServiceDescriptionKey, description.release());
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  description->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  description->SetString(kXmlTextKey, "my description");
+  service->Set(kTizenServiceDescriptionKey, description.release());
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -560,16 +572,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleDescriptionNotInTizen) {
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
   std::unique_ptr<DictionaryValue> description(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  description->SetString(keys::kXmlTextKey, "my description");
-  service->Set(keys::kTizenServiceDescriptionKey, description.release());
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  description->SetString(kXmlTextKey, "my description");
+  service->Set(kTizenServiceDescriptionKey, description.release());
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -599,24 +611,24 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleDescription) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
 
   std::unique_ptr<ListValue> description_list(new ListValue());
   for (auto& desc_value : {"1", "2"}) {
     std::unique_ptr<DictionaryValue> description(new DictionaryValue());
-    description->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-    description->SetString(keys::kXmlTextKey, desc_value);
+    description->SetString(kNamespaceKey, kTizenNamespacePrefix);
+    description->SetString(kXmlTextKey, desc_value);
     description_list->Append(description.release());
   }
-  service->Set(keys::kTizenServiceDescriptionKey, description_list.release());
+  service->Set(kTizenServiceDescriptionKey, description_list.release());
 
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -633,18 +645,18 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleMetadata) {
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
   std::unique_ptr<DictionaryValue> metadata(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  metadata->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  metadata->SetString(keys::kTizenServiceMetadataKeyKey, "unique key");
-  metadata->SetString(keys::kTizenServiceMetadataValueKey, "some value");
-  service->Set(keys::kTizenServiceMetadataKey, metadata.release());
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  metadata->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  metadata->SetString(kTizenServiceMetadataKeyKey, "unique key");
+  metadata->SetString(kTizenServiceMetadataValueKey, "some value");
+  service->Set(kTizenServiceMetadataKey, metadata.release());
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -677,17 +689,17 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleMetadataNotInTizen) {
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
   std::unique_ptr<DictionaryValue> metadata(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  metadata->SetString(keys::kTizenServiceMetadataKeyKey, "unique key");
-  metadata->SetString(keys::kTizenServiceMetadataValueKey, "some value");
-  service->Set(keys::kTizenServiceMetadataKey, metadata.release());
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  metadata->SetString(kTizenServiceMetadataKeyKey, "unique key");
+  metadata->SetString(kTizenServiceMetadataValueKey, "some value");
+  service->Set(kTizenServiceMetadataKey, metadata.release());
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -717,27 +729,27 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleMetadata) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
 
   std::unique_ptr<ListValue> metadata_list(new ListValue());
   std::unique_ptr<DictionaryValue> metadata(new DictionaryValue());
-  metadata->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  metadata->SetString(keys::kTizenServiceMetadataKeyKey, "unique key");
-  metadata->SetString(keys::kTizenServiceMetadataValueKey, "some value");
+  metadata->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  metadata->SetString(kTizenServiceMetadataKeyKey, "unique key");
+  metadata->SetString(kTizenServiceMetadataValueKey, "some value");
   metadata_list->Append(metadata.release());
   std::unique_ptr<DictionaryValue> metadata2(new DictionaryValue());
-  metadata2->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  metadata2->SetString(keys::kTizenServiceMetadataKeyKey, "unique key 2");
+  metadata2->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  metadata2->SetString(kTizenServiceMetadataKeyKey, "unique key 2");
   metadata_list->Append(metadata2.release());
-  service->Set(keys::kTizenServiceMetadataKey, metadata_list.release());
+  service->Set(kTizenServiceMetadataKey, metadata_list.release());
 
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -771,34 +783,34 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleMetadataMixedNamespaces) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
 
   std::unique_ptr<ListValue> metadata_list(new ListValue());
 
   std::unique_ptr<DictionaryValue> metadata(new DictionaryValue());
-  metadata->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  metadata->SetString(keys::kTizenServiceMetadataKeyKey, "unique key");
-  metadata->SetString(keys::kTizenServiceMetadataValueKey, "some value");
+  metadata->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  metadata->SetString(kTizenServiceMetadataKeyKey, "unique key");
+  metadata->SetString(kTizenServiceMetadataValueKey, "some value");
   metadata_list->Append(metadata.release());
 
   std::unique_ptr<DictionaryValue> metadata2(new DictionaryValue());
-  metadata2->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  metadata2->SetString(keys::kTizenServiceMetadataKeyKey, "unique key 2");
+  metadata2->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  metadata2->SetString(kTizenServiceMetadataKeyKey, "unique key 2");
   metadata_list->Append(metadata2.release());
 
   std::unique_ptr<DictionaryValue> metadata3(new DictionaryValue());
-  metadata3->SetString(keys::kTizenServiceMetadataKeyKey, "unique key 3");
+  metadata3->SetString(kTizenServiceMetadataKeyKey, "unique key 3");
   metadata_list->Append(metadata3.release());
 
-  service->Set(keys::kTizenServiceMetadataKey, metadata_list.release());
+  service->Set(kTizenServiceMetadataKey, metadata_list.release());
 
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -833,17 +845,17 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleCategory) {
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
   std::unique_ptr<DictionaryValue> category(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  category->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  category->SetString(keys::kTizenServiceCategoryNameKey, "category name");
-  service->Set(keys::kTizenServiceCategoryKey, category.release());
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  category->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  category->SetString(kTizenServiceCategoryNameKey, "category name");
+  service->Set(kTizenServiceCategoryKey, category.release());
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -875,16 +887,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleCategoryNotInTizen) {
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
   std::unique_ptr<DictionaryValue> category(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
-  category->SetString(keys::kTizenServiceCategoryNameKey, "category name");
-  service->Set(keys::kTizenServiceCategoryKey, category.release());
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
+  category->SetString(kTizenServiceCategoryNameKey, "category name");
+  service->Set(kTizenServiceCategoryKey, category.release());
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -914,24 +926,24 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleCategory) {
   std::unique_ptr<DictionaryValue> service(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-  content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  name->SetString(keys::kXmlTextKey, "name");
+  content->SetString(kTizenServiceContentSrcKey, "service.js");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  name->SetString(kXmlTextKey, "name");
 
   std::unique_ptr<ListValue> catogory_list(new ListValue());
   for (auto& name : {"category name 1", "category name 2", "category name 3"}) {
     std::unique_ptr<DictionaryValue> category(new DictionaryValue());
-    category->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-    category->SetString(keys::kTizenServiceCategoryNameKey, name);
+    category->SetString(kNamespaceKey, kTizenNamespacePrefix);
+    category->SetString(kTizenServiceCategoryNameKey, name);
     catogory_list->Append(category.release());
   }
-  service->Set(keys::kTizenServiceCategoryKey, catogory_list.release());
+  service->Set(kTizenServiceCategoryKey, catogory_list.release());
 
-  service->Set(keys::kTizenServiceContentKey, content.release());
-  service->Set(keys::kTizenServiceNameKey, name.release());
-  service->SetString(keys::kTizenServiceIdKey, "correct001.appId");
-  service->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  service->Set(kTizenServiceContentKey, content.release());
+  service->Set(kTizenServiceNameKey, name.release());
+  service->SetString(kTizenServiceIdKey, "correct001.appId");
+  service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -962,23 +974,21 @@ TEST_F(ServiceHandlerTest, MultipleServiceEntry) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<ListValue> list(new ListValue());
-  std::unique_ptr<DictionaryValue> service1(
-      new DictionaryValue());
-  std::unique_ptr<DictionaryValue> service2(
-      new DictionaryValue());
-  service1->SetString(keys::kTizenServiceIdKey, "correct004.appId");
-  service1->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  service2->SetString(keys::kTizenServiceIdKey, "correct005.appId");
-  service2->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  std::unique_ptr<DictionaryValue> service1(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> service2(new DictionaryValue());
+  service1->SetString(kTizenServiceIdKey, "correct004.appId");
+  service1->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  service2->SetString(kTizenServiceIdKey, "correct005.appId");
+  service2->SetString(kNamespaceKey, kTizenNamespacePrefix);
   for (auto& service : {service1.get(), service2.get()}) {
     std::unique_ptr<DictionaryValue> content(new DictionaryValue());
     std::unique_ptr<DictionaryValue> name(new DictionaryValue());
-    content->SetString(keys::kTizenServiceContentSrcKey, "service.js");
-    content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-    name->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-    name->SetString(keys::kXmlTextKey, "name");
-    service->Set(keys::kTizenServiceContentKey, content.release());
-    service->Set(keys::kTizenServiceNameKey, name.release());
+    content->SetString(kTizenServiceContentSrcKey, "service.js");
+    content->SetString(kNamespaceKey, kTizenNamespacePrefix);
+    name->SetString(kNamespaceKey, kTizenNamespacePrefix);
+    name->SetString(kXmlTextKey, "name");
+    service->Set(kTizenServiceContentKey, content.release());
+    service->Set(kTizenServiceNameKey, name.release());
   }
   list->Append(service1.release());
   list->Append(service2.release());
@@ -1006,4 +1016,3 @@ TEST_F(ServiceHandlerTest, MultipleServiceEntry) {
 }
 
 }  // namespace parser
-

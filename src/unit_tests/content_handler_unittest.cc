@@ -18,7 +18,9 @@
 namespace bf = boost::filesystem;
 
 namespace {
-
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kTizenContentSrcKey[] = "@src";
+const char kNamespaceKey[] = "@namespace";
 const char kTizenContentTagKey[] = "content";
 
 std::unique_ptr<parser::ManifestHandlerRegistry> GetRegistryForTest() {
@@ -46,9 +48,7 @@ class ContentHandlerTest : public testing::Test {
   void SetUp() override {
     parser_.reset(new ManifestParserImpl((GetRegistryForTest())));
   }
-  void TearDown() override {
-    parser_.reset();
-  }
+  void TearDown() override { parser_.reset(); }
   void SetManifest(std::shared_ptr<Manifest> manifest) {
     parser_->manifest_ = manifest;
   }
@@ -84,7 +84,7 @@ TEST_F(ContentHandlerTest, SingleContentEntry) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
-  content->SetString(keys::kTizenContentSrcKey, "my_index.html");
+  content->SetString(kTizenContentSrcKey, "my_index.html");
   widget->Set(kTizenContentTagKey, content.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -105,8 +105,8 @@ TEST_F(ContentHandlerTest, SingleContentEntrySrcEmpty) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
-  content->SetString(keys::kTizenContentSrcKey, "");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenContentSrcKey, "");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kTizenContentTagKey, content.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -125,9 +125,8 @@ TEST_F(ContentHandlerTest, SingleTizenContentEntry) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
-  content->SetString(keys::kTizenContentSrcKey,
-      "http://www.tizen.app/my_index.html");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenContentSrcKey, "http://www.tizen.app/my_index.html");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kTizenContentTagKey, content.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -148,8 +147,8 @@ TEST_F(ContentHandlerTest, SingleTizenContentEntryNotURL) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
-  content->SetString(keys::kTizenContentSrcKey, "relative_NOT_url");
-  content->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content->SetString(kTizenContentSrcKey, "relative_NOT_url");
+  content->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kTizenContentTagKey, content.release());
   value->Set(keys::kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
@@ -170,12 +169,10 @@ TEST_F(ContentHandlerTest, MultipleContentEntryW3CTakeFirst) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<ListValue> list(new ListValue());
-  std::unique_ptr<DictionaryValue> content1(
-      new DictionaryValue());
-  std::unique_ptr<DictionaryValue> content2(
-      new DictionaryValue());
-  content1->SetString(keys::kTizenContentSrcKey, "w3c_1_index.html");
-  content2->SetString(keys::kTizenContentSrcKey, "w3c_2_index.html");
+  std::unique_ptr<DictionaryValue> content1(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> content2(new DictionaryValue());
+  content1->SetString(kTizenContentSrcKey, "w3c_1_index.html");
+  content2->SetString(kTizenContentSrcKey, "w3c_2_index.html");
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
@@ -198,16 +195,14 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenTakeFirst) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<ListValue> list(new ListValue());
-  std::unique_ptr<DictionaryValue> content1(
-      new DictionaryValue());
-  std::unique_ptr<DictionaryValue> content2(
-      new DictionaryValue());
-  content1->SetString(keys::kTizenContentSrcKey,
-      "http://www.tizen.app/tizen_1_index.html");
-  content1->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  content2->SetString(keys::kTizenContentSrcKey,
-      "http://www.tizen.app/tizen_2_index.html");
-  content2->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  std::unique_ptr<DictionaryValue> content1(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> content2(new DictionaryValue());
+  content1->SetString(kTizenContentSrcKey,
+                      "http://www.tizen.app/tizen_1_index.html");
+  content1->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  content2->SetString(kTizenContentSrcKey,
+                      "http://www.tizen.app/tizen_2_index.html");
+  content2->SetString(kNamespaceKey, kTizenNamespacePrefix);
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
@@ -230,14 +225,12 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenPrioritizedAsFirst) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<ListValue> list(new ListValue());
-  std::unique_ptr<DictionaryValue> content1(
-      new DictionaryValue());
-  std::unique_ptr<DictionaryValue> content2(
-      new DictionaryValue());
-  content1->SetString(keys::kTizenContentSrcKey,
-      "http://www.tizen.app/tizen_index.html");
-  content1->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  content2->SetString(keys::kTizenContentSrcKey, "my_index.html");
+  std::unique_ptr<DictionaryValue> content1(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> content2(new DictionaryValue());
+  content1->SetString(kTizenContentSrcKey,
+                      "http://www.tizen.app/tizen_index.html");
+  content1->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  content2->SetString(kTizenContentSrcKey, "my_index.html");
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
@@ -260,14 +253,12 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenPrioritizedAsSecond) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<ListValue> list(new ListValue());
-  std::unique_ptr<DictionaryValue> content1(
-      new DictionaryValue());
-  std::unique_ptr<DictionaryValue> content2(
-      new DictionaryValue());
-  content1->SetString(keys::kTizenContentSrcKey, "my_index.html");
-  content2->SetString(keys::kTizenContentSrcKey,
-      "http://www.tizen.app/tizen_index.html");
-  content2->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  std::unique_ptr<DictionaryValue> content1(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> content2(new DictionaryValue());
+  content1->SetString(kTizenContentSrcKey, "my_index.html");
+  content2->SetString(kTizenContentSrcKey,
+                      "http://www.tizen.app/tizen_index.html");
+  content2->SetString(kNamespaceKey, kTizenNamespacePrefix);
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
@@ -290,11 +281,9 @@ TEST_F(ContentHandlerTest, MultipleContentEntryW3CIgnoreIfNotFirst) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<ListValue> list(new ListValue());
-  std::unique_ptr<DictionaryValue> content1(
-      new DictionaryValue());
-  std::unique_ptr<DictionaryValue> content2(
-      new DictionaryValue());
-  content2->SetString(keys::kTizenContentSrcKey, "w3c_2_index.html");
+  std::unique_ptr<DictionaryValue> content1(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> content2(new DictionaryValue());
+  content2->SetString(kTizenContentSrcKey, "w3c_2_index.html");
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
@@ -315,12 +304,10 @@ TEST_F(ContentHandlerTest, MultipleContentEntryW3CIgnoreIfFirstEmpty) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<ListValue> list(new ListValue());
-  std::unique_ptr<DictionaryValue> content1(
-      new DictionaryValue());
-  std::unique_ptr<DictionaryValue> content2(
-      new DictionaryValue());
-  content1->SetString(keys::kTizenContentSrcKey, "");
-  content2->SetString(keys::kTizenContentSrcKey, "w3c_2_index.html");
+  std::unique_ptr<DictionaryValue> content1(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> content2(new DictionaryValue());
+  content1->SetString(kTizenContentSrcKey, "");
+  content2->SetString(kTizenContentSrcKey, "w3c_2_index.html");
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
@@ -341,12 +328,10 @@ TEST_F(ContentHandlerTest, MultipleContentBackToW3CWhenTizenEntryBroken) {
   std::unique_ptr<DictionaryValue> value(new DictionaryValue());
   std::unique_ptr<DictionaryValue> widget(new DictionaryValue());
   std::unique_ptr<ListValue> list(new ListValue());
-  std::unique_ptr<DictionaryValue> content1(
-      new DictionaryValue());
-  std::unique_ptr<DictionaryValue> content2(
-      new DictionaryValue());
-  content1->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  content2->SetString(keys::kTizenContentSrcKey, "w3c_1_index.html");
+  std::unique_ptr<DictionaryValue> content1(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> content2(new DictionaryValue());
+  content1->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  content2->SetString(kTizenContentSrcKey, "w3c_1_index.html");
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
@@ -373,15 +358,14 @@ TEST_F(ContentHandlerTest, MultipleMoreContentEntry) {
   std::unique_ptr<DictionaryValue> content2(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content3(new DictionaryValue());
   std::unique_ptr<DictionaryValue> content4(new DictionaryValue());
-  content1->SetString(keys::kTizenContentSrcKey, "w3c_1_index.html");
-  content2->SetString(keys::kTizenContentSrcKey,
-      "w3c_2_index.html");
-  content3->SetString(keys::kTizenContentSrcKey,
-      "http://www.tizen.app/tizen_3_index.html");
-  content3->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
-  content4->SetString(keys::kTizenContentSrcKey,
-      "http://www.tizen.app/tizen_4_index.html");
-  content4->SetString(keys::kNamespaceKey, keys::kTizenNamespacePrefix);
+  content1->SetString(kTizenContentSrcKey, "w3c_1_index.html");
+  content2->SetString(kTizenContentSrcKey, "w3c_2_index.html");
+  content3->SetString(kTizenContentSrcKey,
+                      "http://www.tizen.app/tizen_3_index.html");
+  content3->SetString(kNamespaceKey, kTizenNamespacePrefix);
+  content4->SetString(kTizenContentSrcKey,
+                      "http://www.tizen.app/tizen_4_index.html");
+  content4->SetString(kNamespaceKey, kTizenNamespacePrefix);
   list->Append(content1.release());
   list->Append(content2.release());
   list->Append(content3.release());
@@ -402,4 +386,3 @@ TEST_F(ContentHandlerTest, MultipleMoreContentEntry) {
 }
 
 }  // namespace parser
-

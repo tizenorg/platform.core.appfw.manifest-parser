@@ -21,6 +21,10 @@ namespace parse {
 
 namespace keys = wgt::application_widget_keys;
 
+namespace {
+const char kTizenSplashScreenSrcKey[] = "@src";
+}
+
 SplashScreenInfo::SplashScreenInfo() {}
 SplashScreenInfo::~SplashScreenInfo() {}
 
@@ -28,22 +32,20 @@ SplashScreenHandler::SplashScreenHandler() {}
 
 SplashScreenHandler::~SplashScreenHandler() {}
 
-bool SplashScreenHandler::Parse(
-    const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+bool SplashScreenHandler::Parse(const parser::Manifest& manifest,
+                                std::shared_ptr<parser::ManifestData>* output,
+                                std::string* error) {
   std::shared_ptr<SplashScreenInfo> ss_info(new SplashScreenInfo);
   parser::Value* splash_screen = nullptr;
   manifest.Get(keys::kTizenSplashScreenKey, &splash_screen);
-  if (splash_screen && splash_screen->IsType(
-          parser::Value::TYPE_DICTIONARY)) {
+  if (splash_screen && splash_screen->IsType(parser::Value::TYPE_DICTIONARY)) {
     parser::DictionaryValue* ss_dict = nullptr;
     splash_screen->GetAsDictionary(&ss_dict);
     std::string src;
-    ss_dict->GetString(keys::kTizenSplashScreenSrcKey, &src);
+    ss_dict->GetString(kTizenSplashScreenSrcKey, &src);
     ss_info->set_src(src);
-  } else if (splash_screen && !splash_screen->IsType(
-                 parser::Value::TYPE_DICTIONARY)) {
+  } else if (splash_screen &&
+             !splash_screen->IsType(parser::Value::TYPE_DICTIONARY)) {
     *error = "splash-screen elements type is not TYPE_DICTIONARY";
     return false;
   } else {
@@ -58,7 +60,7 @@ bool SplashScreenHandler::Validate(
     const parser::ManifestDataMap& /*handlers_output*/,
     std::string* error) const {
   const SplashScreenInfo& splash_data =
-       static_cast<const SplashScreenInfo&>(data);
+      static_cast<const SplashScreenInfo&>(data);
   std::string src = splash_data.src();
   // According to w3c specification splash screen image should be of one of
   // below types.

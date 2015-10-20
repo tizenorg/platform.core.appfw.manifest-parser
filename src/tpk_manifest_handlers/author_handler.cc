@@ -20,6 +20,7 @@ namespace parse {
 namespace keys = tpk::application_keys;
 
 namespace {
+
 const char kAuthorKeyText[] = "#text";
 const char kAuthorEmailKey[] = "email";
 const char kAuthorEmailChildKey[] = "@email";

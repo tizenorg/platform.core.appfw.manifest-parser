@@ -14,7 +14,14 @@
 namespace {
 const char kEnabledValue[] = "enable";
 const char kDisabledValue[] = "disable";
+
 const utils::VersionNumber kReloadRequiredVersion("2.4");
+const char kTizenApplicationAppControlSrcKey[] = "src";
+const char kTizenApplicationAppControlOperationKey[] = "operation";
+const char kTizenApplicationAppControlUriKey[] = "uri";
+const char kTizenApplicationAppControlMimeKey[] = "mime";
+const char kTizenApplicationAppControlReloadKey[] = "@reload";
+const char kTizenApplicationAppControlChildNameAttrKey[] = "@name";
 }  // namespace
 
 namespace wgt {
@@ -30,36 +37,36 @@ void ParseAppControlEntryAndStore(
   std::string src;
   std::string reload;
   const parser::DictionaryValue* src_dict;
-  if (control_dict.GetDictionary(keys::kTizenApplicationAppControlSrcKey,
+  if (control_dict.GetDictionary(kTizenApplicationAppControlSrcKey,
       &src_dict)) {
     src_dict->GetString(
-        keys::kTizenApplicationAppControlChildNameAttrKey, &src);
-    src_dict->GetString(keys::kTizenApplicationAppControlReloadKey, &reload);
+        kTizenApplicationAppControlChildNameAttrKey, &src);
+    src_dict->GetString(kTizenApplicationAppControlReloadKey, &reload);
   }
 
   std::string operation;
   const parser::DictionaryValue* operation_dict;
   if (control_dict.GetDictionary(
-      keys::kTizenApplicationAppControlOperationKey,
+      kTizenApplicationAppControlOperationKey,
       &operation_dict)) {
     operation_dict->GetString(
-        keys::kTizenApplicationAppControlChildNameAttrKey, &operation);
+        kTizenApplicationAppControlChildNameAttrKey, &operation);
   }
 
   std::string uri;
   const parser::DictionaryValue* uri_dict;
-  if (control_dict.GetDictionary(keys::kTizenApplicationAppControlUriKey,
+  if (control_dict.GetDictionary(kTizenApplicationAppControlUriKey,
       &uri_dict)) {
     uri_dict->GetString(
-        keys::kTizenApplicationAppControlChildNameAttrKey, &uri);
+        kTizenApplicationAppControlChildNameAttrKey, &uri);
   }
 
   std::string mime;
   const parser::DictionaryValue* mime_dict;
-  if (control_dict.GetDictionary(keys::kTizenApplicationAppControlMimeKey,
+  if (control_dict.GetDictionary(kTizenApplicationAppControlMimeKey,
       &mime_dict)) {
     mime_dict->GetString(
-        keys::kTizenApplicationAppControlChildNameAttrKey, &mime);
+        kTizenApplicationAppControlChildNameAttrKey, &mime);
   }
 
   aplist->controls.emplace_back(src, operation, uri, mime, reload);
