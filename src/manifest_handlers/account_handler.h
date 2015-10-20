@@ -38,6 +38,12 @@ class AccountInfo : public parser::ManifestData {
   std::vector<SingleAccountInfo> accounts_;
 };
 
+/**
+ * @brief The AccountHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:account>.
+ */
 class AccountHandler : public parser::ManifestHandler {
  public:
   bool Parse(

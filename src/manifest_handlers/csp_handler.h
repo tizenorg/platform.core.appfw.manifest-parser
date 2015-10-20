@@ -33,6 +33,13 @@ class CSPInfo : public parser::ManifestData {
   std::string security_rules_;
 };
 
+/**
+ * @brief The CSPHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:content-security-policy>,
+ *  - <tizen:content-security-policy-report-only>.
+ */
 class CSPHandler : public parser::ManifestHandler {
  public:
   enum class SecurityType {

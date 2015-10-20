@@ -46,6 +46,12 @@ struct ServiceList  : public parser::ManifestData {
   std::vector<ServiceInfo> services;
 };
 
+/**
+ * @brief The ServiceHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:service>.
+ */
 class ServiceHandler : public parser::ManifestHandler {
  public:
   ServiceHandler();

@@ -113,6 +113,12 @@ class AppWidgetInfo : public parser::ManifestData {
   AppWidgetVector app_widgets_;
 };
 
+/**
+ * @brief The AppWidgetHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:app-widget>.
+ */
 class AppWidgetHandler : public parser::ManifestHandler {
  public:
   AppWidgetHandler();

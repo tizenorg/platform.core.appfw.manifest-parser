@@ -33,6 +33,12 @@ class MetaDataInfo : public parser::ManifestData {
   std::map<std::string, std::string> metadata_;
 };
 
+/**
+ * @brief The MetaDataHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:metadata>.
+ */
 class MetaDataHandler : public parser::ManifestHandler {
  public:
   MetaDataHandler();

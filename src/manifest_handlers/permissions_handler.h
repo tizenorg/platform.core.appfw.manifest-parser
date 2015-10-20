@@ -32,6 +32,12 @@ class PermissionsInfo: public parser::ManifestData {
   parser::PermissionSet api_permissions_;
 };
 
+/**
+ * @brief The PermissionsHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:privilege>.
+ */
 class PermissionsHandler: public parser::ManifestHandler {
  public:
   PermissionsHandler();

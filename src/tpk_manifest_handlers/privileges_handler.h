@@ -31,6 +31,13 @@ class PrivilegesInfo : public parser::ManifestData {
   parser::PrivilegesSet privileges_;
 };
 
+/**
+ * @brief The PrivilegesHandler class
+ *
+ * Handler of tizen-manifest.xml for xml elements:
+ *  <privileges>
+ *  \_  <privilege>
+ */
 class PrivilegesHandler : public parser::ManifestHandler {
  public:
   bool Parse(

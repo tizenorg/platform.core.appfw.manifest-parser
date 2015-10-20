@@ -19,6 +19,12 @@ struct CategoryInfoList : public parser::ManifestData {
   std::vector<std::string> categories;
 };
 
+/**
+ * @brief The CategoryHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:category>.
+ */
 class CategoryHandler : public parser::ManifestHandler {
  public:
   CategoryHandler();

@@ -34,6 +34,12 @@ class WarpInfo : public parser::ManifestData {
   std::vector<std::pair<std::string, bool> > access_map_;
 };
 
+/**
+ * @brief The WarpHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <w3c:access>.
+ */
 class WarpHandler : public parser::ManifestHandler {
  public:
   WarpHandler() {}

@@ -34,6 +34,12 @@ class ImeInfo : public parser::ManifestData {
   std::vector<std::string> languages_;
 };
 
+/**
+ * @brief The ImeHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <tizen:ime>.
+ */
 class ImeHandler : public parser::ManifestHandler {
  public:
   ImeHandler();

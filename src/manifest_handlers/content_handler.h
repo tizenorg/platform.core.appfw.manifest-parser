@@ -47,6 +47,13 @@ class ContentInfo : public parser::ManifestData {
   bool is_tizen_content_;
 };
 
+/**
+ * @brief The ContentHandler class
+ *
+ * Handler of config.xml for xml elements:
+ *  - <w3c:content>,
+ *  - <tizen:content>.
+ */
 class ContentHandler : public parser::ManifestHandler {
  public:
   enum class ParseResult {

@@ -72,6 +72,20 @@ struct ServiceApplicationInfoList : public parser::ManifestData {
   std::vector<ServiceApplicationSingleEntry> items;
 };
 
+/**
+ * @brief The ServiceApplicationHandler class
+ *
+ * Handler of tizen-manifest.xml for xml elements:
+ *  <service-application>
+ *  \_  <label>
+ *  \_  <icon>
+ *  \_  <app-control>
+ *  |   \_  <mime>
+ *  |   \_  <operation>
+ *  |   \_  <uri>
+ *  \_  <metadata>
+ *  \_  <datacontrol>
+ */
 class ServiceApplicationHandler : public parser::ManifestHandler {
  public:
   bool Parse(

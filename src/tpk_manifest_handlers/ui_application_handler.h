@@ -79,6 +79,20 @@ struct UIApplicationInfoList : public parser::ManifestData {
   std::vector<UIApplicationSingleEntry> items;
 };
 
+/**
+ * @brief The UIApplicationHandler class
+ *
+ * Handler of tizen-manifest.xml for xml elements:
+ *  <ui-application>
+ *  \_  <label>
+ *  \_  <icon>
+ *  \_  <app-control>
+ *  |   \_  <mime>
+ *  |   \_  <operation>
+ *  |   \_  <uri>
+ *  \_  <metadata>
+ *  \_  <datacontrol>
+ */
 class UIApplicationHandler : public parser::ManifestHandler {
  public:
   bool Parse(

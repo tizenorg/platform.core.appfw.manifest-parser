@@ -58,6 +58,12 @@ class PackageInfo : public parser::ManifestData {
   std::string install_location_;
 };
 
+/**
+ * @brief The PackageHandler class
+ *
+ * Handler of tizen-manifest.xml for root xml element <manifest>
+ * Child elements are parsed in other handlers.
+ */
 class PackageHandler : public parser::ManifestHandler {
  public:
   bool Parse(

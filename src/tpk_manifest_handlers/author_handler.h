@@ -43,6 +43,12 @@ class AuthorInfo : public parser::ManifestData {
   std::string name_;
 };
 
+/**
+ * @brief The AuthorHandler class
+ *
+ * Handler of tizen-manifest.xml for xml elements:
+ *  <author>
+ */
 class AuthorHandler : public parser::ManifestHandler {
  public:
   bool Parse(
