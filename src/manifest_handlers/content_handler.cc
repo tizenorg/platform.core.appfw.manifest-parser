@@ -21,16 +21,19 @@ namespace keys = wgt::application_widget_keys;
 
 namespace {
 
+const char kNamespaceKey[] = "@namespace";
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
+const char kTizenContentEncodingKey[] = "@encoding";
+const char kTizenContentTypeKey[] = "@type";
 const char kMimeMainComponent[] = "";
 const char kMimeCharsetComponent[] = "charset";
 const char kDefaultMimeType[] = "text/html";
 const char kDefaultEncoding[] = "UTF-8";
+const char kTizenContentSrcKey[] = "@src";
 
 const std::set<std::string> ValidMimeTypeStartFile = {
-  "text/html",
-  "application/xhtml+xml",
-  "image/svg+xml"
-};
+    "text/html", "application/xhtml+xml", "image/svg+xml"};
 
 std::map<std::string, std::string> ParseMimeComponents(
     const std::string& type) {
@@ -57,9 +60,8 @@ std::map<std::string, std::string> ParseMimeComponents(
 }
 
 bool ValidateMimeTypeStartFile(const std::string& type) {
-  return ValidMimeTypeStartFile.find(
-        parser::utils::CollapseWhitespaceUTF8(type)) !=
-      ValidMimeTypeStartFile.end();
+  return ValidMimeTypeStartFile.find(parser::utils::CollapseWhitespaceUTF8(
+             type)) != ValidMimeTypeStartFile.end();
 }
 
 }  // namespace
@@ -68,12 +70,9 @@ namespace wgt {
 namespace parse {
 
 ContentHandler::ContentHandler()
-    : w3c_content_found_(false),
-      tizen_content_found_(false) {
-}
+    : w3c_content_found_(false), tizen_content_found_(false) {}
 
-ContentHandler::~ContentHandler() {
-}
+ContentHandler::~ContentHandler() {}
 
 /**
  * @brief ParseAndSetContentValue
@@ -88,12 +87,11 @@ ContentHandler::~ContentHandler() {
  */
 ContentHandler::ParseResult ContentHandler::ParseAndSetContentValue(
     const parser::DictionaryValue& dict,
-    std::shared_ptr<wgt::parse::ContentInfo>* content,
-    std::string* error) {
+    std::shared_ptr<wgt::parse::ContentInfo>* content, std::string* error) {
   std::string element_namespace;
-  dict.GetString(keys::kNamespaceKey, &element_namespace);
+  dict.GetString(kNamespaceKey, &element_namespace);
 
-  if (element_namespace == keys::kTizenNamespacePrefix) {
+  if (element_namespace == kTizenNamespacePrefix) {
     if (tizen_content_found_) {
       // tizen:content already found
       return ParseResult::IGNORE;
@@ -108,7 +106,7 @@ ContentHandler::ParseResult ContentHandler::ParseAndSetContentValue(
   }
 
   std::string src;
-  if (!dict.GetString(keys::kTizenContentSrcKey, &src)) {
+  if (!dict.GetString(kTizenContentSrcKey, &src)) {
     return ParseResult::IGNORE;
   }
 
@@ -119,7 +117,7 @@ ContentHandler::ParseResult ContentHandler::ParseAndSetContentValue(
   }
 
   std::string type = kDefaultMimeType;
-  dict.GetString(keys::kTizenContentTypeKey, &type);
+  dict.GetString(kTizenContentTypeKey, &type);
   // TODO(t.iwanek): this will fail for "quoted-string"
   //                 use/implement proper mime parsing...
   std::map<std::string, std::string> mime_components =
@@ -128,13 +126,13 @@ ContentHandler::ParseResult ContentHandler::ParseAndSetContentValue(
   auto mime_iter = mime_components.find(kMimeMainComponent);
   if (mime_iter != mime_components.end()) {
     if (!ValidateMimeTypeStartFile(mime_iter->second)) {
-        *error = "Not proper type of starting file";
-        return ParseResult::IGNORE;
+      *error = "Not proper type of starting file";
+      return ParseResult::IGNORE;
     }
   }
 
   std::string encoding = kDefaultEncoding;
-  if (!dict.GetString(keys::kTizenContentEncodingKey, &encoding)) {
+  if (!dict.GetString(kTizenContentEncodingKey, &encoding)) {
     auto charset_iter = mime_components.find(kMimeCharsetComponent);
     if (charset_iter != mime_components.end()) {
       encoding = charset_iter->second;
@@ -151,15 +149,13 @@ ContentHandler::ParseResult ContentHandler::ParseAndSetContentValue(
   (*content)->set_src(src);
   (*content)->set_type(type);
   (*content)->set_encoding(encoding);
-  (*content)->set_is_tizen_content(
-      element_namespace == keys::kTizenNamespacePrefix);
+  (*content)->set_is_tizen_content(element_namespace == kTizenNamespacePrefix);
   return ParseResult::OK;
 }
 
-bool ContentHandler::Parse(
-    const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+bool ContentHandler::Parse(const parser::Manifest& manifest,
+                           std::shared_ptr<parser::ManifestData>* output,
+                           std::string* error) {
   std::shared_ptr<ContentInfo> content_info;
   parser::Value* value = nullptr;
   manifest.Get(keys::kTizenContentKey, &value);
@@ -169,8 +165,8 @@ bool ContentHandler::Parse(
   if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
     const parser::DictionaryValue* dict = nullptr;
     value->GetAsDictionary(&dict);
-    if (ParseAndSetContentValue(*dict, &content_info, error)
-        == ParseResult::ERROR) {
+    if (ParseAndSetContentValue(*dict, &content_info, error) ==
+        ParseResult::ERROR) {
       return false;
     }
   } else if (value->GetType() == parser::Value::TYPE_LIST) {
@@ -180,8 +176,8 @@ bool ContentHandler::Parse(
     for (auto& item : *list) {
       const parser::DictionaryValue* dict = nullptr;
       if (item->GetAsDictionary(&dict)) {
-        if (ParseAndSetContentValue(*dict, &content_info, error)
-            == ParseResult::ERROR) {
+        if (ParseAndSetContentValue(*dict, &content_info, error) ==
+            ParseResult::ERROR) {
           return false;
         }
       }
@@ -195,9 +191,7 @@ bool ContentHandler::Parse(
   return true;
 }
 
-std::string ContentHandler::Key() const {
-  return keys::kTizenContentKey;
-}
+std::string ContentHandler::Key() const { return keys::kTizenContentKey; }
 
 }  // namespace parse
 }  // namespace wgt

@@ -14,22 +14,23 @@ namespace parse {
 
 namespace keys = wgt::application_widget_keys;
 
-PermissionsInfo::PermissionsInfo() {
+namespace {
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kTizenPermissionsNameKey[] = "@name";
+const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
 }
 
-PermissionsInfo::~PermissionsInfo() {
-}
+PermissionsInfo::PermissionsInfo() {}
 
-PermissionsHandler::PermissionsHandler() {
-}
+PermissionsInfo::~PermissionsInfo() {}
 
-PermissionsHandler::~PermissionsHandler() {
-}
+PermissionsHandler::PermissionsHandler() {}
 
-bool PermissionsHandler::Parse(
-    const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+PermissionsHandler::~PermissionsHandler() {}
+
+bool PermissionsHandler::Parse(const parser::Manifest& manifest,
+                               std::shared_ptr<parser::ManifestData>* output,
+                               std::string* error) {
   std::shared_ptr<PermissionsInfo> permissions_info(new PermissionsInfo);
   if (!manifest.HasPath(keys::kTizenPermissionsKey)) {
     return true;
@@ -48,8 +49,7 @@ bool PermissionsHandler::Parse(
   } else {
     parser::ListValue* list = nullptr;
     value->GetAsList(&list);
-    if (list)
-      permission_list.reset(list->DeepCopy());
+    if (list) permission_list.reset(list->DeepCopy());
   }
 
   if (!permission_list) {
@@ -61,14 +61,12 @@ bool PermissionsHandler::Parse(
        it != permission_list->end(); ++it) {
     parser::DictionaryValue* dictionary_value = nullptr;
     (*it)->GetAsDictionary(&dictionary_value);
-    if (!dictionary_value)
-      continue;
+    if (!dictionary_value) continue;
     if (!parser::VerifyElementNamespace(*dictionary_value,
-                                        keys::kTizenNamespacePrefix))
+                                        kTizenNamespacePrefix))
       continue;
     std::string permission;
-    if (!dictionary_value->GetString(
-            keys::kTizenPermissionsNameKey, &permission) ||
+    if (!dictionary_value->GetString(kTizenPermissionsNameKey, &permission) ||
         permission.empty())
       continue;
 
@@ -90,7 +88,7 @@ bool PermissionsHandler::Validate(
     std::string* /*error*/) const {
   const PermissionsInfo& perm_info = static_cast<const PermissionsInfo&>(data);
   // TODO(j.izydorczyk): there should be done 'perm_info' members validation
-  (void) perm_info;
+  (void)perm_info;
   return true;
 }
 

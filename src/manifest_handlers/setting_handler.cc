@@ -20,26 +20,37 @@ namespace {
 
 const char kTrueValue[] = "true";
 const char kFalseValue[] = "false";
+const char kTizenHardwareKey[] = "@hwkey-event";
+const char kTizenScreenOrientationKey[] = "@screen-orientation";
+const char kTizenEncryptionKey[] = "@encryption";
+const char kTizenContextMenuKey[] = "@context-menu";
+const char kTizenBackgroundSupportKey[] = "@background-support";
+const char kTizenNoDisplayKey[] = "@nodisplay";
+const char kTizenIndicatorPresenceKey[] = "@indicator-presence";
+const char kTizenBackbuttonPresenceKey[] = "@backbutton-presence";
+const char kTizenInstallLocationKey[] = "@install-location";
+const char kTizenUserAgentKey[] = "@user-agent";
+const char kTizenSoundModeKey[] = "@sound-mode";
+const char kTizenBackgroundVibrationKey[] = "@background-vibration";
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
 
 bool ForAllFindKey(const parser::Value* value, const std::string& key,
                    std::string* result) {
   if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
     const parser::DictionaryValue* dict = nullptr;
     value->GetAsDictionary(&dict);
-    if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+    if (!parser::VerifyElementNamespace(*dict, kTizenNamespacePrefix))
       return false;
-    if (dict->GetString(key, result))
-      return true;
+    if (dict->GetString(key, result)) return true;
   } else if (value->GetType() == parser::Value::TYPE_LIST) {
     const parser::ListValue* list = nullptr;
     value->GetAsList(&list);
     for (auto& item : *list) {
       const parser::DictionaryValue* dict = nullptr;
       if (item->GetAsDictionary(&dict)) {
-        if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+        if (!parser::VerifyElementNamespace(*dict, kTizenNamespacePrefix))
           continue;
-        if (dict->GetString(key, result))
-          return true;
+        if (dict->GetString(key, result)) return true;
       }
     }
   }
@@ -70,20 +81,19 @@ SettingHandler::SettingHandler() {}
 
 SettingHandler::~SettingHandler() {}
 
-bool SettingHandler::Parse(
-    const parser::Manifest& manifest,
-    std::shared_ptr<parser::ManifestData>* output,
-    std::string* /*error*/) {
+bool SettingHandler::Parse(const parser::Manifest& manifest,
+                           std::shared_ptr<parser::ManifestData>* output,
+                           std::string* /*error*/) {
   const parser::Value* value = nullptr;
   manifest.Get(keys::kTizenSettingKey, &value);
 
   std::shared_ptr<SettingInfo> app_info(new SettingInfo);
   std::string hwkey;
-  ForAllFindKey(value, keys::kTizenHardwareKey, &hwkey);
+  ForAllFindKey(value, kTizenHardwareKey, &hwkey);
   app_info->set_hwkey_enabled(hwkey != "disable");
 
   std::string screen_orientation;
-  ForAllFindKey(value, keys::kTizenScreenOrientationKey, &screen_orientation);
+  ForAllFindKey(value, kTizenScreenOrientationKey, &screen_orientation);
   if (strcasecmp("portrait", screen_orientation.c_str()) == 0)
     app_info->set_screen_orientation(SettingInfo::ScreenOrientation::PORTRAIT);
   else if (strcasecmp("landscape", screen_orientation.c_str()) == 0)
@@ -92,31 +102,30 @@ bool SettingHandler::Parse(
     app_info->set_screen_orientation(SettingInfo::ScreenOrientation::AUTO);
 
   std::string encryption;
-  ForAllFindKey(value, keys::kTizenEncryptionKey, &encryption);
+  ForAllFindKey(value, kTizenEncryptionKey, &encryption);
   app_info->set_encryption_enabled(encryption == "enable");
 
   std::string context_menu;
-  ForAllFindKey(value, keys::kTizenContextMenuKey, &context_menu);
+  ForAllFindKey(value, kTizenContextMenuKey, &context_menu);
   app_info->set_context_menu_enabled(context_menu != "disable");
 
   std::string background_support;
-  ForAllFindKey(value, keys::kTizenBackgroundSupportKey, &background_support);
+  ForAllFindKey(value, kTizenBackgroundSupportKey, &background_support);
   app_info->set_background_support_enabled(background_support == "enable");
 
   std::string install_location;
-  ForAllFindKey(value, keys::kTizenInstallLocationKey, &install_location);
+  ForAllFindKey(value, kTizenInstallLocationKey, &install_location);
   if (strcasecmp("internal-only", install_location.c_str()) == 0)
     app_info->set_install_location(SettingInfo::InstallLocation::INTERNAL);
   else if (strcasecmp("prefer-external", install_location.c_str()) == 0)
     app_info->set_install_location(SettingInfo::InstallLocation::EXTERNAL);
 
   std::string no_display;
-  ForAllFindKey(value, keys::kTizenNoDisplayKey, &no_display);
+  ForAllFindKey(value, kTizenNoDisplayKey, &no_display);
   app_info->set_no_display(boost::iequals(no_display, kTrueValue));
 
   std::string indicator_presence;
-  if (ForAllFindKey(value, keys::kTizenIndicatorPresenceKey,
-                    &indicator_presence)) {
+  if (ForAllFindKey(value, kTizenIndicatorPresenceKey, &indicator_presence)) {
     if (boost::iequals(indicator_presence, kTrueValue)) {
       app_info->set_indicator_presence(true);
     } else if (boost::iequals(indicator_presence, kFalseValue)) {
@@ -125,8 +134,7 @@ bool SettingHandler::Parse(
   }
 
   std::string backbutton_presence;
-  if (ForAllFindKey(value, keys::kTizenBackbuttonPresenceKey,
-                    &backbutton_presence)) {
+  if (ForAllFindKey(value, kTizenBackbuttonPresenceKey, &backbutton_presence)) {
     if (boost::iequals(backbutton_presence, kTrueValue)) {
       app_info->set_backbutton_presence(true);
     } else if (boost::iequals(backbutton_presence, kFalseValue)) {
@@ -135,16 +143,15 @@ bool SettingHandler::Parse(
   }
 
   std::string user_agent;
-  ForAllFindKey(value, keys::kTizenUserAgentKey, &user_agent);
+  ForAllFindKey(value, kTizenUserAgentKey, &user_agent);
   app_info->set_user_agent(user_agent);
 
   std::string background_vibration;
-  ForAllFindKey(value, keys::kTizenBackgroundVibrationKey,
-                &background_vibration);
+  ForAllFindKey(value, kTizenBackgroundVibrationKey, &background_vibration);
   app_info->set_background_vibration(background_vibration == "enable");
 
   std::string sound_mode;
-  ForAllFindKey(value, keys::kTizenSoundModeKey, &sound_mode);
+  ForAllFindKey(value, kTizenSoundModeKey, &sound_mode);
   if (strcasecmp("exclusive", sound_mode.c_str()) == 0)
     app_info->set_sound_mode(SettingInfo::SoundMode::EXCLUSIVE);
 
@@ -156,8 +163,7 @@ bool SettingHandler::Validate(
     const parser::ManifestData& data,
     const parser::ManifestDataMap& /*handlers_output*/,
     std::string* error) const {
-  const SettingInfo& setting_info =
-      static_cast<const SettingInfo&>(data);
+  const SettingInfo& setting_info = static_cast<const SettingInfo&>(data);
   if (setting_info.screen_orientation() !=
           SettingInfo::ScreenOrientation::AUTO &&
       setting_info.screen_orientation() !=
@@ -168,8 +174,7 @@ bool SettingHandler::Validate(
     return false;
   }
 
-  if (setting_info.install_location() !=
-          SettingInfo::InstallLocation::AUTO &&
+  if (setting_info.install_location() != SettingInfo::InstallLocation::AUTO &&
       setting_info.install_location() !=
           SettingInfo::InstallLocation::INTERNAL &&
       setting_info.install_location() !=
@@ -178,10 +183,8 @@ bool SettingHandler::Validate(
     return false;
   }
 
-  if (setting_info.sound_mode() !=
-          SettingInfo::SoundMode::SHARED &&
-      setting_info.sound_mode() !=
-          SettingInfo::SoundMode::EXCLUSIVE) {
+  if (setting_info.sound_mode() != SettingInfo::SoundMode::SHARED &&
+      setting_info.sound_mode() != SettingInfo::SoundMode::EXCLUSIVE) {
     *error = "Wrong value of screen sound mode";
     return false;
   }
@@ -189,9 +192,7 @@ bool SettingHandler::Validate(
   return true;
 }
 
-std::string SettingHandler::Key() const {
-  return keys::kTizenSettingKey;
-}
+std::string SettingHandler::Key() const { return keys::kTizenSettingKey; }
 
 }  // namespace parse
 }  // namespace wgt

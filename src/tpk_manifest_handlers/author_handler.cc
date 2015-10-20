@@ -20,6 +20,7 @@ namespace parse {
 namespace keys = tpk::application_keys;
 
 namespace {
+const char kAuthorEmailKey[] = "@email";
 
 void ParseAuthorAndStore(
     const parser::DictionaryValue& control_dict,
@@ -27,7 +28,7 @@ void ParseAuthorAndStore(
 
   std::string email;
   const parser::DictionaryValue* email_dict;
-  if (control_dict.GetDictionary(keys::kAuthorEmailKey,
+  if (control_dict.GetDictionary(kAuthorEmailKey,
                                  &email_dict)) {
     email_dict->GetString(
         keys::kAuthorEmailChildKey, &email);
