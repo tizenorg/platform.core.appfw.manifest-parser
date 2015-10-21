@@ -157,6 +157,17 @@ const char kTizenServiceKey[] = "widget.service";
 const char kTizenServiceIdKey[] = "@id";
 const char kTizenServiceAutoRestartKey[] = "@auto-restart";
 const char kTizenServiceOnBootKey[] = "@on-boot";
+const char kTizenServiceNameKey[] = "name";
+const char kTizenServiceCategoryKey[] = "category";
+const char kTizenServiceCategoryNameKey[] = "@name";
+const char kTizenServiceContentKey[] = "content";
+const char kTizenServiceContentSrcKey[] = "@src";
+const char kTizenServiceIconKey[] = "icon";
+const char kTizenServiceIconSrcKey[] = "@src";
+const char kTizenServiceDescriptionKey[] = "description";
+const char kTizenServiceMetadataKey[] = "metadata";
+const char kTizenServiceMetadataKeyKey[] = "@key";
+const char kTizenServiceMetadataKeyValue[] = "@value";
 
 const char kXmlTextKey[] = "#text";
 
