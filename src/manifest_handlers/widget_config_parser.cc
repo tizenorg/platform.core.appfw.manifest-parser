@@ -30,6 +30,7 @@
 #include "manifest_handlers/metadata_handler.h"
 #include "manifest_handlers/navigation_handler.h"
 #include "manifest_handlers/permissions_handler.h"
+#include "manifest_handlers/service_handler.h"
 #include "manifest_handlers/setting_handler.h"
 #include "manifest_handlers/splash_screen_handler.h"
 #include "manifest_handlers/tizen_application_handler.h"
@@ -218,6 +219,7 @@ WidgetConfigParser::WidgetConfigParser() {
     new MetaDataHandler,
     new NavigationHandler,
     new PermissionsHandler,
+    new ServiceHandler,
     new SettingHandler,
     new SplashScreenHandler,
     new TizenApplicationHandler,
