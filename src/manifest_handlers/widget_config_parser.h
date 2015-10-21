@@ -44,9 +44,11 @@ class WidgetConfigParser {
   const std::string& GetErrorMessage() const;
   bool ParseManifest(const boost::filesystem::path& path);
   bool HasValidStartFile() const;
+  bool HasValidServicesStartFiles() const;
 
  private:
   bool CheckStartFile();
+  bool CheckServicesStartFiles();
   // This function creates list of icons that are valid disregarding
   // (in actual version) current system's locale as installer do not need to
   // know about it.
@@ -57,6 +59,7 @@ class WidgetConfigParser {
   boost::filesystem::path widget_path_;
   std::string error_;
   bool has_valid_start_file_;
+  bool has_valid_services_start_files_;
 };
 
 }  // namespace parse
