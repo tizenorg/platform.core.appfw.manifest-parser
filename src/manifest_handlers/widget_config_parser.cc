@@ -30,6 +30,7 @@
 #include "manifest_handlers/metadata_handler.h"
 #include "manifest_handlers/navigation_handler.h"
 #include "manifest_handlers/permissions_handler.h"
+#include "manifest_handlers/service_handler.h"
 #include "manifest_handlers/setting_handler.h"
 #include "manifest_handlers/splash_screen_handler.h"
 #include "manifest_handlers/tizen_application_handler.h"
@@ -218,6 +219,7 @@ WidgetConfigParser::WidgetConfigParser() {
     new MetaDataHandler,
     new NavigationHandler,
     new PermissionsHandler,
+    new ServiceHandler,
     new SettingHandler,
     new SplashScreenHandler,
     new TizenApplicationHandler,
@@ -273,6 +275,23 @@ bool WidgetConfigParser::CheckStartFile() {
     parser_->EraseManifestData(application_widget_keys::kTizenContentKey);
     error_ = "Could not find valid start file";
     return false;
+  }
+  return true;
+}
+
+bool WidgetConfigParser::CheckServicesStartFiles() {
+  std::shared_ptr<const ServiceList> service_list =
+      std::static_pointer_cast<const ServiceList>(
+          parser_->GetManifestData(application_widget_keys::kTizenServiceKey));
+  if (!service_list)
+    return true;
+  for (auto& service_info : service_list->services) {
+    bf::path start_file = widget_path_ / service_info.content();
+    if (!bf::exists(start_file)) {
+      error_ = std::string("Could not find valid service start file: ")
+          + start_file.string();
+      return false;
+    }
   }
   return true;
 }
@@ -339,12 +358,17 @@ bool WidgetConfigParser::ParseManifest(const boost::filesystem::path& path) {
     return false;
 
   has_valid_start_file_ = CheckStartFile();
+  has_valid_services_start_files_ = CheckServicesStartFiles();
 
   return true;
 }
 
 bool WidgetConfigParser::HasValidStartFile() const {
   return has_valid_start_file_;
+}
+
+bool WidgetConfigParser::HasValidServicesStartFiles() const {
+  return has_valid_services_start_files_;
 }
 
 }  // namespace parse
