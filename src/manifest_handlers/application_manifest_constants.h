@@ -140,6 +140,17 @@ extern const char kTizenServiceKey[];
 extern const char kTizenServiceIdKey[];
 extern const char kTizenServiceAutoRestartKey[];
 extern const char kTizenServiceOnBootKey[];
+extern const char kTizenServiceNameKey[];
+extern const char kTizenServiceCategoryKey[];
+extern const char kTizenServiceCategoryNameKey[];
+extern const char kTizenServiceContentKey[];
+extern const char kTizenServiceContentSrcKey[];
+extern const char kTizenServiceIconKey[];
+extern const char kTizenServiceIconSrcKey[];
+extern const char kTizenServiceDescriptionKey[];
+extern const char kTizenServiceMetadataKey[];
+extern const char kTizenServiceMetadataKeyKey[];
+extern const char kTizenServiceMetadataValueKey[];
 extern const char kXmlTextKey[];
 }  // namespace application_widget_keys
 

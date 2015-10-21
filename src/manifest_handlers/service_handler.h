@@ -7,6 +7,7 @@
 #define MANIFEST_HANDLERS_SERVICE_HANDLER_H_
 
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "manifest_parser/manifest_handler.h"
@@ -14,6 +15,9 @@
 
 namespace wgt {
 namespace parse {
+
+using LangNameVector = std::vector<std::pair<std::string, std::string>>;
+using KeyValueVector = std::vector<std::pair<std::string, std::string>>;
 
 class ServiceInfo {
  public:
@@ -36,13 +40,61 @@ class ServiceInfo {
     on_boot_ = on_boot;
   }
 
+  const LangNameVector& names() const {
+    return names_;
+  }
+  void set_names(const LangNameVector& names) {
+    names_ = names;
+  }
+
+  const std::string& icon() const {
+    return icon_;
+  }
+  void set_icon(const std::string& icon) {
+    icon_ = icon;
+  }
+
+  const std::string& content() const {
+    return content_;
+  }
+  void set_content(const std::string& content) {
+    content_ = content;
+  }
+
+  const std::string& description() const {
+    return description_;
+  }
+  void set_description(const std::string& description) {
+    description_ = description;
+  }
+
+  const std::vector<std::string>& categories() const {
+    return categories_;
+  }
+  void set_categories(const std::vector<std::string>& categories) {
+    categories_ = categories;
+  }
+
+  const KeyValueVector& metadata_set() const {
+    return metadata_set_;
+  }
+  void set_metadata_set(const KeyValueVector& metadata_set) {
+    metadata_set_ = metadata_set;
+  }
+
  private:
   std::string id_;
   bool auto_restart_;
   bool on_boot_;
+  LangNameVector names_;
+  std::string icon_;
+  std::string content_;
+  std::string description_;
+  std::vector<std::string> categories_;
+  KeyValueVector metadata_set_;
 };
 
-struct ServiceList  : public parser::ManifestData {
+struct ServiceList : public parser::ManifestData {
   std::vector<ServiceInfo> services;
 };
 
