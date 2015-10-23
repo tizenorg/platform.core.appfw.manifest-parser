@@ -222,30 +222,10 @@ void WidgetHandler::ParseAuthorElements(
   if (manifest.HasPath(keys::kAuthorKey)) {
     const parser::Value* author_value = nullptr;
     manifest.Get(keys::kAuthorKey, &author_value);
-    if (author_value->GetType() == parser::Value::TYPE_DICTIONARY) {
-      const parser::DictionaryValue* author_dict = nullptr;
-      author_value->GetAsDictionary(&author_dict);
-      if (!parser::VerifyElementNamespace(*author_dict,
-                                          keys::kWidgetNamespacePrefix))
-        return;
-      ParseSingleAuthorElement(author_dict, info);
-    } else if (author_value->GetType() == parser::Value::TYPE_LIST) {
-      const parser::ListValue* author_list = nullptr;
-      author_value->GetAsList(&author_list);
-      for (auto& item : *author_list) {
-        const parser::DictionaryValue* author_dict = nullptr;
-        if (item->GetAsDictionary(&author_dict)) {
-          if (!parser::VerifyElementNamespace(*author_dict,
-                                              keys::kWidgetNamespacePrefix)) {
-            // not W3C author
-            continue;
-          } else {
-            ParseSingleAuthorElement(author_dict, info);
-            break;
-          }
-        }
-      }
-    }
+    auto& authors = parser::GetOneOrMany(manifest.value(), keys::kAuthorKey,
+                                 keys::kTizenNamespacePrefix);
+    if (!authors.empty())
+      ParseSingleAuthorElement(authors[0], info);
   }
 }
 
@@ -298,32 +278,13 @@ bool WidgetHandler::Parse(
   if (manifest.HasPath(keys::kViewModesKey))
     manifest.GetString(keys::kViewModesKey, &widget_info->viewmodes_);
 
-  if (manifest.HasPath(keys::kPreferencesKey)) {
-    const parser::Value* val = nullptr;
-    if (manifest.Get(keys::kPreferencesKey, &val)) {
-      if (val->GetType() == parser::Value::TYPE_LIST) {
-        // list of preferences
-        const parser::ListValue* pref_list;
-        if (val->GetAsList(&pref_list)) {
-          // get all preferences
-          for (const auto& pref : *pref_list) {
-            Preference* preference;
-            if (!ParserPreferenceItem(pref, &preference, error))
-              return false;
-            widget_info->preferences_.push_back(preference);
-          }
-        } else {
-          *error = "Preference list exists in manifest, but is not accessible.";
-          return false;
-        }
-      } else if (val->GetType() == parser::Value::TYPE_DICTIONARY) {
-        // only one preference
-        Preference* pref;
-        if (!ParserPreferenceItem(val, &pref, error))
-          return false;
-        widget_info->preferences_.push_back(pref);
-      }
-    }
+  for (auto& pref_dict : parser::GetOneOrMany(manifest.value(),
+                                              keys::kPreferencesKey,
+                                              keys::kWidgetNamespacePrefix)) {
+    Preference* preference = nullptr;
+    if (!ParserPreferenceItem(pref_dict, &preference, error))
+      return false;
+    widget_info->preferences_.push_back(preference);
   }
 
   *output = std::static_pointer_cast<parser::ManifestData>(widget_info);
