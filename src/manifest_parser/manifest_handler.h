@@ -82,6 +82,23 @@ class ManifestHandler {
 
 bool VerifyElementNamespace(const parser::DictionaryValue& dict,
                             const std::string& requested_namespace);
+/**
+ * @brief GetOneOrMany
+ *        Provides vector of dictionary value pointers for given key
+ *
+ * This function is shortcut for query zero, one or more elements of given key.
+ * Client code receives "unified" type - list of items so that it do not need
+ * to check if underlaying values are lists or dictionaries.
+ *
+ * @param dict root dictionary where lookup should start
+ * @param path path to be resolved in tree
+ * @param namespace_prefix value of namespace which will be used to filter
+ *                         elements
+ * @return elements matching parameters
+ */
+const std::vector<const DictionaryValue*> GetOneOrMany(
+    const DictionaryValue* dict, const std::string& path,
+    const std::string& namespace_prefix);
 
 typedef std::map<std::string, ManifestHandler*> ManifestHandlerMap;
 typedef std::map<ManifestHandler*, int> ManifestHandlerOrderMap;

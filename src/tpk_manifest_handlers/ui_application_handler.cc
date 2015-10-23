@@ -475,40 +475,16 @@ bool UIApplicationHandler::Parse(
     std::string* error) {
   std::shared_ptr<UIApplicationInfoList>
                   uiapplicationinfo(new UIApplicationInfoList());
-  parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kUIApplicationKey, &value))
+  if (!manifest.HasPath(keys::kUIApplicationKey))
     return true;
 
-  if (value->GetType() == parser::Value::TYPE_LIST) {
-    // multiple entries
-    const parser::ListValue* list = nullptr;
-    value->GetAsList(&list);
-    for (const auto& item : *list) {
-      const parser::DictionaryValue* ui_dict = nullptr;
-      if (!item->GetAsDictionary(&ui_dict)) {
-        *error = "Parsing ui-application element failed";
-        return false;
-      }
-
-      UIApplicationSingleEntry uiappentry;
-      if (!ParseUIApplicationAndStore(*ui_dict, &uiappentry, error))
-        return false;
-      uiapplicationinfo->items.push_back(uiappentry);
-    }
-  } else if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
-    // single entry
-    const parser::DictionaryValue* ui_dict = nullptr;
-    value->GetAsDictionary(&ui_dict);
-
+  for (const auto& ui_dict : parser::GetOneOrMany(
+      manifest.value(), keys::kUIApplicationKey, "")) {
     UIApplicationSingleEntry uiappentry;
     if (!ParseUIApplicationAndStore(*ui_dict, &uiappentry, error))
       return false;
     uiapplicationinfo->items.push_back(uiappentry);
-  } else {
-    *error = "Cannot parse ui-application element";
-    return false;
   }
-
   *output = std::static_pointer_cast<parser::ManifestData>(uiapplicationinfo);
   return true;
 }

@@ -38,6 +38,38 @@ bool VerifyElementNamespace(
   return element_namespace == requested_namespace;
 }
 
+const std::vector<const DictionaryValue*> GetOneOrMany(
+    const DictionaryValue* dict, const std::string& path,
+    const std::string& namespace_prefix) {
+  std::vector<const DictionaryValue*> nodes;
+  const parser::Value* value = nullptr;
+  if (dict->Get(path, &value)) {
+    if (value->GetType() == parser::Value::TYPE_LIST) {
+      const parser::ListValue* list = nullptr;
+      value->GetAsList(&list);
+      for (auto& item : *list) {
+        const parser::DictionaryValue* dict = nullptr;
+        item->GetAsDictionary(&dict);
+        if (!namespace_prefix.empty() &&
+            !VerifyElementNamespace(*dict, namespace_prefix))
+          continue;
+        nodes.push_back(dict);
+      }
+    } else if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
+      const parser::DictionaryValue* dict = nullptr;
+      value->GetAsDictionary(&dict);
+      if (namespace_prefix.empty() ||
+          VerifyElementNamespace(*dict, namespace_prefix)) {
+        nodes.push_back(dict);
+      }
+    } else {
+      assert(false &&
+          "This should not happen. Only element node can be resolved.");
+    }
+  }
+  return nodes;
+}
+
 bool ManifestHandler::AlwaysParseForKey() const {
   return false;
 }
