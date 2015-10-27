@@ -461,7 +461,21 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleIconNotInTizen) {
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
-  ASSERT_FALSE(ParseAppManifest());
+  ASSERT_TRUE(ParseAppManifest());
+  ASSERT_TRUE(ValidateAppManifest());
+  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  std::shared_ptr<const wgt::parse::ServiceList> service_list =
+      std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
+          GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!service_list);
+  ASSERT_EQ(service_list->services.size(), 1);
+  ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
+  ASSERT_EQ(service_list->services[0].auto_restart(), false);
+  ASSERT_EQ(service_list->services[0].on_boot(), false);
+  ASSERT_EQ(service_list->services[0].content(), "service.js");
+  ASSERT_EQ(service_list->services[0].names().size(), 1);
+  ASSERT_EQ(service_list->services[0].names()[0].second, "name");
+  ASSERT_EQ(service_list->services[0].icon(), "");
 }
 
 TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleIcon) {

@@ -111,13 +111,11 @@ bool ParseServiceIcon(const parser::DictionaryValue* dict,
   } else if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
     const parser::DictionaryValue* dict = nullptr;
     value->GetAsDictionary(&dict);
-    if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix)) {
-      *error = "Missing tizen:icon tag in tizen:service";
-      return false;
-    }
-    if (!dict->GetString(keys::kTizenServiceIconSrcKey, &icon)) {
-      *error = "Missing 'src' attribute in tizen:icon tag in tizen:service";
-      return false;
+    if (parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix)) {
+      if (!dict->GetString(keys::kTizenServiceIconSrcKey, &icon)) {
+        *error = "Missing 'src' attribute in tizen:icon tag in tizen:service";
+        return false;
+      }
     }
   } else {
     *error = "Failed to parse tizen:icon element of service";
