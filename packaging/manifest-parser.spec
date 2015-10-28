@@ -75,6 +75,7 @@ make %{?_smp_mflags}
 %{_libdir}/libmanifest-parser-utils.so*
 %{_libdir}/libmanifest-handlers.so*
 %{_libdir}/libtpk-manifest-handlers.so*
+%{_libdir}/libdelta-manifest-handlers.so*
 %license LICENSE LICENSE-xwalk
 
 %files devel
