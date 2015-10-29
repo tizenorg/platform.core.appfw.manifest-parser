@@ -14,6 +14,7 @@
 namespace {
 const char kEnabledValue[] = "enable";
 const char kDisabledValue[] = "disable";
+const utils::VersionNumber kReloadRequiredVersion("2.4");
 }  // namespace
 
 namespace wgt {
@@ -135,30 +136,30 @@ bool AppControlHandler::Validate(
       return false;
     }
 
-    const std::string& reload = item.reload();
-    if (reload.empty()) {
-      // FIXME for now, this const_cast is used, but it is not the best way.
-      AppControlInfo &tmp = const_cast<AppControlInfo &>(item);
-      tmp.set_reload(kEnabledValue);  // default parameter
-    } else if (reload != kEnabledValue && reload != kDisabledValue) {
-      *error = "The improper value was given for appcontrol reload";
+    const TizenApplicationInfo& app_info =
+      static_cast<const TizenApplicationInfo&>(
+        *handlers_output.find(keys::kTizenApplicationKey)->second);
+    utils::VersionNumber required_version(app_info.required_version());
+    if (!required_version.IsValid()) {
+      *error = "Cannot retrieve required API version from widget";
       return false;
-    } else {
-      utils::VersionNumber supported_version("2.4");
-      const TizenApplicationInfo& app_info =
-        static_cast<const TizenApplicationInfo&>(
-          *handlers_output.find(keys::kTizenApplicationKey)->second);
-      utils::VersionNumber required_version(app_info.required_version());
-      if (!required_version.IsValid()) {
-        *error = "Cannot retrieve required API version from widget";
+    }
+
+    if (required_version >= kReloadRequiredVersion) {
+      if (item.reload().empty()) {
+        // FIXME for now, this const_cast is used, but it is not the best way.
+        AppControlInfo &tmp = const_cast<AppControlInfo &>(item);
+        tmp.set_reload(kEnabledValue);  // default parameter
+      } else if (item.reload() != kEnabledValue &&
+                 item.reload() != kDisabledValue) {
+        *error = "The improper value was given for appcontrol reload";
         return false;
       }
-      if (required_version < supported_version) {
-        *error = "The reload attribute of app-control is applicable to"
-            "platform >= 2.4";
-        return false;
-      }
-    }  // else
+    } else if(!item.reload().empty()) {
+      *error = "reload attribute cannot be used for api version lower "
+               "than 2.4";
+      return false;
+    }
   }
   return true;
 }
