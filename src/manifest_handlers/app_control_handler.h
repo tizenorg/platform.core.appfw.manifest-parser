@@ -43,23 +43,41 @@ class AppControlInfo {
   AppControlInfo(const std::string& src, const std::string& operation,
       const std::string& uri, const std::string& mime,
       const std::string& reload);
+  /**
+   * @brief src return the source attribute
+   * @return the value of source attribute
+   */
   const std::string& src() const {
     return src_;
   }
+  /**
+   * @brief
+   * @return the value of operation attribute
+   */
   const std::string& operation() const {
     return operation_;
   }
+  /**
+   * @brief uri
+   * @return the value of the uri attribute
+   */
   const std::string& uri() const {
     return uri_;
   }
+  /**
+   * @brief mime
+   * @return the value of the mime attribute
+   */
   const std::string& mime() const {
     return mime_;
   }
-
+  /**
+   * @brief reload
+   * @return the value of reload attribute
+   */
   const std::string& reload() const {
     return reload_;
   }
-
   void set_reload(const std::string &rel)  {
     reload_ = rel;
   }

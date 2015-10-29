@@ -21,10 +21,17 @@ class CSPInfo : public parser::ManifestData {
  public:
   CSPInfo() {}
   ~CSPInfo() override {}
-
+  /**
+   * @brief set_security_rules sets up string with security rules
+   * @param security_rules
+   */
   void set_security_rules(const std::string& security_rules) {
     security_rules_ = security_rules;
   }
+  /**
+   * @brief security_rules
+   * @return string with security_rules
+   */
   const std::string security_rules() const {
     return security_rules_;
   }

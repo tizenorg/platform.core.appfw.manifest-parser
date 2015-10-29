@@ -21,11 +21,17 @@ class WarpInfo : public parser::ManifestData {
  public:
   WarpInfo() {}
   ~WarpInfo() override {}
-
+  /**
+   * @brief set_access_element push single access_element inside vector
+   * @param access_element
+   */
   void set_access_element(const std::pair<std::string, bool>& access_element) {
     access_map_.push_back(access_element);
   }
-
+  /**
+   * @brief access_map
+   * @return vector containing access_elements
+   */
   const std::vector<std::pair<std::string, bool> >& access_map() const {
     return access_map_;
   }
