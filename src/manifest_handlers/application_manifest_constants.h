@@ -28,6 +28,7 @@ extern const char kAccountSectionKey[];
 extern const char kAccountTextKey[];
 extern const char kAccountCapabilityKey[];
 extern const char kAccountLangKey[];
+extern const char kBackgroundCategoryKey[];
 extern const char kNamespaceKey[];
 extern const char kXmlLangKey[];
 extern const char kXmlHrefKey[];

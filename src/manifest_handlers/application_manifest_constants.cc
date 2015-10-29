@@ -27,6 +27,7 @@ const char kAccountSectionKey[] = "@section";
 const char kAccountTextKey[] = "#text";
 const char kAccountCapabilityKey[] = "capability";
 const char kAccountLangKey[] = "@lang";
+const char kBackgroundCategoryKey[] = "widget.background-category";
 const char kNamespaceKey[] = "@namespace";
 const char kXmlLangKey[] = "@lang";
 const char kXmlHrefKey[] = "@href";
