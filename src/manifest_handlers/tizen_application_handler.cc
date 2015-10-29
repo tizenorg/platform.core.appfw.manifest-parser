@@ -25,11 +25,9 @@ const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
 
 namespace keys = wgt::application_widget_keys;
 
-TizenApplicationInfo::TizenApplicationInfo(): launch_mode_("single") {
-}
+TizenApplicationInfo::TizenApplicationInfo() {}
 
-TizenApplicationInfo::~TizenApplicationInfo() {
-}
+TizenApplicationInfo::~TizenApplicationInfo() {}
 
 TizenApplicationHandler::TizenApplicationHandler() {}
 
@@ -88,16 +86,9 @@ bool TizenApplicationHandler::Parse(
       }
     }
   }
-  if (app_dict->GetString(keys::kTizenApplicationLaunchModeKey, &value)) {
-    if (utils::VersionNumber(app_info->required_version()) <
-        kLaunchModeRequiredVersion) {
-      *error = "launch_mode attribute cannot be used for api version lower"
-               " than 2.4";
-      return false;
-    } else {
-      app_info->set_launch_mode(value);
-    }
-  }
+  std::string launch_mode;
+  app_dict->GetString(keys::kTizenApplicationLaunchModeKey, &launch_mode);
+  app_info->set_launch_mode(launch_mode);
 
   *output = std::static_pointer_cast<parser::ManifestData>(app_info);
   return true;
@@ -148,13 +139,22 @@ bool TizenApplicationHandler::Validate(
     return false;
   }
   if (required_version >= kLaunchModeRequiredVersion) {
-    if (!app_info.launch_mode().empty() &&
-        app_info.launch_mode() != "caller" &&
-        app_info.launch_mode() != "group" &&
-        app_info.launch_mode() != "single") {
+    if (app_info.launch_mode().empty()) {
+      // FIXME for now, this const_cast is used, but it is not the best way.
+      TizenApplicationInfo &tmp = const_cast<TizenApplicationInfo &>(app_info);
+      tmp.set_launch_mode("single");  // default parameter
+    }
+    else if (app_info.launch_mode() != "caller" &&
+             app_info.launch_mode() != "group" &&
+             app_info.launch_mode() != "single") {
       *error = "Wrong value of launch mode";
       return false;
     }
+  }
+  else if(!app_info.launch_mode().empty()) {
+    *error = "launch_mode attribute cannot be used for api version lower"
+             " than 2.4";
+    return false;
   }
   return true;
 }

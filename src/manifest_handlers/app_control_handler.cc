@@ -10,10 +10,12 @@
 #include "manifest_parser/values.h"
 #include "utils/iri_util.h"
 #include "utils/version_number.h"
+#include <iostream>
 
 namespace {
 const char kEnabledValue[] = "enable";
 const char kDisabledValue[] = "disable";
+const utils::VersionNumber kReloadRequiredVersion("2.4");
 }  // namespace
 
 namespace wgt {
@@ -27,11 +29,13 @@ void ParseAppControlEntryAndStore(
     const parser::DictionaryValue& control_dict,
     AppControlInfoList* aplist) {
   std::string src;
+  std::string reload;
   const parser::DictionaryValue* src_dict;
   if (control_dict.GetDictionary(keys::kTizenApplicationAppControlSrcKey,
       &src_dict)) {
     src_dict->GetString(
         keys::kTizenApplicationAppControlChildNameAttrKey, &src);
+    src_dict->GetString(keys::kTizenApplicationAppControlReloadKey, &reload);
   }
 
   std::string operation;
@@ -58,9 +62,6 @@ void ParseAppControlEntryAndStore(
     mime_dict->GetString(
         keys::kTizenApplicationAppControlChildNameAttrKey, &mime);
   }
-
-  std::string reload;
-  control_dict.GetString(keys::kTizenApplicationAppControlReloadKey, &reload);
 
   aplist->controls.emplace_back(src, operation, uri, mime, reload);
 }
@@ -135,30 +136,32 @@ bool AppControlHandler::Validate(
       return false;
     }
 
-    const std::string& reload = item.reload();
-    if (reload.empty()) {
-      // FIXME for now, this const_cast is used, but it is not the best way.
-      AppControlInfo &tmp = const_cast<AppControlInfo &>(item);
-      tmp.set_reload(kEnabledValue);  // default parameter
-    } else if (reload != kEnabledValue && reload != kDisabledValue) {
-      *error = "The improper value was given for appcontrol reload";
+    const TizenApplicationInfo& app_info =
+      static_cast<const TizenApplicationInfo&>(
+        *handlers_output.find(keys::kTizenApplicationKey)->second);
+    utils::VersionNumber required_version(app_info.required_version());
+    if (!required_version.IsValid()) {
+      *error = "Cannot retrieve required API version from widget";
       return false;
-    } else {
-      utils::VersionNumber supported_version("2.4");
-      const TizenApplicationInfo& app_info =
-        static_cast<const TizenApplicationInfo&>(
-          *handlers_output.find(keys::kTizenApplicationKey)->second);
-      utils::VersionNumber required_version(app_info.required_version());
-      if (!required_version.IsValid()) {
-        *error = "Cannot retrieve required API version from widget";
+    }
+
+    std::cout << "reload: <"<< item.reload() << ">\n";
+    if (required_version >= kReloadRequiredVersion) {
+      if (item.reload().empty()) {
+        // FIXME for now, this const_cast is used, but it is not the best way.
+        AppControlInfo &tmp = const_cast<AppControlInfo &>(item);
+        tmp.set_reload(kEnabledValue);  // default parameter
+        std::cout << "1reload: <"<< tmp.reload() << ">\n";
+      } else if (item.reload() != kEnabledValue &&
+                 item.reload() != kDisabledValue) {
+        *error = "The improper value was given for appcontrol reload";
         return false;
       }
-      if (required_version < supported_version) {
-        *error = "The reload attribute of app-control is applicable to"
-            "platform >= 2.4";
-        return false;
-      }
-    }  // else
+    } else if(!item.reload().empty()) {
+      *error = "reload attribute cannot be used for api version lower "
+               "than 2.4";
+      return false;
+    }
   }
   return true;
 }
