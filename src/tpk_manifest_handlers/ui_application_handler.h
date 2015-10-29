@@ -19,46 +19,102 @@ namespace parse {
 
 class UIApplicationInfo : public parser::ManifestData {
  public:
+  /**
+   * @brief set_appid sets app id
+   * @param appid
+   */
   void set_appid(const std::string& appid) {
     appid_ = appid;
   }
+  /**
+   * @brief set_exec sets exec
+   * @param exec
+   */
   void set_exec(const std::string& exec) {
     exec_ = exec;
   }
+  /**
+   * @brief set_launch_mode sets launch mdoe
+   * @param launch_mode
+   */
   void set_launch_mode(const std::string& launch_mode) {
     launch_mode_ = launch_mode;
   }
+  /**
+   * @brief set_multiple sets multiple
+   * @param multiple
+   */
   void set_multiple(const std::string& multiple) {
     multiple_ = multiple;
   }
+  /**
+   * @brief set_nodisplay sets no display
+   * @param nodisplay
+   */
   void set_nodisplay(const std::string& nodisplay) {
     nodisplay_ = nodisplay;
   }
+  /**
+   * @brief set_taskmanage set task manage
+   * @param taskmanage
+   */
   void set_taskmanage(const std::string& taskmanage) {
     taskmanage_ = taskmanage;
   }
+  /**
+   * @brief set_type set types
+   * @param type
+   */
   void set_type(const std::string& type) {
     type_ = type;
   }
+  /**
+   * @brief appid
+   * @return appid string
+   */
 
   const std::string& appid() const {
     return appid_;
   }
+  /**
+   * @brief exec
+   * @return exec string
+   */
   const std::string& exec() const {
     return exec_;
   }
+  /**
+   * @brief launch_mode
+   * @return launch mode string
+   */
   const std::string& launch_mode() const {
     return launch_mode_;
   }
+  /**
+   * @brief multiple
+   * @return multiple string
+   */
   const std::string& multiple() const {
     return multiple_;
   }
+  /**
+   * @brief nodisplay
+   * @return nodisplay string
+   */
   const std::string& nodisplay() const {
     return nodisplay_;
   }
+  /**
+   * @brief taskmanage
+   * @return taskmanage
+   */
   const std::string& taskmanage() const {
     return taskmanage_;
   }
+  /**
+   * @brief type
+   * @return type string
+   */
   const std::string& type() const {
     return type_;
   }

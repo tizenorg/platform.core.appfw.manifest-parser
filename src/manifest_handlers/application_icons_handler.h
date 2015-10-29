@@ -18,12 +18,32 @@ class ApplicationIcon {
  public:
   explicit ApplicationIcon(const std::string& path, int height = -1,
                            int width = -1);
-
+  /**
+   * @brief GetWidth
+   * @param width
+   * @return true if successful
+   */
   bool GetWidth(int* width) const;
+  /**
+   * @brief GetHeight
+   * @param height
+   * @return true if successful
+   */
   bool GetHeight(int* height) const;
+  /**
+   * @brief path
+   * @return string to the path
+   */
   const std::string& path() const;
-
+  /**
+   * @brief set_width sets width
+   * @param width
+   */
   void set_width(int width);
+  /**
+   * @brief set_height sets height
+   * @param height
+   */
   void set_height(int height);
 
  private:
@@ -35,6 +55,10 @@ class ApplicationIcon {
 class ApplicationIconsInfo : public parser::ManifestData {
  public:
   const std::vector<ApplicationIcon>& icons() const;
+  /**
+   * @brief AddIcon adds icon
+   * @param icon_path
+   */
   void AddIcon(const ApplicationIcon& icon_path);
  private:
   std::vector<ApplicationIcon> icons_;

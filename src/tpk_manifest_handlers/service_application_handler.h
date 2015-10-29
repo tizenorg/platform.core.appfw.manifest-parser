@@ -19,34 +19,73 @@ namespace parse {
 
 class ServiceApplicationInfo : public parser::ManifestData {
  public:
+  /**
+   * @brief set_appid sets appid
+   * @param appid
+   */
   void set_appid(const std::string& appid) {
     appid_ = appid;
   }
+  /**
+   * @brief set_auto_restart sets auto restart
+   * @param auto_restart
+   */
   void set_auto_restart(const std::string& auto_restart) {
     auto_restart_ = auto_restart;
   }
+  /**
+   * @brief set_exec sets exec
+   * @param exec
+   */
   void set_exec(const std::string& exec) {
     exec_ = exec;
   }
+  /**
+   * @brief set_on_boot sets on boot
+   * @param on_boot
+   */
   void set_on_boot(const std::string& on_boot) {
     on_boot_ = on_boot;
   }
+  /**
+   * @brief set_type sets type
+   * @param type
+   */
   void set_type(const std::string& type) {
     type_ = type;
   }
-
+  /**
+   * @brief appid
+   * @return appid string
+   */
   const std::string& appid() const {
     return appid_;
   }
+  /**
+   * @brief auto_restart
+   * @return auto_restart string
+   */
   const std::string& auto_restart() const {
     return auto_restart_;
   }
+  /**
+   * @brief exec
+   * @return exec string
+   */
   const std::string& exec() const {
     return exec_;
   }
+  /**
+   * @brief on_boot
+   * @return on_boot string
+   */
   const std::string& on_boot() const {
     return on_boot_;
   }
+  /**
+   * @brief type
+   * @return type string
+   */
   const std::string& type() const {
     return type_;
   }

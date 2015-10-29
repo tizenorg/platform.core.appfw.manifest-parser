@@ -17,13 +17,24 @@ namespace parse {
 
 class DescriptionInfo : public parser::ManifestData {
  public:
+  /**
+   * @brief set_description sets description
+   * @param description
+   */
   void set_description(const std::string& description) {
     description_ = description;
   }
+  /**
+   * @brief set_xml_lang sets xml lang
+   * @param xml_lang
+   */
   void set_xml_lang(const std::string& xml_lang) {
     xml_lang_ = xml_lang;
   }
-
+  /**
+   * @brief description
+   * @return description string
+   */
   const std::string& description() const {
     return description_;
   }

@@ -19,10 +19,17 @@ namespace parse {
 
 class PrivilegesInfo : public parser::ManifestData {
  public:
+  /**
+   * @brief GetPrivileges
+   * @return PrivilegesSet
+   */
   const parser::PrivilegesSet& GetPrivileges() const {
     return privileges_;
   }
-
+  /**
+   * @brief AddPrivilege add privilege
+   * @param privilege
+   */
   void AddPrivilege(const std::string& privilege) {
     privileges_.insert(privilege);
   }

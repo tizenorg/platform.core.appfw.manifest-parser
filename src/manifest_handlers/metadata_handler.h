@@ -21,10 +21,28 @@ class MetaDataInfo : public parser::ManifestData {
  public:
   MetaDataInfo();
   virtual ~MetaDataInfo();
-
+  /**
+   * @brief HasKey
+   * @param key
+   * @return true if has key
+   */
   bool HasKey(const std::string& key) const;
+  /**
+   * @brief GetValue gets value
+   * @param key
+   * @return
+   */
   std::string GetValue(const std::string& key) const;
+  /**
+   * @brief SetValue sets value
+   * @param key
+   * @param value
+   */
   void SetValue(const std::string& key, const std::string& value);
+  /**
+   * @brief metadata
+   * @return map of metadata
+   */
   const std::map<std::string, std::string>& metadata() const {
     return metadata_;
   }

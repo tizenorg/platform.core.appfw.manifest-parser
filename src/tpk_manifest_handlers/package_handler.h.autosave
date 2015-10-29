@@ -80,6 +80,10 @@ class PackageInfo : public parser::ManifestData {
   const std::string& version() const {
     return version_;
   }
+  /**
+   * @brief install_location
+   * @return 
+   */
   const std::string& install_location() const {
     return install_location_;
   }

@@ -19,11 +19,17 @@ class PermissionsInfo: public parser::ManifestData {
  public:
   PermissionsInfo();
   virtual ~PermissionsInfo();
-
+  /**
+   * @brief GetAPIPermissions
+   * @return permission set
+   */
   const parser::PermissionSet& GetAPIPermissions() const {
     return api_permissions_;
   }
-
+  /**
+   * @brief SetAPIPermissions sets api permissions
+   * @param api_permissions
+   */
   void SetAPIPermissions(const parser::PermissionSet& api_permissions) {
     api_permissions_ = api_permissions;
   }

@@ -19,14 +19,25 @@ class ImeInfo : public parser::ManifestData {
  public:
   ImeInfo();
   virtual ~ImeInfo();
-
+  /**
+   * @brief uuid
+   * @return uuid string
+   */
   const std::string& uuid() const {
     return uuid_;
   }
+  /**
+   * @brief set_uuid sets uuid string
+   * @param uuid
+   */
   void set_uuid(const std::string& uuid) { uuid_ = uuid; }
   const std::vector<std::string>& languages() const {
     return languages_;
   }
+  /**
+   * @brief AddLanguage adds language
+   * @param language
+   */
   void AddLanguage(const std::string& language);
 
  private:

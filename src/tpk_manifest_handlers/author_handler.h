@@ -17,22 +17,45 @@ namespace parse {
 
 class AuthorInfo : public parser::ManifestData {
  public:
+  /**
+   * @brief set_email sets email
+   * @param email
+   */
   void set_email(const std::string& email) {
     email_ = email;
   }
+  /**
+   * @brief set_href sets href
+   * @param href
+   */
   void set_href(const std::string& href) {
     href_ = href;
   }
+  /**
+   * @brief set_name sets name
+   * @param name
+   */
   void set_name(const std::string& name) {
     name_ = name;
   }
-
+  /**
+   * @brief email
+   * @return email string
+   */
   const std::string& email() const {
     return email_;
   }
+  /**
+   * @brief href
+   * @return href string
+   */
   const std::string& href() const {
     return href_;
   }
+  /**
+   * @brief name
+   * @return name string
+   */
   const std::string& name() const {
     return name_;
   }

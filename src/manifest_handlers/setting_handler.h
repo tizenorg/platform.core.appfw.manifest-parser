@@ -38,54 +38,138 @@ class SettingInfo : public parser::ManifestData {
 
   SettingInfo();
   virtual ~SettingInfo();
-
+  /**
+   * @brief set_hwkey_enabled sets value of hw_key to true or false
+   * @param enabled
+   */
   void set_hwkey_enabled(bool enabled) { hwkey_enabled_ = enabled; }
+  /**
+   * @brief hwkey_enabled
+   * @return  current value of hw_key
+   */
   bool hwkey_enabled() const { return hwkey_enabled_; }
-
+  /**
+   * @brief set_screen_orientation sets screen_orientation
+   * @param orientation
+   */
   void set_screen_orientation(ScreenOrientation orientation) {
     screen_orientation_ = orientation;
   }
+  /**
+   * @brief screen_orientation
+   * @return currently selected screen orientation
+   */
 
   ScreenOrientation screen_orientation() const { return screen_orientation_; }
-
+  /**
+   * @brief set_encryption_enabled sets if encryption is enabled or disabled
+   * @param enabled
+   */
   void set_encryption_enabled(bool enabled) { encryption_enabled_ = enabled; }
+  /**
+   * @brief encryption_enabled
+   * @return true if encryption is enable
+   */
   bool encryption_enabled() const { return encryption_enabled_; }
-
+  /**
+   * @brief set_context_menu_enabled sets context menu enabled
+   * @param enabled
+   */
   void set_context_menu_enabled(bool enabled) {
     context_menu_enabled_ = enabled;
   }
+  /**
+   * @brief context_menu_enabled
+   * @return true if context menu is enabled
+   */
   bool context_menu_enabled() const { return context_menu_enabled_; }
-
+  /**
+   * @brief set_background_support_enabled whether it is enabled
+   * @param enabled
+   */
   void set_background_support_enabled(bool enabled) {
     background_support_enabled_ = enabled;
   }
+  /**
+   * @brief background_support_enabled
+   * @return true if background support is enabled
+   */
   bool background_support_enabled() const {
     return background_support_enabled_;
   }
-
+  /**
+   * @brief set_install_location sets install location
+   * @param installLocation
+   */
   void set_install_location(InstallLocation installLocation) {
     install_location_ = installLocation;
   }
+  /**
+   * @brief install_location
+   * @return what InstallLocation is chosen
+   */
   InstallLocation install_location() const { return install_location_; }
-
+  /**
+   * @brief set_no_display sets is there is no display
+   * @param enabled
+   */
   void set_no_display(bool enabled) { no_display_ = enabled; }
+  /**
+   * @brief no_display
+   * @return if there is no supoort for display
+   */
   bool no_display() const { return no_display_; }
-
+  /**
+   * @brief set_indicator_presence sets indicator presence
+   * @param enabled
+   */
   void set_indicator_presence(bool enabled) { indicator_presence_ = enabled; }
+  /**
+   * @brief indicator_presence
+   * @return  if the indicator is present
+   */
   bool indicator_presence() const { return indicator_presence_; }
-
+  /**
+   * @brief set_backbutton_presence sets if backbutton is present
+   * @param enabled
+   */
   void set_backbutton_presence(bool enabled) { backbutton_presence_ = enabled; }
+  /**
+   * @brief backbutton_presence
+   * @return true if backbutton is present
+   */
   bool backbutton_presence() const { return backbutton_presence_; }
-
+  /**
+   * @brief set_user_agent sets user_agent()
+   * @param user_agent
+   */
   void set_user_agent(std::string user_agent) { user_agent_ = user_agent; }
+  /**
+   * @brief user_agent
+   * @return actual user agent
+   */
   std::string user_agent() const { return user_agent_; }
-
+  /**
+   * @brief set_sound_mode sets sound mode
+   * @param soundMode
+   */
   void set_sound_mode(SoundMode soundMode) { sound_mode_ = soundMode; }
+  /**
+   * @brief sound_mode
+   * @return current sound mode
+   */
   SoundMode sound_mode() const { return sound_mode_; }
-
+  /**
+   * @brief set_background_vibration set background vibration
+   * @param enabled
+   */
   void set_background_vibration(bool enabled) {
     background_vibration_ = enabled;
   }
+  /**
+   * @brief background_vibration
+   * @return background vibration
+   */
   bool background_vibration() const { return background_vibration_; }
 
  private:

@@ -56,18 +56,56 @@ class AccountHandler : public parser::ManifestHandler {
       std::string Key() const override;
 
  private:
+      /**
+   * @brief ParseSingleAccountElement parses single account element
+   * @param item_dict
+   * @param info
+   * @param error
+   * @return true everything okay
+   */
   bool ParseSingleAccountElement(const parser::DictionaryValue* item_dict,
                                  std::shared_ptr<AccountInfo> info,
                                  std::string* error);
+  /**
+   * @brief ParseAccountIcons parse account icons
+   * @param item_dict
+   * @param singel_account
+   * @return true if everything is okay
+   */
   bool ParseAccountIcons(const parser::DictionaryValue* item_dict,
                          SingleAccountInfo* singel_account);
+  /**
+   * @brief ParseAccountProvider parses account provider
+   * @param item_dict
+   * @param info
+   * @param error
+   * @return if everything is fine
+   */
   bool ParseAccountProvider(const parser::DictionaryValue* item_dict,
                              std::shared_ptr<AccountInfo> info,
                              std::string* error);
+  /**
+   * @brief ParseSingleAccountIcon parses single account icon
+   * @param item_dict
+   * @param singel_account
+   * @return
+   */
   bool ParseSingleAccountIcon(const parser::DictionaryValue* item_dict,
                               SingleAccountInfo* singel_account);
+  /**
+   * @brief ParseLabels parses single account label
+   * @param item_dict
+   * @param singel_account
+   * @return true if everything is fine
+   */
   bool ParseLabels(const parser::DictionaryValue* item_dict,
                          SingleAccountInfo* singel_account);
+  /**
+   * @brief ParseCapabilities pa
+   * @param item_dict
+   * @param singel_account
+   * @return true if everything is fine
+   */
   bool ParseCapabilities(const parser::DictionaryValue* item_dict,
                          SingleAccountInfo* singel_account);
 };

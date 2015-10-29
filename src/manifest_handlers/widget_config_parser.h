@@ -43,16 +43,36 @@ class WidgetConfigParser {
       const std::string& key);
   const std::string& GetErrorMessage() const;
   bool ParseManifest(const boost::filesystem::path& path);
+  /**
+   * @brief HasValidStartFile
+   * @return true valid start file exists
+   */
   bool HasValidStartFile() const;
+  /**
+   * @brief HasValidServicesStartFiles
+   * @return true if has valid service start files
+   */
   bool HasValidServicesStartFiles() const;
 
  private:
+  /**
+   * @brief CheckStartFile
+   * @return  true if start file is correct
+   */
   bool CheckStartFile();
+  /**
+   * @brief CheckServicesStartFiles
+   * @return true if services start files are correct
+   */
   bool CheckServicesStartFiles();
   // This function creates list of icons that are valid disregarding
   // (in actual version) current system's locale as installer do not need to
   // know about it.
   // Edited/Created list is present as kIconsKey key in parser.
+  /**
+   * @brief CheckWidgetIcons
+   * @return true if widget icons are correct
+   */
   bool CheckWidgetIcons();
 
   std::unique_ptr<parser::ManifestParser> parser_;

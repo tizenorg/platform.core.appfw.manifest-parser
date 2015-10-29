@@ -101,34 +101,81 @@ class WidgetHandler : public parser::ManifestHandler {
       std::string* error) override;
   bool AlwaysParseForKey() const override { return true; }
   std::string Key() const override;
-
+  /**
+   * @brief ParseSingleLocalizedLicenseElement parses single license element
+   * @param item_dict
+   * @param parent_lang
+   * @param info
+   */
   void ParseSingleLocalizedLicenseElement(
       const parser::DictionaryValue* item_dict,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
+  /**
+   * @brief ParseLocalizedLicenseElements parser localized element
+   * @param manifest
+   * @param parent_lang
+   * @param info
+   */
   void ParseLocalizedLicenseElements(
       const parser::Manifest& manifest,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
+  /**
+   * @brief ParseSingleLocalizedDescriptionElement parses
+   * single localized description
+   * @param item_dict
+   * @param parent_lang
+   * @param info
+   */
   void ParseSingleLocalizedDescriptionElement(
       const parser::DictionaryValue* item_dict,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
+  /**
+   * @brief ParseLocalizedDescriptionElements parses localized description
+   * element
+   * @param manifest
+   * @param parent_lang
+   * @param info
+   */
   void ParseLocalizedDescriptionElements(
       const parser::Manifest& manifest,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
+  /**
+   * @brief ParseSingleLocalizedNameElement parses single localized name
+   * @param item_dict
+   * @param parent_lang
+   * @param info
+   */
   void ParseSingleLocalizedNameElement(
       const parser::DictionaryValue* item_dict,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
+  /**
+   * @brief ParseLocalizedNameElements parses localized name
+   * @param manifest
+   * @param parent_lang
+   * @param info
+   */
   void ParseLocalizedNameElements(
       const parser::Manifest& manifest,
       const std::string& parent_lang,
       std::shared_ptr<WidgetInfo> info);
+  /**
+   * @brief ParseAuthorElements parses author element
+   * @param manifest
+   * @param info
+   */
   void ParseAuthorElements(
       const parser::Manifest& manifest,
       std::shared_ptr<WidgetInfo> info);
+  /**
+   * @brief ParseSingleAuthorElement parses single author element
+   * @param author_dict
+   * @param info
+   */
   void ParseSingleAuthorElement(
       const parser::DictionaryValue* author_dict,
       std::shared_ptr<WidgetInfo> info);
