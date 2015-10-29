@@ -23,6 +23,7 @@
 #include "manifest_handlers/application_icons_handler.h"
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_handlers/appwidget_handler.h"
+#include "manifest_handlers/background_category_handler.h"
 #include "manifest_handlers/category_handler.h"
 #include "manifest_handlers/content_handler.h"
 #include "manifest_handlers/csp_handler.h"
@@ -224,7 +225,8 @@ WidgetConfigParser::WidgetConfigParser() {
     new SplashScreenHandler,
     new TizenApplicationHandler,
     new WarpHandler,
-    new WidgetHandler
+    new WidgetHandler,
+    new BackgroundCategoryHandler
   };
 
   std::unique_ptr<parser::ManifestHandlerRegistry> registry(
