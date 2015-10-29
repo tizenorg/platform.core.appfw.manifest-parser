@@ -26,10 +26,16 @@ class AccountInfo : public parser::ManifestData {
   AccountInfo() {}
   ~AccountInfo() override {}
 
+  /**
+   * @brief This method returns all the accounts successfully parsed
+   */
   const std::vector<SingleAccountInfo>& accounts() const {
     return accounts_;
   }
 
+  /**
+    * @brief  Method add to the vector successfully created account
+    */
   void set_account(const SingleAccountInfo& single_account) {
     accounts_.push_back(single_account);
   }
@@ -53,17 +59,43 @@ class AccountHandler : public parser::ManifestHandler {
 
   std::string Key() const override;
  private:
+
+  /**
+   * @brief ParseSingleAccountElement everything between <account> </account>
+   * @param item_dict dictionary to be parsed
+   * @param info ptr for entity that stores successfully parsed results
+   * @param error information about error that happened
+   * @return true if operation of parsing was successful
+   */
   bool ParseSingleAccountElement(const parser::DictionaryValue* item_dict,
                                  std::shared_ptr<AccountInfo> info,
                                  std::string* error);
+  /**
+   * @brief ParseAccountIcons icons of account
+   * @param item_dict dictionary to be parsed
+   * @param singel_account the single account entity
+   * @return true parsed successfully
+   */
   bool ParseAccountIcons(const parser::DictionaryValue* item_dict,
                          SingleAccountInfo* singel_account);
   bool ParseSingleAccountIcon(const parser::DictionaryValue* item_dict,
                               SingleAccountInfo* singel_account);
+  /**
+   * @brief ParseAccountNames parse and validates account name
+   * @param item_dict dictionary to be parsed
+   * @param singel_account the single account entity
+   * @return true if parsed successfully
+   */
   bool ParseAccountNames(const parser::DictionaryValue* item_dict,
                          SingleAccountInfo* singel_account);
   bool ParseSingleAccountName(const parser::DictionaryValue* item_dict,
                               SingleAccountInfo* singel_account);
+  /**
+   * @brief ParseCapabilities parses capabilities and validates them
+   * @param item_dict dictionary to be parsed
+   * @param singel_account the single account entity
+   * @return true if parsed successfully
+   */
   bool ParseCapabilities(const parser::DictionaryValue* item_dict,
                          SingleAccountInfo* singel_account);
 };

@@ -10,7 +10,10 @@
 #include "utils/version_number.h"
 
 namespace parser {
-
+/**
+ * @brief GetCurrentPlatformVersion
+ * @return number version of the platform currently used
+ */
 utils::VersionNumber GetCurrentPlatformVersion();
 
 }  // namespace parser
