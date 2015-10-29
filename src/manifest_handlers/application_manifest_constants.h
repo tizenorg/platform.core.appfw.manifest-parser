@@ -31,6 +31,7 @@ extern const char kIconsKey[];
 extern const char kTizenApplicationAppControlsKey[];
 extern const char kTizenApplicationKey[];
 extern const char kTizenAppWidgetFullKey[];
+extern const char kTizenBackgroundCategoryKey[];
 extern const char kTizenCategoryKey[];
 extern const char kTizenContentKey[];
 extern const char kTizenImeKey[];

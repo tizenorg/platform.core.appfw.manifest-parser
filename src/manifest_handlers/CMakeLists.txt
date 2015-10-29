@@ -5,6 +5,7 @@ SET(SRCS
   application_manifest_constants.cc
   application_icons_handler.cc
   appwidget_handler.cc
+  background_category_handler.cc
   category_handler.cc
   content_handler.cc
   csp_handler.cc

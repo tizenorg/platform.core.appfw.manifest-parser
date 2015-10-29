@@ -49,6 +49,7 @@ const char kTizenApplicationLaunchModeKey[] = "@launch_mode";
 const char kTizenApplicationPackageKey[] = "@package";
 
 const char kAllowNavigationKey[] = "widget.allow-navigation";
+const char kTizenBackgroundCategoryKey[] = "widget.background-category";
 const char kTizenSettingKey[] = "widget.setting";
 const char kTizenInstallLocationKey[] = "@install-location";
 const char kTizenUserAgentKey[] = "@user-agent";
