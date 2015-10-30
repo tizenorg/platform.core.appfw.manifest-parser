@@ -62,20 +62,9 @@ bool AccountHandler::ParseSingleAccountElement(
     const parser::DictionaryValue* item_dict,
     std::shared_ptr<AccountInfo> info,
     std::string* error) {
-
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-  if (item_dict->Get(kAccountProviderKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseAccountProvider(dict, info, error))
-          return false;
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list)
-        if (item->GetAsDictionary(&dict))
-          if (!ParseAccountProvider(dict, info, error))
-            return false;
-    }
+  for (auto& item : parser::GetOneOrMany(item_dict, kAccountProviderKey, "")) {
+    if (!ParseAccountProvider(item, info, error))
+      return false;
   }
   return true;
 }
@@ -137,22 +126,14 @@ bool AccountHandler::ParseAccountProvider(
 bool AccountHandler::ParseAccountIcons(
   const parser::DictionaryValue* item_dict,
   SingleAccountInfo* info) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-  if (item_dict->Get(kAccountIconKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseSingleAccountIcon(dict, info))
-        return false;
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list)
-        if (item->GetAsDictionary(&dict) &&
-            !ParseSingleAccountIcon(dict, info))
-          return false;
-    }
-    return true;
+  auto& icons = parser::GetOneOrMany(item_dict, kAccountIconKey, "");
+  if (icons.empty())
+    return false;
+  for (auto& item : icons) {
+    if (!ParseSingleAccountIcon(item, info))
+      return false;
   }
-  return false;
+  return true;
 }
 
 bool AccountHandler::ParseSingleAccountIcon(
@@ -172,24 +153,12 @@ bool AccountHandler::ParseSingleAccountIcon(
 bool AccountHandler::ParseLabels(
     const parser::DictionaryValue* item_dict,
     SingleAccountInfo* info) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-  if (item_dict->Get(kAccountLabelKey, &val)) {
-    std::string label;
+  for (auto& item : parser::GetOneOrMany(item_dict, kAccountLabelKey, "")) {
     std::string lang;
-    if (val->GetAsDictionary(&dict)) {
-      dict->GetString(kAccountLangKey, &lang);
-      dict->GetString(kAccountTextKey, &label);
-      info->labels.push_back(std::make_pair(label, lang));
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list)
-        if (item->GetAsDictionary(&dict)) {
-          dict->GetString(kAccountLangKey, &lang);
-          dict->GetString(kAccountTextKey, &label);
-          info->labels.push_back(std::make_pair(label, lang));
-        }
-    }
+    std::string label;
+    item->GetString(kAccountLangKey, &lang);
+    item->GetString(kAccountTextKey, &label);
+    info->labels.push_back(std::make_pair(label, lang));
   }
   return true;
 }
@@ -197,22 +166,11 @@ bool AccountHandler::ParseLabels(
 bool AccountHandler::ParseCapabilities(
     const parser::DictionaryValue* item_dict,
     SingleAccountInfo* info) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-  std::string string_value;
-  if (item_dict->Get(kAccountCapabilityKey, &val)) {
+  for (auto& item : parser::GetOneOrMany(item_dict, kAccountCapabilityKey,
+                                         "")) {
     std::string capability;
-    if (val->GetAsDictionary(&dict)) {
-      dict->GetString(kAccountTextKey, &capability);
-      info->capabilities.push_back(capability);
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list)
-        if (item->GetAsDictionary(&dict)) {
-          dict->GetString(kAccountTextKey, &capability);
-          info->capabilities.push_back(capability);
-        }
-    }
+    item->GetString(kAccountTextKey, &capability);
+    info->capabilities.push_back(capability);
   }
   return true;
 }

@@ -143,25 +143,10 @@ bool InitializeAppControlParsing(
     const parser::DictionaryValue& control_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
     std::string* error) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-
-  if (control_dict.Get(kAppControlKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseAppControl(dict, uiapplicationinfo)) {
-        *error = "Parsing AppControl failed";
-          return false;
-      }
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&dict)) {
-          if (!ParseAppControl(dict, uiapplicationinfo)) {
-            *error = "Parsing AppControl failed";
-            return false;
-          }
-        }
-      }
+  for (auto& item : parser::GetOneOrMany(&control_dict, kAppControlKey, "")) {
+    if (!ParseAppControl(item, uiapplicationinfo)) {
+      *error = "Parsing AppControl failed";
+      return false;
     }
   }
   return true;
@@ -171,25 +156,10 @@ bool InitializeDataControlParsing(
     const parser::DictionaryValue& control_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
     std::string* error) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-
-  if (control_dict.Get(kDataControlKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseDataControl(dict, uiapplicationinfo)) {
-        *error = "Parsing DataControl failed";
-        return false;
-      }
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&dict)) {
-          if (!ParseDataControl(dict, uiapplicationinfo)) {
-            *error = "Parsing DataControl failed";
-            return false;
-          }
-        }
-      }
+  for (auto& item : parser::GetOneOrMany(&control_dict, kDataControlKey, "")) {
+    if (!ParseDataControl(item, uiapplicationinfo)) {
+      *error = "Parsing DataControl failed";
+      return false;
     }
   }
   return true;
@@ -199,25 +169,10 @@ bool InitializeMetaDataParsing(
     const parser::DictionaryValue& app_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
     std::string* error) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-
-  if (app_dict.Get(kMetaDataKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseMetaData(dict, uiapplicationinfo)) {
-        *error = "Parsing Metadata failed";
-        return false;
-      }
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&dict)) {
-          if (!ParseMetaData(dict, uiapplicationinfo)) {
-            *error = "Parsing Metadata failed";
-            return false;
-          }
-        }
-      }
+  for (auto& item : parser::GetOneOrMany(&app_dict, kMetaDataKey, "")) {
+    if (!ParseMetaData(item, uiapplicationinfo)) {
+      *error = "Parsing Metadata failed";
+      return false;
     }
   }
   return true;
@@ -227,25 +182,10 @@ bool InitializeIconParsing(
     const parser::DictionaryValue& app_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
     std::string* error) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-
-  if (app_dict.Get(kIconKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseAppIcon(dict, uiapplicationinfo)) {
-        *error = "Parsing Icon failed";
-        return false;
-      }
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&dict)) {
-          if (!ParseAppIcon(dict, uiapplicationinfo)) {
-            *error = "Parsing Icon failed";
-            return false;
-          }
-        }
-      }
+  for (auto& item : parser::GetOneOrMany(&app_dict, kIconKey, "")) {
+    if (!ParseAppIcon(item, uiapplicationinfo)) {
+      *error = "Parsing Icon failed";
+      return false;
     }
   }
   return true;
@@ -255,25 +195,10 @@ bool InitializeLabelParsing(
     const parser::DictionaryValue& control_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
     std::string* error) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-
-  if (control_dict.Get(kLabelKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseLabel(dict, uiapplicationinfo)) {
-        *error = "Parsing Label failed";
-        return false;
-      }
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&dict)) {
-          if (!ParseLabel(dict, uiapplicationinfo)) {
-            *error = "Parsing Label failed";
-            return false;
-          }
-        }
-      }
+  for (auto& item : parser::GetOneOrMany(&control_dict, kLabelKey, "")) {
+    if (!ParseLabel(item, uiapplicationinfo)) {
+      *error = "Parsing Label failed";
+      return false;
     }
   }
   return true;
