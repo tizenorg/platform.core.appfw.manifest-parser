@@ -38,41 +38,13 @@ bool PrivilegesHandler::Parse(
     *error = "Failed to parse <privileges> tag";
     return false;
   }
-
-  parser::Value* value = nullptr;
-  if (!privileges_dict->Get(kPrivilegeKey, &value))
-    return true;
-
-  std::unique_ptr<parser::ListValue> privileges_list;
-  if (value->IsType(parser::Value::TYPE_DICTIONARY)) {
-    privileges_list.reset(new parser::ListValue);
-    privileges_list->Append(value->DeepCopy());
-  } else {
-    parser::ListValue* list = nullptr;
-    value->GetAsList(&list);
-    if (list)
-      privileges_list.reset(list->DeepCopy());
-  }
-
-  if (!privileges_list) {
-    *error = "Invalid value of privileges.";
-    return false;
-  }
-  for (parser::ListValue::const_iterator it = privileges_list->begin();
-       it != privileges_list->end(); ++it) {
-    parser::DictionaryValue* dictionary_value = nullptr;
-    (*it)->GetAsDictionary(&dictionary_value);
-
+  for (auto& item : parser::GetOneOrMany(privileges_dict, kPrivilegeKey, "")) {
     std::string privilege;
-    if (!dictionary_value ||
-        !dictionary_value->GetString(
-            kPrivilegeTextKey, &privilege) ||
+    if (!item->GetString(kPrivilegeTextKey, &privilege) ||
         privilege.empty())
       continue;
-
     privileges_info->AddPrivilege(privilege);
   }
-
   *output = std::static_pointer_cast<parser::ManifestData>(privileges_info);
   return true;
 }
