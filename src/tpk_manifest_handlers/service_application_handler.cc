@@ -144,25 +144,10 @@ bool InitializeAppControlParsing(
     const parser::DictionaryValue& app_dict,
     ServiceApplicationSingleEntry* serviceapplicationinfo,
     std::string* error) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-
-  if (app_dict.Get(kAppControlKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseAppControl(dict, serviceapplicationinfo)) {
-        *error = "Parsing AppControl failed";
-          return false;
-      }
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&dict)) {
-          if (!ParseAppControl(dict, serviceapplicationinfo)) {
-            *error = "Parsing AppControl failed";
-            return false;
-          }
-        }
-      }
+  for (auto& item : parser::GetOneOrMany(&app_dict, kAppControlKey, "")) {
+    if (!ParseAppControl(item, serviceapplicationinfo)) {
+      *error = "Parsing AppControl failed";
+      return false;
     }
   }
   return true;
@@ -172,25 +157,10 @@ bool InitializeDataControlParsing(
     const parser::DictionaryValue& app_dict,
     ServiceApplicationSingleEntry* serviceapplicationinfo,
     std::string* error) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-
-  if (app_dict.Get(kDataControlKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseDataControl(dict, serviceapplicationinfo)) {
-        *error = "Parsing DataControl failed";
-        return false;
-      }
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&dict)) {
-          if (!ParseDataControl(dict, serviceapplicationinfo)) {
-            *error = "Parsing DataControl failed";
-            return false;
-          }
-        }
-      }
+  for (auto& item : parser::GetOneOrMany(&app_dict, kDataControlKey, "")) {
+    if (!ParseDataControl(item, serviceapplicationinfo)) {
+      *error = "Parsing DataControl failed";
+      return false;
     }
   }
   return true;
@@ -200,25 +170,10 @@ bool InitializeMetaDataParsing(
     const parser::DictionaryValue& app_dict,
     ServiceApplicationSingleEntry* serviceapplicationinfo,
     std::string* error) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-
-  if (app_dict.Get(kMetaDataKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseMetaData(dict, serviceapplicationinfo)) {
-        *error = "Parsing Metadata failed";
-        return false;
-      }
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&dict)) {
-          if (!ParseMetaData(dict, serviceapplicationinfo)) {
-            *error = "Parsing Metadata failed";
-            return false;
-          }
-        }
-      }
+  for (auto& item : parser::GetOneOrMany(&app_dict, kMetaDataKey, "")) {
+    if (!ParseMetaData(item, serviceapplicationinfo)) {
+      *error = "Parsing Metadata failed";
+      return false;
     }
   }
   return true;
@@ -228,25 +183,10 @@ bool InitializeIconParsing(
     const parser::DictionaryValue& app_dict,
     ServiceApplicationSingleEntry* serviceapplicationinfo,
     std::string* error) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-
-  if (app_dict.Get(kIconKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseAppIcon(dict, serviceapplicationinfo)) {
-        *error = "Parsing Icon failed";
-        return false;
-      }
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&dict)) {
-          if (!ParseAppIcon(dict, serviceapplicationinfo)) {
-            *error = "Parsing Icon failed";
-            return false;
-          }
-        }
-      }
+  for (auto& item : parser::GetOneOrMany(&app_dict, kIconKey, "")) {
+    if (!ParseAppIcon(item, serviceapplicationinfo)) {
+      *error = "Parsing Icon failed";
+      return false;
     }
   }
   return true;
@@ -256,25 +196,10 @@ bool InitializeLabelParsing(
     const parser::DictionaryValue& app_dict,
     ServiceApplicationSingleEntry* serviceapplicationinfo,
     std::string* error) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-
-  if (app_dict.Get(kLabelKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseLabel(dict, serviceapplicationinfo)) {
-        *error = "Parsing Label failed";
-        return false;
-      }
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&dict)) {
-          if (!ParseLabel(dict, serviceapplicationinfo)) {
-            *error = "Parsing Label failed";
-            return false;
-          }
-        }
-      }
+  for (auto& item : parser::GetOneOrMany(&app_dict, kLabelKey, "")) {
+    if (!ParseLabel(item, serviceapplicationinfo)) {
+      *error = "Parsing Label failed";
+      return false;
     }
   }
   return true;
@@ -435,46 +360,19 @@ bool ServiceApplicationHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
+  if (!manifest.HasPath(keys::kServiceApplicationKey))
+    return true;
   std::shared_ptr<ServiceApplicationInfoList>
                   serviceapplicationinfo(new ServiceApplicationInfoList());
-  parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kServiceApplicationKey, &value))
-    return true;
-
-  if (value->GetType() == parser::Value::TYPE_LIST) {
-    // multiple entries
-    const parser::ListValue* list;
-    value->GetAsList(&list);
-    for (const auto& item : *list) {
-      const parser::DictionaryValue* control_dict;
-      if (!item->GetAsDictionary(&control_dict)) {
-        *error = "Parsing service application element failed";
-        return false;
-      }
-
-      ServiceApplicationSingleEntry serviceappentry;
-      if (!ParseServiceApplicationAndStore(*control_dict,
-                                          &serviceappentry,
-                                          error))
-        return false;
-      serviceapplicationinfo->items.push_back(serviceappentry);
-    }
-  } else if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
-    // single entry
-    const parser::DictionaryValue* dict;
-    value->GetAsDictionary(&dict);
-
+  for (auto& item : parser::GetOneOrMany(manifest.value(),
+                                         keys::kServiceApplicationKey, "")) {
     ServiceApplicationSingleEntry serviceappentry;
-    if (!ParseServiceApplicationAndStore(*dict,
+    if (!ParseServiceApplicationAndStore(*item,
                                         &serviceappentry,
                                         error))
       return false;
     serviceapplicationinfo->items.push_back(serviceappentry);
-  } else {
-    *error = "Cannot parse service application element";
-    return false;
   }
-
   *output = std::static_pointer_cast
             <parser::ManifestData>(serviceapplicationinfo);
   return true;

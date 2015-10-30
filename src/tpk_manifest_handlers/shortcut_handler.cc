@@ -34,32 +34,13 @@ bool ParseShortcut(const parser::DictionaryValue* dict, std::string* error,
   dict->GetString(keys::kShortcutExtraDataKey, &shortcut.extra_data);
   dict->GetString(keys::kShortcutExtraKeyKey, &shortcut.extra_key);
 
-  const parser::Value* labels_value = nullptr;
-  if (dict->Get(keys::kShortcutLabelKey, &labels_value)) {
-    if (labels_value->GetType() == parser::Value::TYPE_DICTIONARY) {
-      const parser::DictionaryValue* ldict = nullptr;
-      labels_value->GetAsDictionary(&ldict);
-      std::pair<std::string, std::string> label;
-      if (!ParseShortcutLabel(ldict, error, &label))
-        return false;
-      shortcut.labels.push_back(label);
-    } else if (labels_value->GetType() == parser::Value::TYPE_LIST) {
-      const parser::ListValue* list = nullptr;
-      labels_value->GetAsList(&list);
-      for (auto& item : *list) {
-        const parser::DictionaryValue* ldict = nullptr;
-        if (!item->GetAsDictionary(&ldict))
-          continue;
-        std::pair<std::string, std::string> label;
-        if (!ParseShortcutLabel(ldict, error, &label))
-          return false;
-        shortcut.labels.push_back(label);
-      }
-    } else {
-      *error = "Invalid value of shortcut's label element";
+  for (auto& item : parser::GetOneOrMany(dict, keys::kShortcutLabelKey, "")) {
+    std::pair<std::string, std::string> label;
+    if (!ParseShortcutLabel(item, error, &label))
       return false;
-    }
+    shortcut.labels.push_back(label);
   }
+
   const parser::Value* icon_value = nullptr;
   if (dict->Get(keys::kShortcutIconKey, &icon_value)) {
     const parser::DictionaryValue* icon_dict = nullptr;
@@ -91,30 +72,11 @@ bool ShortcutHandler::Parse(
     *error = "Cannot parse shortcut-list element. Single element is expected";
     return false;
   }
-  const parser::Value* value = nullptr;
-  if (!listdict->Get(keys::kShortcutKey, &value))
-    return false;
-
   std::shared_ptr<ShortcutListInfo> shortcuts(new ShortcutListInfo());
-  if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
-    const parser::DictionaryValue* dict = nullptr;
-    value->GetAsDictionary(&dict);
-    if (!ParseShortcut(dict, error, shortcuts.get()))
+  for (auto& item : parser::GetOneOrMany(listdict, keys::kShortcutKey, "")) {
+    if (!ParseShortcut(item, error, shortcuts.get()))
       return false;
-  } else if (value->GetType() == parser::Value::TYPE_LIST) {
-    const parser::ListValue* list = nullptr;
-    value->GetAsList(&list);
-    for (auto& item : *list) {
-      const parser::DictionaryValue* dict = nullptr;
-      item->GetAsDictionary(&dict);
-      if (!ParseShortcut(dict, error, shortcuts.get()))
-        return false;
-    }
-  } else {
-    *error = "Invalid value of shortcut-list element";
-    return false;
   }
-
   *output = std::static_pointer_cast<parser::ManifestData>(shortcuts);
   return true;
 }
