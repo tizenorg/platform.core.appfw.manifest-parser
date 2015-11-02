@@ -21,6 +21,8 @@ class MetaDataInfo : public parser::ManifestData {
  public:
   MetaDataInfo();
   virtual ~MetaDataInfo();
+
+  static std::string Key();
   /**
    * @brief HasKey
    * @param key

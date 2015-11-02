@@ -23,8 +23,8 @@ const char kAPI[] = "@api-version";
 const char kPackage[] = "@package";
 const char kVersion[] = "@version";
 const char kInstallLocation[] = "@install-location";
-
 const char kAutoInstallLocation[] = "auto";
+const char kManifestKey[] = "manifest";
 
 void ParsePackageAndStore(
     const parser::DictionaryValue& manifest_dict,
@@ -53,13 +53,18 @@ void ParsePackageAndStore(
 
 }  // namespace
 
+
+std::string PackageInfo::key() {
+  return kManifestKey;
+}
+
 bool PackageHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
   std::shared_ptr<PackageInfo> pkg_info(new PackageInfo());
   parser::Value* value = nullptr;
-  if (!manifest.Get(application_keys::kManifestKey, &value)) {
+  if (!manifest.Get(kManifestKey, &value)) {
     *error = "Manifest element not found";
     return false;
   }
@@ -114,7 +119,7 @@ bool PackageHandler::Validate(
 }
 
 std::string PackageHandler::Key() const {
-  return application_keys::kManifestKey;
+  return kManifestKey;
 }
 
 }   // namespace parse

@@ -20,6 +20,11 @@ namespace parse {
 class ServiceApplicationInfo : public parser::ManifestData {
  public:
   /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+  /**
    * @brief set_appid sets appid
    * @param appid
    */

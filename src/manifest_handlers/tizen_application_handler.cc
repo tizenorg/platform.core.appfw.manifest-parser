@@ -19,6 +19,8 @@ namespace wgt {
 namespace parse {
 
 namespace {
+
+const char kTizenApplicationKey[] = "widget.application";
 const utils::VersionNumber kMinimumAPIVersion("2.2.1");
 const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
@@ -28,8 +30,6 @@ const char kTizenApplicationPackageKey[] = "@package";
 const char kTizenApplicationLaunchModeKey[] = "@launch_mode";
 const char kTizenApplicationRequiredVersionKey[] = "@required_version";
 }  // namespace
-
-namespace keys = wgt::application_widget_keys;
 
 TizenApplicationInfo::TizenApplicationInfo() {}
 
@@ -44,7 +44,7 @@ bool TizenApplicationHandler::Parse(
     std::shared_ptr<parser::ManifestData>* output, std::string* error) {
   std::shared_ptr<TizenApplicationInfo> app_info(new TizenApplicationInfo);
   parser::Value* app_value = nullptr;
-  manifest.Get(keys::kTizenApplicationKey, &app_value);
+  manifest.Get(kTizenApplicationKey, &app_value);
   // Find an application element with tizen namespace
   parser::DictionaryValue* app_dict;
   std::string value;
@@ -170,8 +170,12 @@ bool TizenApplicationHandler::Validate(
   return true;
 }
 
+std::string TizenApplicationInfo::Key() {
+  return kTizenApplicationKey;
+}
+
 std::string TizenApplicationHandler::Key() const {
-  return keys::kTizenApplicationKey;
+  return kTizenApplicationKey;
 }
 
 bool TizenApplicationHandler::AlwaysParseForKey() const { return true; }

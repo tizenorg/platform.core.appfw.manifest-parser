@@ -24,6 +24,11 @@ struct ShortcutInfo {
 
 class ShortcutListInfo : public parser::ManifestData {
  public:
+  /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
   std::vector<ShortcutInfo> shortcuts;
 };
 

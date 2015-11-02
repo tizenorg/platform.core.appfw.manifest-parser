@@ -21,6 +21,11 @@ const char kTizenApplicationRequiredVersionKey[] = "@required_version";
 
 class TizenApplicationInfo : public parser::ManifestData {
  public:
+
+  static std::string key() {
+    return kTizenApplicationKey;
+  }
+
   TizenApplicationInfo() {}
   virtual ~TizenApplicationInfo() {}
 
@@ -138,7 +143,7 @@ TEST_F(ParseManifestTest, HandlesProperManifestFile) {
 
   std::shared_ptr<const wgt::parse::TizenApplicationInfo> app_info =
       std::static_pointer_cast<const wgt::parse::TizenApplicationInfo>(
-          parser_->GetManifestData(wgt::parse::kTizenApplicationKey));
+          parser_->GetManifestData(wgt::parse::TizenApplicationInfo::key()));
   ASSERT_TRUE(app_info.get());
   EXPECT_STREQ("nNBDOItqjN.WebSettingSample", app_info->id().c_str());
   EXPECT_STREQ("nNBDOItqjN", app_info->package().c_str());

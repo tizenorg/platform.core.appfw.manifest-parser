@@ -18,6 +18,11 @@ namespace parse {
 class DescriptionInfo : public parser::ManifestData {
  public:
   /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+  /**
    * @brief set_description sets description
    * @param description
    */

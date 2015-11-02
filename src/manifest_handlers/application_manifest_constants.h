@@ -18,33 +18,6 @@ extern const char kIconsKey[];
 
 }  // namespace application_manifest_keys
 
-namespace application_widget_keys {
-
-extern const char kAccessKey[];
-extern const char kAccountKey[];
-extern const char kAllowNavigationKey[];
-extern const char kAuthorKey[];
-extern const char kCSPKey[];
-extern const char kCSPReportOnlyKey[];
-extern const char kDescriptionKey[];
-extern const char kIconsKey[];
-extern const char kTizenApplicationAppControlsKey[];
-extern const char kTizenApplicationKey[];
-extern const char kTizenAppWidgetFullKey[];
-extern const char kTizenCategoryKey[];
-extern const char kTizenContentKey[];
-extern const char kTizenImeKey[];
-extern const char kTizenMetaDataKey[];
-extern const char kTizenPermissionsKey[];
-extern const char kTizenServiceKey[];
-extern const char kTizenSettingKey[];
-extern const char kTizenSplashScreenKey[];
-extern const char kTizenWidgetKey[];
-extern const char kVersionKey[];
-extern const char kWidgetKey[];
-
-}  // namespace application_widget_keys
-
 }  // namespace wgt
 
 #endif  // MANIFEST_HANDLERS_APPLICATION_MANIFEST_CONSTANTS_H_

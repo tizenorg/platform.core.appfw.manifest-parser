@@ -9,10 +9,12 @@
 #include "manifest_parser/values.h"
 #include "utils/logging.h"
 
+namespace {
+const char kTizenPermissionsKey[] = "widget.privilege";
+}
+
 namespace wgt {
 namespace parse {
-
-namespace keys = wgt::application_widget_keys;
 
 namespace {
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
@@ -32,12 +34,12 @@ bool PermissionsHandler::Parse(const parser::Manifest& manifest,
                                std::shared_ptr<parser::ManifestData>* output,
                                std::string* error) {
   std::shared_ptr<PermissionsInfo> permissions_info(new PermissionsInfo);
-  if (!manifest.HasPath(keys::kTizenPermissionsKey)) {
+  if (!manifest.HasPath(kTizenPermissionsKey)) {
     return true;
   }
 
   parser::Value* value;
-  if (!manifest.Get(keys::kTizenPermissionsKey, &value)) {
+  if (!manifest.Get(kTizenPermissionsKey, &value)) {
     *error = "Invalid value of tizen permissions.";
     return false;
   }
@@ -92,8 +94,12 @@ bool PermissionsHandler::Validate(
   return true;
 }
 
+std::string PermissionsInfo::Key() {
+  return kTizenPermissionsKey;
+}
+
 std::string PermissionsHandler::Key() const {
-  return keys::kTizenPermissionsKey;
+  return kTizenPermissionsKey;
 }
 
 }  // namespace parse

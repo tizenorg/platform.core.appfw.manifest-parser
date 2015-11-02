@@ -54,6 +54,8 @@ class ApplicationIcon {
 
 class ApplicationIconsInfo : public parser::ManifestData {
  public:
+  static std::string Key();
+
   const std::vector<ApplicationIcon>& icons() const;
   /**
    * @brief AddIcon adds icon
