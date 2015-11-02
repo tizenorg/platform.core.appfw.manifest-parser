@@ -249,6 +249,7 @@ bool WidgetHandler::Parse(const parser::Manifest& manifest,
   widget_info->preferences_ = std::vector<Preference*>();
 
   std::string parent_lang;
+
   if (manifest.HasPath(kWidgetNamespaceKey)) {
     manifest.GetString(kWidgetNamespaceKey, &widget_info->widget_namespace_);
     manifest.GetString(kWidgetLangKey, &parent_lang);

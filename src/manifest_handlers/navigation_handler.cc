@@ -37,31 +37,19 @@ NavigationHandler::NavigationHandler() {}
 
 NavigationHandler::~NavigationHandler() {}
 
-bool NavigationHandler::Parse(const parser::Manifest& manifest,
-                              std::shared_ptr<parser::ManifestData>* output,
-                              std::string* error) {
-  const parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kAllowNavigationKey, &value)) return true;
-  const parser::DictionaryValue* dict = nullptr;
-  if (!value->GetAsDictionary(&dict)) {
-    const parser::ListValue* list = nullptr;
-    if (value->GetAsList(&list)) {
-      for (auto& item : *list) {
-        const parser::DictionaryValue* candidate = nullptr;
-        if (item->GetAsDictionary(&candidate) &&
-            parser::VerifyElementNamespace(*candidate, kTizenNamespacePrefix)) {
-          dict = candidate;
-          break;
-        }
-      }
-    }
-  }
-  if (!dict) return true;
-  if (!VerifyElementNamespace(*dict, kTizenNamespacePrefix)) return true;
+bool NavigationHandler::Parse(
+    const parser::Manifest& manifest,
+    std::shared_ptr<parser::ManifestData>* output,
+    std::string* error) {
+  if (!manifest.HasPath(keys::kAllowNavigationKey))
+    return true;
 
   std::string allowed_domains;
-  if (!dict->GetString(kXmlTextKey, &allowed_domains)) {
-    return true;
+
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      keys::kAllowNavigationKey, kTizenNamespacePrefix)) {
+    if (!dict->GetString(kXmlTextKey, &allowed_domains))
+      return true;
   }
 
   *output = std::static_pointer_cast<parser::ManifestData>(
