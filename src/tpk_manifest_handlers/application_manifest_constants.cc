@@ -40,5 +40,8 @@ const char kShortcutLabelKey[] = "label";
 const char kShortcutLabelTextKey[] = "#text";
 const char kShortcutLabelLangKey[] = "@lang";
 
+//profile
+const char kProfileKey[] = "manifest.profile";
+
 }  // namespace application_keys
 }  // namespace tpk
