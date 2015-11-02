@@ -21,6 +21,8 @@ class ContentInfo : public parser::ManifestData {
 
   virtual ~ContentInfo() { }
 
+  static std::string Key();
+
   const std::string& src() const {
     return src_;
   }

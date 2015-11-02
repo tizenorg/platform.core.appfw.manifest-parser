@@ -55,8 +55,7 @@ int main() {
           m_parser->GetManifestData(example::keys::item_handler_list_key));
   std::shared_ptr<const wgt::parse::TizenApplicationInfo> tizen_app_info =
       std::static_pointer_cast<const wgt::parse::TizenApplicationInfo>(
-          m_parser->GetManifestData(
-              wgt::application_widget_keys::kTizenApplicationKey));
+          m_parser->GetManifestData(wgt::parse::TizenApplicationInfo::Key()));
 
   // Check parsed ItemInfo data
   assert(!strcmp("additional", item_info->type().c_str()));

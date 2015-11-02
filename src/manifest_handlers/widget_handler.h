@@ -44,6 +44,7 @@ class WidgetInfo : public parser::ManifestData {
     for (auto p : preferences_)
       delete p;
   }
+  static std::string Key();
 
   const LangValMap& name_set() const { return name_set_; }
   const LangValMap& short_name_set() const { return short_name_set_; }

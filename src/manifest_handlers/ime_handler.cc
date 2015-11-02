@@ -16,8 +16,6 @@
 namespace wgt {
 namespace parse {
 
-namespace keys = wgt::application_widget_keys;
-
 namespace {
 
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
@@ -27,6 +25,7 @@ const char kTizenImeUuidTextKey[] = "#text";
 const char kTizenImeLanguagesKey[] = "languages";
 const char kTizenImeLanguageKey[] = "language";
 const char kTizenImeLanguageTextKey[] = "#text";
+const char kTizenImeKey[] = "widget.ime";
 
 const char kErrMsgLanguages[] =
     "At least and only ONE tizen:languages tag should be specified";
@@ -120,7 +119,7 @@ bool ImeHandler::Parse(const parser::Manifest& manifest,
                        std::string* error) {
   std::shared_ptr<ImeInfo> ime_info(new ImeInfo);
   parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kTizenImeKey, &value)) return true;
+  if (!manifest.Get(kTizenImeKey, &value)) return true;
 
   bool result = true;
 
@@ -168,7 +167,7 @@ bool ImeHandler::Validate(const parser::ManifestData& data,
   return true;
 }
 
-std::string ImeHandler::Key() const { return keys::kTizenImeKey; }
+std::string ImeHandler::Key() const { return kTizenImeKey; }
 
 }  // namespace parse
 }  // namespace wgt

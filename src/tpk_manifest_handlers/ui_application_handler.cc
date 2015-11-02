@@ -17,6 +17,7 @@
 namespace {
 
 const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
+const char kUIApplicationKey[] = "manifest.ui-application";
 
 }  // namespace
 
@@ -61,7 +62,12 @@ const char kUIApplicationMultipleKey[] = "@multiple";
 const char kUIApplicationNoDisplayKey[] = "@nodisplay";
 const char kUIApplicationTaskManageKey[] = "@taskmanage";
 const char kUIApplicationTypeKey[] = "@type";
-}
+const char kUIApplicationKey[] = "manifest.ui-application";
+
+// manifest
+const char kManifestKey[] = "manifest";
+
+}  // namespace
 
 bool ParseAppControl(
   const parser::DictionaryValue* dict,
@@ -400,11 +406,11 @@ bool UIApplicationHandler::Parse(
     std::string* error) {
   std::shared_ptr<UIApplicationInfoList>
                   uiapplicationinfo(new UIApplicationInfoList());
-  if (!manifest.HasPath(keys::kUIApplicationKey))
+  if (!manifest.HasPath(kUIApplicationKey))
     return true;
 
   for (const auto& ui_dict : parser::GetOneOrMany(
-      manifest.value(), keys::kUIApplicationKey, "")) {
+      manifest.value(), kUIApplicationKey, "")) {
     UIApplicationSingleEntry uiappentry;
     if (!ParseUIApplicationAndStore(*ui_dict, &uiappentry, error))
       return false;
@@ -424,7 +430,7 @@ bool UIApplicationHandler::Validate(
 
   std::shared_ptr<const PackageInfo> package_info =
       std::static_pointer_cast<const PackageInfo>(
-          handlers_output.find(keys::kManifestKey)->second);
+          handlers_output.find(kManifestKey)->second);
 
   for (const auto& item : elements.items) {
     if (!UIAppValidation(item, package_info->api_version(), error) ||
@@ -438,12 +444,16 @@ bool UIApplicationHandler::Validate(
   return true;
 }
 
+std::string UIApplicationInfo::key() {
+  return kUIApplicationKey;
+}
+
 std::string UIApplicationHandler::Key() const {
-  return keys::kUIApplicationKey;
+  return kUIApplicationKey;
 }
 
 std::vector<std::string> UIApplicationHandler::PrerequisiteKeys() const {
-  return {keys::kManifestKey};
+  return { kManifestKey };
 }
 
 }   // namespace parse

@@ -19,14 +19,17 @@ namespace bf = boost::filesystem;
 namespace wgt {
 namespace parse {
 
-namespace keys = wgt::application_widget_keys;
-
 namespace {
 const char kTizenSplashScreenSrcKey[] = "@src";
+const char kTizenSplashScreenKey[] = "widget.splash-screen";
 }
 
 SplashScreenInfo::SplashScreenInfo() {}
 SplashScreenInfo::~SplashScreenInfo() {}
+
+std::string SplashScreenInfo::Key() {
+  return kTizenSplashScreenKey;
+}
 
 SplashScreenHandler::SplashScreenHandler() {}
 
@@ -37,7 +40,7 @@ bool SplashScreenHandler::Parse(const parser::Manifest& manifest,
                                 std::string* error) {
   std::shared_ptr<SplashScreenInfo> ss_info(new SplashScreenInfo);
   parser::Value* splash_screen = nullptr;
-  manifest.Get(keys::kTizenSplashScreenKey, &splash_screen);
+  manifest.Get(kTizenSplashScreenKey, &splash_screen);
   if (splash_screen && splash_screen->IsType(parser::Value::TYPE_DICTIONARY)) {
     parser::DictionaryValue* ss_dict = nullptr;
     splash_screen->GetAsDictionary(&ss_dict);
@@ -75,7 +78,7 @@ bool SplashScreenHandler::Validate(
 }
 
 std::string SplashScreenHandler::Key() const {
-  return keys::kTizenSplashScreenKey;
+  return kTizenSplashScreenKey;
 }
 
 }  // namespace parse

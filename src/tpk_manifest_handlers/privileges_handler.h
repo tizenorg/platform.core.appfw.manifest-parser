@@ -20,6 +20,11 @@ namespace parse {
 class PrivilegesInfo : public parser::ManifestData {
  public:
   /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+  /**
    * @brief GetPrivileges
    * @return PrivilegesSet
    */

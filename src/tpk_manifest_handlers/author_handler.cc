@@ -21,6 +21,7 @@ namespace keys = tpk::application_keys;
 
 namespace {
 
+const char kAuthorKey[] = "author";
 const char kAuthorKeyText[] = "#text";
 const char kAuthorEmailKey[] = "email";
 const char kAuthorEmailChildKey[] = "@email";
@@ -49,7 +50,7 @@ void ParseAuthorAndStore(
 
   std::string name;
   const parser::DictionaryValue* name_dict;
-  if (control_dict.GetDictionary(keys::kAuthorKey,
+  if (control_dict.GetDictionary(kAuthorKey,
                                  &name_dict)) {
     name_dict->GetString(
         kAuthorKeyText, &name);
@@ -68,7 +69,7 @@ bool AuthorHandler::Parse(
     std::string* error) {
   std::shared_ptr<AuthorInfo> author(new AuthorInfo());
   parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kAuthorKey, &value)) {
+  if (!manifest.Get(kAuthorKey, &value)) {
     *error = "Author element not found";
     return true;
   }
@@ -120,8 +121,12 @@ bool AuthorHandler::Validate(
   return true;
 }
 
+std::string AuthorInfo::key() {
+  return kAuthorKey;
+}
+
 std::string AuthorHandler::Key() const {
-  return keys::kAuthorKey;
+  return kAuthorKey;
 }
 
 }   // namespace parse
