@@ -18,12 +18,13 @@
 namespace wgt {
 namespace parse {
 
-namespace keys = wgt::application_widget_keys;
-
 namespace {
+
+const char kTizenAppWidgetFullKey[] = "widget.app-widget";
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
 const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
 const char kNamespaceKey[] = "@namespace";
+const char kTizenWidgetKey[] = "widget";
 const char kTizenAppWidgetKey[] = "app-widget";
 const char kTizenAppWidgetBoxLabelLangKey[] = "@lang";
 const char kTizenAppWidgetBoxIconSrcKey[] = "@src";
@@ -550,7 +551,7 @@ bool AppWidgetHandler::Parse(const parser::Manifest& manifest,
                              std::shared_ptr<parser::ManifestData>* output,
                              std::string* error) {
   const parser::DictionaryValue* dict = nullptr;
-  if (!GetMandatoryDictionary(manifest, keys::kTizenWidgetKey, &dict, error))
+  if (!GetMandatoryDictionary(manifest, kTizenWidgetKey, &dict, error))
     return false;
 
   AppWidgetVector app_widgets;
@@ -619,7 +620,7 @@ bool AppWidgetHandler::Validate(
 }
 
 std::string AppWidgetHandler::Key() const {
-  return keys::kTizenAppWidgetFullKey;
+  return kTizenAppWidgetFullKey;
 }
 
 }  // namespace parse

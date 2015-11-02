@@ -14,9 +14,8 @@
 #include "manifest_parser/manifest_util.h"
 #include "manifest_parser/values.h"
 
-namespace keys = wgt::application_widget_keys;
-
 namespace {
+const char kTizenServiceKey[] = "widget.service";
 const char kTizenServiceIdKey[] = "@id";
 const char kTizenServiceAutoRestartKey[] = "@auto-restart";
 const char kTizenServiceOnBootKey[] = "@on-boot";
@@ -218,13 +217,13 @@ bool ServiceHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!manifest.HasPath(keys::kTizenServiceKey)) {
+  if (!manifest.HasPath(kTizenServiceKey)) {
     return true;
   }
   std::shared_ptr<ServiceList> services_data(new ServiceList());
 
   for (auto& item : parser::GetOneOrMany(manifest.value(),
-      keys::kTizenServiceKey, kTizenNamespacePrefix)) {
+      kTizenServiceKey, kTizenNamespacePrefix)) {
     auto service = ParseService(item, error);
     if (!service)
       return false;
@@ -252,7 +251,13 @@ bool ServiceHandler::Validate(
   return true;
 }
 
-std::string ServiceHandler::Key() const { return keys::kTizenServiceKey; }
+std::string ServiceInfo::Key() {
+  return kTizenServiceKey;
+}
+
+std::string ServiceHandler::Key() const {
+  return kTizenServiceKey;
+}
 
 }  // namespace parse
 }  // namespace wgt

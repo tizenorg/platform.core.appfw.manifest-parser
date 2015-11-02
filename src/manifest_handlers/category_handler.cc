@@ -12,13 +12,13 @@
 namespace wgt {
 namespace parse {
 
-namespace keys = wgt::application_widget_keys;
-
 namespace {
+
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
 const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
 const char kTizenCategoryNameKey[] = "@name";
 const char kErrMsgCategory[] = "Parsing category element failed";
+const char kTizenCategoryKey[] = "widget.category";
 const char kErrMsgCategoryName[] =
     "The name element inside category element is obligatory";
 
@@ -41,7 +41,7 @@ bool CategoryHandler::Parse(const parser::Manifest& manifest,
                             std::string* error) {
   std::shared_ptr<CategoryInfoList> aplist(new CategoryInfoList());
   parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kTizenCategoryKey, &value)) return true;
+  if (!manifest.Get(kTizenCategoryKey, &value)) return true;
 
   if (value->GetType() == parser::Value::TYPE_LIST) {
     // multiple entries
@@ -88,7 +88,14 @@ bool CategoryHandler::Validate(
   return true;
 }
 
-std::string CategoryHandler::Key() const { return keys::kTizenCategoryKey; }
+std::string CategoryHandler::Key() const {
+  return kTizenCategoryKey;
+}
+
+
+std::string CategoryInfoList::Key() {
+    return kTizenCategoryKey;
+}
 
 }  // namespace parse
 }  // namespace wgt

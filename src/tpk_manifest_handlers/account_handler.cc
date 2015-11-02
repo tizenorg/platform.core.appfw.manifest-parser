@@ -19,6 +19,7 @@ namespace parse {
 namespace keys = tpk::application_keys;
 
 namespace {
+const char kAccountKey[] = "manifest.account";
 const char kAccountProviderKey[] = "account-provider";
 const char kAccountProviderIDKey[] = "@providerid";
 const char kAccountAppIDKey[] = "@appid";
@@ -31,7 +32,7 @@ const char kAccountCapabilityKey[] = "capability";
 const char kAccountLangKey[] = "@lang";
 const char kAccountIconNormalKey[] = "account";
 const char kAccountIconSmallKey[] = "account-small";
-}
+}  // namespace
 
 bool AccountHandler::Parse(const parser::Manifest& manifest,
                            std::shared_ptr<parser::ManifestData>* output,
@@ -41,7 +42,7 @@ bool AccountHandler::Parse(const parser::Manifest& manifest,
   const parser::ListValue* list = nullptr;
   std::shared_ptr<AccountInfo> info(new AccountInfo);
 
-  if (manifest.Get(keys::kAccountKey, &val)) {
+  if (manifest.Get(kAccountKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (!ParseSingleAccountElement(dict, info, error))
         return false;
@@ -54,8 +55,12 @@ bool AccountHandler::Parse(const parser::Manifest& manifest,
   return true;
 }
 
+std::string AccountInfo::key() {
+  return kAccountKey;
+}
+
 std::string AccountHandler::Key() const {
-  return keys::kAccountKey;
+  return kAccountKey;
 }
 
 bool AccountHandler::ParseSingleAccountElement(

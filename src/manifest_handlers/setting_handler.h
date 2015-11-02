@@ -38,6 +38,8 @@ class SettingInfo : public parser::ManifestData {
 
   SettingInfo();
   virtual ~SettingInfo();
+
+  static std::string Key();
   /**
    * @brief set_hwkey_enabled sets value of hw_key to true or false
    * @param enabled

@@ -16,17 +16,18 @@
 namespace wgt {
 namespace parse {
 
-namespace keys = wgt::application_widget_keys;
-
 typedef std::pair<std::string, std::string> MetaDataPair;
 typedef std::map<std::string, std::string> MetaDataMap;
 typedef std::map<std::string, std::string>::const_iterator MetaDataIter;
 
 namespace {
-const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+
 const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
 const char kTizenMetaDataNameKey[] = "@key";
 const char kTizenMetaDataValueKey[] = "@value";
+const char kTizenMetaDataKey[] = "widget.metadata";
+
 MetaDataPair ParseMetaDataItem(const parser::DictionaryValue* dict,
                                std::string* error) {
   assert(dict && dict->IsType(parser::Value::TYPE_DICTIONARY));
@@ -72,7 +73,7 @@ bool MetaDataHandler::Parse(const parser::Manifest& manifest,
   std::shared_ptr<MetaDataInfo> metadata_info(new MetaDataInfo);
   parser::Value* metadata_value = nullptr;
 
-  if (!manifest.Get(keys::kTizenMetaDataKey, &metadata_value)) {
+  if (!manifest.Get(kTizenMetaDataKey, &metadata_value)) {
     LOG(INFO) << "Failed to get value of tizen metaData";
     return true;
   }
@@ -122,7 +123,14 @@ bool MetaDataHandler::Validate(
   return true;
 }
 
-std::string MetaDataHandler::Key() const { return keys::kTizenMetaDataKey; }
+std::string MetaDataHandler::Key() const {
+  return kTizenMetaDataKey;
+}
+
+std::string MetaDataInfo::Key() {
+  return kTizenMetaDataKey;
+}
+
 
 }  // namespace parse
 }  // namespace wgt

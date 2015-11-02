@@ -25,6 +25,7 @@ class AccountInfo : public parser::ManifestData {
  public:
   AccountInfo() {}
   ~AccountInfo() override {}
+  static std::string Key();
 
   /**
    * @brief This method returns all the accounts successfully parsed
