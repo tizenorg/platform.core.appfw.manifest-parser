@@ -31,7 +31,6 @@ PermissionsHandler::~PermissionsHandler() {}
 bool PermissionsHandler::Parse(const parser::Manifest& manifest,
                                std::shared_ptr<parser::ManifestData>* output,
                                std::string* error) {
-  std::shared_ptr<PermissionsInfo> permissions_info(new PermissionsInfo);
   if (!manifest.HasPath(keys::kTizenPermissionsKey)) {
     return true;
   }
@@ -42,31 +41,14 @@ bool PermissionsHandler::Parse(const parser::Manifest& manifest,
     return false;
   }
 
-  std::unique_ptr<parser::ListValue> permission_list;
-  if (value->IsType(parser::Value::TYPE_DICTIONARY)) {
-    permission_list.reset(new parser::ListValue);
-    permission_list->Append(value->DeepCopy());
-  } else {
-    parser::ListValue* list = nullptr;
-    value->GetAsList(&list);
-    if (list) permission_list.reset(list->DeepCopy());
-  }
-
-  if (!permission_list) {
-    *error = "Invalid value of permissions.";
-    return false;
-  }
+  std::shared_ptr<PermissionsInfo> permissions_info(new PermissionsInfo);
   parser::PermissionSet api_permissions;
-  for (parser::ListValue::const_iterator it = permission_list->begin();
-       it != permission_list->end(); ++it) {
-    parser::DictionaryValue* dictionary_value = nullptr;
-    (*it)->GetAsDictionary(&dictionary_value);
-    if (!dictionary_value) continue;
-    if (!parser::VerifyElementNamespace(*dictionary_value,
-                                        kTizenNamespacePrefix))
-      continue;
+
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      keys::kTizenPermissionsKey, kTizenNamespacePrefix)) {
     std::string permission;
-    if (!dictionary_value->GetString(kTizenPermissionsNameKey, &permission) ||
+
+    if (!dict->GetString(kTizenPermissionsNameKey, &permission) ||
         permission.empty())
       continue;
 
