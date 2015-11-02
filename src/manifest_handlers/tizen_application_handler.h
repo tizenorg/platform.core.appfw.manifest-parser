@@ -21,7 +21,11 @@ class TizenApplicationInfo : public parser::ManifestData {
  public:
   TizenApplicationInfo();
   virtual ~TizenApplicationInfo();
-
+  /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
   void set_id(const std::string& id) {
     id_ = id;
   }

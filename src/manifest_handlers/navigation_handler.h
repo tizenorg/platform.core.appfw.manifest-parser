@@ -20,6 +20,11 @@ class AllowedNavigationInfo : public parser::ManifestData {
   explicit AllowedNavigationInfo(const std::string& allowed_domains);
   virtual ~AllowedNavigationInfo();
   /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+  /**
    * @brief GetAllowedDomains
    * @return vector with allowed domains
    */

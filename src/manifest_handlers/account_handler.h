@@ -27,6 +27,12 @@ class AccountInfo : public parser::ManifestData {
   ~AccountInfo() override {}
 
   /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+
+  /**
    * @brief This method returns all the accounts successfully parsed
    */
   const std::vector<SingleAccountInfo>& accounts() const {

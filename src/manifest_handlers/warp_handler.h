@@ -19,6 +19,12 @@ namespace parse {
 
 class WarpInfo : public parser::ManifestData {
  public:
+  /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+
   WarpInfo() {}
   ~WarpInfo() override {}
   /**

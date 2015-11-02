@@ -9,6 +9,8 @@
 #include "utils/logging.h"
 
 namespace {
+const char kAccountKey[] = "manifest.account";
+
 const char kSectionIconAccount[] = "Account";
 const char kSectionIconAccountSmall[] = "AccountSmall";
 const char kTrueValueString[] = "true";
@@ -34,7 +36,7 @@ bool AccountHandler::Parse(const parser::Manifest& manifest,
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
   std::shared_ptr<AccountInfo> info(new AccountInfo);
-  if (manifest.Get(keys::kAccountKey, &val)) {
+  if (manifest.Get(kAccountKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (!ParseSingleAccountElement(dict, info, error))
         return false;
@@ -50,7 +52,11 @@ bool AccountHandler::Parse(const parser::Manifest& manifest,
 }
 
 std::string AccountHandler::Key() const {
-  return keys::kAccountKey;
+  return kAccountKey;
+}
+
+std::string AccountInfo::key() {
+  return kAccountKey;
 }
 
 bool AccountHandler::ParseSingleAccountElement(

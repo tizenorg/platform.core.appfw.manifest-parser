@@ -18,6 +18,11 @@ namespace parse {
 class PackageInfo : public parser::ManifestData {
  public:
   /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+  /**
    * @brief set_xmlns xmlns
    * @param xmlns
    */

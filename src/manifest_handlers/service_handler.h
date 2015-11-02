@@ -25,6 +25,11 @@ class ServiceInfo {
       bool on_boot = false);
   virtual ~ServiceInfo();
   /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+  /**
    * @brief id
    * @return string id
    */

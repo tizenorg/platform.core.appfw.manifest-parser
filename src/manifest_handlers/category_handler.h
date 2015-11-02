@@ -15,7 +15,18 @@
 namespace wgt {
 namespace parse {
 
+class CategoryInfo
+{
+ public:
+  /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+};
+
 struct CategoryInfoList : public parser::ManifestData {
+
   std::vector<std::string> categories;
 };
 

@@ -25,7 +25,9 @@ namespace parse {
 namespace keys = wgt::application_widget_keys;
 
 namespace {
+const char kWidgetKey[] = "widget";
 
+const char kAuthorKey[] = "widget.author";
 const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
 const char kWidgetNamespaceKey[] = "widget.@namespace";
 const char kAuthorHrefKey[] = "@href";
@@ -47,6 +49,7 @@ const char kDefaultLocaleKey[] = "widget.@defaultlocale";
 const char kViewModesKey[] = "widget.@viewmodes";
 const char kPreferencesKey[] = "widget.preference";
 const char kXmlTextKey[] = "#text";
+const char kDescriptionKey[] = "widget.description";
 
 bool ParserPreferenceItem(const parser::Value* val, Preference** output,
                           std::string* error) {
@@ -144,12 +147,12 @@ void WidgetHandler::ParseSingleLocalizedDescriptionElement(
 void WidgetHandler::ParseLocalizedDescriptionElements(
     const parser::Manifest& manifest, const std::string& parent_lang,
     std::shared_ptr<WidgetInfo> info) {
-  if (!manifest.HasPath(keys::kDescriptionKey)) return;
+  if (!manifest.HasPath(kDescriptionKey)) return;
 
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
-  if (manifest.Get(keys::kDescriptionKey, &val)) {
+  if (manifest.Get(kDescriptionKey, &val)) {
     if (val->GetAsDictionary(&dict)) {
       if (parser::VerifyElementNamespace(*dict, kWidgetNamespacePrefix))
         ParseSingleLocalizedDescriptionElement(dict, parent_lang, info);
@@ -231,11 +234,11 @@ void WidgetHandler::ParseSingleAuthorElement(
 
 void WidgetHandler::ParseAuthorElements(const parser::Manifest& manifest,
                                         std::shared_ptr<WidgetInfo> info) {
-  if (manifest.HasPath(keys::kAuthorKey)) {
+  if (manifest.HasPath(kAuthorKey)) {
     const parser::Value* author_value = nullptr;
-    manifest.Get(keys::kAuthorKey, &author_value);
+    manifest.Get(kAuthorKey, &author_value);
 
-    auto& authors = parser::GetOneOrMany(manifest.value(), keys::kAuthorKey,
+    auto& authors = parser::GetOneOrMany(manifest.value(), kAuthorKey,
                                          kWidgetNamespacePrefix);
     if (!authors.empty())
       ParseSingleAuthorElement(authors[0], info);
@@ -311,7 +314,14 @@ bool WidgetHandler::Validate(const parser::ManifestData& data,
   return true;
 }
 
-std::string WidgetHandler::Key() const { return keys::kTizenWidgetKey; }
+
+std::string WidgetHandler::Key() const {
+  return kWidgetKey;
+}
+
+std::string WidgetInfo::key() {
+  return kWidgetKey;
+}
 
 }  // namespace parse
 }  // namespace wgt
