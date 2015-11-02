@@ -38,7 +38,12 @@ typedef std::map<std::string, std::string> LangValMap;
 class WidgetInfo : public parser::ManifestData {
  public:
   WidgetInfo() {}
-  virtual ~WidgetInfo() {}
+  WidgetInfo(const WidgetInfo&) = delete;
+  WidgetInfo& operator=(const WidgetInfo&) = delete;
+  virtual ~WidgetInfo() {
+    for (auto p : preferences_)
+      delete p;
+  }
 
   const LangValMap& name_set() const { return name_set_; }
   const LangValMap& short_name_set() const { return short_name_set_; }
