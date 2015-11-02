@@ -398,10 +398,10 @@ bool UIApplicationHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  std::shared_ptr<UIApplicationInfoList>
-                  uiapplicationinfo(new UIApplicationInfoList());
   if (!manifest.HasPath(keys::kUIApplicationKey))
     return true;
+
+  auto uiapplicationinfo = std::make_shared<UIApplicationInfoList>();
 
   for (const auto& ui_dict : parser::GetOneOrMany(
       manifest.value(), keys::kUIApplicationKey, "")) {
@@ -410,6 +410,7 @@ bool UIApplicationHandler::Parse(
       return false;
     uiapplicationinfo->items.push_back(uiappentry);
   }
+
   *output = std::static_pointer_cast<parser::ManifestData>(uiapplicationinfo);
   return true;
 }

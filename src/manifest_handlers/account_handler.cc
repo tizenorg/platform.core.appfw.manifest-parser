@@ -9,6 +9,8 @@
 #include "utils/logging.h"
 
 namespace {
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+
 const char kSectionIconAccount[] = "Account";
 const char kSectionIconAccountSmall[] = "AccountSmall";
 const char kTrueValueString[] = "true";
@@ -30,21 +32,17 @@ namespace keys = wgt::application_widget_keys;
 bool AccountHandler::Parse(const parser::Manifest& manifest,
                            std::shared_ptr<parser::ManifestData>* output,
                            std::string* error) {
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-  std::shared_ptr<AccountInfo> info(new AccountInfo);
-  if (manifest.Get(keys::kAccountKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (!ParseSingleAccountElement(dict, info, error))
-        return false;
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list)
-        if (item->GetAsDictionary(&dict))
-          if (!ParseSingleAccountElement(dict, info, error))
-            return false;
-    }
+  if (!manifest.HasPath(keys::kAccountKey))
+    return true;
+
+  auto info = std::make_shared<AccountInfo>();
+
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      keys::kAccountKey, kTizenNamespacePrefix)) {
+    if (!ParseSingleAccountElement(dict, info, error))
+      return false;
   }
+
   *output = std::static_pointer_cast<AccountInfo>(info);
   return true;
 }
