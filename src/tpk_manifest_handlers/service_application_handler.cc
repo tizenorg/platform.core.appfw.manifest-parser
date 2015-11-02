@@ -18,6 +18,8 @@ namespace parse {
 namespace keys = tpk::application_keys;
 
 namespace {
+const char kServiceApplicationKey[] = "manifest.service-application";
+
 // service-application
 const char kServiceApplicationAppIDKey[] = "@appid";
 const char kServiceApplicationAutoRestartKey[] = "@auto-restart";
@@ -360,12 +362,12 @@ bool ServiceApplicationHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!manifest.HasPath(keys::kServiceApplicationKey))
+  if (!manifest.HasPath(kServiceApplicationKey))
     return true;
   std::shared_ptr<ServiceApplicationInfoList>
                   serviceapplicationinfo(new ServiceApplicationInfoList());
   for (auto& item : parser::GetOneOrMany(manifest.value(),
-                                         keys::kServiceApplicationKey, "")) {
+                                         kServiceApplicationKey, "")) {
     ServiceApplicationSingleEntry serviceappentry;
     if (!ParseServiceApplicationAndStore(*item,
                                         &serviceappentry,
@@ -397,8 +399,13 @@ bool ServiceApplicationHandler::Validate(
   return true;
 }
 
+
+std::string ServiceApplicationInfo::key() {
+  return kServiceApplicationKey;
+}
+
 std::string ServiceApplicationHandler::Key() const {
-  return keys::kServiceApplicationKey;
+  return kServiceApplicationKey;
 }
 
 }   // namespace parse

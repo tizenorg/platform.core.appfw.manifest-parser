@@ -10,7 +10,6 @@ namespace application_keys {
 // manifest
 const char kManifestKey[] = "manifest";
 
-// author
 const char kAuthorKey[] = "author";
 
 // description
@@ -29,16 +28,7 @@ const char kUIApplicationKey[] = "manifest.ui-application";
 const char kAccountKey[] = "manifest.account";
 
 // shortcuts
-const char kShortcutListKey[] = "manifest.shortcut-list";
-const char kShortcutKey[] = "shortcut";
-const char kShortcutAppidKey[] = "@appid";
-const char kShortcutExtraDataKey[] = "@extra_data";
-const char kShortcutExtraKeyKey[] = "@extra_key";
-const char kShortcutIconKey[] = "icon";
-const char kShortcutIconTextKey[] = "#text";
-const char kShortcutLabelKey[] = "label";
-const char kShortcutLabelTextKey[] = "#text";
-const char kShortcutLabelLangKey[] = "@lang";
+
 
 //profile
 const char kProfileKey[] = "manifest.profile";

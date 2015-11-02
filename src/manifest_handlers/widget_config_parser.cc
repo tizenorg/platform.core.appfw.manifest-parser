@@ -249,7 +249,7 @@ const std::string& WidgetConfigParser::GetErrorMessage() const {
 bool WidgetConfigParser::CheckStartFile() {
   std::shared_ptr<const ContentInfo> content_info =
       std::static_pointer_cast<const ContentInfo>(parser_->GetManifestData(
-          application_widget_keys::kTizenContentKey));
+          ContentInfo::key()));
   if (content_info) {
     std::string content = content_info->src();
     if (content_info->is_tizen_content()) {
@@ -267,12 +267,12 @@ bool WidgetConfigParser::CheckStartFile() {
       return true;
     } else {
       // Remove content as it is invalid
-      parser_->EraseManifestData(application_widget_keys::kTizenContentKey);
+      parser_->EraseManifestData(ContentInfo::key());
     }
   }
 
   if (!CheckStartFileInWidget(widget_path_)) {
-    parser_->EraseManifestData(application_widget_keys::kTizenContentKey);
+    parser_->EraseManifestData(ContentInfo::key());
     error_ = "Could not find valid start file";
     return false;
   }
@@ -282,7 +282,7 @@ bool WidgetConfigParser::CheckStartFile() {
 bool WidgetConfigParser::CheckServicesStartFiles() {
   std::shared_ptr<const ServiceList> service_list =
       std::static_pointer_cast<const ServiceList>(
-          parser_->GetManifestData(application_widget_keys::kTizenServiceKey));
+          parser_->GetManifestData(ServiceInfo::key()));
   if (!service_list)
     return true;
   for (auto& service_info : service_list->services) {

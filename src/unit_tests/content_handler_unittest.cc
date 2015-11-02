@@ -18,10 +18,20 @@
 namespace bf = boost::filesystem;
 
 namespace {
-const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
-const char kTizenContentSrcKey[] = "@src";
+const char kWidgetKey[] = "widget";
 const char kNamespaceKey[] = "@namespace";
 const char kTizenContentTagKey[] = "content";
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
+const char kTizenContentEncodingKey[] = "@encoding";
+const char kTizenContentTypeKey[] = "@type";
+const char kTizenContentKey[] = "widget.content";
+const char kMimeMainComponent[] = "";
+const char kMimeCharsetComponent[] = "charset";
+const char kDefaultMimeType[] = "text/html";
+const char kDefaultEncoding[] = "UTF-8";
+const char kTizenContentSrcKey[] = "@src";
+
 
 std::unique_ptr<parser::ManifestHandlerRegistry> GetRegistryForTest() {
   std::unique_ptr<parser::ManifestHandlerRegistry> registry;
@@ -76,7 +86,7 @@ TEST_F(ContentHandlerTest, NoContentEntry) {
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!GetManifestData(keys::kTizenContentKey));
+  ASSERT_TRUE(!GetManifestData(kTizenContentKey));
 }
 
 TEST_F(ContentHandlerTest, SingleContentEntry) {
@@ -86,7 +96,7 @@ TEST_F(ContentHandlerTest, SingleContentEntry) {
   std::unique_ptr<DictionaryValue> content(new DictionaryValue());
   content->SetString(kTizenContentSrcKey, "my_index.html");
   widget->Set(kTizenContentTagKey, content.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -94,7 +104,7 @@ TEST_F(ContentHandlerTest, SingleContentEntry) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), false);
   ASSERT_EQ(content_info->src(), "my_index.html");
@@ -108,7 +118,7 @@ TEST_F(ContentHandlerTest, SingleContentEntrySrcEmpty) {
   content->SetString(kTizenContentSrcKey, "");
   content->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kTizenContentTagKey, content.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check empty
@@ -116,7 +126,7 @@ TEST_F(ContentHandlerTest, SingleContentEntrySrcEmpty) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_FALSE(!!content_info);
 }
 
@@ -128,7 +138,7 @@ TEST_F(ContentHandlerTest, SingleTizenContentEntry) {
   content->SetString(kTizenContentSrcKey, "http://www.tizen.app/my_index.html");
   content->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kTizenContentTagKey, content.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -136,7 +146,7 @@ TEST_F(ContentHandlerTest, SingleTizenContentEntry) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), true);
   ASSERT_EQ(content_info->src(), "http://www.tizen.app/my_index.html");
@@ -150,7 +160,7 @@ TEST_F(ContentHandlerTest, SingleTizenContentEntryNotURL) {
   content->SetString(kTizenContentSrcKey, "relative_NOT_url");
   content->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kTizenContentTagKey, content.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check error
@@ -158,7 +168,7 @@ TEST_F(ContentHandlerTest, SingleTizenContentEntryNotURL) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), true);
   ASSERT_EQ(content_info->src(), "relative_NOT_url");
@@ -176,7 +186,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryW3CTakeFirst) {
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -184,7 +194,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryW3CTakeFirst) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), false);
   ASSERT_EQ(content_info->src(), "w3c_1_index.html");
@@ -206,7 +216,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenTakeFirst) {
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -214,7 +224,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenTakeFirst) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), true);
   ASSERT_EQ(content_info->src(), "http://www.tizen.app/tizen_1_index.html");
@@ -234,7 +244,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenPrioritizedAsFirst) {
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -242,7 +252,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenPrioritizedAsFirst) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), true);
   ASSERT_EQ(content_info->src(), "http://www.tizen.app/tizen_index.html");
@@ -262,7 +272,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenPrioritizedAsSecond) {
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -270,7 +280,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryTizenPrioritizedAsSecond) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), true);
   ASSERT_EQ(content_info->src(), "http://www.tizen.app/tizen_index.html");
@@ -287,7 +297,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryW3CIgnoreIfNotFirst) {
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check empty
@@ -295,7 +305,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryW3CIgnoreIfNotFirst) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_FALSE(!!content_info);
 }
 
@@ -311,7 +321,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryW3CIgnoreIfFirstEmpty) {
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check empty
@@ -319,7 +329,7 @@ TEST_F(ContentHandlerTest, MultipleContentEntryW3CIgnoreIfFirstEmpty) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_FALSE(!!content_info);
 }
 
@@ -335,7 +345,7 @@ TEST_F(ContentHandlerTest, MultipleContentBackToW3CWhenTizenEntryBroken) {
   list->Append(content1.release());
   list->Append(content2.release());
   widget->Set(kTizenContentTagKey, list.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check w3c when tizen:content broken
@@ -343,7 +353,7 @@ TEST_F(ContentHandlerTest, MultipleContentBackToW3CWhenTizenEntryBroken) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), false);
   ASSERT_EQ(content_info->src(), "w3c_1_index.html");
@@ -371,7 +381,7 @@ TEST_F(ContentHandlerTest, MultipleMoreContentEntry) {
   list->Append(content3.release());
   list->Append(content4.release());
   widget->Set(kTizenContentTagKey, list.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -379,7 +389,7 @@ TEST_F(ContentHandlerTest, MultipleMoreContentEntry) {
   ASSERT_TRUE(ValidateAppManifest());
   std::shared_ptr<const wgt::parse::ContentInfo> content_info =
       std::dynamic_pointer_cast<const wgt::parse::ContentInfo>(
-          GetManifestData(keys::kTizenContentKey));
+          GetManifestData(kTizenContentKey));
   ASSERT_TRUE(!!content_info);
   ASSERT_EQ(content_info->is_tizen_content(), true);
   ASSERT_EQ(content_info->src(), "http://www.tizen.app/tizen_3_index.html");

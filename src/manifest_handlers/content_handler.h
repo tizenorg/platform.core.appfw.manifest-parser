@@ -20,6 +20,11 @@ class ContentInfo : public parser::ManifestData {
      : is_tizen_content_(false) { }
 
   virtual ~ContentInfo() { }
+  /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
 
   const std::string& src() const {
     return src_;

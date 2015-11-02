@@ -20,6 +20,7 @@ namespace parse {
 namespace keys = tpk::application_keys;
 
 namespace {
+const char kDescriptionKey[] = "description";
 const char kDescriptionKeyText[] = "#text";
 const char kDescriptionLangKey[] = "@lang";
 
@@ -29,7 +30,7 @@ void ParseDescriptionAndStore(
 
   std::string description;
   const parser::DictionaryValue* description_dict;
-  if (control_dict.GetDictionary(keys::kDescriptionKey,
+  if (control_dict.GetDictionary(kDescriptionKey,
                                  &description_dict)) {
     description_dict->GetString(
         kDescriptionKeyText, &description);
@@ -56,7 +57,7 @@ bool DescriptionHandler::Parse(
   std::shared_ptr<DescriptionInfo>
     descriptioninfo(new DescriptionInfo());
   parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kDescriptionKey, &value))
+  if (!manifest.Get(kDescriptionKey, &value))
     return true;
 
   if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
@@ -87,8 +88,12 @@ bool DescriptionHandler::Validate(
   return true;
 }
 
+std::string DescriptionInfo::key() {
+  return kDescriptionKey;
+}
+
 std::string DescriptionHandler::Key() const {
-  return keys::kDescriptionKey;
+  return kDescriptionKey;
 }
 
 }   // namespace parse

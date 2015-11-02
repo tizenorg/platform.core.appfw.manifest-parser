@@ -9,41 +9,24 @@
 namespace tpk {
 namespace application_keys {
 
-// manifest
-extern const char kManifestKey[];
-
-// author
-extern const char kAuthorKey[];
-
-// description
-extern const char kDescriptionKey[];
-
-// privileges
-extern const char kPrivilegesKey[];
-
-// service-application
-extern const char kServiceApplicationKey[];
-
-// ui-application
-extern const char kUIApplicationKey[];
-
-// account
-extern const char kAccountKey[];
-
-// shortcuts
-extern const char kShortcutListKey[];
-extern const char kShortcutKey[];
-extern const char kShortcutAppidKey[];
-extern const char kShortcutExtraDataKey[];
-extern const char kShortcutExtraKeyKey[];
-extern const char kShortcutIconKey[];
-extern const char kShortcutIconTextKey[];
-extern const char kShortcutLabelKey[];
-extern const char kShortcutLabelTextKey[];
-extern const char kShortcutLabelLangKey[];
-
-// profile
-extern const char kProfileKey[];
+//extern const char kManifestKey[];
+//extern const char kAuthorKey[];
+//extern const char kDescriptionKey[];
+//extern const char kPrivilegesKey[];
+//extern const char kServiceApplicationKey[];
+//extern const char kUIApplicationKey[];
+//extern const char kAccountKey[];
+//extern const char kShortcutListKey[];
+//extern const char kShortcutKey[];
+//extern const char kShortcutAppidKey[];
+//extern const char kShortcutExtraDataKey[];
+//extern const char kShortcutExtraKeyKey[];
+//extern const char kShortcutIconKey[];
+//extern const char kShortcutIconTextKey[];
+//extern const char kShortcutLabelKey[];
+//extern const char kShortcutLabelTextKey[];
+//extern const char kShortcutLabelLangKey[];
+//extern const char kProfileKey[];
 
 }  // namespace application_keys
 }  // namespace tpk

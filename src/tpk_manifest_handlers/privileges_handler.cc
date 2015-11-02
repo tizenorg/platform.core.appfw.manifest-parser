@@ -21,6 +21,7 @@ namespace parse {
 namespace keys = tpk::application_keys;
 
 namespace {
+const char kPrivilegesKey[] = "manifest.privileges";
 const char kPrivilegeKey[] = "privilege";
 const char kPrivilegeTextKey[] = "#text";
 }
@@ -31,7 +32,7 @@ bool PrivilegesHandler::Parse(
     std::string* error) {
   std::shared_ptr<PrivilegesInfo> privileges_info(new PrivilegesInfo());
   parser::Value* privileges_value = nullptr;
-  if (!manifest.Get(keys::kPrivilegesKey, &privileges_value))
+  if (!manifest.Get(kPrivilegesKey, &privileges_value))
     return true;
   parser::DictionaryValue* privileges_dict = nullptr;
   if (!privileges_value->GetAsDictionary(&privileges_dict)) {
@@ -49,8 +50,12 @@ bool PrivilegesHandler::Parse(
   return true;
 }
 
+std::string PrivilegesInfo::key() {
+  return kPrivilegesKey;
+}
+
 std::string PrivilegesHandler::Key() const {
-  return keys::kPrivilegesKey;
+  return kPrivilegesKey;
 }
 
 }   // namespace parse

@@ -44,6 +44,11 @@ class AppControlInfo {
       const std::string& uri, const std::string& mime,
       const std::string& reload);
   /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+  /**
    * @brief src return the source attribute
    * @return the value of source attribute
    */

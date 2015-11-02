@@ -19,6 +19,8 @@
 namespace bf = boost::filesystem;
 
 namespace {
+const char kWidgetKey[] = "widget";
+const char kTizenServiceKey[] = "widget.service";
 const char kTizenServiceContentKey[] = "content";
 const char kTizenServiceContentSrcKey[] = "@src";
 const char kTizenServiceIdKey[] = "@id";
@@ -102,16 +104,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryDefault) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -141,16 +143,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryOnBootOn) {
   service->SetString(kTizenServiceOnBootKey, "true");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct002.appId");
@@ -179,16 +181,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryAutoRestartOn) {
   service->SetString(kTizenServiceAutoRestartKey, "true");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct003.appId");
@@ -215,7 +217,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryWrongId) {
   service->SetString(kTizenServiceIdKey, "wrongid.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -239,7 +241,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryIdTypeMismatch) {
   service->SetInteger(kTizenServiceIdKey, 1410);
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -258,7 +260,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryNameMissing) {
   service->SetInteger(kTizenServiceIdKey, 1410);
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -280,7 +282,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryIdSingleNameNotInTizen) {
   service->SetInteger(kTizenServiceIdKey, 1410);
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -314,16 +316,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleNames) {
   service->SetString(kTizenServiceAutoRestartKey, "true");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct003.appId");
@@ -354,7 +356,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryIdSingleContentNotInTizen) {
   service->SetInteger(kTizenServiceIdKey, 1410);
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -373,7 +375,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryContentMissing) {
   service->SetInteger(kTizenServiceIdKey, 1410);
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -402,7 +404,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleContents) {
   service->SetInteger(kTizenServiceIdKey, 1410);
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -429,16 +431,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleIcon) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -469,16 +471,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleIconNotInTizen) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -516,7 +518,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleIcon) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -543,16 +545,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleDescription) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -583,16 +585,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleDescriptionNotInTizen) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -630,7 +632,7 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleDescription) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
@@ -658,16 +660,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleMetadata) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -701,16 +703,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleMetadataNotInTizen) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -751,16 +753,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleMetadata) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -812,16 +814,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleMetadataMixedNamespaces) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -857,16 +859,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleCategory) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -898,16 +900,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntrySingleCategoryNotInTizen) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -945,16 +947,16 @@ TEST_F(ServiceHandlerTest, SingleServiceEntryMultipleCategory) {
   service->SetString(kTizenServiceIdKey, "correct001.appId");
   service->SetString(kNamespaceKey, kTizenNamespacePrefix);
   widget->Set(kServiceKey, service.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(kTizenServiceKey));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 1);
   ASSERT_EQ(service_list->services[0].id(), "correct001.appId");
@@ -993,16 +995,16 @@ TEST_F(ServiceHandlerTest, MultipleServiceEntry) {
   list->Append(service1.release());
   list->Append(service2.release());
   widget->Set(kServiceKey, list.release());
-  value->Set(keys::kWidgetKey, widget.release());
+  value->Set(kWidgetKey, widget.release());
   std::shared_ptr<Manifest> manifest(new Manifest(std::move(value)));
   SetManifest(manifest);
   // Check correctness
   ASSERT_TRUE(ParseAppManifest());
   ASSERT_TRUE(ValidateAppManifest());
-  ASSERT_TRUE(!!GetManifestData(keys::kTizenServiceKey));
+  ASSERT_TRUE(!!GetManifestData(kTizenServiceKey));
   std::shared_ptr<const wgt::parse::ServiceList> service_list =
       std::dynamic_pointer_cast<const wgt::parse::ServiceList>(
-          GetManifestData(keys::kTizenServiceKey));
+          GetManifestData(wgt::parse::ServiceInfo::key()));
   ASSERT_TRUE(!!service_list);
   ASSERT_EQ(service_list->services.size(), 2);
   ASSERT_EQ(service_list->services[0].id(), "correct004.appId");

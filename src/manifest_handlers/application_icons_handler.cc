@@ -12,10 +12,12 @@
 namespace keys = wgt::application_widget_keys;
 
 namespace {
+
 const char kWidgetIconKey[] = "widget.icon";
 const char kWidgetIconSrcKey[] = "@src";
 const char kWidgetIconWidthKey[] = "@width";
 const char kWidgetIconHeightKey[] = "@height";
+const char kIconsKey[] = "icons";
 
 bool ExtractIconSrc(const parser::Value& dict, std::string* value,
                     std::string* /*error*/) {
@@ -107,6 +109,11 @@ void ApplicationIcon::set_height(int height) {
   if (height >= 0)
     height_ = height;
 }
+
+std::string ApplicationIconsInfo::key() {
+  return kIconsKey;
+}
+
 
 const std::vector<ApplicationIcon>& ApplicationIconsInfo::icons() const {
   return icons_;

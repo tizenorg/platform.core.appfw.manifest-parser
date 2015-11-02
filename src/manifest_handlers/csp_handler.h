@@ -22,6 +22,16 @@ class CSPInfo : public parser::ManifestData {
   CSPInfo() {}
   ~CSPInfo() override {}
   /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+  /**
+   * @brief key
+   * @param key string
+   */
+  static std::string report_only_key();
+  /**
    * @brief set_security_rules sets up string with security rules
    * @param security_rules
    */
