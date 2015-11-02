@@ -15,19 +15,27 @@ namespace {
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
 const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
 const char kXmlTextKey[] = "#text";
+const char kCSPKey[] = "widget.content-security-policy";
+const char kCSPReportOnlyKey[] = "widget.content-security-policy-report-only";
 }
 
 namespace wgt {
 namespace parse {
 
-namespace keys = wgt::application_widget_keys;
+std::string CSPInfo::Key() {
+  return kCSPKey;
+}
+
+std::string CSPInfo::Report_only_key() {
+  return kCSPReportOnlyKey;
+}
 
 bool CSPHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* /*error*/) {
   std::string security_key = (security_type_ == SecurityType::CSP) ?
-      keys::kCSPKey : keys::kCSPReportOnlyKey;
+      kCSPKey : kCSPReportOnlyKey;
 
   if (!manifest.HasPath(security_key))
     return true;
@@ -48,8 +56,8 @@ bool CSPHandler::Parse(
 }
 
 std::string CSPHandler::Key() const {
-  return security_type_ == SecurityType::CSP ? keys::kCSPKey
-                                             : keys::kCSPReportOnlyKey;
+  return security_type_ == SecurityType::CSP ? kCSPKey
+                                             : kCSPReportOnlyKey;
 }
 
 }  // namespace parse

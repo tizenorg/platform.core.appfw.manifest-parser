@@ -19,6 +19,8 @@ namespace parse {
 
 class SplashScreenInfo : public parser::ManifestData {
  public:
+  static std::string Key();
+
   SplashScreenInfo();
   virtual ~SplashScreenInfo();
 

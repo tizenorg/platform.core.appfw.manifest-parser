@@ -9,7 +9,9 @@
 #include "utils/logging.h"
 
 namespace {
+
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kAccountKey[] = "manifest.account";
 
 const char kSectionIconAccount[] = "Account";
 const char kSectionIconAccountSmall[] = "AccountSmall";
@@ -22,23 +24,21 @@ const char kAccountNameKey[] = "display-name";
 const char kAccountLangKey[] = "@lang";
 const char kAccountIconKey[] = "icon";
 const char kAccountCapabilityKey[] = "capability";
-}
+}  // namespace
 
 namespace wgt {
 namespace parse {
 
-namespace keys = wgt::application_widget_keys;
-
 bool AccountHandler::Parse(const parser::Manifest& manifest,
                            std::shared_ptr<parser::ManifestData>* output,
                            std::string* error) {
-  if (!manifest.HasPath(keys::kAccountKey))
+  if (!manifest.HasPath(kAccountKey))
     return true;
 
   auto info = std::make_shared<AccountInfo>();
 
   for (const auto& dict : parser::GetOneOrMany(manifest.value(),
-      keys::kAccountKey, kTizenNamespacePrefix)) {
+      kAccountKey, kTizenNamespacePrefix)) {
     if (!ParseSingleAccountElement(dict, info, error))
       return false;
   }
@@ -48,7 +48,11 @@ bool AccountHandler::Parse(const parser::Manifest& manifest,
 }
 
 std::string AccountHandler::Key() const {
-  return keys::kAccountKey;
+  return kAccountKey;
+}
+
+std::string AccountInfo::Key() {
+  return kAccountKey;
 }
 
 bool AccountHandler::ParseSingleAccountElement(

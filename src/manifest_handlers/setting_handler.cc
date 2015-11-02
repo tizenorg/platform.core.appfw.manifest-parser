@@ -14,12 +14,11 @@
 
 #include "manifest_handlers/application_manifest_constants.h"
 
-namespace keys = wgt::application_widget_keys;
-
 namespace {
 
 const char kTrueValue[] = "true";
 const char kFalseValue[] = "false";
+
 const char kTizenHardwareKey[] = "@hwkey-event";
 const char kTizenScreenOrientationKey[] = "@screen-orientation";
 const char kTizenEncryptionKey[] = "@encryption";
@@ -33,6 +32,7 @@ const char kTizenUserAgentKey[] = "@user-agent";
 const char kTizenSoundModeKey[] = "@sound-mode";
 const char kTizenBackgroundVibrationKey[] = "@background-vibration";
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kTizenSettingKey[] = "widget.setting";
 
 bool ForAllFindKey(const parser::Value* value, const std::string& key,
                    std::string* result) {
@@ -85,7 +85,7 @@ bool SettingHandler::Parse(const parser::Manifest& manifest,
                            std::shared_ptr<parser::ManifestData>* output,
                            std::string* /*error*/) {
   const parser::Value* value = nullptr;
-  manifest.Get(keys::kTizenSettingKey, &value);
+  manifest.Get(kTizenSettingKey, &value);
 
   std::shared_ptr<SettingInfo> app_info(new SettingInfo);
   std::string hwkey;
@@ -192,7 +192,14 @@ bool SettingHandler::Validate(
   return true;
 }
 
-std::string SettingHandler::Key() const { return keys::kTizenSettingKey; }
+
+std::string SettingHandler::Key() const {
+  return kTizenSettingKey;
+}
+
+std::string SettingInfo::Key() {
+  return kTizenSettingKey;
+}
 
 }  // namespace parse
 }  // namespace wgt

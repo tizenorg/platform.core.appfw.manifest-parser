@@ -12,29 +12,40 @@ namespace keys = tpk::application_keys;
 
 namespace {
 
+const char kShortcutListKey[] = "manifest.shortcut-list";
+const char kShortcutKey[] = "shortcut";
+const char kShortcutAppidKey[] = "@appid";
+const char kShortcutExtraDataKey[] = "@extra_data";
+const char kShortcutExtraKeyKey[] = "@extra_key";
+const char kShortcutIconKey[] = "icon";
+const char kShortcutIconTextKey[] = "#text";
+const char kShortcutLabelKey[] = "label";
+const char kShortcutLabelTextKey[] = "#text";
+const char kShortcutLabelLangKey[] = "@lang";
+
 bool ParseShortcutLabel(const parser::DictionaryValue* dict,
                         std::string* error,
                         std::pair<std::string, std::string>* label) {
   std::string lang;
-  if (dict->GetString(keys::kShortcutLabelLangKey, &lang)) {
+  if (dict->GetString(kShortcutLabelLangKey, &lang)) {
     if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
       *error = "Failed to validate language tag of shortcut's label element";
       return false;
     }
   }
   label->first = lang;
-  dict->GetString(keys::kShortcutLabelTextKey, &label->second);
+  dict->GetString(kShortcutLabelTextKey, &label->second);
   return true;
 }
 
 bool ParseShortcut(const parser::DictionaryValue* dict, std::string* error,
                    tpk::parse::ShortcutListInfo* list) {
   tpk::parse::ShortcutInfo shortcut;
-  dict->GetString(keys::kShortcutAppidKey, &shortcut.app_id);
-  dict->GetString(keys::kShortcutExtraDataKey, &shortcut.extra_data);
-  dict->GetString(keys::kShortcutExtraKeyKey, &shortcut.extra_key);
+  dict->GetString(kShortcutAppidKey, &shortcut.app_id);
+  dict->GetString(kShortcutExtraDataKey, &shortcut.extra_data);
+  dict->GetString(kShortcutExtraKeyKey, &shortcut.extra_key);
 
-  for (auto& item : parser::GetOneOrMany(dict, keys::kShortcutLabelKey, "")) {
+  for (auto& item : parser::GetOneOrMany(dict, kShortcutLabelKey, "")) {
     std::pair<std::string, std::string> label;
     if (!ParseShortcutLabel(item, error, &label))
       return false;
@@ -42,13 +53,13 @@ bool ParseShortcut(const parser::DictionaryValue* dict, std::string* error,
   }
 
   const parser::Value* icon_value = nullptr;
-  if (dict->Get(keys::kShortcutIconKey, &icon_value)) {
+  if (dict->Get(kShortcutIconKey, &icon_value)) {
     const parser::DictionaryValue* icon_dict = nullptr;
     if (!icon_value->GetAsDictionary(&icon_dict)) {
       *error = "Invalid shortcut icon. Parser is expecting single <icon> tag";
       return false;
     }
-    icon_dict->GetString(keys::kShortcutIconTextKey, &shortcut.icon);
+    icon_dict->GetString(kShortcutIconTextKey, &shortcut.icon);
   }
 
   list->shortcuts.push_back(shortcut);
@@ -65,7 +76,7 @@ bool ShortcutHandler::Parse(
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
   const parser::Value* listvalue = nullptr;
-  if (!manifest.Get(keys::kShortcutListKey, &listvalue))
+  if (!manifest.Get(kShortcutListKey, &listvalue))
     return true;
   const parser::DictionaryValue* listdict = nullptr;
   if (!listvalue->GetAsDictionary(&listdict)) {
@@ -73,7 +84,7 @@ bool ShortcutHandler::Parse(
     return false;
   }
   std::shared_ptr<ShortcutListInfo> shortcuts(new ShortcutListInfo());
-  for (auto& item : parser::GetOneOrMany(listdict, keys::kShortcutKey, "")) {
+  for (auto& item : parser::GetOneOrMany(listdict, kShortcutKey, "")) {
     if (!ParseShortcut(item, error, shortcuts.get()))
       return false;
   }
@@ -81,8 +92,12 @@ bool ShortcutHandler::Parse(
   return true;
 }
 
+std::string ShortcutListInfo::key() {
+  return kShortcutListKey;
+}
+
 std::string ShortcutHandler::Key() const {
-  return keys::kShortcutListKey;
+  return kShortcutListKey;
 }
 
 }  // namespace parse

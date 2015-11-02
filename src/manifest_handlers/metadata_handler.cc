@@ -16,17 +16,18 @@
 namespace wgt {
 namespace parse {
 
-namespace keys = wgt::application_widget_keys;
-
 typedef std::pair<std::string, std::string> MetaDataPair;
 typedef std::map<std::string, std::string> MetaDataMap;
 typedef std::map<std::string, std::string>::const_iterator MetaDataIter;
 
 namespace {
-const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+
 const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
+const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
 const char kTizenMetaDataNameKey[] = "@key";
 const char kTizenMetaDataValueKey[] = "@value";
+const char kTizenMetaDataKey[] = "widget.metadata";
+
 MetaDataPair ParseMetaDataItem(const parser::DictionaryValue* dict,
                                std::string* error) {
   assert(dict && dict->IsType(parser::Value::TYPE_DICTIONARY));
@@ -66,17 +67,18 @@ MetaDataHandler::MetaDataHandler() {}
 
 MetaDataHandler::~MetaDataHandler() {}
 
+
 bool MetaDataHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!manifest.HasPath(keys::kTizenMetaDataKey))
+  if (!manifest.HasPath(kTizenMetaDataKey))
     return true;
 
   auto metadata_info = std::make_shared<MetaDataInfo>();
 
   for (const auto& dict : parser::GetOneOrMany(manifest.value(),
-      keys::kTizenMetaDataKey, kTizenNamespacePrefix)) {
+      kTizenMetaDataKey, kTizenNamespacePrefix)) {
     MetaDataPair metadata_item;
 
     metadata_item = ParseMetaDataItem(dict, error);
@@ -99,7 +101,14 @@ bool MetaDataHandler::Validate(
   return true;
 }
 
-std::string MetaDataHandler::Key() const { return keys::kTizenMetaDataKey; }
+std::string MetaDataHandler::Key() const {
+  return kTizenMetaDataKey;
+}
+
+std::string MetaDataInfo::Key() {
+  return kTizenMetaDataKey;
+}
+
 
 }  // namespace parse
 }  // namespace wgt

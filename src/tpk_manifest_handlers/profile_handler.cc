@@ -19,18 +19,18 @@ namespace keys = tpk::application_keys;
 namespace {
 
 const char kProfileNameKey[] = "@name";
-
+const char kProfileKey[] = "manifest.profile";
 }  // namespace
 
 bool ProfileHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!manifest.HasPath(keys::kProfileKey))
+  if (!manifest.HasPath(kProfileKey))
     return true;
 
   std::shared_ptr<ProfileInfo> profile_info(new ProfileInfo());
-  for (auto& item : parser::GetOneOrMany(manifest.value(), keys::kProfileKey,
+  for (auto& item : parser::GetOneOrMany(manifest.value(), kProfileKey,
                                          "")) {
     std::string name;
     if (!item->GetString(kProfileNameKey, &name)) {
@@ -45,7 +45,7 @@ bool ProfileHandler::Parse(
 }
 
 std::string ProfileHandler::Key() const {
-  return keys::kProfileKey;
+  return kProfileKey;
 }
 
 }  // namespace parse
