@@ -20,6 +20,11 @@ namespace parse {
 class UIApplicationInfo : public parser::ManifestData {
  public:
   /**
+   * @brief key
+   * @param key string
+   */
+  static std::string key();
+  /**
    * @brief set_appid sets app id
    * @param appid
    */

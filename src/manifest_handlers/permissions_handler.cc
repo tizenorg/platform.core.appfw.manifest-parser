@@ -9,10 +9,12 @@
 #include "manifest_parser/values.h"
 #include "utils/logging.h"
 
+namespace {
+const char kTizenPermissionsKey[] = "widget.privilege";
+}
+
 namespace wgt {
 namespace parse {
-
-namespace keys = wgt::application_widget_keys;
 
 namespace {
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
@@ -31,12 +33,13 @@ PermissionsHandler::~PermissionsHandler() {}
 bool PermissionsHandler::Parse(const parser::Manifest& manifest,
                                std::shared_ptr<parser::ManifestData>* output,
                                std::string* error) {
-  if (!manifest.HasPath(keys::kTizenPermissionsKey)) {
+
+  if (!manifest.HasPath(kTizenPermissionsKey)) {
     return true;
   }
 
   parser::Value* value;
-  if (!manifest.Get(keys::kTizenPermissionsKey, &value)) {
+  if (!manifest.Get(kTizenPermissionsKey, &value)) {
     *error = "Invalid value of tizen permissions.";
     return false;
   }
@@ -45,7 +48,7 @@ bool PermissionsHandler::Parse(const parser::Manifest& manifest,
   parser::PermissionSet api_permissions;
 
   for (const auto& dict : parser::GetOneOrMany(manifest.value(),
-      keys::kTizenPermissionsKey, kTizenNamespacePrefix)) {
+      kTizenPermissionsKey, kTizenNamespacePrefix)) {
     std::string permission;
 
     if (!dict->GetString(kTizenPermissionsNameKey, &permission) ||
@@ -74,8 +77,12 @@ bool PermissionsHandler::Validate(
   return true;
 }
 
+std::string PermissionsInfo::Key() {
+  return kTizenPermissionsKey;
+}
+
 std::string PermissionsHandler::Key() const {
-  return keys::kTizenPermissionsKey;
+  return kTizenPermissionsKey;
 }
 
 }  // namespace parse

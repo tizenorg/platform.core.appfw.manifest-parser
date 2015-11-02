@@ -18,18 +18,19 @@ const char kEnabledValue[] = "enable";
 const char kDisabledValue[] = "disable";
 
 const utils::VersionNumber kReloadRequiredVersion("2.4");
+const char kTizenApplicationKey[] = "widget.application";
 const char kTizenApplicationAppControlSrcKey[] = "src";
 const char kTizenApplicationAppControlOperationKey[] = "operation";
 const char kTizenApplicationAppControlUriKey[] = "uri";
 const char kTizenApplicationAppControlMimeKey[] = "mime";
 const char kTizenApplicationAppControlReloadKey[] = "@reload";
 const char kTizenApplicationAppControlChildNameAttrKey[] = "@name";
+const char kTizenApplicationAppControlsKey[] = "widget.app-control";
+
 }  // namespace
 
 namespace wgt {
 namespace parse {
-
-namespace keys = wgt::application_widget_keys;
 
 namespace {
 
@@ -86,13 +87,14 @@ bool AppControlHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!manifest.HasPath(keys::kTizenApplicationAppControlsKey))
+
+  if (!manifest.HasPath(kTizenApplicationAppControlsKey))
     return true;
 
   auto aplist = std::make_shared<AppControlInfoList>();
 
   for (const auto& dict : parser::GetOneOrMany(manifest.value(),
-      keys::kTizenApplicationAppControlsKey, kTizenNamespacePrefix)) {
+      kTizenApplicationAppControlsKey, kTizenNamespacePrefix)) {
     ParseAppControlEntryAndStore(*dict, aplist.get());
   }
 
@@ -128,7 +130,7 @@ bool AppControlHandler::Validate(
 
     const TizenApplicationInfo& app_info =
       static_cast<const TizenApplicationInfo&>(
-        *handlers_output.find(keys::kTizenApplicationKey)->second);
+        *handlers_output.find(kTizenApplicationKey)->second);
     utils::VersionNumber required_version(app_info.required_version());
     if (!required_version.IsValid()) {
       *error = "Cannot retrieve required API version from widget";
@@ -155,11 +157,15 @@ bool AppControlHandler::Validate(
 }
 
 std::vector<std::string> AppControlHandler::PrerequisiteKeys() const {
-  return {keys::kTizenApplicationKey};
+  return { kTizenApplicationKey };
+}
+
+std::string AppControlInfo::Key() {
+  return kTizenApplicationAppControlsKey;
 }
 
 std::string AppControlHandler::Key() const {
-  return keys::kTizenApplicationAppControlsKey;
+  return kTizenApplicationAppControlsKey;
 }
 
 AppControlInfo::AppControlInfo(

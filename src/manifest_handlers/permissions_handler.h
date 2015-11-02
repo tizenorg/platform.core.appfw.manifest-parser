@@ -19,6 +19,8 @@ class PermissionsInfo: public parser::ManifestData {
  public:
   PermissionsInfo();
   virtual ~PermissionsInfo();
+
+  static std::string Key();
   /**
    * @brief GetAPIPermissions
    * @return permission set

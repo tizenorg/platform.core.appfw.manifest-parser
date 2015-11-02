@@ -16,8 +16,6 @@
 namespace wgt {
 namespace parse {
 
-namespace keys = wgt::application_widget_keys;
-
 namespace {
 
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
@@ -27,6 +25,7 @@ const char kTizenImeUuidTextKey[] = "#text";
 const char kTizenImeLanguagesKey[] = "languages";
 const char kTizenImeLanguageKey[] = "language";
 const char kTizenImeLanguageTextKey[] = "#text";
+const char kTizenImeKey[] = "widget.ime";
 
 const char kErrMsgLanguages[] =
     "At least and only ONE tizen:languages tag should be specified";
@@ -115,17 +114,18 @@ void ImeInfo::AddLanguage(const std::string& language) {
   languages_.push_back(language);
 }
 
+
 bool ImeHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!manifest.HasPath(keys::kTizenImeKey))
+  if (!manifest.HasPath(kTizenImeKey))
     return true;
 
   auto ime_info = std::make_shared<ImeInfo>();
 
   const auto& dict = parser::GetOneOrMany(manifest.value(),
-      keys::kTizenImeKey, kTizenNamespacePrefix).front();
+      kTizenImeKey, kTizenNamespacePrefix).front();
 
   if (!ParseImeEntryAndStore(*dict, ime_info.get(), error)) {
     return false;
@@ -161,7 +161,7 @@ bool ImeHandler::Validate(const parser::ManifestData& data,
   return true;
 }
 
-std::string ImeHandler::Key() const { return keys::kTizenImeKey; }
+std::string ImeHandler::Key() const { return kTizenImeKey; }
 
 }  // namespace parse
 }  // namespace wgt
