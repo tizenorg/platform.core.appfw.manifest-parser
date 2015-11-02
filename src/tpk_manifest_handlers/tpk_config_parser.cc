@@ -20,6 +20,7 @@
 #include "tpk_manifest_handlers/description_handler.h"
 #include "tpk_manifest_handlers/package_handler.h"
 #include "tpk_manifest_handlers/privileges_handler.h"
+#include "tpk_manifest_handlers/profile_handler.h"
 #include "tpk_manifest_handlers/service_application_handler.h"
 #include "tpk_manifest_handlers/shortcut_handler.h"
 #include "tpk_manifest_handlers/ui_application_handler.h"
@@ -42,6 +43,7 @@ TPKConfigParser::TPKConfigParser() {
   new DescriptionHandler,
   new PackageHandler,
   new PrivilegesHandler,
+  new ProfileHandler,
   new ServiceApplicationHandler,
   new UIApplicationHandler,
   new ShortcutHandler

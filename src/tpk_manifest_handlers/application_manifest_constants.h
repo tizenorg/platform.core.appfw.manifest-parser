@@ -42,6 +42,9 @@ extern const char kShortcutLabelKey[];
 extern const char kShortcutLabelTextKey[];
 extern const char kShortcutLabelLangKey[];
 
+// profile
+extern const char kProfileKey[];
+
 }  // namespace application_keys
 }  // namespace tpk
 
