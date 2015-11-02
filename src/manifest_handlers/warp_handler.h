@@ -58,9 +58,6 @@ class WarpHandler : public parser::ManifestHandler {
   void ParseSingleAccessElement(
       const parser::DictionaryValue& item_dict,
       std::shared_ptr<WarpInfo> info);
-  void ParseAccessElements(
-      const parser::Manifest& manifest,
-      std::shared_ptr<WarpInfo> info);
   std::string Key() const override;
 };
 }  // namespace parse

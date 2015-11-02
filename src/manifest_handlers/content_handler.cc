@@ -153,41 +153,25 @@ ContentHandler::ParseResult ContentHandler::ParseAndSetContentValue(
   return ParseResult::OK;
 }
 
-bool ContentHandler::Parse(const parser::Manifest& manifest,
-                           std::shared_ptr<parser::ManifestData>* output,
-                           std::string* error) {
-  std::shared_ptr<ContentInfo> content_info;
-  parser::Value* value = nullptr;
-  manifest.Get(keys::kTizenContentKey, &value);
-
-  w3c_content_found_ = false;
-  tizen_content_found_ = false;
-  if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
-    const parser::DictionaryValue* dict = nullptr;
-    value->GetAsDictionary(&dict);
-    if (ParseAndSetContentValue(*dict, &content_info, error) ==
-        ParseResult::ERROR) {
-      return false;
-    }
-  } else if (value->GetType() == parser::Value::TYPE_LIST) {
-    parser::ListValue* list = nullptr;
-    value->GetAsList(&list);
-    // Iterate through contents and set values
-    for (auto& item : *list) {
-      const parser::DictionaryValue* dict = nullptr;
-      if (item->GetAsDictionary(&dict)) {
-        if (ParseAndSetContentValue(*dict, &content_info, error) ==
-            ParseResult::ERROR) {
-          return false;
-        }
-      }
-    }
-  } else {
+bool ContentHandler::Parse(
+    const parser::Manifest& manifest,
+    std::shared_ptr<parser::ManifestData>* output,
+    std::string* error) {
+  if (!manifest.HasPath(keys::kTizenContentKey))
     return true;
+
+  std::shared_ptr<ContentInfo> content_info;
+
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      keys::kTizenContentKey, "")) {
+    if (ParseAndSetContentValue(*dict, &content_info, error)
+        == ParseResult::ERROR) {
+        return false;
+    }
   }
 
-  if (content_info)
-    *output = std::static_pointer_cast<parser::ManifestData>(content_info);
+  *output = std::static_pointer_cast<parser::ManifestData>(content_info);
+
   return true;
 }
 

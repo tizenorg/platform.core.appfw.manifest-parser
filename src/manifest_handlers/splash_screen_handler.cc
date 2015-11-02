@@ -36,22 +36,22 @@ bool SplashScreenHandler::Parse(const parser::Manifest& manifest,
                                 std::shared_ptr<parser::ManifestData>* output,
                                 std::string* error) {
   std::shared_ptr<SplashScreenInfo> ss_info(new SplashScreenInfo);
-  parser::Value* splash_screen = nullptr;
-  manifest.Get(keys::kTizenSplashScreenKey, &splash_screen);
-  if (splash_screen && splash_screen->IsType(parser::Value::TYPE_DICTIONARY)) {
-    parser::DictionaryValue* ss_dict = nullptr;
-    splash_screen->GetAsDictionary(&ss_dict);
-    std::string src;
-    ss_dict->GetString(kTizenSplashScreenSrcKey, &src);
-    ss_info->set_src(src);
-  } else if (splash_screen &&
-             !splash_screen->IsType(parser::Value::TYPE_DICTIONARY)) {
-    *error = "splash-screen elements type is not TYPE_DICTIONARY";
-    return false;
-  } else {
+
+  if (manifest.HasPath(keys::kTizenSplashScreenKey)) {
+    for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+        keys::kTizenSplashScreenKey, "")) {
+      std::string src;
+
+      dict->GetString(kTizenSplashScreenSrcKey, &src);
+      ss_info->set_src(src);
+    }
+  }
+  else {
     ss_info->set_exists(false);
   }
+
   *output = std::static_pointer_cast<parser::ManifestData>(ss_info);
+
   return true;
 }
 
