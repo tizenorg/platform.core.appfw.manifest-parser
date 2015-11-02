@@ -115,31 +115,24 @@ void ImeInfo::AddLanguage(const std::string& language) {
   languages_.push_back(language);
 }
 
-bool ImeHandler::Parse(const parser::Manifest& manifest,
-                       std::shared_ptr<parser::ManifestData>* output,
-                       std::string* error) {
-  std::shared_ptr<ImeInfo> ime_info(new ImeInfo);
-  parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kTizenImeKey, &value)) return true;
-
-  bool result = true;
-
-  if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
-    // single entry
-    const parser::DictionaryValue* dict;
-    value->GetAsDictionary(&dict);
-    if (!parser::VerifyElementNamespace(*dict, kTizenNamespacePrefix))
-      return nullptr;
-    result = ParseImeEntryAndStore(*dict, ime_info.get(), error);
-  } else if (value->GetType() == parser::Value::TYPE_LIST) {
-    *error = kErrMsgParsingIme;
-    return nullptr;
-  } else {
-    LOG(INFO) << "IME element is not defined.";
+bool ImeHandler::Parse(
+    const parser::Manifest& manifest,
+    std::shared_ptr<parser::ManifestData>* output,
+    std::string* error) {
+  if (!manifest.HasPath(keys::kTizenImeKey))
     return true;
+
+  std::shared_ptr<ImeInfo> ime_info(new ImeInfo);
+
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      keys::kTizenImeKey, kTizenNamespacePrefix)) {
+    if (!ParseImeEntryAndStore(*dict, ime_info.get(), error)) {
+      return false;
+    }
   }
 
   *output = std::static_pointer_cast<parser::ManifestData>(ime_info);
+
   return true;
 }
 
