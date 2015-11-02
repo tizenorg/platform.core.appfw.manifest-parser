@@ -35,39 +35,22 @@ void WarpHandler::ParseSingleAccessElement(
   info->set_access_element(std::make_pair(domain_name, subdomains));
 }
 
-void WarpHandler::ParseAccessElements(
-    const parser::Manifest& manifest,
-    std::shared_ptr<WarpInfo> info) {
-  if (!manifest.HasPath(keys::kAccessKey))
-    return;
-
-  const parser::Value* val = nullptr;
-  const parser::DictionaryValue* dict = nullptr;
-  const parser::ListValue* list = nullptr;
-  if (manifest.Get(keys::kAccessKey, &val)) {
-    if (val->GetAsDictionary(&dict)) {
-      if (parser::VerifyElementNamespace(*dict, keys::kWidgetNamespacePrefix))
-        ParseSingleAccessElement(*dict, info);
-    } else if (val->GetAsList(&list)) {
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&dict)) {
-          if (!parser::VerifyElementNamespace(*dict,
-                                              keys::kWidgetNamespacePrefix))
-            continue;
-          ParseSingleAccessElement(*dict, info);
-        }
-      }
-    }
-  }
-}
-
 bool WarpHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* /*error*/) {
+  if (!manifest.HasPath(keys::kAccessKey))
+    return true;
+
   std::shared_ptr<WarpInfo> info(new WarpInfo);
-  ParseAccessElements(manifest, info);
+
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      keys::kWidgetNamespacePrefix, "")) {
+    ParseSingleAccessElement(*dict, info);
+  }
+
   *output = std::static_pointer_cast<parser::ManifestData>(info);
+
   return true;
 }
 

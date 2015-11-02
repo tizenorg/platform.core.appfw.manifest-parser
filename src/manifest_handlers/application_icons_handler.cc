@@ -130,43 +130,29 @@ bool ApplicationIconsHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
+  if (!manifest.HasPath(keys::kWidgetIconKey))
+    return true;
+
   std::shared_ptr<ApplicationIconsInfo> app_icons_info =
       std::make_shared<ApplicationIconsInfo>();
-  parser::Value* key_value;
-  if (!manifest.Get(keys::kWidgetIconKey, &key_value)) {
-    *output = std::static_pointer_cast<parser::ManifestData>(app_icons_info);
-    return true;
-  }
 
-  if (key_value->IsType(parser::Value::TYPE_DICTIONARY)) {
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      keys::kWidgetIconKey, "")) {
+    parser::Value* key_value;
     std::string icon_path;
-    int width = -1;
-    int height = -1;
+
     if (!ExtractIconSrc(*key_value, &icon_path, error)) {
       *error = "Cannot get key value as a dictionary. Key name: widget.icon";
       return false;
     }
+
+    int width = -1;
+    int height = -1;
+
     ExtractIconDimensions(*key_value, &height, &width);
     app_icons_info->AddIcon(ApplicationIcon(icon_path, height, width));
-  } else if (key_value->IsType(parser::Value::TYPE_LIST)) {
-    const parser::ListValue* list;
-    if (!key_value->GetAsList(&list)) {
-      *error = "Cannot get key value as a list. Key name: widget.icon";
-      return false;
-    }
-    for (const parser::Value* list_value : *list) {
-      std::string icon_path;
-      int width = -1;
-      int height = -1;
-      if (!ExtractIconSrc(*list_value, &icon_path, error)) {
-        *output =
-            std::static_pointer_cast<parser::ManifestData>(app_icons_info);
-        return true;
-      }
-      ExtractIconDimensions(*key_value, &height, &width);
-      app_icons_info->AddIcon(ApplicationIcon(icon_path, height, width));
-    }
   }
+
   *output = std::static_pointer_cast<parser::ManifestData>(app_icons_info);
   return true;
 }

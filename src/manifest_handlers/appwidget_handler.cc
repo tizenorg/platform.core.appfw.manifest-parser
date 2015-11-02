@@ -74,24 +74,6 @@ void SetError(const std::string& message,
     *error = message + arg;
 }
 
-// Retrieves a mandatory dictionary from specified manifest and specified key.
-// Returns true, if the ditionary is found or false otherwise. If the error
-// parameter is specified, it is also filled with proper message.
-bool GetMandatoryDictionary(const parser::Manifest& manifest,
-    const std::string& key, const parser::DictionaryValue** dict,
-    std::string* error) {
-  assert(dict);
-  if (!manifest.HasPath(key)) {
-    SetError(kErrMsgNoMandatoryKey, key, error);
-    return false;
-  }
-  if (!manifest.GetDictionary(key, dict) || !*dict) {
-    SetError(kErrMsgInvalidDictionary, key, error);
-    return false;
-  }
-  return true;
-}
-
 // Converts given text value to a value of specific type. Returns true
 // if convertion is successful or false otherwise.
 template <typename ValueType>
@@ -183,62 +165,6 @@ bool GetOptionalValue(const parser::DictionaryValue& dict,
   if (!result)
     SetError(kErrMsgInvalidKeyValue, key, error);
   return result;
-}
-
-// Helper function for ParseEach. Do not use directly.
-template <typename ParseSingleType, typename DataContainerType>
-bool ParseEachInternal(const parser::Value& value,
-    const std::string& key, ParseSingleType parse_single,
-    DataContainerType* data_container, std::string* error) {
-  assert(data_container);
-  const parser::DictionaryValue* inner_dict;
-  if (!value.GetAsDictionary(&inner_dict)) {
-    SetError(kErrMsgInvalidDictionary, key, error);
-    return false;
-  }
-  if (!parse_single(*inner_dict, key, data_container, error))
-    return false;
-  return true;
-}
-
-// Parsing helper function calling 'parse_single' for each dictionary contained
-// in 'dict' under a 'key'. This helper function takes two template arguments:
-//  - a function with following prototype:
-//    bool ParseSingleExample(const parser::Value& value,
-//    const std::string& key, DataContainerType* data_container,
-//    std::string* error);
-//  - a DataContainerType object where the above function stores data
-template <typename ParseSingleType, typename DataContainerType>
-bool ParseEach(const parser::DictionaryValue& dict,
-               const std::string& key, bool mandatory,
-               ParseSingleType parse_single, DataContainerType* data_container,
-               std::string* error) {
-  assert(data_container);
-
-  const parser::Value* value = nullptr;
-  if (!dict.Get(key, &value) || !value) {
-    if (mandatory) {
-      SetError(kErrMsgNoMandatoryKey, key, error);
-      return false;
-    }
-    return true;
-  }
-
-  if (value->IsType(parser::Value::TYPE_DICTIONARY)) {
-    if (!ParseEachInternal(*value, key, parse_single, data_container, error))
-      return false;
-  } else if (value->IsType(parser::Value::TYPE_LIST)) {
-    const parser::ListValue* list;
-    if (!value->GetAsList(&list)) {
-      SetError(kErrMsgInvalidList, key, error);
-      return false;
-    }
-    for (const parser::Value* value : *list)
-      if (!ParseEachInternal(*value, key, parse_single, data_container, error))
-        return false;
-  }
-
-  return true;
 }
 
 // Verifies whether specified dictionary represents an element in specified
@@ -425,13 +351,26 @@ bool ParseContent(const parser::DictionaryValue& dict,
       true, &app_widget->content_touch_effect, error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxContentSizeKey,
-      true, ParseContentSizes, app_widget, error))
+  const parser::Value* value = nullptr;
+
+  if (dict.Get(keys::kTizenAppWidgetBoxContentSizeKey, &value) || !value)
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxContentDropViewKey,
-      false, ParseContentDropView, app_widget, error))
-    return false;
+  for (const auto& dict_cs : parser::GetOneOrMany(&dict,
+      keys::kTizenAppWidgetBoxContentSizeKey, "")) {
+    if (!ParseContentSizes(*dict_cs, keys::kTizenAppWidgetBoxContentSizeKey,
+        app_widget, error))
+      return false;
+  }
+
+  value = nullptr;
+
+  for (const auto& dict_cs : parser::GetOneOrMany(&dict,
+      keys::kTizenAppWidgetBoxContentDropViewKey, "")) {
+    if (!ParseContentSizes(*dict_cs, keys::kTizenAppWidgetBoxContentDropViewKey,
+        app_widget, error))
+      return false;
+  }
 
   return true;
 }
@@ -467,17 +406,38 @@ bool ParseAppWidget(const parser::DictionaryValue& dict,
       false, &app_widget.auto_launch, error))
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxLabelKey,
-      true, ParseLabel, &app_widget, error))
+  const parser::Value* value = nullptr;
+
+  if (dict.Get(keys::kTizenAppWidgetBoxLabelKey, &value) || !value)
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxIconKey,
-      false, ParseIcon, &app_widget, error))
+  for (const auto& dict_l : parser::GetOneOrMany(&dict,
+      keys::kTizenAppWidgetBoxLabelKey, "")) {
+    if (!ParseLabel(*dict_l, keys::kTizenAppWidgetBoxLabelKey,
+        &app_widget, error))
+      return false;
+  }
+
+  value = nullptr;
+
+  for (const auto& dict_i : parser::GetOneOrMany(&dict,
+      keys::kTizenAppWidgetBoxIconKey, "")) {
+    if (!ParseIcon(*dict_i, keys::kTizenAppWidgetBoxIconKey,
+        &app_widget, error))
+      return false;
+  }
+
+  value = nullptr;
+
+  if (dict.Get(keys::kTizenAppWidgetBoxContentKey, &value) || !value)
     return false;
 
-  if (!ParseEach(dict, keys::kTizenAppWidgetBoxContentKey,
-      true, ParseContent, &app_widget, error))
-    return false;
+  for (const auto& dict_c : parser::GetOneOrMany(&dict,
+      keys::kTizenAppWidgetBoxContentKey, "")) {
+    if (!ParseContent(*dict_c, keys::kTizenAppWidgetBoxContentKey,
+        &app_widget, error))
+      return false;
+  }
 
   app_widgets->push_back(app_widget);
 
@@ -542,16 +502,16 @@ bool AppWidgetHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  const parser::DictionaryValue* dict = nullptr;
-  if (!GetMandatoryDictionary(manifest, keys::kTizenWidgetKey,
-                              &dict, error))
+  if (!manifest.HasPath(keys::kTizenAppWidgetKey))
     return false;
 
   AppWidgetVector app_widgets;
 
-  if (!ParseEach(*dict, keys::kTizenAppWidgetKey,
-      false, ParseAppWidget, &app_widgets, error))
-    return false;
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      keys::kTizenAppWidgetKey, "")) {
+    if (!ParseAppWidget(*dict, keys::kTizenAppWidgetKey, &app_widgets, error))
+      return false;
+  }
 
   *output = std::static_pointer_cast<parser::ManifestData>(
       std::make_shared<AppWidgetInfo>(app_widgets));

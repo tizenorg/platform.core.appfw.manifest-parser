@@ -77,32 +77,14 @@ bool AppControlHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  std::shared_ptr<AppControlInfoList> aplist(new AppControlInfoList());
-  parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kTizenApplicationAppControlsKey, &value))
+  if (!manifest.HasPath(keys::kTizenApplicationAppControlsKey))
     return true;
 
-  if (value->GetType() == parser::Value::TYPE_LIST) {
-    // multiple entries
-    const parser::ListValue* list;
-    value->GetAsList(&list);
-    for (const auto& item : *list) {
-      const parser::DictionaryValue* control_dict;
-      if (!item->GetAsDictionary(&control_dict)) {
-        *error = "Parsing app-control element failed";
-        return false;
-      }
+  std::shared_ptr<AppControlInfoList> aplist(new AppControlInfoList());
 
-      ParseAppControlEntryAndStore(*control_dict, aplist.get());
-    }
-  } else if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
-    // single entry
-    const parser::DictionaryValue* dict;
-    value->GetAsDictionary(&dict);
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      keys::kTizenApplicationAppControlsKey, "")) {
     ParseAppControlEntryAndStore(*dict, aplist.get());
-  } else {
-    *error = "Cannot parse app-control element";
-    return false;
   }
 
   *output = std::static_pointer_cast<parser::ManifestData>(aplist);

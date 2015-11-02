@@ -43,39 +43,17 @@ bool CategoryHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  std::shared_ptr<CategoryInfoList> aplist(new CategoryInfoList());
-  parser::Value* value = nullptr;
-  if (!manifest.Get(keys::kTizenCategoryKey, &value))
+  if (!manifest.HasPath(keys::kTizenCategoryKey))
     return true;
 
-  if (value->GetType() == parser::Value::TYPE_LIST) {
-    // multiple entries
-    const parser::ListValue* list;
-    value->GetAsList(&list);
-    for (const auto& item : *list) {
-      const parser::DictionaryValue* control_dict;
-      if (!item->GetAsDictionary(&control_dict))
-        continue;
-      if (!parser::VerifyElementNamespace(
-          *control_dict, keys::kTizenNamespacePrefix))
-        continue;
-      if (!ParseCategoryEntryAndStore(*control_dict, aplist.get())) {
-        *error = kErrMsgCategory;
-        return nullptr;
-      }
-    }
-  } else if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
-    // single entry
-    const parser::DictionaryValue* dict;
-    value->GetAsDictionary(&dict);
-    if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
-      return nullptr;
+  std::shared_ptr<CategoryInfoList> aplist(new CategoryInfoList());
+
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      keys::kTizenCategoryKey, "")) {
     if (!ParseCategoryEntryAndStore(*dict, aplist.get()))
-      return nullptr;
-  } else {
-    LOG(INFO) << "Category element is not defined.";
-    return true;
+      return false;
   }
+
   *output = std::static_pointer_cast<parser::ManifestData>(aplist);
   return true;
 }

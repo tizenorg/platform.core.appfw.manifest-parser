@@ -239,12 +239,12 @@ bool WidgetHandler::Parse(
   std::string parent_lang;
   if (manifest.HasPath(keys::kWidgetNamespaceKey)) {
     manifest.GetString(keys::kWidgetNamespaceKey,
-                       &widget_info->widget_namespace_);
+        &widget_info->widget_namespace_);
     manifest.GetString(keys::kWidgetLangKey,
-                       &parent_lang);
+        &parent_lang);
   }
 
-  if (widget_info->widget_namespace_ != keys::kWidgetNamespacePrefix) {
+  if (widget_info->widget_namespace() != keys::kWidgetNamespacePrefix) {
     *error = "Wrong namespace of <widget> element. Config.xml is invalid";
     return false;
   }

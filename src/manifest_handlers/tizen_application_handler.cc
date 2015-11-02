@@ -37,40 +37,22 @@ bool TizenApplicationHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  std::shared_ptr<TizenApplicationInfo> app_info(new TizenApplicationInfo);
-  parser::Value* app_value = nullptr;
-  manifest.Get(keys::kTizenApplicationKey, &app_value);
-  // Find an application element with tizen namespace
-  parser::DictionaryValue* app_dict;
-  std::string value;
-  bool found = false;
-  if (app_value && app_value->IsType(parser::Value::TYPE_DICTIONARY)) {
-    app_value->GetAsDictionary(&app_dict);
-    found = app_dict->GetString(keys::kNamespaceKey, &value);
-    found = found && (value == keys::kTizenNamespacePrefix);
-  } else if (app_value && app_value->IsType(parser::Value::TYPE_LIST)) {
-    parser::ListValue* list;
-    app_value->GetAsList(&list);
-    for (parser::ListValue::iterator it = list->begin();
-         it != list->end(); ++it) {
-      (*it)->GetAsDictionary(&app_dict);
-      app_dict->GetString(keys::kNamespaceKey, &value);
-      bool is_tizen = (value == keys::kTizenNamespacePrefix);
-      if (is_tizen) {
-        if (found) {
-          *error = "There should be no more than one tizen:application element";
-          return false;
-        }
-        found = true;
-      }
-    }
-  }
+  const auto& dict = parser::GetOneOrMany(manifest.value(),
+      keys::kTizenApplicationKey, keys::kTizenNamespacePrefix);
 
-  if (!found) {
+  if (dict.empty()) {
     *error = "Cannot find application element with tizen namespace "
              "or the tizen namespace prefix is incorrect.\n";
     return false;
+  } else if (dict.size() > 1) {
+    *error = "There should be no more than one tizen:application element";
+    return false;
   }
+
+  std::shared_ptr<TizenApplicationInfo> app_info(new TizenApplicationInfo);
+  const parser::DictionaryValue* app_dict = dict.front();
+  std::string value;
+
   if (app_dict->GetString(keys::kTizenApplicationIdKey, &value))
     app_info->set_id(value);
   if (app_dict->GetString(keys::kTizenApplicationPackageKey, &value))
@@ -86,9 +68,9 @@ bool TizenApplicationHandler::Parse(
       }
     }
   }
-  std::string launch_mode;
-  app_dict->GetString(keys::kTizenApplicationLaunchModeKey, &launch_mode);
-  app_info->set_launch_mode(launch_mode);
+
+  app_dict->GetString(keys::kTizenApplicationLaunchModeKey, &value);
+  app_info->set_launch_mode(value);
 
   *output = std::static_pointer_cast<parser::ManifestData>(app_info);
   return true;

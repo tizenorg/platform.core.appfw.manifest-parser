@@ -69,44 +69,21 @@ bool MetaDataHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  std::shared_ptr<MetaDataInfo> metadata_info(new MetaDataInfo);
-  parser::Value* metadata_value = nullptr;
-
-  if (!manifest.Get(keys::kTizenMetaDataKey, &metadata_value)) {
-    LOG(INFO) << "Failed to get value of tizen metaData";
+  if (!manifest.HasPath(keys::kTizenMetaDataKey))
     return true;
-  }
 
-  MetaDataPair metadata_item;
-  if (metadata_value && metadata_value->IsType(
-          parser::Value::TYPE_DICTIONARY)) {
-    parser::DictionaryValue* dict;
-    metadata_value->GetAsDictionary(&dict);
-    if (parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix)) {
-      metadata_item = ParseMetaDataItem(dict, error);
-      metadata_info->SetValue(metadata_item.first, metadata_item.second);
-    }
-  } else if (metadata_value &&
-        metadata_value->IsType(parser::Value::TYPE_LIST)) {
-    parser::ListValue* list;
-    metadata_value->GetAsList(&list);
+  std::shared_ptr<MetaDataInfo> metadata_info(new MetaDataInfo);
 
-    for (parser::ListValue::iterator it = list->begin();
-         it != list->end(); ++it) {
-      parser::DictionaryValue* dict;
-      (*it)->GetAsDictionary(&dict);
-      if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
-        continue;
-      metadata_item = ParseMetaDataItem(dict, error);
-      metadata_info->SetValue(metadata_item.first, metadata_item.second);
-    }
-  } else {
-    *error = "tizen metaData element exists and its type is neither "
-             "TYPE_LIST nor TYPE_DICTIONARY.";
-    return false;
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      keys::kTizenMetaDataKey, "")) {
+    MetaDataPair metadata_item;
+
+    metadata_item = ParseMetaDataItem(dict, error);
+    metadata_info->SetValue(metadata_item.first, metadata_item.second);
   }
 
   *output = std::static_pointer_cast<parser::ManifestData>(metadata_info);
+
   return true;
 }
 

@@ -20,37 +20,23 @@ bool CSPHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* /*error*/) {
-  std::string security_policy = (security_type_ == SecurityType::CSP) ?
+  std::string security_key = (security_type_ == SecurityType::CSP) ?
       keys::kCSPKey : keys::kCSPReportOnlyKey;
-  const parser::Value* value = nullptr;
-  if (!manifest.Get(security_policy, &value))
-    return true;
-  const parser::DictionaryValue* dict = nullptr;
-  if (!value->GetAsDictionary(&dict)) {
-    const parser::ListValue* list = nullptr;
-    if (value->GetAsList(&list)) {
-      const parser::DictionaryValue* candidate = nullptr;
-      for (auto& item : *list) {
-        if (item->GetAsDictionary(&candidate) &&
-            parser::VerifyElementNamespace(
-              *candidate, keys::kTizenNamespacePrefix)) {
-          dict = candidate;
-          break;
-        }
-      }
-    }
-  }
-  if (!dict)
-    return true;
-  if (!parser::VerifyElementNamespace(*dict, keys::kTizenNamespacePrefix))
+
+  if (!manifest.HasPath(security_key))
     return true;
 
   std::shared_ptr<CSPInfo> info(new CSPInfo);
-  std::string security_rules;
-  if (dict->GetString(keys::kXmlTextKey, &security_rules)) {
-    info->set_security_rules(security_rules);
-    *output = std::static_pointer_cast<parser::ManifestData>(info);
+
+  for (const auto& dict : parser::GetOneOrMany(manifest.value(),
+      security_key, "")) {
+    std::string security_rules;
+
+    if (dict->GetString(keys::kXmlTextKey, &security_rules)) {
+      info->set_security_rules(security_rules);
+    }
   }
+
   return true;
 }
 
