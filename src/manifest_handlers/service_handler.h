@@ -24,6 +24,8 @@ class ServiceInfo {
   explicit ServiceInfo(const std::string& id, bool auto_restart = false,
       bool on_boot = false);
   virtual ~ServiceInfo();
+
+  static std::string Key();
   /**
    * @brief id
    * @return string id

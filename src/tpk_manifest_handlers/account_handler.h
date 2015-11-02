@@ -25,6 +25,8 @@ struct SingleAccountInfo {
 
 class AccountInfo : public parser::ManifestData {
  public:
+  static std::string key();
+
   const std::vector<SingleAccountInfo>& accounts() const {
     return accounts_;
   }

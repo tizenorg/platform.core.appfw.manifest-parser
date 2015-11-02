@@ -12,10 +12,9 @@
 namespace wgt {
 namespace parse {
 
-namespace keys = wgt::application_widget_keys;
-
 namespace {
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
+const char kAllowNavigationKey[] = "widget.allow-navigation";
 const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
 const char kXmlTextKey[] = "#text";
 const boost::char_separator<char> navigation_separator(" ");
@@ -37,17 +36,18 @@ NavigationHandler::NavigationHandler() {}
 
 NavigationHandler::~NavigationHandler() {}
 
+
 bool NavigationHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!manifest.HasPath(keys::kAllowNavigationKey))
+  if (!manifest.HasPath(kAllowNavigationKey))
     return true;
 
   std::string allowed_domains;
 
   for (const auto& dict : parser::GetOneOrMany(manifest.value(),
-      keys::kAllowNavigationKey, kTizenNamespacePrefix)) {
+      kAllowNavigationKey, kTizenNamespacePrefix)) {
     if (!dict->GetString(kXmlTextKey, &allowed_domains))
       return true;
   }
@@ -68,7 +68,9 @@ bool NavigationHandler::Validate(
   return true;
 }
 
-std::string NavigationHandler::Key() const { return keys::kAllowNavigationKey; }
+std::string NavigationHandler::Key() const {
+  return kAllowNavigationKey;
+}
 
 }  // namespace parse
 }  // namespace wgt

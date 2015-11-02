@@ -17,7 +17,6 @@
 #include "utils/string_util.h"
 
 namespace ba = boost::algorithm;
-namespace keys = wgt::application_widget_keys;
 
 namespace {
 
@@ -26,6 +25,7 @@ const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
 const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
 const char kTizenContentEncodingKey[] = "@encoding";
 const char kTizenContentTypeKey[] = "@type";
+const char kTizenContentKey[] = "widget.content";
 const char kMimeMainComponent[] = "";
 const char kMimeCharsetComponent[] = "charset";
 const char kDefaultMimeType[] = "text/html";
@@ -157,13 +157,13 @@ bool ContentHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!manifest.HasPath(keys::kTizenContentKey))
+  if (!manifest.HasPath(kTizenContentKey))
     return true;
 
   std::shared_ptr<ContentInfo> content_info;
 
   for (const auto& dict : parser::GetOneOrMany(manifest.value(),
-      keys::kTizenContentKey, "")) {
+      kTizenContentKey, "")) {
     if (ParseAndSetContentValue(*dict, &content_info, error)
         == ParseResult::ERROR) {
         return false;
@@ -175,7 +175,13 @@ bool ContentHandler::Parse(
   return true;
 }
 
-std::string ContentHandler::Key() const { return keys::kTizenContentKey; }
+std::string ContentHandler::Key() const {
+  return kTizenContentKey;
+}
+
+std::string ContentInfo::Key() {
+  return kTizenContentKey;
+}
 
 }  // namespace parse
 }  // namespace wgt

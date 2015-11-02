@@ -14,9 +14,8 @@
 namespace wgt {
 namespace parse {
 
-namespace keys = wgt::application_widget_keys;
-
 namespace {
+const char kAccessKey[] = "widget.access";
 const char kWidgetNamespacePrefix[] = "http://www.w3.org/ns/widgets";
 const char kAccessSubdomainsKey[] = "@subdomains";
 const char kAccessOriginKey[] = "@origin";
@@ -45,13 +44,13 @@ bool WarpHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* /*error*/) {
-  if (!manifest.HasPath(keys::kAccessKey))
+  if (!manifest.HasPath(kAccessKey))
     return true;
 
   auto info = std::make_shared<WarpInfo>();
 
   for (const auto& dict : parser::GetOneOrMany(manifest.value(),
-      keys::kAccessKey, kWidgetNamespacePrefix)) {
+      kAccessKey, kWidgetNamespacePrefix)) {
     ParseSingleAccessElement(*dict, info);
   }
 
@@ -60,8 +59,12 @@ bool WarpHandler::Parse(
   return true;
 }
 
+std::string WarpInfo::Key() {
+  return kAccessKey;
+}
+
 std::string WarpHandler::Key() const {
-  return keys::kAccessKey;
+  return kAccessKey;
 }
 
 }  // namespace parse
