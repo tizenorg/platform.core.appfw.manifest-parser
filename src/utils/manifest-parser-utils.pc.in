@@ -1,0 +1,11 @@
+prefix=@PREFIX@
+exec_prefix=@PREFIX@
+libdir=@LIBDIR@
+includedir=@INCLUDEDIR@
+
+Name: manifest-parser-utils
+Description: Universal manifest parser utils
+Version: @VERSION@
+Requires: libiri
+Libs: -L${libdir} -lmanifest-parser-utils
+Cflags: -I${includedir}
