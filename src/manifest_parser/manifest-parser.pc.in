@@ -6,6 +6,6 @@ includedir=@INCLUDEDIR@
 Name: manifest-parser
 Description: Universal manifest parser
 Version: @VERSION@
-Requires: libiri libxml-2.0 pkgmgr-info pkgmgr-parser vconf
+Requires: libiri libxml-2.0 pkgmgr-info pkgmgr-parser vconf manifest-parser-utils
 Libs: -L${libdir} -lmanifest-parser
 Cflags: -I${includedir}
