@@ -394,6 +394,12 @@ bool ParseUIApplicationAndStore(
   return true;
 }
 
+UIApplicationInfo::UIApplicationInfo()
+    : multiple_("false"),
+      nodisplay_("false"),
+      taskmanage_("true") {
+}
+
 bool UIApplicationHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
