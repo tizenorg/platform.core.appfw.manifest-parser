@@ -19,6 +19,7 @@ namespace parse {
 
 class UIApplicationInfo : public parser::ManifestData {
  public:
+  UIApplicationInfo();
   /**
    * @brief key
    * @param key string
