@@ -32,6 +32,10 @@ AllowedNavigationInfo::AllowedNavigationInfo(
 
 AllowedNavigationInfo::~AllowedNavigationInfo() {}
 
+std::string AllowedNavigationInfo::Key() {
+  return kAllowNavigationKey;
+}
+
 NavigationHandler::NavigationHandler() {}
 
 NavigationHandler::~NavigationHandler() {}
