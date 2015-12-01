@@ -35,6 +35,10 @@ const char kAppControlURIKey[] = "uri";
 const char kAppControlMimeKey[] = "mime";
 const char kAppControlNameChildKey[] = "@name";
 
+// background-category
+const char kBackgroundCategoryKey[] = "background-category";
+const char kBackgroundCategoryValueKey[] = "@value";
+
 // datacontrol
 const char kDataControlKey[] = "datacontrol";
 const char kDataControlAccessKey[] = "@access";
@@ -97,6 +101,19 @@ bool ParseAppControl(
   return true;
 }
 
+bool ParseBackgroundCategoryElement(
+    const parser::DictionaryValue* dict,
+    ServiceApplicationSingleEntry* info) {
+  std::string value;
+
+  if (!dict->GetString(kBackgroundCategoryValueKey, &value))
+    return false;
+
+  info->background_category.emplace_back(std::move(value));
+
+  return true;
+}
+
 bool ParseDataControl(
   const parser::DictionaryValue* dict,
   ServiceApplicationSingleEntry* info) {
@@ -149,6 +166,20 @@ bool InitializeAppControlParsing(
   for (auto& item : parser::GetOneOrMany(&app_dict, kAppControlKey, "")) {
     if (!ParseAppControl(item, serviceapplicationinfo)) {
       *error = "Parsing AppControl failed";
+      return false;
+    }
+  }
+  return true;
+}
+
+bool InitializeBackgroundCategoryParsing(
+    const parser::DictionaryValue& control_dict,
+    ServiceApplicationSingleEntry* serviceapplicationinfo,
+    std::string* error) {
+  for (auto& item : parser::GetOneOrMany(&control_dict,
+      kBackgroundCategoryKey, "")) {
+    if (!ParseBackgroundCategoryElement(item, serviceapplicationinfo)) {
+      *error = "Parsing background-category element failed";
       return false;
     }
   }
@@ -349,6 +380,9 @@ bool ParseServiceApplicationAndStore(
                             serviceapplicationinfo,
                             error) ||
      !InitializeLabelParsing(app_dict,
+                             serviceapplicationinfo,
+                             error) ||
+     !InitializeBackgroundCategoryParsing(app_dict,
                              serviceapplicationinfo,
                              error)) {
     return false;
