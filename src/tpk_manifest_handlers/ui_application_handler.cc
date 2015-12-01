@@ -34,6 +34,10 @@ const char kAppControlURIKey[] = "uri";
 const char kAppControlMimeKey[] = "mime";
 const char kAppControlNameChildKey[] = "@name";
 
+// background-category
+const char kBackgroundCategoryKey[] = "background-category";
+const char kBackgroundCategoryValueKey[] = "@value";
+
 // datacontrol
 const char kDataControlKey[] = "datacontrol";
 const char kDataControlAccessKey[] = "@access";
@@ -100,6 +104,19 @@ bool ParseAppControl(
   return true;
 }
 
+bool ParseBackgroundCategoryElement(
+    const parser::DictionaryValue* dict,
+    UIApplicationSingleEntry* info) {
+  std::string value;
+
+  if (!dict->GetString(kBackgroundCategoryValueKey, &value))
+    return false;
+
+  info->background_category.emplace_back(std::move(value));
+
+  return true;
+}
+
 bool ParseDataControl(
   const parser::DictionaryValue* dict,
   UIApplicationSingleEntry* info) {
@@ -152,6 +169,20 @@ bool InitializeAppControlParsing(
   for (auto& item : parser::GetOneOrMany(&control_dict, kAppControlKey, "")) {
     if (!ParseAppControl(item, uiapplicationinfo)) {
       *error = "Parsing AppControl failed";
+      return false;
+    }
+  }
+  return true;
+}
+
+bool InitializeBackgroundCategoryParsing(
+    const parser::DictionaryValue& control_dict,
+    UIApplicationSingleEntry* uiapplicationinfo,
+    std::string* error) {
+  for (auto& item : parser::GetOneOrMany(&control_dict,
+      kBackgroundCategoryKey, "")) {
+    if (!ParseBackgroundCategoryElement(item, uiapplicationinfo)) {
+      *error = "Parsing background-category element failed";
       return false;
     }
   }
@@ -394,7 +425,8 @@ bool ParseUIApplicationAndStore(
      !InitializeDataControlParsing(app_dict, uiapplicationinfo, error) ||
      !InitializeMetaDataParsing(app_dict, uiapplicationinfo, error) ||
      !InitializeIconParsing(app_dict, uiapplicationinfo, error) ||
-     !InitializeLabelParsing(app_dict, uiapplicationinfo, error)) {
+     !InitializeLabelParsing(app_dict, uiapplicationinfo, error) ||
+     !InitializeBackgroundCategoryParsing(app_dict, uiapplicationinfo, error)) {
     return false;
   }
   return true;
