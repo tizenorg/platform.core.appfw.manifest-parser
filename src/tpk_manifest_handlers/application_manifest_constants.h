@@ -42,6 +42,9 @@ extern const char kShortcutLabelKey[];
 extern const char kShortcutLabelTextKey[];
 extern const char kShortcutLabelLangKey[];
 
+// background-category
+extern const char kBackgroundCategoryKey[];
+
 // profile
 extern const char kProfileKey[];
 
