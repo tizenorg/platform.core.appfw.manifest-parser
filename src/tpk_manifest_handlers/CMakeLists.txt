@@ -11,6 +11,7 @@ SET(SRCS
   shortcut_handler.cc
   tpk_config_parser.cc
   ui_application_handler.cc
+  background_category_handler.cc
 )
 
 # Target - definition

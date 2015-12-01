@@ -40,6 +40,9 @@ const char kShortcutLabelKey[] = "label";
 const char kShortcutLabelTextKey[] = "#text";
 const char kShortcutLabelLangKey[] = "@lang";
 
+// background-category
+const char kBackgroundCategoryKey[] = "background-category";
+
 //profile
 const char kProfileKey[] = "manifest.profile";
 

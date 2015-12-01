@@ -17,6 +17,7 @@
 #include "tpk_manifest_handlers/account_handler.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 #include "tpk_manifest_handlers/author_handler.h"
+#include "tpk_manifest_handlers/background_category_handler.h"
 #include "tpk_manifest_handlers/description_handler.h"
 #include "tpk_manifest_handlers/package_handler.h"
 #include "tpk_manifest_handlers/privileges_handler.h"
@@ -46,7 +47,8 @@ TPKConfigParser::TPKConfigParser() {
   new ProfileHandler,
   new ServiceApplicationHandler,
   new UIApplicationHandler,
-  new ShortcutHandler
+  new ShortcutHandler,
+  new BackgroundCategoryHandler
   };
 
   std::unique_ptr<parser::ManifestHandlerRegistry> registry(
