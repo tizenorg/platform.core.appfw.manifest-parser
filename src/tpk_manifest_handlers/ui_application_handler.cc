@@ -34,6 +34,10 @@ const char kAppControlURIKey[] = "uri";
 const char kAppControlMimeKey[] = "mime";
 const char kAppControlNameChildKey[] = "@name";
 
+// background-category
+const char kBackgroundCategoryKey[] = "background-category";
+const char kBackgroundCategoryValueKey[] = "@value";
+
 // datacontrol
 const char kDataControlKey[] = "datacontrol";
 const char kDataControlAccessKey[] = "@access";
@@ -100,6 +104,19 @@ bool ParseAppControl(
   return true;
 }
 
+bool ParseBackgroundCategoryElement(
+    const parser::DictionaryValue* dict,
+    UIApplicationSingleEntry* info) {
+  std::string value;
+
+  if (!dict->GetString(kBackgroundCategoryValueKey, &value))
+    return false;
+
+  info->background_category.emplace_back(std::move(value));
+
+  return true;
+}
+
 bool ParseDataControl(
   const parser::DictionaryValue* dict,
   UIApplicationSingleEntry* info) {
@@ -158,6 +175,20 @@ bool InitializeAppControlParsing(
   return true;
 }
 
+bool InitializeBackgroundCategoryParsing(
+    const parser::DictionaryValue& control_dict,
+    UIApplicationSingleEntry* uiapplicationinfo,
+    std::string* error) {
+  for (auto& item : parser::GetOneOrMany(&control_dict,
+      kBackgroundCategoryKey, "")) {
+    if (!ParseBackgroundCategoryElement(item, uiapplicationinfo)) {
+      *error = "Parsing background-category element failed";
+      return false;
+    }
+  }
+  return true;
+}
+
 bool InitializeDataControlParsing(
     const parser::DictionaryValue& control_dict,
     UIApplicationSingleEntry* uiapplicationinfo,
@@ -207,6 +238,24 @@ bool InitializeLabelParsing(
       return false;
     }
   }
+  return true;
+}
+
+bool InitializeParsing(const parser::DictionaryValue& app_dict,
+                       UIApplicationSingleEntry* uiapplicationinfo,
+                       std::string* error) {
+  if (!InitializeAppControlParsing(app_dict, uiapplicationinfo, error))
+    return false;
+  if (!InitializeDataControlParsing(app_dict, uiapplicationinfo, error))
+    return false;
+  if (!InitializeMetaDataParsing(app_dict, uiapplicationinfo, error))
+    return false;
+  if (!InitializeIconParsing(app_dict, uiapplicationinfo, error))
+    return false;
+  if (!InitializeLabelParsing(app_dict, uiapplicationinfo, error))
+    return false;
+  if (!InitializeBackgroundCategoryParsing(app_dict, uiapplicationinfo, error))
+    return false;
   return true;
 }
 
@@ -390,14 +439,7 @@ bool ParseUIApplicationAndStore(
     uiapplicationinfo->ui_info.set_launch_mode(launch_mode);
   }
 
-  if (!InitializeAppControlParsing(app_dict, uiapplicationinfo, error) ||
-     !InitializeDataControlParsing(app_dict, uiapplicationinfo, error) ||
-     !InitializeMetaDataParsing(app_dict, uiapplicationinfo, error) ||
-     !InitializeIconParsing(app_dict, uiapplicationinfo, error) ||
-     !InitializeLabelParsing(app_dict, uiapplicationinfo, error)) {
-    return false;
-  }
-  return true;
+  return InitializeParsing(app_dict, uiapplicationinfo, error);
 }
 
 UIApplicationInfo::UIApplicationInfo()

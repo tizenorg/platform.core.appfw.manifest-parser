@@ -43,6 +43,18 @@ class AppControlInfo : public parser::ManifestData {
   std::string mime_;
 };
 
+// Background-category
+class BackgroundCategoryInfo : public parser::ManifestData {
+ public:
+  explicit BackgroundCategoryInfo(const std::string& value) : value_(value) {}
+  virtual ~BackgroundCategoryInfo() {}
+
+  const std::string& value() const { return value_; }
+
+ private:
+  std::string value_;
+};
+
 // DataControl
 class DataControlInfo : public parser::ManifestData {
  public:

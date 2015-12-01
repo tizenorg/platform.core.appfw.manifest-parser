@@ -138,6 +138,7 @@ class UIApplicationInfo : public parser::ManifestData {
 struct UIApplicationSingleEntry : public parser::ManifestData {
   UIApplicationInfo ui_info;
   std::vector<AppControlInfo> app_control;
+  std::vector<BackgroundCategoryInfo> background_category;
   std::vector<DataControlInfo> data_control;
   std::vector<MetaDataInfo> meta_data;
   ApplicationIconsInfo app_icons;

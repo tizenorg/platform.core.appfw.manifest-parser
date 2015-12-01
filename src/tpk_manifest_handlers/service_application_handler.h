@@ -106,6 +106,7 @@ class ServiceApplicationInfo : public parser::ManifestData {
 struct ServiceApplicationSingleEntry : public parser::ManifestData {
   ServiceApplicationInfo sa_info;
   std::vector<AppControlInfo> app_control;
+  std::vector<BackgroundCategoryInfo> background_category;
   std::vector<DataControlInfo> data_control;
   std::vector<MetaDataInfo> meta_data;
   ApplicationIconsInfo app_icons;
