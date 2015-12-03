@@ -11,16 +11,20 @@
 #include "manifest_parser/manifest_util.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 
-namespace tpk {
-namespace parse {
-
-namespace keys = tpk::application_keys;
-
 namespace {
 
 const char kProfileNameKey[] = "@name";
 const char kProfileKey[] = "manifest.profile";
 }  // namespace
+
+namespace tpk {
+namespace parse {
+
+namespace keys = tpk::application_keys;
+
+std::string ProfileInfo::Key() {
+  return kProfileKey;
+}
 
 bool ProfileHandler::Parse(
     const parser::Manifest& manifest,

@@ -18,6 +18,8 @@ namespace parse {
 
 class ProfileInfo : public parser::ManifestData {
  public:
+  static std::string Key();
+
   void AddProfile(const std::string& profile) {
     profiles_.push_back(profile);
   }
