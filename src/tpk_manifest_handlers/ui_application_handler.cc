@@ -4,6 +4,8 @@
 
 #include "tpk_manifest_handlers/ui_application_handler.h"
 
+#include <boost/algorithm/string/predicate.hpp>
+
 #include <utility>
 
 #include "manifest_parser/manifest_util.h"
@@ -24,6 +26,7 @@ const char kUIApplicationKey[] = "manifest.ui-application";
 namespace tpk {
 namespace parse {
 
+namespace ba = boost::algorithm;
 namespace keys = tpk::application_keys;
 
 namespace {
@@ -62,6 +65,14 @@ const char kUIApplicationMultipleKey[] = "@multiple";
 const char kUIApplicationNoDisplayKey[] = "@nodisplay";
 const char kUIApplicationTaskManageKey[] = "@taskmanage";
 const char kUIApplicationTypeKey[] = "@type";
+const char kUIApplicationUIGadgetKey[] = "@ui-gadget";
+const char kUIApplicationProcessPoolKey[] = "@process-pool";
+const char kUIApplicationSubmodeKey[] = "@submode";
+const char kUIApplicationSubmodeMainIDKey[] = "@submode-mainid";
+const char kUIApplicationIndicatorDisplayKey[] = "@indicatordisplay";
+const char kUIApplicationPortraitEffectImageKey[] = "@portrait-effectimage";
+const char kUIApplicationLandscapeEffectImageKey[] = "@landscape-effectimage";
+const char kUIApplicationEffectImageTypeKey[] = "@effectimage-type";
 const char kUIApplicationKey[] = "manifest.ui-application";
 
 // manifest
@@ -362,24 +373,68 @@ bool ParseUIApplicationAndStore(
     UIApplicationSingleEntry* uiapplicationinfo,
     std::string* error) {
   std::string appid;
-  app_dict.GetString(kUIApplicationAppIDKey, &appid);
+  if (app_dict.GetString(kUIApplicationAppIDKey, &appid))
+    uiapplicationinfo->ui_info.set_appid(appid);
   std::string exec;
-  app_dict.GetString(kUIApplicationExecKey, &exec);
+  if (app_dict.GetString(kUIApplicationExecKey, &exec))
+    uiapplicationinfo->ui_info.set_exec(exec);
   std::string multiple;
-  app_dict.GetString(kUIApplicationMultipleKey, &multiple);
+  if (app_dict.GetString(kUIApplicationMultipleKey, &multiple))
+    uiapplicationinfo->ui_info.set_multiple(multiple);
   std::string nodisplay;
-  app_dict.GetString(kUIApplicationNoDisplayKey, &nodisplay);
+  if (app_dict.GetString(kUIApplicationNoDisplayKey, &nodisplay))
+    uiapplicationinfo->ui_info.set_nodisplay(nodisplay);
   std::string taskmanage;
-  app_dict.GetString(kUIApplicationTaskManageKey, &taskmanage);
+  if (app_dict.GetString(kUIApplicationTaskManageKey, &taskmanage))
+    uiapplicationinfo->ui_info.set_taskmanage(taskmanage);
   std::string type;
-  app_dict.GetString(kUIApplicationTypeKey, &type);
-
-  uiapplicationinfo->ui_info.set_appid(appid);
-  uiapplicationinfo->ui_info.set_exec(exec);
-  uiapplicationinfo->ui_info.set_multiple(multiple);
-  uiapplicationinfo->ui_info.set_nodisplay(nodisplay);
-  uiapplicationinfo->ui_info.set_taskmanage(taskmanage);
-  uiapplicationinfo->ui_info.set_type(type);
+  if (app_dict.GetString(kUIApplicationTypeKey, &type))
+    uiapplicationinfo->ui_info.set_type(type);
+  std::string uigadget;
+  if (app_dict.GetString(kUIApplicationUIGadgetKey, &uigadget))
+    uiapplicationinfo->ui_info.set_uigadget(uigadget);
+  std::string process_pool;
+  if (app_dict.GetString(kUIApplicationProcessPoolKey, &process_pool)) {
+    if (!ba::iequals(process_pool, "true") &&
+        !ba::iequals(process_pool, "false")) {
+      *error = "process_pool must be 'true' or 'false'";
+      return false;
+    }
+    uiapplicationinfo->ui_info.set_process_pool(process_pool);
+  }
+  std::string submode;
+  if (app_dict.GetString(kUIApplicationSubmodeKey, &submode)) {
+    if (!ba::iequals(submode, "true") &&
+        !ba::iequals(submode, "false")) {
+      *error = "submode must be 'true' or 'false'";
+      return false;
+    }
+    uiapplicationinfo->ui_info.set_submode(submode);
+  }
+  std::string submode_mainid;
+  if (app_dict.GetString(kUIApplicationSubmodeMainIDKey, &submode_mainid))
+    uiapplicationinfo->ui_info.set_submode_mainid(submode_mainid);
+  std::string indicator_display;
+  if (app_dict.GetString(kUIApplicationIndicatorDisplayKey,
+                         &indicator_display)) {
+    if (!ba::iequals(indicator_display, "true") &&
+        !ba::iequals(indicator_display, "false")) {
+      *error = "indicatordisplay must be 'true' or 'false'";
+      return false;
+    }
+    uiapplicationinfo->ui_info.set_indicator_display(indicator_display);
+  }
+  std::string portrait_effectimage;
+  if (app_dict.GetString(kUIApplicationPortraitEffectImageKey,
+                     &portrait_effectimage))
+    uiapplicationinfo->ui_info.set_portrait_image(portrait_effectimage);
+  std::string landscape_effectimage;
+  if (app_dict.GetString(kUIApplicationLandscapeEffectImageKey,
+                     &landscape_effectimage))
+    uiapplicationinfo->ui_info.set_landscape_image(landscape_effectimage);
+  std::string effectimage_type;
+  if (app_dict.GetString(kUIApplicationEffectImageTypeKey, &effectimage_type))
+    uiapplicationinfo->ui_info.set_effectimage_type(effectimage_type);
 
   std::string launch_mode;
   if (app_dict.GetString(kUIApplicationLaunchModeKey, &launch_mode)) {
@@ -403,7 +458,9 @@ bool ParseUIApplicationAndStore(
 UIApplicationInfo::UIApplicationInfo()
     : multiple_("false"),
       nodisplay_("false"),
-      taskmanage_("true") {
+      taskmanage_("true"),
+      indicator_display_("true"),
+      effectimage_type_("image") {
 }
 
 bool UIApplicationHandler::Parse(
