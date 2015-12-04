@@ -4,6 +4,8 @@
 
 #include "tpk_manifest_handlers/service_application_handler.h"
 
+#include <boost/algorithm/string/predicate.hpp>
+
 #include <utility>
 
 #include "manifest_parser/manifest_util.h"
@@ -15,6 +17,7 @@
 namespace tpk {
 namespace parse {
 
+namespace ba = boost::algorithm;
 namespace keys = tpk::application_keys;
 
 namespace {
@@ -26,6 +29,7 @@ const char kServiceApplicationAutoRestartKey[] = "@auto-restart";
 const char kServiceApplicationExecKey[] = "@exec";
 const char kServiceApplicationOnBootKey[] = "@on-boot";
 const char kServiceApplicationTypeKey[] = "@type";
+const char kServiceApplicationProcessPoolKey[] = "@process-pool";
 const char kServiceApplicationKeyText[] = "#text";
 
 // app-control
@@ -366,6 +370,16 @@ bool ParseServiceApplicationAndStore(
   serviceapplicationinfo->sa_info.set_auto_restart(auto_restart);
   serviceapplicationinfo->sa_info.set_on_boot(on_boot);
   serviceapplicationinfo->sa_info.set_type(type);
+
+  std::string process_pool;
+  if (app_dict.GetString(kServiceApplicationProcessPoolKey, &process_pool)) {
+    if (!ba::iequals(process_pool, "true") &&
+        !ba::iequals(process_pool, "false")) {
+      *error = "process_pool must be 'true' or 'false'";
+      return false;
+    }
+    serviceapplicationinfo->sa_info.set_process_pool(process_pool);
+  }
 
   if (!InitializeAppControlParsing(app_dict,
                                   serviceapplicationinfo,
