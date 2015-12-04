@@ -74,6 +74,34 @@ class UIApplicationInfo : public parser::ManifestData {
   void set_type(const std::string& type) {
     type_ = type;
   }
+  void set_uigadget(const std::string& uigadget) {
+    uigadget_ = uigadget;
+  }
+  void set_process_pool(const std::string& process_pool) {
+    process_pool_ = process_pool;
+  }
+  void set_submode(const std::string& submode) {
+    submode_ = submode;
+  }
+  void set_submode_mainid(const std::string& submode_mainid) {
+    submode_mainid_ = submode_mainid;
+  }
+  void set_indicator_display(const std::string& indicator_display) {
+    indicator_display_ = indicator_display;
+  }
+  void set_portrait_image(const std::string& portrait_image) {
+    portrait_image_= portrait_image;
+  }
+  void set_landscape_image(const std::string& landscape_image) {
+    landscape_image_ = landscape_image;
+  }
+  void set_effectimage_type(const std::string& effectimage_type) {
+    effectimage_type_ = effectimage_type;
+  }
+  void set_hwacceleration(const std::string& hwacceleration) {
+    hwacceleration_= hwacceleration;
+  }
+
   /**
    * @brief appid
    * @return appid string
@@ -125,6 +153,42 @@ class UIApplicationInfo : public parser::ManifestData {
     return type_;
   }
 
+  const std::string& uigadget() const {
+    return uigadget_;
+  }
+
+  const std::string& process_pool() const {
+    return process_pool_;
+  }
+
+  const std::string& submode() const {
+    return submode_;
+  }
+
+  const std::string& submode_mainid() const {
+    return submode_mainid_;
+  }
+
+  const std::string& indicator_display() const {
+    return indicator_display_;
+  }
+
+  const std::string& portrait_image() const {
+    return portrait_image_;
+  }
+
+  const std::string& landscape_image() const {
+    return landscape_image_;
+  }
+
+  const std::string& effectimage_type() const {
+    return effectimage_type_;
+  }
+
+  const std::string& hwacceleration() const {
+    return hwacceleration_;
+  }
+
  private:
   std::string appid_;
   std::string exec_;
@@ -133,6 +197,15 @@ class UIApplicationInfo : public parser::ManifestData {
   std::string nodisplay_;
   std::string taskmanage_;
   std::string type_;
+  std::string uigadget_;
+  std::string process_pool_;
+  std::string submode_;
+  std::string submode_mainid_;
+  std::string indicator_display_;
+  std::string portrait_image_;
+  std::string landscape_image_;
+  std::string effectimage_type_;
+  std::string hwacceleration_;
 };
 
 struct UIApplicationSingleEntry : public parser::ManifestData {

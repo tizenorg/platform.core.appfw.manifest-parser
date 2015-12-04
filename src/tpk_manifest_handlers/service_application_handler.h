@@ -59,6 +59,10 @@ class ServiceApplicationInfo : public parser::ManifestData {
   void set_type(const std::string& type) {
     type_ = type;
   }
+  void set_process_pool(const std::string& process_pool) {
+    process_pool_ = process_pool;
+  }
+
   /**
    * @brief appid
    * @return appid string
@@ -94,6 +98,9 @@ class ServiceApplicationInfo : public parser::ManifestData {
   const std::string& type() const {
     return type_;
   }
+  const std::string& process_pool() const {
+    return process_pool_;
+  }
 
  private:
   std::string appid_;
@@ -101,6 +108,7 @@ class ServiceApplicationInfo : public parser::ManifestData {
   std::string exec_;
   std::string on_boot_;
   std::string type_;
+  std::string process_pool_;
 };
 
 struct ServiceApplicationSingleEntry : public parser::ManifestData {

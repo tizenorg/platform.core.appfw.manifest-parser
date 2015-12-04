@@ -23,6 +23,7 @@ const char kAPI[] = "@api-version";
 const char kPackage[] = "@package";
 const char kVersion[] = "@version";
 const char kInstallLocation[] = "@install-location";
+const char kNodisplaySetting[] = "@nodisplay-setting";
 const char kAutoInstallLocation[] = "auto";
 const char kManifestKey[] = "manifest";
 
@@ -39,11 +40,15 @@ void ParsePackageAndStore(
   manifest_dict.GetString(kVersion, &version);
   std::string install_location;
   manifest_dict.GetString(kInstallLocation, &install_location);
+  std::string nodisplay_setting("false");
+  manifest_dict.GetString(kNodisplaySetting, &nodisplay_setting);
 
   pkg_info->set_xmlns(xmlns);
   pkg_info->set_api_version(api_version);
   pkg_info->set_package(package);
   pkg_info->set_version(version);
+  pkg_info->set_nodisplay_setting(nodisplay_setting);
+
   if (install_location.empty()) {
     pkg_info->set_install_location(kAutoInstallLocation);
   } else {
