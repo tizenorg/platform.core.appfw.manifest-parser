@@ -57,6 +57,11 @@ class PackageInfo : public parser::ManifestData {
   void set_install_location(const std::string& install_location) {
     install_location_ = install_location;
   }
+
+  void set_nodisplay_setting(const std::string& nodisplay_setting) {
+    nodisplay_setting_ = nodisplay_setting;
+  }
+
   /**
    * @brief xmlns
    * @return xmlns string
@@ -88,7 +93,9 @@ class PackageInfo : public parser::ManifestData {
   const std::string& install_location() const {
     return install_location_;
   }
-
+  const std::string& nodisplay_setting() const {
+    return nodisplay_setting_;
+  }
 
  private:
   std::string xmlns_;
@@ -96,6 +103,7 @@ class PackageInfo : public parser::ManifestData {
   std::string package_;
   std::string version_;
   std::string install_location_;
+  std::string nodisplay_setting_;
 };
 
 /**
