@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
@@ -14,6 +15,8 @@
 
 namespace tpk {
 namespace parse {
+
+using LangTextPair = std::pair<std::string, std::string>;
 
 class PackageInfo : public parser::ManifestData {
  public:
@@ -61,6 +64,9 @@ class PackageInfo : public parser::ManifestData {
   void set_nodisplay_setting(const std::string& nodisplay_setting) {
     nodisplay_setting_ = nodisplay_setting;
   }
+  void AddLabel(const std::string& lang, const std::string& text) {
+    labels_.emplace_back(lang, text);
+  }
 
   /**
    * @brief xmlns
@@ -96,6 +102,9 @@ class PackageInfo : public parser::ManifestData {
   const std::string& nodisplay_setting() const {
     return nodisplay_setting_;
   }
+  const std::vector<LangTextPair>& labels() const {
+    return labels_;
+  }
 
  private:
   std::string xmlns_;
@@ -104,6 +113,7 @@ class PackageInfo : public parser::ManifestData {
   std::string version_;
   std::string install_location_;
   std::string nodisplay_setting_;
+  std::vector<LangTextPair> labels_;
 };
 
 /**

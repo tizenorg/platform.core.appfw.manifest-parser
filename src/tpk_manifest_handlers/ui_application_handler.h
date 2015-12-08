@@ -215,6 +215,7 @@ struct UIApplicationSingleEntry : public parser::ManifestData {
   std::vector<DataControlInfo> data_control;
   std::vector<MetaDataInfo> meta_data;
   ApplicationIconsInfo app_icons;
+  ApplicationImagesInfo app_images;
   std::vector<LabelInfo> label;
 };
 
@@ -229,6 +230,7 @@ struct UIApplicationInfoList : public parser::ManifestData {
  *  <ui-application>
  *  \_  <label>
  *  \_  <icon>
+ *  \_  <image>
  *  \_  <app-control>
  *  |   \_  <mime>
  *  |   \_  <operation>
