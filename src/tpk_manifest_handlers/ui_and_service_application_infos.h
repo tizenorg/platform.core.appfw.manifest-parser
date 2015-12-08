@@ -103,6 +103,25 @@ class ApplicationIcon  {
   std::string path_;
 };
 
+class ApplicationImage  {
+ public:
+  ApplicationImage(const std::string& name, const std::string& lang)
+      : name_(name), lang_(lang) {
+  }
+
+  const std::string& name() const {
+    return name_;
+  }
+
+  const std::string& lang() const {
+    return lang_;
+  }
+
+ private:
+  std::string name_;
+  std::string lang_;
+};
+
 class ApplicationIconsInfo : public parser::ManifestData {
  public:
   const std::vector<ApplicationIcon>& icons() const {
@@ -113,6 +132,11 @@ class ApplicationIconsInfo : public parser::ManifestData {
 
  private:
   std::vector<ApplicationIcon> icons_;
+};
+
+class ApplicationImagesInfo {
+ public:
+  std::vector<ApplicationImage> images;
 };
 
 // Label

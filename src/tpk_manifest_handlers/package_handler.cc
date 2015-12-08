@@ -26,6 +26,9 @@ const char kInstallLocation[] = "@install-location";
 const char kNodisplaySetting[] = "@nodisplay-setting";
 const char kAutoInstallLocation[] = "auto";
 const char kManifestKey[] = "manifest";
+const char kLabelKey[] = "label";
+const char kLabelLangKey[] = "@lang";
+const char kLabelTextKey[] = "#text";
 
 void ParsePackageAndStore(
     const parser::DictionaryValue& manifest_dict,
@@ -53,6 +56,14 @@ void ParsePackageAndStore(
     pkg_info->set_install_location(kAutoInstallLocation);
   } else {
     pkg_info->set_install_location(install_location);
+  }
+
+  for (auto label_dict : parser::GetOneOrMany(&manifest_dict, kLabelKey, "")) {
+    std::string lang;
+    std::string text;
+    label_dict->GetString(kLabelLangKey, &lang);
+    label_dict->GetString(kLabelTextKey, &text);
+    pkg_info->AddLabel(lang, text);
   }
 }
 

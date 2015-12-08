@@ -47,6 +47,11 @@ const char kDataControlTypeKey[] = "@type";
 const char kIconKey[] = "icon";
 const char kIconTextKey[] = "#text";
 
+// image
+const char kImageKey[] = "image";
+const char kImageNameKey[] = "@name";
+const char kImageLangKey[] = "@lang";
+
 // label
 const char kLabelKey[] = "label";
 const char kLabelTextKey[] = "#text";
@@ -150,6 +155,18 @@ bool ParseAppIcon(
   return true;
 }
 
+bool ParseAppImage(
+  const parser::DictionaryValue* dict,
+  UIApplicationSingleEntry* info) {
+  std::string image_name;
+  std::string image_lang;
+  if (!dict->GetString(kImageNameKey, &image_name))
+    return false;
+  dict->GetString(kImageLangKey, &image_lang);
+  info->app_images.images.emplace_back(image_name, image_lang);
+  return true;
+}
+
 bool ParseLabel(
   const parser::DictionaryValue* dict,
   UIApplicationSingleEntry* info) {
@@ -206,6 +223,19 @@ bool InitializeIconParsing(
     std::string* error) {
   for (auto& item : parser::GetOneOrMany(&app_dict, kIconKey, "")) {
     if (!ParseAppIcon(item, uiapplicationinfo)) {
+      *error = "Parsing Icon failed";
+      return false;
+    }
+  }
+  return true;
+}
+
+bool InitializeImageParsing(
+    const parser::DictionaryValue& app_dict,
+    UIApplicationSingleEntry* uiapplicationinfo,
+    std::string* error) {
+  for (auto& item : parser::GetOneOrMany(&app_dict, kImageKey, "")) {
+    if (!ParseAppImage(item, uiapplicationinfo)) {
       *error = "Parsing Icon failed";
       return false;
     }
@@ -455,6 +485,7 @@ bool ParseUIApplicationAndStore(
      !InitializeDataControlParsing(app_dict, uiapplicationinfo, error) ||
      !InitializeMetaDataParsing(app_dict, uiapplicationinfo, error) ||
      !InitializeIconParsing(app_dict, uiapplicationinfo, error) ||
+     !InitializeImageParsing(app_dict, uiapplicationinfo, error) ||
      !InitializeLabelParsing(app_dict, uiapplicationinfo, error)) {
     return false;
   }
