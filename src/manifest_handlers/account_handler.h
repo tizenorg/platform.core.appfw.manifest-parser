@@ -59,8 +59,8 @@ class AccountHandler : public parser::ManifestHandler {
       std::string* error) override;
 
   std::string Key() const override;
- private:
 
+ private:
   /**
    * @brief ParseSingleAccountElement everything between <account> </account>
    * @param item_dict dictionary to be parsed

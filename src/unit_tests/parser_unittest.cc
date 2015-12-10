@@ -21,7 +21,6 @@ const char kTizenApplicationRequiredVersionKey[] = "@required_version";
 
 class TizenApplicationInfo : public parser::ManifestData {
  public:
-
   static std::string key() {
     return kTizenApplicationKey;
   }

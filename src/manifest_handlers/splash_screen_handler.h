@@ -55,7 +55,7 @@ class SplashScreenInfo : public parser::ManifestData {
     return splash_screen_data_;
   }
   void set_ready_when(ReadyWhen ready_when) { ready_when_ = ready_when; }
-  const ReadyWhen ready_when() const { return ready_when_; }
+  ReadyWhen ready_when() const { return ready_when_; }
 
  private:
   std::string src_;

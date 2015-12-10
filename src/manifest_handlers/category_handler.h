@@ -16,7 +16,6 @@ namespace wgt {
 namespace parse {
 
 struct CategoryInfoList : public parser::ManifestData {
-
   static std::string Key();
   std::vector<std::string> categories;
 };

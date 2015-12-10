@@ -81,7 +81,6 @@ std::string SplashScreenInfo::Key() {
 bool SplashScreenHandler::ParseSingleOrientation(
     const parser::Manifest& manifest, ScreenOrientation orientation,
     SplashScreenInfo* ss_info) {
-
   auto dict_element_parser =
       [this](SplashScreenData& splash_screen,
              const parser::DictionaryValue* dict) -> bool {
@@ -169,7 +168,7 @@ bool SplashScreenHandler::ParseReadyWhen(const parser::Manifest& manifest,
 
 bool SplashScreenHandler::Parse(const parser::Manifest& manifest,
                                 std::shared_ptr<parser::ManifestData>* output,
-                                std::string* error) {
+                                std::string* /*error*/) {
   auto ss_info = std::make_shared<SplashScreenInfo>();
   if (!ParseReadyWhen(manifest, ss_info.get())) return false;
 

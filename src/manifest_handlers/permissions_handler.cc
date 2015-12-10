@@ -33,7 +33,6 @@ PermissionsHandler::~PermissionsHandler() {}
 bool PermissionsHandler::Parse(const parser::Manifest& manifest,
                                std::shared_ptr<parser::ManifestData>* output,
                                std::string* error) {
-
   if (!manifest.HasPath(kTizenPermissionsKey)) {
     return true;
   }

@@ -8,6 +8,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"

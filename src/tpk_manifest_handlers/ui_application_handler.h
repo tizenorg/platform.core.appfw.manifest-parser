@@ -90,7 +90,7 @@ class UIApplicationInfo : public parser::ManifestData {
     indicator_display_ = indicator_display;
   }
   void set_portrait_image(const std::string& portrait_image) {
-    portrait_image_= portrait_image;
+    portrait_image_ = portrait_image;
   }
   void set_landscape_image(const std::string& landscape_image) {
     landscape_image_ = landscape_image;
@@ -99,7 +99,7 @@ class UIApplicationInfo : public parser::ManifestData {
     effectimage_type_ = effectimage_type;
   }
   void set_hwacceleration(const std::string& hwacceleration) {
-    hwacceleration_= hwacceleration;
+    hwacceleration_ = hwacceleration;
   }
 
   /**
