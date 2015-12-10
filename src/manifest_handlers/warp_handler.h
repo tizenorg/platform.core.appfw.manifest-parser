@@ -19,7 +19,6 @@ namespace parse {
 
 class WarpInfo : public parser::ManifestData {
  public:
-
   static std::string Key();
 
   WarpInfo() {}

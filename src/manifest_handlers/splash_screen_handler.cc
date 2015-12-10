@@ -39,34 +39,34 @@ const char kSplashScreenBgColor[] = "@background_color";
 const char kSplashScreenBgImage[] = "@background_image";
 const char kSplashScreenImage[] = "@image";
 const char kSplashScreenImageBorder[] = "@image_border";
-const std::map<wgt_parse::ScreenOrientation, const char*> kOrientationMap = {
-    {wgt_parse::ScreenOrientation::AUTO, kSplashScreenDefault},
-    {wgt_parse::ScreenOrientation::LANDSCAPE, kSplashScreenLandscape},
-    {wgt_parse::ScreenOrientation::PORTRAIT, kSplashScreenPortrait}};
+const std::map<wgt_parse::ScreenOrientation, const char*> kOrientationMap = { {
+    wgt_parse::ScreenOrientation::AUTO, kSplashScreenDefault }, {
+    wgt_parse::ScreenOrientation::LANDSCAPE, kSplashScreenLandscape }, {
+    wgt_parse::ScreenOrientation::PORTRAIT, kSplashScreenPortrait } };
 
-std::shared_ptr< wgt_parse::Color>
-ConvertStringToColor(const std::string& color_str) {
+std::shared_ptr<wgt_parse::Color> ConvertStringToColor(
+    const std::string& color_str) {
   auto to_long = [&color_str](unsigned int start, unsigned int end) -> int {
     return std::strtoul(color_str.substr(start, end).c_str(), 0, 16);
   };
   std::shared_ptr<wgt_parse::Color> color(new wgt_parse::Color);
   switch (color_str.size()) {
-    case 3:
-      color->red = to_long(0, 0);
-      color->green = to_long(1, 1);
-      color->blue = to_long(2, 1);
-      break;
-    case 6:
-      color->red = to_long(0, 2);
-      color->green = to_long(2, 2);
-      color->blue = to_long(4, 2);
+  case 3:
+    color->red = to_long(0, 0);
+    color->green = to_long(1, 1);
+    color->blue = to_long(2, 1);
+    break;
+  case 6:
+    color->red = to_long(0, 2);
+    color->green = to_long(2, 2);
+    color->blue = to_long(4, 2);
   }
   return color;
 }
 
 bool IsStringToColorConvertable(const std::string& string_color) {
-  return string_color[0] == '#' &&
-         (string_color.size() == 4 || string_color.size() == 7);
+  return string_color[0] == '#'
+      && (string_color.size() == 4 || string_color.size() == 7);
 }
 
 }  // namespace
@@ -82,11 +82,10 @@ bool SplashScreenHandler::ParseSingleOrientation(
     const parser::Manifest& manifest, ScreenOrientation orientation,
     SplashScreenInfo* ss_info) {
 
-  auto dict_element_parser =
-      [this](SplashScreenData& splash_screen,
-             const parser::DictionaryValue* dict) -> bool {
+  auto dict_element_parser = [this](SplashScreenData& splash_screen,
+      const parser::DictionaryValue* dict) -> bool {
     if (!parser::VerifyElementNamespace(*dict, kTizenNamespacePrefix))
-      return false;
+    return false;
 
     bool parsed_color = ParseColor(dict, &splash_screen);
     ParseElement(dict, &splash_screen.background_image, kSplashScreenBgImage);
@@ -94,29 +93,27 @@ bool SplashScreenHandler::ParseSingleOrientation(
     ParseElement(dict, &splash_screen.image_border, kSplashScreenImageBorder);
 
     return parsed_color || !splash_screen.background_image.empty() ||
-        !splash_screen.image.empty();
+    !splash_screen.image.empty();
   };
 
   auto orientation_chosen = kOrientationMap.at(orientation);
   SplashScreenData splash_screen;
 
   bool valid_element = false;
-  for (auto& dict_element :
-      parser::GetOneOrMany(manifest.value(),
-                           orientation_chosen,
-                           kTizenNamespacePrefix)) {
+  for (auto& dict_element : parser::GetOneOrMany(manifest.value(),
+      orientation_chosen, kTizenNamespacePrefix)) {
     if (dict_element_parser(splash_screen, dict_element))
       valid_element = true;
   }
-  if (!valid_element) return false;
+  if (!valid_element)
+    return false;
 
   ss_info->set_splash_screen_data(std::make_pair(orientation, splash_screen));
   return true;
 }
 
 bool SplashScreenHandler::ParseElement(const parser::DictionaryValue* dict,
-                                       std::vector<std::string>* to_be_saved,
-                                       const char* keyToParse) {
+    std::vector<std::string>* to_be_saved, const char* keyToParse) {
   // TODO(w.kosowicz) check which elements not declared should cause fail
   std::string element;
   dict->GetString(keyToParse, &element);
@@ -125,53 +122,53 @@ bool SplashScreenHandler::ParseElement(const parser::DictionaryValue* dict,
 }
 
 bool SplashScreenHandler::ParseColor(const parser::DictionaryValue* dict,
-                                     SplashScreenData* splash_screen) {
+    SplashScreenData* splash_screen) {
   std::string background_color;
-  if (!dict->GetString(kSplashScreenBgColor, &background_color) ||
-      !IsStringToColorConvertable(background_color))
+  if (!dict->GetString(kSplashScreenBgColor, &background_color)
+      || !IsStringToColorConvertable(background_color))
     return false;
 
   std::string only_hex = background_color.substr(1);
-  if (!std::all_of(only_hex.begin(), only_hex.end(), isxdigit)) return false;
+  if (!std::all_of(only_hex.begin(), only_hex.end(), isxdigit))
+    return false;
 
   splash_screen->background_color = ConvertStringToColor(only_hex);
   return true;
 }
 
 bool SplashScreenHandler::ParseReadyWhen(const parser::Manifest& manifest,
-                                         SplashScreenInfo* ss_info) {
-
-  auto dict_values = parser::GetOneOrMany(manifest.value(),
-                                          kSplashScreenKey,
-                                          kTizenNamespacePrefix);
+    SplashScreenInfo* ss_info) {
+  auto dict_values = parser::GetOneOrMany(manifest.value(), kSplashScreenKey,
+      kTizenNamespacePrefix);
   if (dict_values.empty())
     return false;
 
   std::string ready_when;
   dict_values[0]->GetAsString(&ready_when);
 
-  if (ready_when.empty()) return false;
-  if (ready_when != kFirstPaint && ready_when != kComplete &&
-      ready_when != kCustom)
+  if (ready_when.empty())
+    return false;
+  if (ready_when != kFirstPaint && ready_when != kComplete
+      && ready_when != kCustom)
     return false;
 
   std::map<std::string, std::function<void()>> ready_when_functors;
   ready_when_functors[kFirstPaint] = std::bind(
       &SplashScreenInfo::set_ready_when, ss_info, ReadyWhen::FIRSTPAINT);
   ready_when_functors[kComplete] = std::bind(&SplashScreenInfo::set_ready_when,
-                                             ss_info, ReadyWhen::COMPLETE);
-  ready_when_functors[kCustom] =
-      std::bind(&SplashScreenInfo::set_ready_when, ss_info, ReadyWhen::CUSTOM);
+      ss_info, ReadyWhen::COMPLETE);
+  ready_when_functors[kCustom] = std::bind(&SplashScreenInfo::set_ready_when,
+      ss_info, ReadyWhen::CUSTOM);
   ready_when_functors[ready_when]();
 
   return true;
 }
 
 bool SplashScreenHandler::Parse(const parser::Manifest& manifest,
-                                std::shared_ptr<parser::ManifestData>* output,
-                                std::string* error) {
+    std::shared_ptr<parser::ManifestData>* output, std::string* /*error*/) {
   auto ss_info = std::make_shared<SplashScreenInfo>();
-  if (!ParseReadyWhen(manifest, ss_info.get())) return false;
+  if (!ParseReadyWhen(manifest, ss_info.get()))
+    return false;
 
   ParseSingleOrientation(manifest, ScreenOrientation::AUTO, ss_info.get());
   ParseSingleOrientation(manifest, ScreenOrientation::LANDSCAPE, ss_info.get());
@@ -182,8 +179,7 @@ bool SplashScreenHandler::Parse(const parser::Manifest& manifest,
   return true;
 }
 
-bool SplashScreenHandler::Validate(
-    const parser::ManifestData& data,
+bool SplashScreenHandler::Validate(const parser::ManifestData& data,
     const parser::ManifestDataMap& /*handlers_output*/,
     std::string* error) const {
   const SplashScreenInfo& splash_data =
@@ -191,10 +187,10 @@ bool SplashScreenHandler::Validate(
   std::string src = splash_data.src();
   // According to w3c specification splash screen image should be of one of
   // below types.
-  if (src.compare(src.size() - 3, 3, "png") &&
-      src.compare(src.size() - 3, 3, "svg") &&
-      src.compare(src.size() - 3, 3, "gif") &&
-      src.compare(src.size() - 3, 3, "jpg")) {
+  if (src.compare(src.size() - 3, 3, "png")
+      && src.compare(src.size() - 3, 3, "svg")
+      && src.compare(src.size() - 3, 3, "gif")
+      && src.compare(src.size() - 3, 3, "jpg")) {
     *error = "Not supported file extension of splash image";
     return false;
   }

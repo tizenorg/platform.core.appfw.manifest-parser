@@ -44,7 +44,7 @@ NavigationHandler::~NavigationHandler() {}
 bool NavigationHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+    std::string* /*error*/) {
   if (!manifest.HasPath(kAllowNavigationKey))
     return true;
 

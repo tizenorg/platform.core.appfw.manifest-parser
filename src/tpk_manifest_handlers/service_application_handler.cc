@@ -63,17 +63,6 @@ const char kMetaDataKey[] = "metadata";
 const char kMetaDataKeyKey[] = "@key";
 const char kMetaDataValueKey[] = "@value";
 
-std::string GetParsedValue(const char *key_main, const char *key,
-                           const parser::DictionaryValue& control_dict) {
-  std::string tmp;
-  const parser::DictionaryValue *dict;
-
-  if (control_dict.GetDictionary(key_main, &dict))
-    dict->GetString(key, &tmp);
-
-  return tmp;
-}
-
 bool ParseAppControl(
   const parser::DictionaryValue* dict,
   ServiceApplicationSingleEntry* info) {
