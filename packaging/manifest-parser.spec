@@ -81,7 +81,11 @@ make %{?_smp_mflags}
 %files devel
 %manifest %{name}.manifest
 %{_libdir}/pkgconfig/*.pc
-%{_includedir}/*
+%{_includedir}/manifest_parser/*.h
+%{_includedir}/manifest_parser/utils/*.h
+%{_includedir}/manifest_handlers/*.h
+%{_includedir}/tpk_manifest_handlers/*.h
+%{_includedir}/delta/*.h
 
 %files tests
 %manifest %{name}.manifest
