@@ -117,12 +117,17 @@ class ApplicationIcon  {
 
 class ApplicationImage  {
  public:
-  ApplicationImage(const std::string& name, const std::string& lang)
-      : name_(name), lang_(lang) {
+  ApplicationImage(const std::string& name, const std::string& section,
+                   const std::string& lang)
+      : name_(name), section_(section), lang_(lang) {
   }
 
   const std::string& name() const {
     return name_;
+  }
+
+  const std::string& section() const {
+    return section_;
   }
 
   const std::string& lang() const {
@@ -131,6 +136,7 @@ class ApplicationImage  {
 
  private:
   std::string name_;
+  std::string section_;
   std::string lang_;
 };
 

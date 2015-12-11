@@ -54,6 +54,7 @@ const char kIconTextKey[] = "#text";
 // image
 const char kImageKey[] = "image";
 const char kImageNameKey[] = "@name";
+const char kImageSectionKey[] = "@section";
 const char kImageLangKey[] = "@lang";
 
 // label
@@ -176,11 +177,13 @@ bool ParseAppImage(
   const parser::DictionaryValue* dict,
   UIApplicationSingleEntry* info) {
   std::string image_name;
+  std::string image_section;
   std::string image_lang;
   if (!dict->GetString(kImageNameKey, &image_name))
     return false;
+  dict->GetString(kImageSectionKey, &image_section);
   dict->GetString(kImageLangKey, &image_lang);
-  info->app_images.images.emplace_back(image_name, image_lang);
+  info->app_images.images.emplace_back(image_name, image_section, image_lang);
   return true;
 }
 
