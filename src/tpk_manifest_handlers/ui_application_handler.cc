@@ -270,7 +270,7 @@ bool InitializeImageParsing(
     std::string* error) {
   for (auto& item : parser::GetOneOrMany(&app_dict, kImageKey, "")) {
     if (!ParseAppImage(item, uiapplicationinfo)) {
-      *error = "Parsing Icon failed";
+      *error = "Parsing Image failed";
       return false;
     }
   }
