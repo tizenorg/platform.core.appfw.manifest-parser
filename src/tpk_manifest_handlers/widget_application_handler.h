@@ -12,12 +12,12 @@
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
-#include "tpk_manifest_handlers/ui_and_service_application_infos.h"
+#include "tpk_manifest_handlers/common/application_handler.h"
 
 namespace tpk {
 namespace parse {
 
-class WidgetApplicationInfo : public parser::ManifestData {
+class WidgetApplicationInfo : public ApplicationInfo {
  public:
   WidgetApplicationInfo();
   /**
@@ -25,20 +25,6 @@ class WidgetApplicationInfo : public parser::ManifestData {
    * @param key string
    */
   static std::string key();
-  /**
-   * @brief set_appid sets app id
-   * @param appid
-   */
-  void set_appid(const std::string& appid) {
-    appid_ = appid;
-  }
-  /**
-   * @brief set_exec sets exec
-   * @param exec
-   */
-  void set_exec(const std::string& exec) {
-    exec_ = exec;
-  }
   /**
    * @brief set_launch_mode sets launch mdoe
    * @param launch_mode
@@ -64,21 +50,6 @@ class WidgetApplicationInfo : public parser::ManifestData {
     hwacceleration_ = hwacceleration;
   }
 
-  /**
-   * @brief appid
-   * @return appid string
-   */
-
-  const std::string& appid() const {
-    return appid_;
-  }
-  /**
-   * @brief exec
-   * @return exec string
-   */
-  const std::string& exec() const {
-    return exec_;
-  }
   /**
    * @brief launch_mode
    * @return launch mode string
@@ -106,25 +77,18 @@ class WidgetApplicationInfo : public parser::ManifestData {
   }
 
  private:
-  std::string appid_;
-  std::string exec_;
   std::string launch_mode_;
   std::string multiple_;
   std::string nodisplay_;
   std::string hwacceleration_;
 };
 
-struct WidgetApplicationSingleEntry : public parser::ManifestData {
-  WidgetApplicationInfo widget_info;
-  std::vector<MetaDataInfo> meta_data;
-  ApplicationIconsInfo app_icons;
+struct WidgetApplicationSingleEntry :
+    public ApplicationSingleEntry<WidgetApplicationInfo> {
   ApplicationImagesInfo app_images;
-  std::vector<LabelInfo> label;
 };
 
-struct WidgetApplicationInfoList : public parser::ManifestData {
-  std::vector<WidgetApplicationSingleEntry> items;
-};
+using WidgetApplicationInfoList = ApplicationInfoList<WidgetApplicationSingleEntry>;
 
 /**
  * @brief The WidgetApplicationHandler class
