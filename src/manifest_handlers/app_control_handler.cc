@@ -7,9 +7,9 @@
 
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_handlers/tizen_application_handler.h"
+#include "manifest_parser/utils/iri_util.h"
+#include "manifest_parser/utils/version_number.h"
 #include "manifest_parser/values.h"
-#include "utils/iri_util.h"
-#include "utils/version_number.h"
 
 namespace {
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
