@@ -2,11 +2,12 @@
 // Use of this source code is governed by a apache-2.0 license that can be
 // found in the LICENSE file.
 
+#include "manifest_parser/utils/string_util.h"
+
 #include <gtest/gtest.h>
 
 #include <string>
 
-#include "utils/string_util.h"
 
 #define TEST_FOR_COLLAPSE_CHARCTER(Name, Sequence)                             \
   TEST(StringUtilTest, CollapseWhitespaceUTF8_ ## Name) {                      \
