@@ -13,11 +13,11 @@
 #include <utility>
 #include <set>
 
+#include "manifest_parser/utils/iri_util.h"
+#include "manifest_parser/utils/language_tag_validator.h"
+#include "manifest_parser/utils/logging.h"
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_parser/values.h"
-#include "utils/iri_util.h"
-#include "utils/language_tag_validator.h"
-#include "utils/logging.h"
 
 namespace wgt {
 namespace parse {
