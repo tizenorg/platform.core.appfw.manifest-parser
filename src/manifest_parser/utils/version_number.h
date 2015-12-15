@@ -2,8 +2,8 @@
 // Use of this source code is governed by an apache-2.0 license that can be
 // found in the LICENSE file.
 
-#ifndef UTILS_VERSION_NUMBER_H_
-#define UTILS_VERSION_NUMBER_H_
+#ifndef MANIFEST_PARSER_UTILS_VERSION_NUMBER_H_
+#define MANIFEST_PARSER_UTILS_VERSION_NUMBER_H_
 
 #include <string>
 #include <vector>
@@ -42,4 +42,4 @@ class VersionNumber {
 
 }  // namespace utils
 
-#endif  // UTILS_VERSION_NUMBER_H_
+#endif  // MANIFEST_PARSER_UTILS_VERSION_NUMBER_H_
