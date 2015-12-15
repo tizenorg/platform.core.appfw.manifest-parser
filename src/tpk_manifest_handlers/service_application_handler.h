@@ -7,30 +7,21 @@
 
 #include <memory>
 #include <string>
-#include <vector>
 
-#include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
-#include "tpk_manifest_handlers/ui_and_service_application_infos.h"
+#include "tpk_manifest_handlers/common/application_handler.h"
 
 namespace tpk {
 namespace parse {
 
-class ServiceApplicationInfo : public parser::ManifestData {
+class ServiceApplicationInfo : public ApplicationInfo {
  public:
   /**
    * @brief key
    * @param key string
    */
   static std::string key();
-  /**
-   * @brief set_appid sets appid
-   * @param appid
-   */
-  void set_appid(const std::string& appid) {
-    appid_ = appid;
-  }
   /**
    * @brief set_auto_restart sets auto restart
    * @param auto_restart
@@ -39,37 +30,13 @@ class ServiceApplicationInfo : public parser::ManifestData {
     auto_restart_ = auto_restart;
   }
   /**
-   * @brief set_exec sets exec
-   * @param exec
-   */
-  void set_exec(const std::string& exec) {
-    exec_ = exec;
-  }
-  /**
    * @brief set_on_boot sets on boot
    * @param on_boot
    */
   void set_on_boot(const std::string& on_boot) {
     on_boot_ = on_boot;
   }
-  /**
-   * @brief set_type sets type
-   * @param type
-   */
-  void set_type(const std::string& type) {
-    type_ = type;
-  }
-  void set_process_pool(const std::string& process_pool) {
-    process_pool_ = process_pool;
-  }
 
-  /**
-   * @brief appid
-   * @return appid string
-   */
-  const std::string& appid() const {
-    return appid_;
-  }
   /**
    * @brief auto_restart
    * @return auto_restart string
@@ -78,52 +45,23 @@ class ServiceApplicationInfo : public parser::ManifestData {
     return auto_restart_;
   }
   /**
-   * @brief exec
-   * @return exec string
-   */
-  const std::string& exec() const {
-    return exec_;
-  }
-  /**
    * @brief on_boot
    * @return on_boot string
    */
   const std::string& on_boot() const {
     return on_boot_;
   }
-  /**
-   * @brief type
-   * @return type string
-   */
-  const std::string& type() const {
-    return type_;
-  }
-  const std::string& process_pool() const {
-    return process_pool_;
-  }
 
  private:
-  std::string appid_;
   std::string auto_restart_;
-  std::string exec_;
   std::string on_boot_;
-  std::string type_;
-  std::string process_pool_;
 };
 
-struct ServiceApplicationSingleEntry : public parser::ManifestData {
-  ServiceApplicationInfo sa_info;
-  std::vector<AppControlInfo> app_control;
-  std::vector<BackgroundCategoryInfo> background_category;
-  std::vector<DataControlInfo> data_control;
-  std::vector<MetaDataInfo> meta_data;
-  ApplicationIconsInfo app_icons;
-  std::vector<LabelInfo> label;
-};
+typedef ApplicationSingleEntry<ServiceApplicationInfo>
+    ServiceApplicationSingleEntry;
 
-struct ServiceApplicationInfoList : public parser::ManifestData {
-  std::vector<ServiceApplicationSingleEntry> items;
-};
+typedef ApplicationInfoList<ServiceApplicationSingleEntry>
+    ServiceApplicationInfoList;
 
 /**
  * @brief The ServiceApplicationHandler class
@@ -152,7 +90,7 @@ class ServiceApplicationHandler : public parser::ManifestHandler {
   std::string Key() const override;
 };
 
-}   // namespace parse
-}   // namespace tpk
+}  // namespace parse
+}  // namespace tpk
 
 #endif  // TPK_MANIFEST_HANDLERS_SERVICE_APPLICATION_HANDLER_H_

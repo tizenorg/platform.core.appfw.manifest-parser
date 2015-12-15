@@ -18,6 +18,8 @@
 #include <map>
 #include <vector>
 
+#include "../manifest_parser/utils/iri_util.h"
+#include "../manifest_parser/utils/logging.h"
 #include "manifest_handlers/account_handler.h"
 #include "manifest_handlers/app_control_handler.h"
 #include "manifest_handlers/application_icons_handler.h"
@@ -38,8 +40,6 @@
 #include "manifest_handlers/warp_handler.h"
 #include "manifest_handlers/widget_handler.h"
 #include "manifest_parser/manifest_handler.h"
-#include "utils/iri_util.h"
-#include "utils/logging.h"
 
 namespace ba = boost::algorithm;
 namespace bf = boost::filesystem;

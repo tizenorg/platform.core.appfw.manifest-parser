@@ -2,9 +2,10 @@
 // Use of this source code is governed by an apache-2.0 license that can be
 // found in the LICENSE file.
 
+#include "../manifest_parser/utils/version_number.h"
+
 #include <gtest/gtest.h>
 
-#include "utils/version_number.h"
 
 namespace utils {
 

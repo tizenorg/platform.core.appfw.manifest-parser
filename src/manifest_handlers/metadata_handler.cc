@@ -9,7 +9,7 @@
 #include <map>
 #include <utility>
 
-#include "utils/logging.h"
+#include "../manifest_parser/utils/logging.h"
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_parser/values.h"
 

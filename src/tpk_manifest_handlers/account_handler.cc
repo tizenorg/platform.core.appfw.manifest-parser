@@ -4,9 +4,9 @@
 
 #include "tpk_manifest_handlers/account_handler.h"
 
+#include "../manifest_parser/utils/language_tag_validator.h"
+#include "../manifest_parser/utils/logging.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
-#include "utils/language_tag_validator.h"
-#include "utils/logging.h"
 
 namespace {
 const char kTrueValueString[] = "true";
