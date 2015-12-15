@@ -3,6 +3,7 @@ SET(SRCS
   account_handler.cc
   application_manifest_constants.cc
   author_handler.cc
+  common/application_handler.cc
   description_handler.cc
   package_handler.cc
   privileges_handler.cc

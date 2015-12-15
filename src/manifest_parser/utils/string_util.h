@@ -3,8 +3,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE-xwalk file.
 
-#ifndef UTILS_STRING_UTIL_H_
-#define UTILS_STRING_UTIL_H_
+#ifndef MANIFEST_PARSER_UTILS_STRING_UTIL_H_
+#define MANIFEST_PARSER_UTILS_STRING_UTIL_H_
 
 #include <string>
 
@@ -89,4 +89,4 @@ std::string DecodePercentEscapedCharacter(const std::string& text);
 }  // namespace utils
 }  // namespace parser
 
-#endif  // UTILS_STRING_UTIL_H_
+#endif  // MANIFEST_PARSER_UTILS_STRING_UTIL_H_
