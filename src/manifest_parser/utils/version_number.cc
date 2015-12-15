@@ -2,7 +2,7 @@
 // Use of this source code is governed by an apache-2.0 license that can be
 // found in the LICENSE file.
 
-#include "utils/version_number.h"
+#include "manifest_parser/utils/version_number.h"
 
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/join.hpp>

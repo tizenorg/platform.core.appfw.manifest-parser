@@ -9,9 +9,8 @@
 #include <utility>
 
 #include "manifest_parser/manifest_util.h"
+#include "manifest_parser/utils/logging.h"
 #include "manifest_parser/values.h"
-#include "utils/iri_util.h"
-#include "utils/logging.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 
 namespace tpk {
@@ -32,309 +31,25 @@ const char kServiceApplicationTypeKey[] = "@type";
 const char kServiceApplicationProcessPoolKey[] = "@process-pool";
 const char kServiceApplicationKeyText[] = "#text";
 
-// app-control
-const char kAppControlKey[] = "app-control";
-const char kAppControlOperationKey[] = "operation";
-const char kAppControlURIKey[] = "uri";
-const char kAppControlMimeKey[] = "mime";
-const char kAppControlNameChildKey[] = "@name";
-
-// background-category
-const char kBackgroundCategoryKey[] = "background-category";
-const char kBackgroundCategoryValueKey[] = "@value";
-
-// datacontrol
-const char kDataControlKey[] = "datacontrol";
-const char kDataControlAccessKey[] = "@access";
-const char kDataControlProviderIDKey[] = "@providerid";
-const char kDataControlTypeKey[] = "@type";
-
-// icon
-const char kIconKey[] = "icon";
-const char kIconTextKey[] = "#text";
-
-// label
-const char kLabelKey[] = "label";
-const char kLabelTextKey[] = "#text";
-const char kLabelLangKey[] = "@lang";
-
-// metadata
-const char kMetaDataKey[] = "metadata";
-const char kMetaDataKeyKey[] = "@key";
-const char kMetaDataValueKey[] = "@value";
-
-bool ParseAppControl(
-  const parser::DictionaryValue* dict,
-  ServiceApplicationSingleEntry* info) {
-  std::string operation;
-  const parser::DictionaryValue* operation_dict;
-  if (dict->GetDictionary(kAppControlOperationKey,
-                                 &operation_dict)) {
-    operation_dict->GetString(
-        kAppControlNameChildKey, &operation);
-  }
-
-  std::string uri;
-  const parser::DictionaryValue* uri_dict;
-  if (dict->GetDictionary(kAppControlURIKey,
-                                 &uri_dict)) {
-    uri_dict->GetString(
-        kAppControlNameChildKey, &uri);
-  }
-
-  std::string mime;
-  const parser::DictionaryValue* mime_dict;
-  if (dict->GetDictionary(kAppControlMimeKey,
-                                 &mime_dict)) {
-    mime_dict->GetString(
-        kAppControlNameChildKey, &mime);
-  }
-
-  info->app_control.emplace_back(operation, uri, mime);
-  return true;
-}
-
-bool ParseBackgroundCategoryElement(
-    const parser::DictionaryValue* dict,
-    ServiceApplicationSingleEntry* info) {
-  std::string value;
-
-  if (!dict->GetString(kBackgroundCategoryValueKey, &value))
-    return false;
-
-  info->background_category.emplace_back(std::move(value));
-
-  return true;
-}
-
-bool ParseDataControl(
-  const parser::DictionaryValue* dict,
-  ServiceApplicationSingleEntry* info) {
-  std::string access;
-  dict->GetString(kDataControlAccessKey, &access);
-  std::string providerid;
-  dict->GetString(kDataControlProviderIDKey, &providerid);
-  std::string type;
-  dict->GetString(kDataControlTypeKey, &type);
-  info->data_control.emplace_back(access, providerid, type);
-  return true;
-}
-
-bool ParseMetaData(
-  const parser::DictionaryValue* dict,
-  ServiceApplicationSingleEntry* info) {
-  std::string key;
-  dict->GetString(kMetaDataKeyKey, &key);
-  std::string val;
-  dict->GetString(kMetaDataValueKey, &val);
-  info->meta_data.emplace_back(key, val);
-  return true;
-}
-
-bool ParseAppIcon(
-  const parser::DictionaryValue* dict,
-  ServiceApplicationSingleEntry* info) {
-  std::string icon_path;
-  if (!dict->GetString(kIconTextKey, &icon_path))
-    return false;
-  info->app_icons.AddIcon(ApplicationIcon(icon_path));
-  return true;
-}
-
-bool ParseLabel(
-  const parser::DictionaryValue* dict,
-  ServiceApplicationSingleEntry* info) {
-  std::string text;
-  dict->GetString(kLabelTextKey, &text);
-  std::string xml_lang;
-  dict->GetString(kLabelLangKey, &xml_lang);
-  info->label.emplace_back(text, text, xml_lang);
-  return true;
-}
-
-bool InitializeAppControlParsing(
-    const parser::DictionaryValue& app_dict,
-    ServiceApplicationSingleEntry* serviceapplicationinfo,
-    std::string* error) {
-  for (auto& item : parser::GetOneOrMany(&app_dict, kAppControlKey, "")) {
-    if (!ParseAppControl(item, serviceapplicationinfo)) {
-      *error = "Parsing AppControl failed";
-      return false;
-    }
-  }
-  return true;
-}
-
-bool InitializeBackgroundCategoryParsing(
-    const parser::DictionaryValue& control_dict,
-    ServiceApplicationSingleEntry* serviceapplicationinfo,
-    std::string* error) {
-  for (auto& item : parser::GetOneOrMany(&control_dict,
-      kBackgroundCategoryKey, "")) {
-    if (!ParseBackgroundCategoryElement(item, serviceapplicationinfo)) {
-      *error = "Parsing background-category element failed";
-      return false;
-    }
-  }
-  return true;
-}
-
-bool InitializeDataControlParsing(
-    const parser::DictionaryValue& app_dict,
-    ServiceApplicationSingleEntry* serviceapplicationinfo,
-    std::string* error) {
-  for (auto& item : parser::GetOneOrMany(&app_dict, kDataControlKey, "")) {
-    if (!ParseDataControl(item, serviceapplicationinfo)) {
-      *error = "Parsing DataControl failed";
-      return false;
-    }
-  }
-  return true;
-}
-
-bool InitializeMetaDataParsing(
-    const parser::DictionaryValue& app_dict,
-    ServiceApplicationSingleEntry* serviceapplicationinfo,
-    std::string* error) {
-  for (auto& item : parser::GetOneOrMany(&app_dict, kMetaDataKey, "")) {
-    if (!ParseMetaData(item, serviceapplicationinfo)) {
-      *error = "Parsing Metadata failed";
-      return false;
-    }
-  }
-  return true;
-}
-
-bool InitializeIconParsing(
-    const parser::DictionaryValue& app_dict,
-    ServiceApplicationSingleEntry* serviceapplicationinfo,
-    std::string* error) {
-  for (auto& item : parser::GetOneOrMany(&app_dict, kIconKey, "")) {
-    if (!ParseAppIcon(item, serviceapplicationinfo)) {
-      *error = "Parsing Icon failed";
-      return false;
-    }
-  }
-  return true;
-}
-
-bool InitializeLabelParsing(
-    const parser::DictionaryValue& app_dict,
-    ServiceApplicationSingleEntry* serviceapplicationinfo,
-    std::string* error) {
-  for (auto& item : parser::GetOneOrMany(&app_dict, kLabelKey, "")) {
-    if (!ParseLabel(item, serviceapplicationinfo)) {
-      *error = "Parsing Label failed";
-      return false;
-    }
-  }
-  return true;
-}
-
 bool ServiceAppValidation(
     const ServiceApplicationSingleEntry& item,
     std::string* error) {
-  if (item.sa_info.appid().empty()) {
+  if (item.app_info.appid().empty()) {
     *error = "The appid child element of "
              "service application element is obligatory";
     return false;
   }
-  const std::string& exec = item.sa_info.exec();
+  const std::string& exec = item.app_info.exec();
   if (exec.empty()) {
     *error =
         "The exec child element of service application element is obligatory";
     return false;
   }
-  const std::string& type = item.sa_info.type();
+  const std::string& type = item.app_info.type();
   if (type.empty()) {
     *error =
         "The type child element of service application element is obligatory";
     return false;
-  }
-  return true;
-}
-
-bool AppControlValidation(
-    const ServiceApplicationSingleEntry& it,
-    std::string* error) {
-  for (const auto& item : it.app_control) {
-    if (item.operation().empty()) {
-      *error =
-          "The operation child element of app-control element is obligatory";
-      return false;
-    }
-    if (!parser::utils::IsValidIRI(item.operation())) {
-      *error =
-          "The operation child element of app-control element is not valid url";
-      return false;
-    }
-    const std::string& uri = item.uri();
-    if (!uri.empty()) {
-      if (!parser::utils::IsValidIRI(uri)) {
-        *error =
-            "The uri child element of app-control element is not valid url";
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
-bool DataControlValidation(
-    const ServiceApplicationSingleEntry& it,
-    std::string* error) {
-  for (const auto& item : it.data_control) {
-    if (item.access().empty()) {
-      *error =
-          "The access child element of datacontrol element is obligatory";
-      return false;
-    }
-
-    const std::string& providerid = item.providerid();
-    if (providerid.empty()) {
-      *error =
-          "The providerid child element of datacontrol element is obligatory";
-      return false;
-    }
-
-    const std::string& type = item.type();
-    if (type.empty()) {
-      *error =
-          "The type child element of datacontrol element is obligatory";
-      return false;
-    }
-  }
-  return true;
-}
-
-bool MetadataValidation(
-    const ServiceApplicationSingleEntry& it,
-    std::string* error) {
-  for (const auto& item : it.meta_data) {
-    if (item.key().empty()) {
-      *error =
-          "The key child element of metadata element is obligatory";
-      return false;
-    }
-  }
-  return true;
-}
-
-bool LabelValidation(
-    const ServiceApplicationSingleEntry& it,
-    std::string* error) {
-  for (const auto& item : it.label) {
-    if (item.text().empty()) {
-      *error = "The text child element of label element is obligatory";
-      return false;
-    }
-
-    const std::string& name = item.name();
-    if (name.empty()) {
-      *error =
-          "The name child element of label element is obligatory";
-      return false;
-    }
   }
   return true;
 }
@@ -354,11 +69,11 @@ bool ParseServiceApplicationAndStore(
   std::string type;
   app_dict.GetString(kServiceApplicationTypeKey, &type);
 
-  serviceapplicationinfo->sa_info.set_appid(appid);
-  serviceapplicationinfo->sa_info.set_exec(exec);
-  serviceapplicationinfo->sa_info.set_auto_restart(auto_restart);
-  serviceapplicationinfo->sa_info.set_on_boot(on_boot);
-  serviceapplicationinfo->sa_info.set_type(type);
+  serviceapplicationinfo->app_info.set_appid(appid);
+  serviceapplicationinfo->app_info.set_exec(exec);
+  serviceapplicationinfo->app_info.set_auto_restart(auto_restart);
+  serviceapplicationinfo->app_info.set_on_boot(on_boot);
+  serviceapplicationinfo->app_info.set_type(type);
 
   std::string process_pool;
   if (app_dict.GetString(kServiceApplicationProcessPoolKey, &process_pool)) {
@@ -367,29 +82,35 @@ bool ParseServiceApplicationAndStore(
       *error = "process_pool must be 'true' or 'false'";
       return false;
     }
-    serviceapplicationinfo->sa_info.set_process_pool(process_pool);
+    serviceapplicationinfo->app_info.set_process_pool(process_pool);
   }
 
-  if (!InitializeAppControlParsing(app_dict,
-                                  serviceapplicationinfo,
-                                  error) ||
-     !InitializeDataControlParsing(app_dict,
-                                   serviceapplicationinfo,
-                                   error) ||
-     !InitializeMetaDataParsing(app_dict,
-                                serviceapplicationinfo,
-                                error) ||
-     !InitializeIconParsing(app_dict,
-                            serviceapplicationinfo,
-                            error) ||
-     !InitializeLabelParsing(app_dict,
-                             serviceapplicationinfo,
-                             error) ||
-     !InitializeBackgroundCategoryParsing(app_dict,
-                             serviceapplicationinfo,
-                             error)) {
+  ParsingFuncPtr<ServiceApplicationSingleEntry> parsingFunc =
+      ParseAppControl<ServiceApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kAppControlKey,
+      parsingFunc, serviceapplicationinfo, error))
     return false;
-  }
+  parsingFunc = ParseDataControl<ServiceApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kDataControlKey,
+      parsingFunc, serviceapplicationinfo, error))
+    return false;
+  parsingFunc = ParseMetaData<ServiceApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kMetaDataKey,
+      parsingFunc, serviceapplicationinfo, error))
+    return false;
+  parsingFunc = ParseAppIcon<ServiceApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kIconKey,
+      parsingFunc, serviceapplicationinfo, error))
+    return false;
+  parsingFunc = ParseLabel<ServiceApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kLabelKey,
+      parsingFunc, serviceapplicationinfo, error))
+    return false;
+  parsingFunc = ParseBackgroundCategoryElement<ServiceApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kBackgroundCategoryKey,
+      parsingFunc, serviceapplicationinfo, error))
+    return false;
+
   return true;
 }
 

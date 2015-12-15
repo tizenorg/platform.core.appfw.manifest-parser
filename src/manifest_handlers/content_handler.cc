@@ -12,9 +12,9 @@
 #include <set>
 
 #include "manifest_handlers/application_manifest_constants.h"
-#include "utils/iri_util.h"
-#include "utils/logging.h"
-#include "utils/string_util.h"
+#include "manifest_parser/utils/iri_util.h"
+#include "manifest_parser/utils/logging.h"
+#include "manifest_parser/utils/string_util.h"
 
 namespace ba = boost::algorithm;
 
