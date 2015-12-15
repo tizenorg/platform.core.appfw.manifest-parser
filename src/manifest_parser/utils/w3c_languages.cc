@@ -2,8 +2,7 @@
 // Use of this source code is governed by an apache 2.0 license that can be
 // found in the LICENSE file.
 
-#include "utils/w3c_languages.h"
-
+#include "manifest_parser/utils/w3c_languages.h"
 
 #include <boost/filesystem.hpp>
 #include <tzplatform_config.h>
@@ -11,7 +10,7 @@
 #include <fstream>
 #include <vector>
 
-#include "utils/logging.h"
+#include "manifest_parser/utils/logging.h"
 
 namespace bf = boost::filesystem;
 namespace {
