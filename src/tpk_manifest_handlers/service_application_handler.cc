@@ -127,7 +127,14 @@ bool ParseMetaData(
   dict->GetString(kMetaDataKeyKey, &key);
   std::string val;
   dict->GetString(kMetaDataValueKey, &val);
-  info->meta_data.emplace_back(key, val);
+
+  if (key.find(kBackgroundCategoryKey) == std::string::npos) {
+    info->meta_data.emplace_back(key, val);
+  } else {
+    val = key.substr(key.find_last_of("/") + 1);
+    info->background_category.emplace_back(std::move(val));
+  }
+
   return true;
 }
 
