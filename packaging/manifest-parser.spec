@@ -87,6 +87,7 @@ make %{?_smp_mflags}
 %{_includedir}/manifest_parser/utils/*.h
 %{_includedir}/manifest_handlers/*.h
 %{_includedir}/tpk_manifest_handlers/*.h
+%{_includedir}/tpk_manifest_handlers/common/*.h
 %{_includedir}/delta/*.h
 
 %files tests
