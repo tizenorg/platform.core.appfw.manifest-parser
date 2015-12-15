@@ -12,7 +12,7 @@
 #include <cassert>
 #include <cmath>
 
-#include "utils/logging.h"
+#include "manifest_parser/utils/logging.h"
 
 namespace parser {
 
