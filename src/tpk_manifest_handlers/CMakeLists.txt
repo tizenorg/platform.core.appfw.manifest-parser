@@ -1,5 +1,6 @@
 # Target - sources
 SET(SRCS
+  common/application_handler.cc
   account_handler.cc
   application_manifest_constants.cc
   author_handler.cc

@@ -9,11 +9,11 @@
 #include <map>
 #include <utility>
 
+#include "manifest_parser/utils/version_number.h"
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_parser/manifest_util.h"
 #include "manifest_handlers/platform_version.h"
 #include "manifest_parser/values.h"
-#include "utils/version_number.h"
 
 namespace wgt {
 namespace parse {
