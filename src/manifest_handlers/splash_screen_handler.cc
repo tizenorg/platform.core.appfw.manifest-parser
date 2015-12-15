@@ -16,7 +16,7 @@
 #include <utility>
 
 #include "manifest_handlers/application_manifest_constants.h"
-#include "utils/logging.h"
+#include "manifest_parser/utils/logging.h"
 
 namespace bf = boost::filesystem;
 namespace keys = wgt::application_widget_keys;
