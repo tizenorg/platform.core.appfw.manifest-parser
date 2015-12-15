@@ -7,17 +7,16 @@
 
 #include <memory>
 #include <string>
-#include <vector>
 
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
-#include "tpk_manifest_handlers/ui_and_service_application_infos.h"
+#include "tpk_manifest_handlers/common/application_handler.h"
 
 namespace tpk {
 namespace parse {
 
-class UIApplicationInfo : public parser::ManifestData {
+class UIApplicationInfo : public ApplicationInfo {
  public:
   UIApplicationInfo();
   /**
@@ -25,20 +24,6 @@ class UIApplicationInfo : public parser::ManifestData {
    * @param key string
    */
   static std::string key();
-  /**
-   * @brief set_appid sets app id
-   * @param appid
-   */
-  void set_appid(const std::string& appid) {
-    appid_ = appid;
-  }
-  /**
-   * @brief set_exec sets exec
-   * @param exec
-   */
-  void set_exec(const std::string& exec) {
-    exec_ = exec;
-  }
   /**
    * @brief set_launch_mode sets launch mdoe
    * @param launch_mode
@@ -67,18 +52,8 @@ class UIApplicationInfo : public parser::ManifestData {
   void set_taskmanage(const std::string& taskmanage) {
     taskmanage_ = taskmanage;
   }
-  /**
-   * @brief set_type set types
-   * @param type
-   */
-  void set_type(const std::string& type) {
-    type_ = type;
-  }
   void set_uigadget(const std::string& uigadget) {
     uigadget_ = uigadget;
-  }
-  void set_process_pool(const std::string& process_pool) {
-    process_pool_ = process_pool;
   }
   void set_submode(const std::string& submode) {
     submode_ = submode;
@@ -102,21 +77,6 @@ class UIApplicationInfo : public parser::ManifestData {
     hwacceleration_ = hwacceleration;
   }
 
-  /**
-   * @brief appid
-   * @return appid string
-   */
-
-  const std::string& appid() const {
-    return appid_;
-  }
-  /**
-   * @brief exec
-   * @return exec string
-   */
-  const std::string& exec() const {
-    return exec_;
-  }
   /**
    * @brief launch_mode
    * @return launch mode string
@@ -145,20 +105,9 @@ class UIApplicationInfo : public parser::ManifestData {
   const std::string& taskmanage() const {
     return taskmanage_;
   }
-  /**
-   * @brief type
-   * @return type string
-   */
-  const std::string& type() const {
-    return type_;
-  }
 
   const std::string& uigadget() const {
     return uigadget_;
-  }
-
-  const std::string& process_pool() const {
-    return process_pool_;
   }
 
   const std::string& submode() const {
@@ -190,15 +139,11 @@ class UIApplicationInfo : public parser::ManifestData {
   }
 
  private:
-  std::string appid_;
-  std::string exec_;
   std::string launch_mode_;
   std::string multiple_;
   std::string nodisplay_;
   std::string taskmanage_;
-  std::string type_;
   std::string uigadget_;
-  std::string process_pool_;
   std::string submode_;
   std::string submode_mainid_;
   std::string indicator_display_;
@@ -208,20 +153,13 @@ class UIApplicationInfo : public parser::ManifestData {
   std::string hwacceleration_;
 };
 
-struct UIApplicationSingleEntry : public parser::ManifestData {
-  UIApplicationInfo ui_info;
-  std::vector<AppControlInfo> app_control;
-  std::vector<BackgroundCategoryInfo> background_category;
-  std::vector<DataControlInfo> data_control;
-  std::vector<MetaDataInfo> meta_data;
-  ApplicationIconsInfo app_icons;
+struct UIApplicationSingleEntry :
+    public ApplicationSingleEntry<UIApplicationInfo> {
   ApplicationImagesInfo app_images;
-  std::vector<LabelInfo> label;
 };
 
-struct UIApplicationInfoList : public parser::ManifestData {
-  std::vector<UIApplicationSingleEntry> items;
-};
+typedef ApplicationInfoList<UIApplicationSingleEntry>
+    UIApplicationInfoList;
 
 /**
  * @brief The UIApplicationHandler class
@@ -252,7 +190,7 @@ class UIApplicationHandler : public parser::ManifestHandler {
   std::vector<std::string> PrerequisiteKeys() const override;
 };
 
-}   // namespace parse
-}   // namespace tpk
+}  // namespace parse
+}  // namespace tpk
 
 #endif  // TPK_MANIFEST_HANDLERS_UI_APPLICATION_HANDLER_H_
