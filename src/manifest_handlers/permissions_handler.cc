@@ -5,9 +5,9 @@
 
 #include "manifest_handlers/permissions_handler.h"
 
+#include "manifest_parser/utils/logging.h"
 #include "manifest_handlers/application_manifest_constants.h"
 #include "manifest_parser/values.h"
-#include "utils/logging.h"
 
 namespace {
 const char kTizenPermissionsKey[] = "widget.privilege";

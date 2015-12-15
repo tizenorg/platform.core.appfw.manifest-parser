@@ -2,12 +2,13 @@
 // Use of this source code is governed by an apache 2.0 license that can be
 // found in the LICENSE file.
 
-#include "utils/language_tag_validator.h"
+#include "manifest_parser/utils/language_tag_validator.h"
 
 #include <boost/algorithm/string.hpp>
 #include <vector>
-#include "utils/logging.h"
-#include "utils/w3c_languages.h"
+
+#include "manifest_parser/utils/logging.h"
+#include "manifest_parser/utils/w3c_languages.h"
 
 namespace ba = boost::algorithm;
 

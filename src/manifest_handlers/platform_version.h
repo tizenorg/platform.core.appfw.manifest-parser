@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include "utils/version_number.h"
+#include "manifest_parser/utils/version_number.h"
 
 namespace parser {
 /**
