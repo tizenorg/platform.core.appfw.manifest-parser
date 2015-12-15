@@ -2,8 +2,8 @@
 // Use of this source code is governed by a apache 2.0 license that can be
 // found in the LICENSE file.
 
-#ifndef UTILS_LOGGING_H_
-#define UTILS_LOGGING_H_
+#ifndef MANIFEST_PARSER_UTILS_LOGGING_H_
+#define MANIFEST_PARSER_UTILS_LOGGING_H_
 
 #include <cassert>
 #include <iomanip>
@@ -67,4 +67,4 @@ inline static const constexpr char* __tag_for_logging() {
       << " " << std::setw(20) << std::left << __tag_for_logging()              \
       << std::setw(0) << " : "                                                 \
 
-#endif  // UTILS_LOGGING_H_
+#endif  // MANIFEST_PARSER_UTILS_LOGGING_H_
