@@ -13,9 +13,9 @@
 #include <regex>
 #include <vector>
 
-#include "utils/string_util.h"
 #include "manifest_parser/manifest.h"
 #include "manifest_parser/manifest_handler.h"
+#include "manifest_parser/utils/string_util.h"
 #include "manifest_parser/values.h"
 
 namespace bf = boost::filesystem;
