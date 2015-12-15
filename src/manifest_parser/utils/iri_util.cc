@@ -2,7 +2,7 @@
 // Use of this source code is governed by a apache 2.0 license that can be
 // found in the LICENSE file.
 
-#include "utils/iri_util.h"
+#include "manifest_parser/utils/iri_util.h"
 
 #include <iri.h>
 
