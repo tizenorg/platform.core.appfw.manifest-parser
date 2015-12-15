@@ -24,6 +24,7 @@
 #include "tpk_manifest_handlers/service_application_handler.h"
 #include "tpk_manifest_handlers/shortcut_handler.h"
 #include "tpk_manifest_handlers/ui_application_handler.h"
+#include "tpk_manifest_handlers/widget_application_handler.h"
 
 namespace bf = boost::filesystem;
 
@@ -44,6 +45,7 @@ TPKConfigParser::TPKConfigParser() {
   new PackageHandler,
   new PrivilegesHandler,
   new ProfileHandler,
+  new WidgetApplicationHandler,
   new ServiceApplicationHandler,
   new UIApplicationHandler,
   new ShortcutHandler

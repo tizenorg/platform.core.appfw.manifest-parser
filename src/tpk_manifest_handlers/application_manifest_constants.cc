@@ -25,6 +25,9 @@ const char kServiceApplicationKey[] = "manifest.service-application";
 // ui-application
 const char kUIApplicationKey[] = "manifest.ui-application";
 
+// widget-application
+const char kWidgetApplicationKey[] = "manifest.widget-application";
+
 // account
 const char kAccountKey[] = "manifest.account";
 
