@@ -27,6 +27,9 @@ extern const char kServiceApplicationKey[];
 // ui-application
 extern const char kUIApplicationKey[];
 
+// widget-application
+extern const char kWidgetApplicationKey[];
+
 // account
 extern const char kAccountKey[];
 
