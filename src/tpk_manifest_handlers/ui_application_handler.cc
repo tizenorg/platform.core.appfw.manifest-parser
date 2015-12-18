@@ -167,8 +167,8 @@ bool ParseAppIcon(
   const parser::DictionaryValue* dict,
   UIApplicationSingleEntry* info) {
   std::string icon_path;
-  if (!dict->GetString(kIconTextKey, &icon_path))
-    return false;
+  if (!dict->GetString(kIconTextKey, &icon_path)){}
+//    return false; TODO(jungh.yeon) : some uiapp doesn't have icon
   info->app_icons.AddIcon(ApplicationIcon(icon_path));
   return true;
 }
@@ -179,8 +179,8 @@ bool ParseAppImage(
   std::string image_name;
   std::string image_section;
   std::string image_lang;
-  if (!dict->GetString(kImageNameKey, &image_name))
-    return false;
+  if (!dict->GetString(kImageNameKey, &image_name)){}
+//    return false; TODO(jungh.yeon) : some uiapp doesn't have icon
   dict->GetString(kImageSectionKey, &image_section);
   dict->GetString(kImageLangKey, &image_lang);
   info->app_images.images.emplace_back(image_name, image_section, image_lang);
@@ -389,6 +389,7 @@ bool AppControlValidation(
       return false;
     }
     const std::string& uri = item.uri();
+#if 0 // TODO(jungh.yeon) : temp block for manifest direct install for preload apps
     if (!uri.empty()) {
       if (!parser::utils::IsValidIRI(uri)) {
         *error =
@@ -396,6 +397,7 @@ bool AppControlValidation(
         return false;
       }
     }
+#endif
   }
   return true;
 }

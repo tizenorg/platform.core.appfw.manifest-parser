@@ -111,12 +111,13 @@ bool PackageHandler::Validate(
   }
 
   const std::string& api_version = app_info.api_version();
+#if 0 // TODO(jungh.yeon) : some preload apps does not define api version for now.
   if (api_version.empty()) {
     *error =
         "The api-version child element of manifest element is obligatory";
     return false;
   }
-
+#endif
   const std::string& package = app_info.package();
   if (package.empty()) {
     *error =
