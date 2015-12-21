@@ -22,6 +22,7 @@ const char kNamespace[] = "@namespace";
 const char kAPI[] = "@api-version";
 const char kPackage[] = "@package";
 const char kVersion[] = "@version";
+const char kType[] = "@type";
 const char kInstallLocation[] = "@install-location";
 const char kNodisplaySetting[] = "@nodisplay-setting";
 const char kAutoInstallLocation[] = "auto";
@@ -41,6 +42,8 @@ void ParsePackageAndStore(
   manifest_dict.GetString(kPackage, &package);
   std::string version;
   manifest_dict.GetString(kVersion, &version);
+  std::string type;
+  manifest_dict.GetString(kType, &type);
   std::string install_location;
   manifest_dict.GetString(kInstallLocation, &install_location);
   std::string nodisplay_setting("false");
@@ -50,6 +53,7 @@ void ParsePackageAndStore(
   pkg_info->set_api_version(api_version);
   pkg_info->set_package(package);
   pkg_info->set_version(version);
+  pkg_info->set_type(type);
   pkg_info->set_nodisplay_setting(nodisplay_setting);
 
   if (install_location.empty()) {
