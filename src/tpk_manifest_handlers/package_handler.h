@@ -54,6 +54,9 @@ class PackageInfo : public parser::ManifestData {
   void set_version(const std::string& version) {
     version_ = version;
   }
+  void set_type(const std::string& type) {
+    type_ = type;
+  }
   /**
    * @brief set_install_location sets install location
    * @param install_location
@@ -97,6 +100,9 @@ class PackageInfo : public parser::ManifestData {
   const std::string& version() const {
     return version_;
   }
+  const std::string& type() const {
+    return type_;
+  }
   const std::string& install_location() const {
     return install_location_;
   }
@@ -112,6 +118,7 @@ class PackageInfo : public parser::ManifestData {
   std::string api_version_;
   std::string package_;
   std::string version_;
+  std::string type_;
   std::string install_location_;
   std::string nodisplay_setting_;
   std::vector<LangTextPair> labels_;
