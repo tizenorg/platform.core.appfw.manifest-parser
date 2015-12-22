@@ -183,13 +183,15 @@ bool InitializeParsing(const parser::DictionaryValue& app_dict,
 bool WidgetAppValidation(const WidgetApplicationSingleEntry& item,
                      const std::string& api_version, std::string* error) {
   if (item.widget_info.appid().empty()) {
-    *error = "The appid child element of widget-application element is obligatory";
+    *error = "The appid child element of widget-application element "
+        "is obligatory";
     return false;
   }
 
   const std::string& exec = item.widget_info.exec();
   if (exec.empty()) {
-    *error = "The exec child element of widget-application element is obligatory";
+    *error = "The exec child element of widget-application element "
+        "is obligatory";
     return false;
   }
 
@@ -203,26 +205,30 @@ bool WidgetAppValidation(const WidgetApplicationSingleEntry& item,
     if (launch_mode != "group" &&
         launch_mode != "caller" &&
         launch_mode != "single") {
-      *error = "The improper value was given for widget-application launch_mode";
+      *error = "The improper value was given for widget-application "
+          "launch_mode";
       return false;
     }
   } else {
     // FIXME currently const_cast used, but it is not the best way.
-    WidgetApplicationInfo &tmp = const_cast<WidgetApplicationInfo &>(item.widget_info);
+    WidgetApplicationInfo &tmp = const_cast<WidgetApplicationInfo &>(
+        item.widget_info);
     tmp.set_launch_mode("single");
   }
 
   const std::string& multiple = item.widget_info.multiple();
   if (multiple.empty()) {
     *error =
-        "The multiple child element of widget-application element is obligatory";
+        "The multiple child element of widget-application element "
+        "is obligatory";
     return false;
   }
 
   const std::string& nodisplay = item.widget_info.nodisplay();
   if (nodisplay.empty()) {
     *error =
-        "The nodisplay child element of widget-application element is obligatory";
+        "The nodisplay child element of widget-application element "
+        "is obligatory";
     return false;
   }
   return true;
@@ -241,7 +247,9 @@ bool MetadataValidation(
   return true;
 }
 
-bool LabelValidation(const WidgetApplicationSingleEntry& it, std::string* error) {
+bool LabelValidation(
+    const WidgetApplicationSingleEntry& it,
+    std::string* error) {
   for (const auto& item : it.label) {
     if (item.text().empty()) {
       *error = "The text child element of label element is obligatory";
@@ -314,7 +322,8 @@ bool WidgetApplicationHandler::Parse(
     widgetapplicationinfo->items.push_back(widgetappentry);
   }
 
-  *output = std::static_pointer_cast<parser::ManifestData>(widgetapplicationinfo);
+  *output = std::static_pointer_cast<parser::ManifestData>(
+      widgetapplicationinfo);
   return true;
 }
 
