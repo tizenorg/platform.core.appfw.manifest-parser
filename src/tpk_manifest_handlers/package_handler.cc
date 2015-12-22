@@ -114,13 +114,6 @@ bool PackageHandler::Validate(
     return false;
   }
 
-  const std::string& api_version = app_info.api_version();
-  if (api_version.empty()) {
-    *error =
-        "The api-version child element of manifest element is obligatory";
-    return false;
-  }
-
   const std::string& package = app_info.package();
   if (package.empty()) {
     *error =
