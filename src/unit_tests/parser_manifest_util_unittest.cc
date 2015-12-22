@@ -166,13 +166,9 @@ TEST_F(ManifestUtilTest, GetNodeTextTestXmlElementNode) {
   const char* xml = "<widget dir=\"rtl\">"
                     "<name>ppa emoS</name>"
                     "</widget>";
-  std::map<char, int> control_chars = {
-    { '\xe2', 0 },
-    { '\x80', 1 },
-    { '\xab', 2 },
-    { '\xe2', 11 },
-    { '\x80', 12 },
-    { '\xac', 13 },
+  std::map<int, char> control_chars = {
+    { 0, '\xe2' }, { 1, '\x80' }, { 2, '\xab' },
+    { 14, '\xe2' }, { 15, '\x80' }, { 16, '\xac' },
   };
   xmlDoc* doc = xmlParseMemory(xml, strlen(xml));
   ASSERT_TRUE(doc);
@@ -181,7 +177,7 @@ TEST_F(ManifestUtilTest, GetNodeTextTestXmlElementNode) {
   std::string inherit_dir("ltr");
   std::string s = GetNodeText(root, inherit_dir);
   for (const auto& p : control_chars)
-    EXPECT_EQ(p.first, s[p.second]);
+    EXPECT_EQ(p.second, s[p.first]);
 }
 
 // Tests GetNodeText method with rtl and ltr text direction
@@ -190,13 +186,11 @@ TEST_F(ManifestUtilTest, GetNodeTextTestTwoXmlElementNodes) {
                     "<name>ppa emoS</name>"
                     "<description dir=\"ltr\">Desc</description>"
                     "</widget>";
-  std::map<char, int> control_chars = {
-    { '\xe2', 0 }, { '\x80', 1 },
-    { '\xab', 2 }, { '\xe2', 11 },
-    { '\x80', 12 }, { '\xac', 13 },
-    { '\xe2', 14 }, { '\x80', 15 },
-    { '\xaa', 16 }, { '\xe2', 21 },
-    { '\x80', 22 }, { '\xac', 23 },
+  std::map<int, char> control_chars = {
+    { 0, '\xe2' }, { 1, '\x80' }, { 2, '\xab' },
+    { 14, '\xe2' }, { 15, '\x80' }, { 16, '\xac' },
+    { 17, '\xe2' }, { 18, '\x80' }, { 19, '\xaa' },
+    { 24, '\xe2' }, { 25, '\x80' }, { 26, '\xac' }
   };
   xmlDoc* doc = xmlParseMemory(xml, strlen(xml));
   ASSERT_TRUE(doc);
@@ -205,7 +199,7 @@ TEST_F(ManifestUtilTest, GetNodeTextTestTwoXmlElementNodes) {
   std::string inherit_dir("ltr");
   std::string s = GetNodeText(root, inherit_dir);
   for (const auto& p : control_chars)
-    EXPECT_EQ(p.first, s[p.second]);
+    EXPECT_EQ(p.second, s[p.first]);
 }
 
 // Tests LoadXMLNode method with proper xml tree
