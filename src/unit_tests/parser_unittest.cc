@@ -129,7 +129,7 @@ class ParseManifestTest : public testing::Test {
 
 // Tests manifest parser with proper manifest
 TEST_F(ParseManifestTest, HandlesProperManifestFile) {
-  bf::path path = "/usr/share/app-installers-ut/test_samples/good_manifest.xml";
+  bf::path path = "/usr/share/manifest-parser-ut/test_samples/good_manifest.xml";
   std::vector<parser::ManifestHandler*> handlers = {
     new wgt::parse::TizenApplicationHandler,
   };
@@ -151,7 +151,7 @@ TEST_F(ParseManifestTest, HandlesProperManifestFile) {
 
 // Tests manifest parser with broken manifest
 TEST_F(ParseManifestTest, HandlesBrokenManifestFile) {
-  bf::path path = "/usr/share/app-installers-ut/test_samples/bad_manifest.xml";
+  bf::path path = "/usr/share/manifest-parser-ut/test_samples/bad_manifest.xml";
   std::vector<parser::ManifestHandler*> handlers = {
     new wgt::parse::TizenApplicationHandler,
   };
