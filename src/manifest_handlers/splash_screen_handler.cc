@@ -139,7 +139,6 @@ bool SplashScreenHandler::ParseColor(const parser::DictionaryValue* dict,
 
 bool SplashScreenHandler::ParseReadyWhen(const parser::Manifest& manifest,
                                          SplashScreenInfo* ss_info) {
-
   auto dict_values = parser::GetOneOrMany(manifest.value(),
                                           kSplashScreenKey,
                                           kTizenNamespacePrefix);
