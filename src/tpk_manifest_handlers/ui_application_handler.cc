@@ -98,31 +98,25 @@ bool IsBooleanString(const std::string& value) {
 bool ParseAppControl(
   const parser::DictionaryValue* dict,
   UIApplicationSingleEntry* info) {
-  std::string operation;
-  const parser::DictionaryValue* operation_dict;
-  if (dict->GetDictionary(kAppControlOperationKey,
-                                 &operation_dict)) {
-    operation_dict->GetString(
-        kAppControlNameChildKey, &operation);
+  for (const auto& itemOperation : parser::GetOneOrMany(dict,
+      kAppControlOperationKey, "")) {
+    std::string operation;
+    std::string uri;
+    std::string mime;
+    itemOperation->GetString(kAppControlNameChildKey, &operation);
+
+    for (const auto& itemURI : parser::GetOneOrMany(dict,
+        kAppControlURIKey, "")) {
+      itemURI->GetString(kAppControlNameChildKey, &uri);
+
+      for (const auto& itemMime : parser::GetOneOrMany(dict,
+          kAppControlMimeKey, "")) {
+        itemMime->GetString(kAppControlNameChildKey, &mime);
+        info->app_control.emplace_back(operation, uri, mime);
+      }
+    }
   }
 
-  std::string uri;
-  const parser::DictionaryValue* uri_dict;
-  if (dict->GetDictionary(kAppControlURIKey,
-                                 &uri_dict)) {
-    uri_dict->GetString(
-        kAppControlNameChildKey, &uri);
-  }
-
-  std::string mime;
-  const parser::DictionaryValue* mime_dict;
-  if (dict->GetDictionary(kAppControlMimeKey,
-                                 &mime_dict)) {
-    mime_dict->GetString(
-        kAppControlNameChildKey, &mime);
-  }
-
-  info->app_control.emplace_back(operation, uri, mime);
   return true;
 }
 
@@ -382,19 +376,20 @@ bool AppControlValidation(
       *error =
           "The operation child element of app-control element is obligatory";
       return false;
-    }
-    if (!parser::utils::IsValidIRI(item.operation())) {
+    } else if (!parser::utils::IsValidIRI(item.operation())) {
       *error =
           "The operation child element of app-control element is not valid url";
       return false;
     }
-    const std::string& uri = item.uri();
-    if (!uri.empty()) {
-      if (!parser::utils::IsValidIRI(uri)) {
-        *error =
-            "The uri child element of app-control element is not valid url";
-        return false;
-      }
+    if (item.uri().empty()) {
+      *error =
+          "The uri child element of app-control element is obligatory";
+      return false;
+    }
+    if (item.mime().empty()) {
+      *error =
+          "The mime child element of app-control element is obligatory";
+      return false;
     }
   }
   return true;
