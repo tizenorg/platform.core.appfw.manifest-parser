@@ -66,31 +66,29 @@ const char kMetaDataValueKey[] = "@value";
 bool ParseAppControl(
   const parser::DictionaryValue* dict,
   ServiceApplicationSingleEntry* info) {
-  std::string operation;
-  const parser::DictionaryValue* operation_dict;
-  if (dict->GetDictionary(kAppControlOperationKey,
-                                 &operation_dict)) {
-    operation_dict->GetString(
-        kAppControlNameChildKey, &operation);
+  for (const auto& item_operation : parser::GetOneOrMany(dict,
+      kAppControlOperationKey, "")) {
+    std::string operation;
+    std::string uri;
+    std::string mime;
+    item_operation->GetString(kAppControlNameChildKey, &operation);
+
+    auto uri_items = parser::GetOneOrMany(dict, kAppControlURIKey, "");
+    auto mime_items = parser::GetOneOrMany(dict, kAppControlMimeKey, "");
+
+    if (uri_items.empty()) uri_items.push_back(new parser::DictionaryValue());
+    if (mime_items.empty()) mime_items.push_back(new parser::DictionaryValue());
+
+    for (const auto& item_uri : uri_items) {
+      item_uri->GetString(kAppControlNameChildKey, &uri);
+
+      for (const auto& item_mime : mime_items) {
+        item_mime->GetString(kAppControlNameChildKey, &mime);
+        info->app_control.emplace_back(operation, uri, mime);
+      }
+    }
   }
 
-  std::string uri;
-  const parser::DictionaryValue* uri_dict;
-  if (dict->GetDictionary(kAppControlURIKey,
-                                 &uri_dict)) {
-    uri_dict->GetString(
-        kAppControlNameChildKey, &uri);
-  }
-
-  std::string mime;
-  const parser::DictionaryValue* mime_dict;
-  if (dict->GetDictionary(kAppControlMimeKey,
-                                 &mime_dict)) {
-    mime_dict->GetString(
-        kAppControlNameChildKey, &mime);
-  }
-
-  info->app_control.emplace_back(operation, uri, mime);
   return true;
 }
 
@@ -262,19 +260,10 @@ bool AppControlValidation(
       *error =
           "The operation child element of app-control element is obligatory";
       return false;
-    }
-    if (!parser::utils::IsValidIRI(item.operation())) {
+    } else if (!parser::utils::IsValidIRI(item.operation())) {
       *error =
           "The operation child element of app-control element is not valid url";
       return false;
-    }
-    const std::string& uri = item.uri();
-    if (!uri.empty()) {
-      if (!parser::utils::IsValidIRI(uri)) {
-        *error =
-            "The uri child element of app-control element is not valid url";
-        return false;
-      }
     }
   }
   return true;
