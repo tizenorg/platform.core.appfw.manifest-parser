@@ -10,4 +10,14 @@ utils::VersionNumber GetCurrentPlatformVersion() {
   return utils::VersionNumber(TIZEN_VERSION);
 }
 
+utils::VersionNumber GetMinimumPlatformVersion() {
+#ifdef TIZEN_TV
+  return utils::VersionNumber("2.3");
+#elif TIZEN_WEARABLE
+  return utils::VersionNumber("2.3.1");
+#else
+  return utils::VersionNumber("2.2.1");
+#endif
+}
+
 }  // namespace parser

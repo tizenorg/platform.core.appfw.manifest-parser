@@ -21,14 +21,13 @@ namespace parse {
 namespace {
 
 const char kTizenApplicationKey[] = "widget.application";
-const utils::VersionNumber kMinimumAPIVersion("2.2.1");
-const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
 const char kNamespaceKey[] = "@namespace";
 const char kTizenApplicationIdKey[] = "@id";
 const char kTizenApplicationPackageKey[] = "@package";
 const char kTizenApplicationLaunchModeKey[] = "@launch_mode";
 const char kTizenApplicationRequiredVersionKey[] = "@required_version";
+const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
 }  // namespace
 
 TizenApplicationInfo::TizenApplicationInfo() {}
@@ -84,10 +83,10 @@ bool TizenApplicationHandler::Parse(
   }
   if (app_dict->GetString(kTizenApplicationRequiredVersionKey, &value)) {
     if (!value.empty()) {
-      // TODO(wy80.choi): should consider minimum API version for each profile.
       utils::VersionNumber req_version(value);
-      if (req_version < kMinimumAPIVersion) {
-        app_info->set_required_version(kMinimumAPIVersion.ToString());
+      utils::VersionNumber min_version = parser::GetMinimumPlatformVersion();
+      if (req_version < min_version) {
+        app_info->set_required_version(min_version.ToString());
       } else {
         app_info->set_required_version(value);
       }

@@ -16,6 +16,12 @@ namespace parser {
  */
 utils::VersionNumber GetCurrentPlatformVersion();
 
+/**
+ * @brief GetMinimumPlatformVersion
+ * @return number version of the minimum platform for current profile
+ */
+utils::VersionNumber GetMinimumPlatformVersion();
+
 }  // namespace parser
 
 #endif  // MANIFEST_HANDLERS_PLATFORM_VERSION_H_

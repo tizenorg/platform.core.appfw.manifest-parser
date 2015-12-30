@@ -57,7 +57,9 @@ cp %{SOURCE100} .
 # is used in CMakeLists.txt files to distinguish, which project
 # is currently being build.
 %cmake . -DCMAKE_BUILD_TYPE=%{?build_type:%build_type} \
-         -DTIZEN_VERSION=%{tizen_version}
+         -DTIZEN_VERSION=%{tizen_version} \
+         -DTIZEN_PROFILE=%{profile}
+
 make %{?_smp_mflags}
 
 %install
@@ -111,7 +113,7 @@ make %{?_smp_mflags}
 - TPK handlers added
 
 * Tue Aug 18 2015 Pawel Sikorski <p.sikorski@samsung.com> 1.2-1
-- ConfigParsing and StartFile validation separation; 
+- ConfigParsing and StartFile validation separation;
 - AlwaysValidate removed, version checking improved
 
 * Fri Aug 14 2015 Pawel Sikorski <p.sikorski@samsung.com> 1.1-1
