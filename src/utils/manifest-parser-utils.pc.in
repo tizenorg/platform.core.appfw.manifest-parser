@@ -9,3 +9,4 @@ Version: @VERSION@
 Requires: libiri
 Libs: -L${libdir} -lmanifest-parser-utils
 Cflags: -I${includedir}
+License: Apache-2.0 and BSD-3-Clause

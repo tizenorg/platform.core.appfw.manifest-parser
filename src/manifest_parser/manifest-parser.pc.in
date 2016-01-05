@@ -9,3 +9,4 @@ Version: @VERSION@
 Requires: libiri libxml-2.0 pkgmgr-info pkgmgr-parser vconf manifest-parser-utils
 Libs: -L${libdir} -lmanifest-parser
 Cflags: -I${includedir}
+License: Apache-2.0 and BSD-3-Clause

@@ -9,3 +9,4 @@ Version: @VERSION@
 Requires: manifest-parser
 Libs: -L${libdir} -lmanifest-handlers
 Cflags: -I${includedir}
+License: Apache-2.0 and BSD-3-Clause
