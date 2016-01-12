@@ -10,7 +10,6 @@ SET(SRCS
 
 SET(INCLUDES
   ${CMAKE_CURRENT_SOURCE_DIR}/manifest.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/manifest_constants.h
   ${CMAKE_CURRENT_SOURCE_DIR}/manifest_handler.h
   ${CMAKE_CURRENT_SOURCE_DIR}/manifest_parser.h
   ${CMAKE_CURRENT_SOURCE_DIR}/permission_types.h

@@ -16,9 +16,6 @@ const char kNamespaceKey[] = "@namespace";
 
 namespace parser {
 
-// TODO(p.sikorski): temporary place for this key
-const char kW3CNamespacePrefix[] = "http://www.w3.org/ns/widgets";
-
 ManifestHandler::~ManifestHandler() {
 }
 

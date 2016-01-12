@@ -10,7 +10,6 @@
 #include <vector>
 
 #include "manifest_parser/manifest_handler.h"
-#include "manifest_parser/manifest_constants.h"
 #include "utils/iri_util.h"
 #include "utils/logging.h"
 
