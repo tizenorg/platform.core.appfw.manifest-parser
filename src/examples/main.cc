@@ -5,7 +5,7 @@
 // Include manifest parser
 #include <manifest_parser/manifest_parser.h>
 // Include manifest handler, which is packaged with manifest parser
-#include <manifest_handlers/tizen_application_handler.h>
+#include <wgt_manifest_handlers/tizen_application_handler.h>
 
 #include <boost/filesystem/path.hpp>
 #include <cassert>

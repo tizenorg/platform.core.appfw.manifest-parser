@@ -9,11 +9,11 @@
 #include <memory>
 #include <vector>
 
-#include "manifest_handlers/application_manifest_constants.h"
-#include "manifest_handlers/content_handler.h"
 #include "manifest_parser/manifest.h"
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/manifest_parser_impl.h"
+#include "wgt_manifest_handlers/application_manifest_constants.h"
+#include "wgt_manifest_handlers/content_handler.h"
 
 namespace bf = boost::filesystem;
 
