@@ -23,7 +23,7 @@ SET(CMAKE_CXX_FLAGS_RELEASE    "-O2 -std=c++11 -g")
 SET(CMAKE_CXX_FLAGS_CCOV       "-O0 -std=c++11 -g --coverage")
 
 # Targets
-SET(TARGET_LIBNAME_MANIFEST_HANDLERS "manifest-handlers")
+SET(TARGET_LIBNAME_WGT_MANIFEST_HANDLERS "wgt-manifest-handlers")
 SET(TARGET_LIBNAME_TPK_MANIFEST_HANDLERS "tpk-manifest-handlers")
 SET(TARGET_LIBNAME_DELTA_MANIFEST_HANDLERS "delta-manifest-handlers")
 SET(TARGET_LIBNAME_PARSER "manifest-parser")
