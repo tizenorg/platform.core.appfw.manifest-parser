@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"

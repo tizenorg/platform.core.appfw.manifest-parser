@@ -88,7 +88,8 @@ struct WidgetApplicationSingleEntry :
   ApplicationImagesInfo app_images;
 };
 
-using WidgetApplicationInfoList = ApplicationInfoList<WidgetApplicationSingleEntry>;
+using WidgetApplicationInfoList =
+    ApplicationInfoList<WidgetApplicationSingleEntry>;
 
 /**
  * @brief The WidgetApplicationHandler class

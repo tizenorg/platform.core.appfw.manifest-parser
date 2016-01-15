@@ -168,7 +168,6 @@ bool AccountHandler::ParseCapabilities(
   const parser::Value* val = nullptr;
   const parser::DictionaryValue* dict = nullptr;
   const parser::ListValue* list = nullptr;
-  std::string string_value;
   if (item_dict->Get(kAccountCapabilityKey, &val)) {
     std::string capability;
     if (val->GetAsDictionary(&dict)) {
