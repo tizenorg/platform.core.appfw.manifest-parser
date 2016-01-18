@@ -11,7 +11,7 @@
 namespace {
 
 const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
-const char kAccountKey[] = "manifest.account";
+const char kAccountKey[] = "widget.account";
 
 const char kSectionIconAccount[] = "Account";
 const char kSectionIconAccountSmall[] = "AccountSmall";
