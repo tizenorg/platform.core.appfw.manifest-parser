@@ -151,13 +151,11 @@ bool ParseDataControl(const parser::DictionaryValue& dict,
 
 template<typename T>
 bool ParseAppIcon(const parser::DictionaryValue& dict,
-                  T* info, std::string* error) {
+                  T* info, std::string* /*error*/) {
   std::string icon_path;
 
-  if (!dict.GetString(tpk_app_keys::kIconTextKey, &icon_path)) {
-    *error = "Parsing Icon failed";
-    return false;
-  }
+  if (!dict.GetString(tpk_app_keys::kIconTextKey, &icon_path))
+    return true;
 
   info->app_icons.AddIcon(ApplicationIcon(icon_path));
 
