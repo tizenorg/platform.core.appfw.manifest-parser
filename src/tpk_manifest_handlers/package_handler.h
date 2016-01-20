@@ -68,6 +68,11 @@ class PackageInfo : public parser::ManifestData {
   void set_nodisplay_setting(const std::string& nodisplay_setting) {
     nodisplay_setting_ = nodisplay_setting;
   }
+
+  void set_preload(const std::string& preload) {
+    preload_ = preload;
+  }
+
   void AddLabel(const std::string& lang, const std::string& text) {
     labels_.emplace_back(lang, text);
   }
@@ -109,6 +114,9 @@ class PackageInfo : public parser::ManifestData {
   const std::string& nodisplay_setting() const {
     return nodisplay_setting_;
   }
+  const std::string& preload() const {
+    return preload_;
+  }
   const std::vector<LangTextPair>& labels() const {
     return labels_;
   }
@@ -121,6 +129,8 @@ class PackageInfo : public parser::ManifestData {
   std::string type_;
   std::string install_location_;
   std::string nodisplay_setting_;
+  std::string preload_;
+
   std::vector<LangTextPair> labels_;
 };
 
