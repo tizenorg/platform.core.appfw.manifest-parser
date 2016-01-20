@@ -30,6 +30,7 @@ const char kManifestKey[] = "manifest";
 const char kLabelKey[] = "label";
 const char kLabelLangKey[] = "@lang";
 const char kLabelTextKey[] = "#text";
+const char kPreload[] = "@preload";
 
 void ParsePackageAndStore(
     const parser::DictionaryValue& manifest_dict,
@@ -48,6 +49,8 @@ void ParsePackageAndStore(
   manifest_dict.GetString(kInstallLocation, &install_location);
   std::string nodisplay_setting("false");
   manifest_dict.GetString(kNodisplaySetting, &nodisplay_setting);
+  std::string preload;
+  manifest_dict.GetString(kPreload, &preload);
 
   pkg_info->set_xmlns(xmlns);
   pkg_info->set_api_version(api_version);
@@ -55,6 +58,7 @@ void ParsePackageAndStore(
   pkg_info->set_version(version);
   pkg_info->set_type(type);
   pkg_info->set_nodisplay_setting(nodisplay_setting);
+  pkg_info->set_preload(preload);
 
   if (install_location.empty()) {
     pkg_info->set_install_location(kAutoInstallLocation);
