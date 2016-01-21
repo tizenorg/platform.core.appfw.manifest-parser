@@ -44,6 +44,6 @@ INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${INCLUDEDIR}
         FILES_MATCHING PATTERN "*.h")
 
 # Configure and install pkgconfig file
-SET(PKG_FILE manifest-handlers.pc)
+SET(PKG_FILE wgt-manifest-handlers.pc)
 CONFIGURE_FILE(${PKG_FILE}.in ${PKG_FILE} @ONLY)
 INSTALL(FILES ${PKG_FILE} DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
