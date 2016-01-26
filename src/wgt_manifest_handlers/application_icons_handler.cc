@@ -99,16 +99,6 @@ const std::string& ApplicationIcon::path() const {
   return path_;
 }
 
-void ApplicationIcon::set_width(int width) {
-  if (width >= 0)
-    width_ = width;
-}
-
-void ApplicationIcon::set_height(int height) {
-  if (height >= 0)
-    height_ = height;
-}
-
 std::string ApplicationIconsInfo::Key() {
   return kIconsKey;
 }

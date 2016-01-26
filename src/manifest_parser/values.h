@@ -233,13 +233,6 @@ class DictionaryValue : public Value {
   // be used as paths.
   void SetWithoutPathExpansion(const std::string& key, Value* in_value);
 
-  // Convenience forms of SetWithoutPathExpansion().
-  void SetBooleanWithoutPathExpansion(const std::string& path, bool in_value);
-  void SetIntegerWithoutPathExpansion(const std::string& path, int in_value);
-  void SetDoubleWithoutPathExpansion(const std::string& path, double in_value);
-  void SetStringWithoutPathExpansion(const std::string& path,
-                                     const std::string& in_value);
-
   // Gets the Value associated with the given path starting from this object.
   // A path has the form "<key>" or "<key>.<key>.[...]", where "." indexes
   // into the next DictionaryValue down.  If the path can be resolved
@@ -321,9 +314,6 @@ class DictionaryValue : public Value {
   // replaced. Values within |dictionary| are deep-copied, so |dictionary| may
   // be freed any time after this call.
   void MergeDictionary(const DictionaryValue* dictionary);
-
-  // Swaps contents with the |other| dictionary.
-  virtual void Swap(DictionaryValue* other);
 
   // This class provides an iterator over both keys and values in the
   // dictionary.  It can't be used to modify the dictionary.
@@ -421,29 +411,10 @@ class ListValue : public Value {
   // Appends a Value to the end of the list.
   void Append(Value* in_value);
 
-  // Convenience forms of Append.
-  void AppendBoolean(bool in_value);
-  void AppendInteger(int in_value);
-  void AppendDouble(double in_value);
-  void AppendString(const std::string& in_value);
-  void AppendStrings(const std::vector<std::string>& in_values);
-
-  // Appends a Value if it's not already present. Takes ownership of the
-  // |in_value|. Returns true if successful, or false if the value was already
-  // present. If the value was already present the |in_value| is deleted.
-  bool AppendIfNotPresent(Value* in_value);
-
-  // Insert a Value at index.
-  // Returns true if successful, or false if the index was out of range.
-  bool Insert(size_t index, Value* in_value);
-
   // Searches for the first instance of |value| in the list using the Equals
   // method of the Value type.
   // Returns a const_iterator to the found item or to end() if none exists.
   const_iterator Find(const Value& value) const;
-
-  // Swaps contents with the |other| list.
-  virtual void Swap(ListValue* other);
 
   // Iteration.
   iterator begin() { return list_.begin(); }
