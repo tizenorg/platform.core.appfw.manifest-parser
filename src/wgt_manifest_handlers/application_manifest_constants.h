@@ -10,13 +10,6 @@
 
 // Keys used in JSON representation of applications.
 namespace wgt {
-namespace application_manifest_keys {
-
-// TODO(p.sikorski): below key should be removed, when nwrt and app-installer
-// will stop use it. Now, it is just copied.
-extern const char kIconsKey[];
-
-}  // namespace application_manifest_keys
 
 namespace application_widget_keys {
 

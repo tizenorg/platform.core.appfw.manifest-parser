@@ -405,26 +405,6 @@ void DictionaryValue::SetWithoutPathExpansion(const std::string& key,
   }
 }
 
-void DictionaryValue::SetBooleanWithoutPathExpansion(
-    const std::string& path, bool in_value) {
-  SetWithoutPathExpansion(path, new FundamentalValue(in_value));
-}
-
-void DictionaryValue::SetIntegerWithoutPathExpansion(
-    const std::string& path, int in_value) {
-  SetWithoutPathExpansion(path, new FundamentalValue(in_value));
-}
-
-void DictionaryValue::SetDoubleWithoutPathExpansion(
-    const std::string& path, double in_value) {
-  SetWithoutPathExpansion(path, new FundamentalValue(in_value));
-}
-
-void DictionaryValue::SetStringWithoutPathExpansion(
-    const std::string& path, const std::string& in_value) {
-  SetWithoutPathExpansion(path, new StringValue(in_value));
-}
-
 bool DictionaryValue::Get(const std::string& path,
                           const Value** out_value) const {
   std::string current_path(path);
@@ -720,10 +700,6 @@ void DictionaryValue::MergeDictionary(const DictionaryValue* dictionary) {
   }
 }
 
-void DictionaryValue::Swap(DictionaryValue* other) {
-  dictionary_.swap(other->dictionary_);
-}
-
 DictionaryValue::Iterator::Iterator(const DictionaryValue& target)
     : target_(target),
       it_(target.dictionary_.begin()) {}
@@ -942,56 +918,8 @@ void ListValue::Append(Value* in_value) {
   list_.push_back(in_value);
 }
 
-void ListValue::AppendBoolean(bool in_value) {
-  Append(new FundamentalValue(in_value));
-}
-
-void ListValue::AppendInteger(int in_value) {
-  Append(new FundamentalValue(in_value));
-}
-
-void ListValue::AppendDouble(double in_value) {
-  Append(new FundamentalValue(in_value));
-}
-
-void ListValue::AppendString(const std::string& in_value) {
-  Append(new StringValue(in_value));
-}
-
-void ListValue::AppendStrings(const std::vector<std::string>& in_values) {
-  for (std::vector<std::string>::const_iterator it = in_values.begin();
-       it != in_values.end(); ++it) {
-    AppendString(*it);
-  }
-}
-
-bool ListValue::AppendIfNotPresent(Value* in_value) {
-  assert(in_value);
-  for (ValueVector::const_iterator i(list_.begin()); i != list_.end(); ++i) {
-    if ((*i)->Equals(in_value)) {
-      delete in_value;
-      return false;
-    }
-  }
-  list_.push_back(in_value);
-  return true;
-}
-
-bool ListValue::Insert(size_t index, Value* in_value) {
-  assert(in_value);
-  if (index > list_.size())
-    return false;
-
-  list_.insert(list_.begin() + index, in_value);
-  return true;
-}
-
 ListValue::const_iterator ListValue::Find(const Value& value) const {
   return std::find_if(list_.begin(), list_.end(), ValueEquals(&value));
-}
-
-void ListValue::Swap(ListValue* other) {
-  list_.swap(other->list_);
 }
 
 bool ListValue::GetAsList(ListValue** out_value) {

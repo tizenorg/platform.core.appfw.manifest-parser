@@ -35,16 +35,6 @@ class ApplicationIcon {
    * @return string to the path
    */
   const std::string& path() const;
-  /**
-   * @brief set_width sets width
-   * @param width
-   */
-  void set_width(int width);
-  /**
-   * @brief set_height sets height
-   * @param height
-   */
-  void set_height(int height);
 
  private:
   std::string path_;

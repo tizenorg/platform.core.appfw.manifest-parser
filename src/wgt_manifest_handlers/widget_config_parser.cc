@@ -301,7 +301,7 @@ bool WidgetConfigParser::CheckServicesStartFiles() {
 bool WidgetConfigParser::CheckWidgetIcons() {
   std::shared_ptr<ApplicationIconsInfo> icons_info =
       std::static_pointer_cast<ApplicationIconsInfo>(
-          parser_->AccessManifestData(application_manifest_keys::kIconsKey));
+          parser_->AccessManifestData(application_widget_keys::kIconsKey));
   if (!icons_info) {
     error_ = "Failed to get icon info";
     return false;
