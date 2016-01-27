@@ -41,10 +41,6 @@ const char kWidgetApplicationKey[] = "manifest.widget-application";
 // manifest
 const char kManifestKey[] = "manifest";
 
-bool IsBooleanString(const std::string& value) {
-  return ba::iequals(value, "true") || ba::iequals(value, "false");
-}
-
 }  // namespace
 
 template<>

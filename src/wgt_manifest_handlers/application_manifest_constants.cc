@@ -7,14 +7,6 @@
 
 namespace wgt {
 
-namespace application_manifest_keys {
-
-// TODO(p.sikorski): below key should be removed, when nwrt and app-installer
-// will stop use it. Now, it is just copied.
-const char kIconsKey[] = "icons";
-
-}  // namespace application_manifest_keys
-
 // manifest keys for widget applications.
 namespace application_widget_keys {
 

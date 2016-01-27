@@ -163,7 +163,7 @@ bool ApplicationIconsHandler::AlwaysParseForKey() const {
 }
 
 std::string ApplicationIconsHandler::Key() const {
-  return wgt::application_manifest_keys::kIconsKey;
+  return wgt::application_widget_keys::kIconsKey;
 }
 
 }  // namespace parse
