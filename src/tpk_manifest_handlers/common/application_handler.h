@@ -156,8 +156,13 @@ bool ParseAppIcon(const parser::DictionaryValue& dict,
 
   if (!dict.GetString(tpk_app_keys::kIconTextKey, &icon_path))
     return true;
+  std::string xml_lang;
+  dict.GetString(tpk_app_keys::kIconLangKey, &xml_lang);
 
-  info->app_icons.AddIcon(ApplicationIcon(icon_path));
+  std::string dpi;
+  dict.GetString(tpk_app_keys::kIconDpiKey, &dpi);
+
+  info->app_icons.AddIcon(ApplicationIcon(icon_path, xml_lang, dpi));
 
   return true;
 }
