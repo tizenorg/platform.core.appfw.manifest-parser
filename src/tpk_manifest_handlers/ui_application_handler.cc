@@ -38,6 +38,7 @@ const char kUIApplicationTaskManageKey[] = "@taskmanage";
 const char kUIApplicationTypeKey[] = "@type";
 const char kUIApplicationUIGadgetKey[] = "@ui-gadget";
 const char kUIApplicationProcessPoolKey[] = "@process-pool";
+const char kUIApplicationPreinitWindowKey[] = "@preinit-window";
 const char kUIApplicationSubmodeKey[] = "@submode";
 const char kUIApplicationSubmodeMainIDKey[] = "@submode-mainid";
 const char kUIApplicationIndicatorDisplayKey[] = "@indicatordisplay";
@@ -201,6 +202,16 @@ bool ParseUIApplicationAndStore(
   if (app_dict.GetString(kUIApplicationProcessPoolKey, &process_pool)) {
     if (!IsBooleanString(process_pool)) {
       *error = "process_pool must be 'true' or 'false'";
+      return false;
+    }
+    uiapplicationinfo->app_info.set_process_pool(process_pool);
+  }
+  // NOTE: preinit-window is public version of process-pool, \
+  // and they share same variable.
+  if (process_pool.empty() &&
+    app_dict.GetString(kUIApplicationPreinitWindowKey, &process_pool)) {
+    if (!IsBooleanString(process_pool)) {
+      *error = "preinit_window must be 'true' or 'false'";
       return false;
     }
     uiapplicationinfo->app_info.set_process_pool(process_pool);
