@@ -39,6 +39,8 @@ extern const char kDataControlTypeKey[];
 // icon
 extern const char kIconKey[];
 extern const char kIconTextKey[];
+extern const char kIconLangKey[];
+extern const char kIconDpiKey[];
 
 // label
 extern const char kLabelKey[];
