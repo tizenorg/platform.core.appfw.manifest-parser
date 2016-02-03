@@ -27,6 +27,8 @@ const char kDataControlTypeKey[] = "@type";
 // icon
 const char kIconKey[] = "icon";
 const char kIconTextKey[] = "#text";
+const char kIconLangKey[] = "@lang";
+const char kIconDpiKey[] = "@dpi";
 
 // label
 const char kLabelKey[] = "label";
