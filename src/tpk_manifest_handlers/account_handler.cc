@@ -94,10 +94,7 @@ bool AccountHandler::ParseAccountProvider(
   }
 
   std::string provider_id;
-  if (!dict->GetString(kAccountProviderIDKey, &provider_id)) {
-    *error = "Error while parsing provider id in account";
-    return false;
-  }
+  dict->GetString(kAccountProviderIDKey, &provider_id);
   single_account.provider_id = provider_id;
 
   bool mas_bool = false;
