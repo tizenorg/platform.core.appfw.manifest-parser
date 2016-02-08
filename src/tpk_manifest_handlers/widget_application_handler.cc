@@ -75,6 +75,10 @@ bool InitializeParsing(const parser::DictionaryValue& app_dict,
   if (!InitializeParsingElement(app_dict, tpk_app_keys::kImageKey,
       parsingFunc, widgetapplicationinfo, error))
     return false;
+  parsingFunc = ParseCategory<WidgetApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kCategoryKey,
+      parsingFunc, widgetapplicationinfo, error))
+    return false;
 
   return true;
 }

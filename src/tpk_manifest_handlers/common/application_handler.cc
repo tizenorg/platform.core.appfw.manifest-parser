@@ -45,6 +45,11 @@ const char kLabelLangKey[] = "@lang";
 const char kMetaDataKey[] = "metadata";
 const char kMetaDataKeyKey[] = "@key";
 const char kMetaDataValueKey[] = "@value";
+
+// category
+const char kCategoryKey[] = "category";
+const char kCategoryNameKey[] = "@name";
+
 }  // namespace tpk_app_keys
 
 const utils::VersionNumber kLaunchModeRequiredVersion("2.4");

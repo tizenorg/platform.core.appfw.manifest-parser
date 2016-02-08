@@ -57,6 +57,11 @@ extern const char kLabelLangKey[];
 extern const char kMetaDataKey[];
 extern const char kMetaDataKeyKey[];
 extern const char kMetaDataValueKey[];
+
+// category
+extern const char kCategoryKey[];
+extern const char kCategoryNameKey[];
+
 }  // namespace tpk_app_keys
 
 extern const utils::VersionNumber kLaunchModeRequiredVersion;
@@ -90,6 +95,7 @@ struct ApplicationSingleEntry : public parser::ManifestData {
   std::vector<MetaDataInfo> meta_data;
   ApplicationIconsInfo app_icons;
   std::vector<LabelInfo> label;
+  std::vector<std::string> categories;
 };
 
 template<typename T>
@@ -217,6 +223,16 @@ bool ParseMetaData(const parser::DictionaryValue& dict,
     info->background_category.emplace_back(std::move(val));
   }
 
+  return true;
+}
+
+template<typename T>
+bool ParseCategory(const parser::DictionaryValue& dict,
+                   T* info, std::string*) {
+  std::string name;
+  dict.GetString(tpk_app_keys::kCategoryNameKey, &name);
+  if (!name.empty())
+    info->categories.push_back(name);
   return true;
 }
 
