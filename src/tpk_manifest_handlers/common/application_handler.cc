@@ -30,6 +30,12 @@ const char kIconTextKey[] = "#text";
 const char kIconLangKey[] = "@lang";
 const char kIconDpiKey[] = "@dpi";
 
+// image
+const char kImageKey[] = "image";
+const char kImageNameKey[] = "@name";
+const char kImageSectionKey[] = "@section";
+const char kImageLangKey[] = "@lang";
+
 // label
 const char kLabelKey[] = "label";
 const char kLabelTextKey[] = "#text";

@@ -22,11 +22,6 @@ namespace ba = boost::algorithm;
 namespace keys = tpk::application_keys;
 
 namespace {
-// image
-const char kImageKey[] = "image";
-const char kImageNameKey[] = "@name";
-const char kImageSectionKey[] = "@section";
-const char kImageLangKey[] = "@lang";
 
 // ui-application
 const char kUIApplicationAppIDKey[] = "@appid";
@@ -56,22 +51,6 @@ bool IsBooleanString(const std::string& value) {
 
 }  // namespace
 
-bool ParseAppImage(const parser::DictionaryValue& dict,
-                   UIApplicationSingleEntry* info, std::string*) {
-  std::string image_name;
-  std::string image_section;
-  std::string image_lang;
-
-  if (!dict.GetString(kImageNameKey, &image_name))
-    return true;
-
-  dict.GetString(kImageSectionKey, &image_section);
-  dict.GetString(kImageLangKey, &image_lang);
-  info->app_images.images.emplace_back(image_name, image_section, image_lang);
-
-  return true;
-}
-
 bool InitializeParsing(const parser::DictionaryValue& app_dict,
                        UIApplicationSingleEntry* uiapplicationinfo,
                        std::string* error) {
@@ -96,8 +75,8 @@ bool InitializeParsing(const parser::DictionaryValue& app_dict,
   if (!InitializeParsingElement(app_dict, tpk_app_keys::kLabelKey,
       parsingFunc, uiapplicationinfo, error))
     return false;
-  parsingFunc = ParseAppImage;
-  if (!InitializeParsingElement(app_dict, kImageKey,
+  parsingFunc = ParseAppImage<UIApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kImageKey,
       parsingFunc, uiapplicationinfo, error))
     return false;
   parsingFunc = ParseBackgroundCategoryElement<UIApplicationSingleEntry>;
