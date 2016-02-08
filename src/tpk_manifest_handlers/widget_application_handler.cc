@@ -55,33 +55,6 @@ bool ParseMetaData(const parser::DictionaryValue& dict,
   return true;
 }
 
-bool ParseAppImage(
-  const parser::DictionaryValue* dict,
-  WidgetApplicationSingleEntry* info) {
-  std::string image_name;
-  std::string image_section;
-  std::string image_lang;
-  if (!dict->GetString(kImageNameKey, &image_name))
-    return false;
-  dict->GetString(kImageSectionKey, &image_section);
-  dict->GetString(kImageLangKey, &image_lang);
-  info->app_images.images.emplace_back(image_name, image_section, image_lang);
-  return true;
-}
-
-bool InitializeImageParsing(
-    const parser::DictionaryValue& app_dict,
-    WidgetApplicationSingleEntry* widgetapplicationinfo,
-    std::string* error) {
-  for (auto& item : parser::GetOneOrMany(&app_dict, kImageKey, "")) {
-    if (!ParseAppImage(item, widgetapplicationinfo)) {
-      *error = "Parsing Image failed";
-      return false;
-    }
-  }
-  return true;
-}
-
 bool InitializeParsing(const parser::DictionaryValue& app_dict,
                        WidgetApplicationSingleEntry* widgetapplicationinfo,
                        std::string* error) {
@@ -91,15 +64,15 @@ bool InitializeParsing(const parser::DictionaryValue& app_dict,
       parsingFunc, widgetapplicationinfo, error))
     return false;
   parsingFunc = ParseAppIcon<WidgetApplicationSingleEntry>;
-  if (!InitializeParsingElement(app_dict, tpk_app_keys::kMetaDataKey,
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kIconKey,
       parsingFunc, widgetapplicationinfo, error))
     return false;
   parsingFunc = ParseLabel<WidgetApplicationSingleEntry>;
-  if (!InitializeParsingElement(app_dict, tpk_app_keys::kMetaDataKey,
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kLabelKey,
       parsingFunc, widgetapplicationinfo, error))
     return false;
-  parsingFunc = InitializeImageParsing;
-  if (!InitializeParsingElement(app_dict, tpk_app_keys::kMetaDataKey,
+  parsingFunc = ParseAppImage<WidgetApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kImageKey,
       parsingFunc, widgetapplicationinfo, error))
     return false;
 

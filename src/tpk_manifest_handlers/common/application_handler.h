@@ -42,6 +42,12 @@ extern const char kIconTextKey[];
 extern const char kIconLangKey[];
 extern const char kIconDpiKey[];
 
+// image
+extern const char kImageKey[];
+extern const char kImageNameKey[];
+extern const char kImageSectionKey[];
+extern const char kImageLangKey[];
+
 // label
 extern const char kLabelKey[];
 extern const char kLabelTextKey[];
@@ -166,6 +172,22 @@ bool ParseAppIcon(const parser::DictionaryValue& dict,
 
   info->app_icons.AddIcon(ApplicationIcon(icon_path, xml_lang, dpi));
 
+  return true;
+}
+
+template<typename T>
+bool ParseAppImage(const parser::DictionaryValue& dict, T* info,
+                   std::string* error) {
+  std::string image_name;
+  if (!dict.GetString(tpk_app_keys::kImageNameKey, &image_name)) {
+    *error = "Failed to parse image's name attribute";
+    return false;
+  }
+  std::string image_section;
+  dict.GetString(tpk_app_keys::kImageSectionKey, &image_section);
+  std::string image_lang;
+  dict.GetString(tpk_app_keys::kImageLangKey, &image_lang);
+  info->app_images.images.emplace_back(image_name, image_section, image_lang);
   return true;
 }
 
