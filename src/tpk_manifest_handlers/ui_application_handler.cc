@@ -79,6 +79,10 @@ bool InitializeParsing(const parser::DictionaryValue& app_dict,
   if (!InitializeParsingElement(app_dict, tpk_app_keys::kImageKey,
       parsingFunc, uiapplicationinfo, error))
     return false;
+  parsingFunc = ParseCategory<UIApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kCategoryKey,
+      parsingFunc, uiapplicationinfo, error))
+    return false;
   parsingFunc = ParseBackgroundCategoryElement<UIApplicationSingleEntry>;
   if (!InitializeParsingElement(app_dict, tpk_app_keys::kBackgroundCategoryKey,
       parsingFunc, uiapplicationinfo, error))
