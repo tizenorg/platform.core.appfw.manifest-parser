@@ -104,7 +104,8 @@ class MetaDataInfo : public parser::ManifestData {
 // Icon
 class ApplicationIcon  {
  public:
-  explicit ApplicationIcon(const std::string& path, const std::string& lang, const std::string& dpi)
+  explicit ApplicationIcon(const std::string& path, const std::string& lang,
+                           const std::string& dpi)
                           : path_(path), lang_(lang), dpi_(dpi) {}
 
   const std::string& path() const {
