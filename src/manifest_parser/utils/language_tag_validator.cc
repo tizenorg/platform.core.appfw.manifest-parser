@@ -7,7 +7,6 @@
 #include <boost/algorithm/string.hpp>
 #include <vector>
 
-#include "manifest_parser/utils/logging.h"
 #include "manifest_parser/utils/w3c_languages.h"
 
 namespace ba = boost::algorithm;
@@ -41,11 +40,12 @@ std::string ToUpper(const std::string& input) {
 namespace utils {
 namespace w3c_languages {
 
-bool ValidateLanguageTag(const std::string& tag) {
-  // algorithm based on http://www.w3.org/International/articles/language-tags/
+// algorithm based on http://www.w3.org/International/articles/language-tags/
+bool ValidateLanguageTag(const std::string& tag, std::string* error) {
   std::vector<std::string> splitted_tag;
   if (tag.empty()) {
-    LOG(ERROR) << "tag is empty";
+    if (error)
+      *error = "tag is empty";
     return false;
   }
   boost::split(splitted_tag, tag, boost::is_any_of(kTagDelimiter));
@@ -53,7 +53,8 @@ bool ValidateLanguageTag(const std::string& tag) {
   // main language validation
   if (current_item != splitted_tag.end() &&
       !lang_set::ValidateOnlyLanguage(*current_item)) {
-    LOG(ERROR) << "Invalid main language tag given";
+    if (error)
+      *error = "Invalid main language tag given";
     return false;
   }
   ++current_item;
@@ -68,7 +69,8 @@ bool ValidateLanguageTag(const std::string& tag) {
       if (current_item == splitted_tag.end())
         return true;
     } else {
-      LOG(ERROR) << "Extlang does not match language";
+      if (error)
+        *error = "Extlang does not match language";
       return false;
     }
   }
@@ -93,7 +95,9 @@ bool ValidateLanguageTag(const std::string& tag) {
   }
   // extension private tag validation
   if ((*current_item).size() != kSingletonTagSize) {
-    LOG(ERROR) << "Singletion subtag should be of size " << kSingletonTagSize;
+    if (error)
+      *error = std::string("Singletion subtag should be of size ") +
+        std::to_string(kSingletonTagSize);
     return false;
   }
   ++current_item;
@@ -102,8 +106,9 @@ bool ValidateLanguageTag(const std::string& tag) {
   for (auto it = current_item; it != splitted_tag.end(); ++current_item) {
     auto tag_length = (*current_item).size();
     if (tag_length > kMaximumExtensionTagSize) {
-      LOG(ERROR) << "Any extensions should be maximum "
-                 << kMaximumExtensionTagSize << "characters";
+      if (error)
+        *error = std::string("Any extensions should be maximum ") +
+            std::to_string(kMaximumExtensionTagSize) + "characters";
       return false;
     }
   }

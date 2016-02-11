@@ -20,6 +20,7 @@
 
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/utils/iri_util.h"
+#include "manifest_parser/utils/language_tag_validator.h"
 #include "manifest_parser/utils/logging.h"
 #include "wgt_manifest_handlers/account_handler.h"
 #include "wgt_manifest_handlers/app_control_handler.h"
@@ -133,11 +134,11 @@ FindResult FindFileWithinWidget(const bf::path& widget_path,
   std::vector<std::string> path_components;
   ba::split(path_components, content_value, ba::is_any_of("/"));
   if (path_components.size() >= 1 && path_components[0] == kLocaleDirectory) {
-    if (path_components.size() == 1) {
+    if (path_components.size() == 1)
       return FindResult::NUL;
-    }
 
-    // TODO(t.iwanek): validate language tag
+    if (!utils::w3c_languages::ValidateLanguageTag(path_components[1]))
+      return FindResult::NUL;
 
     path_components.erase(path_components.begin(), ++++path_components.begin());
     content_value = ba::join(path_components, "/");
@@ -151,7 +152,8 @@ FindResult FindFileWithinWidget(const bf::path& widget_path,
          iter != bf::directory_iterator(); ++iter) {
       const bf::path& path = *iter;
 
-      // TODO(t.iwanek): validate language tag
+      if (!utils::w3c_languages::ValidateLanguageTag(path.filename().string()))
+        continue;
 
       bf::path candidate = path / content_value;
       if (bf::exists(candidate, error)) {
