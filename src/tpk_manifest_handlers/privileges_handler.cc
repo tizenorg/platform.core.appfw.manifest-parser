@@ -12,9 +12,6 @@
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 
-// TODO(m.socha): Handler is very similar to wgt permissions_handler.
-//                It should be refactored.
-
 namespace tpk {
 namespace parse {
 
