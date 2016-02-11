@@ -18,9 +18,10 @@ namespace w3c_languages {
  *  - http://www.w3.org/International/articles/language-tags/
  *
  * @param language tag string
+ * @param error output parameter for error
  * @return true if tag is correct
  */
-bool ValidateLanguageTag(const std::string& tag);
+bool ValidateLanguageTag(const std::string& tag, std::string* error = nullptr);
 
 }  // namespace w3c_languages
 }  // namespace utils
