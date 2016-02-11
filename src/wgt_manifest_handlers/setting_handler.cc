@@ -125,22 +125,12 @@ bool SettingHandler::Parse(const parser::Manifest& manifest,
   app_info->set_no_display(boost::iequals(no_display, kTrueValue));
 
   std::string indicator_presence;
-  if (ForAllFindKey(value, kTizenIndicatorPresenceKey, &indicator_presence)) {
-    if (boost::iequals(indicator_presence, kTrueValue)) {
-      app_info->set_indicator_presence(true);
-    } else if (boost::iequals(indicator_presence, kFalseValue)) {
-      app_info->set_indicator_presence(false);
-    }
-  }
+  ForAllFindKey(value, kTizenIndicatorPresenceKey, &indicator_presence);
+  app_info->set_indicator_presence(indicator_presence == "enable");
 
   std::string backbutton_presence;
-  if (ForAllFindKey(value, kTizenBackbuttonPresenceKey, &backbutton_presence)) {
-    if (boost::iequals(backbutton_presence, kTrueValue)) {
-      app_info->set_backbutton_presence(true);
-    } else if (boost::iequals(backbutton_presence, kFalseValue)) {
-      app_info->set_backbutton_presence(false);
-    }
-  }
+  ForAllFindKey(value, kTizenBackbuttonPresenceKey, &backbutton_presence);
+  app_info->set_backbutton_presence(backbutton_presence == "enable");
 
   std::string user_agent;
   ForAllFindKey(value, kTizenUserAgentKey, &user_agent);
