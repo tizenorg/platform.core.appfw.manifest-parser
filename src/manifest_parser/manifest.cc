@@ -19,7 +19,6 @@ Manifest::~Manifest() {
 
 bool Manifest::ValidateManifest(
     std::string* /*error*/) const {
-  // TODO(xiang): support features validation
   return true;
 }
 

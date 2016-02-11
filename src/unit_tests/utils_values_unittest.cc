@@ -332,30 +332,6 @@ TEST(ValuesTest, DictionaryWithoutPathExpansion) {
   EXPECT_EQ(Value::TYPE_NULL, value4->GetType());
 }
 
-// Tests the deprecated version of SetWithoutPathExpansion.
-// TODO(estade): remove.
-TEST(ValuesTest, DictionaryWithoutPathExpansionDeprecated) {
-  DictionaryValue dict;
-  dict.Set("this.is.expanded", Value::CreateNullValue());
-  dict.SetWithoutPathExpansion("this.isnt.expanded", Value::CreateNullValue());
-
-  EXPECT_FALSE(dict.HasKey("this.is.expanded"));
-  EXPECT_TRUE(dict.HasKey("this"));
-  Value* value1;
-  EXPECT_TRUE(dict.Get("this", &value1));
-  DictionaryValue* value2;
-  ASSERT_TRUE(dict.GetDictionaryWithoutPathExpansion("this", &value2));
-  EXPECT_EQ(value1, value2);
-  EXPECT_EQ(1U, value2->size());
-
-  EXPECT_TRUE(dict.HasKey("this.isnt.expanded"));
-  Value* value3;
-  EXPECT_FALSE(dict.Get("this.isnt.expanded", &value3));
-  Value* value4;
-  ASSERT_TRUE(dict.GetWithoutPathExpansion("this.isnt.expanded", &value4));
-  EXPECT_EQ(Value::TYPE_NULL, value4->GetType());
-}
-
 TEST(ValuesTest, DictionaryRemovePath) {
   DictionaryValue dict;
   dict.SetInteger("a.long.way.down", 1);

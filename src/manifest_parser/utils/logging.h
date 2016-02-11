@@ -38,7 +38,6 @@ class LogCatcher {
  public:
   LogCatcher() { }
   void operator&(const std::ostream& str) const {
-    // TODO(tiwanek): this cast is error-prone - fix it
     std::cerr << static_cast<const std::ostringstream*>(&str)->str()
               << std::endl;
   }
