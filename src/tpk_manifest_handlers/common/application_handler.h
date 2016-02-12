@@ -183,12 +183,10 @@ bool ParseAppIcon(const parser::DictionaryValue& dict,
 
 template<typename T>
 bool ParseAppImage(const parser::DictionaryValue& dict, T* info,
-                   std::string* error) {
+                   std::string*) {
   std::string image_name;
-  if (!dict.GetString(tpk_app_keys::kImageNameKey, &image_name)) {
-    *error = "Failed to parse image's name attribute";
-    return false;
-  }
+  if (!dict.GetString(tpk_app_keys::kImageNameKey, &image_name))
+    return true;
   std::string image_section;
   dict.GetString(tpk_app_keys::kImageSectionKey, &image_section);
   std::string image_lang;
