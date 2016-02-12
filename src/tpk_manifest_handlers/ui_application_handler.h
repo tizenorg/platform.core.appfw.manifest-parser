@@ -174,6 +174,7 @@ struct UIApplicationSingleEntry :
   std::vector<AppControlInfo> app_control;
   std::vector<BackgroundCategoryInfo> background_category;
   std::vector<DataControlInfo> data_control;
+  ApplicationSplashScreenInfo app_splashscreens;
 };
 
 using UIApplicationInfoList = ApplicationInfoList<UIApplicationSingleEntry>;
@@ -192,6 +193,8 @@ using UIApplicationInfoList = ApplicationInfoList<UIApplicationSingleEntry>;
  *  |   \_  <uri>
  *  \_  <metadata>
  *  \_  <datacontrol>
+ *  \_  <splash-screens>
+ *      \_  <splash-screen>
  */
 class UIApplicationHandler : public parser::ManifestHandler {
  public:
