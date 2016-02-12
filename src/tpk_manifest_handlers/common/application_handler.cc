@@ -50,6 +50,15 @@ const char kMetaDataValueKey[] = "@value";
 const char kCategoryKey[] = "category";
 const char kCategoryNameKey[] = "@name";
 
+// splash-screen
+const char kSplashScreensKey[] = "splash-screens";
+const char kSplashScreenKey[] = "splash-screen";
+const char kSplashScreenSrcKey[] = "@src";
+const char kSplashScreenTypeKey[] = "@type";
+const char kSplashScreenDpiKey[] = "@dpi";
+const char kSplashScreenOrientationKey[] = "@orientation";
+const char kSplashScreenIndicatorDisplayKey[] = "@indicator-display";
+
 }  // namespace tpk_app_keys
 
 const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
