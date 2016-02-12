@@ -87,6 +87,10 @@ bool InitializeParsing(const parser::DictionaryValue& app_dict,
   if (!InitializeParsingElement(app_dict, tpk_app_keys::kBackgroundCategoryKey,
       parsingFunc, uiapplicationinfo, error))
     return false;
+  parsingFunc = ParseSplashScreen<UIApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kSplashScreensKey,
+      parsingFunc, uiapplicationinfo, error))
+    return false;
 
   return true;
 }
