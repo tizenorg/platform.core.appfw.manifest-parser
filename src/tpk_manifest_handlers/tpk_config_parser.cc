@@ -85,5 +85,18 @@ void ApplicationIconsInfo::AddIcon(const ApplicationIcon& new_icon) {
   icons_.push_back(new_icon);
 }
 
+void ApplicationSplashScreenInfo::AddSplashScreen(
+    const ApplicationSplashScreen& new_splashscreen) {
+  // Eliminate duplicates, keep order
+  if (std::find_if(splashscreens_.begin(), splashscreens_.end(),
+      [&new_splashscreen](const ApplicationSplashScreen& splashscreen) {
+        return splashscreen.src() == new_splashscreen.src();
+      })
+      != splashscreens_.end()) {
+    return;
+  }
+  splashscreens_.push_back(new_splashscreen);
+}
+
 }  // namespace parse
 }  // namespace tpk
