@@ -87,6 +87,10 @@ bool InitializeParsing(const parser::DictionaryValue& app_dict,
   if (!InitializeParsingElement(app_dict, tpk_app_keys::kBackgroundCategoryKey,
       parsingFunc, uiapplicationinfo, error))
     return false;
+  parsingFunc = ParseSplashScreen<UIApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kSplashScreensKey,
+      parsingFunc, uiapplicationinfo, error))
+    return false;
 
   return true;
 }
@@ -210,15 +214,21 @@ bool ParseUIApplicationAndStore(
   }
   std::string portrait_effectimage;
   if (app_dict.GetString(kUIApplicationPortraitEffectImageKey,
-                     &portrait_effectimage))
-    uiapplicationinfo->app_info.set_portrait_image(portrait_effectimage);
+                     &portrait_effectimage)) {
+    if (!portrait_effectimage.empty())
+      uiapplicationinfo->app_info.set_portrait_image(portrait_effectimage);
+  }
   std::string landscape_effectimage;
   if (app_dict.GetString(kUIApplicationLandscapeEffectImageKey,
-                     &landscape_effectimage))
-    uiapplicationinfo->app_info.set_landscape_image(landscape_effectimage);
+                     &landscape_effectimage)) {
+    if (!landscape_effectimage.empty())
+      uiapplicationinfo->app_info.set_landscape_image(landscape_effectimage);
+  }
   std::string effectimage_type;
-  if (app_dict.GetString(kUIApplicationEffectImageTypeKey, &effectimage_type))
-    uiapplicationinfo->app_info.set_effectimage_type(effectimage_type);
+  if (app_dict.GetString(kUIApplicationEffectImageTypeKey, &effectimage_type)) {
+    if (!effectimage_type.empty())
+      uiapplicationinfo->app_info.set_effectimage_type(effectimage_type);
+  }
 
   std::string launch_mode;
   if (app_dict.GetString(kUIApplicationLaunchModeKey, &launch_mode)) {
