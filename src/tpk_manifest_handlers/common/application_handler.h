@@ -62,6 +62,16 @@ extern const char kMetaDataValueKey[];
 extern const char kCategoryKey[];
 extern const char kCategoryNameKey[];
 
+// splash-screen
+extern const char kSplashScreensKey[];
+extern const char kSplashScreenKey[];
+extern const char kSplashScreenSrcKey[];
+extern const char kSplashScreenTypeKey[];
+extern const char kSplashScreenDpiKey[];
+extern const char kSplashScreenOrientationKey[];
+extern const char kSplashScreenIndicatorDisplayKey[];
+extern const char kSplashScreenOperationKey[];
+
 }  // namespace tpk_app_keys
 
 extern const utils::VersionNumber kLaunchModeRequiredVersion;
@@ -96,6 +106,7 @@ struct ApplicationSingleEntry : public parser::ManifestData {
   ApplicationIconsInfo app_icons;
   std::vector<LabelInfo> label;
   std::vector<std::string> categories;
+  ApplicationSplashScreenInfo app_splashscreens;
 };
 
 template<typename T>
@@ -237,6 +248,35 @@ bool ParseCategory(const parser::DictionaryValue& dict,
 }
 
 template<typename T>
+bool ParseSplashScreen(const parser::DictionaryValue& dict,
+                       T* info, std::string*) {
+  for (const auto& item_splashscreen : parser::GetOneOrMany(&dict,
+      tpk_app_keys::kSplashScreenKey, "")) {
+    std::string src;
+    if (!item_splashscreen->GetString(tpk_app_keys::kSplashScreenSrcKey, &src))
+      return true;
+    std::string type;
+    if (!item_splashscreen->GetString(tpk_app_keys::kSplashScreenTypeKey,
+        &type))
+      return true;
+    std::string dpi;
+    if (!item_splashscreen->GetString(tpk_app_keys::kSplashScreenDpiKey, &dpi))
+      return true;
+    std::string orientation;
+    if (!item_splashscreen->GetString(tpk_app_keys::kSplashScreenOrientationKey,
+        &orientation))
+      return true;
+    std::string indicatordisplay;
+    item_splashscreen->GetString(tpk_app_keys::kSplashScreenIndicatorDisplayKey,
+        &indicatordisplay);
+    info->app_splashscreens.AddSplashScreen(ApplicationSplashScreen(src, type,
+        dpi, orientation, indicatordisplay));
+  }
+
+  return true;
+}
+
+template<typename T>
 using ParsingFuncPtr =
     std::function<bool(const parser::DictionaryValue&, T*, std::string*)>;
 
@@ -319,6 +359,36 @@ bool MetadataValidation(const T& it, std::string* error) {
     return false;
   }
 
+  return true;
+}
+
+template<typename T>
+bool SplashScreenValidation(const T& it, std::string* error) {
+  for (const auto& item : it.app_splashscreens.splashscreens()) {
+    if (item.src().empty()) {
+      *error =
+          "The source child element of splash-screen element is obligatory";
+      return false;
+    }
+
+    if (item.type().empty()) {
+      *error =
+          "The type child element of splash-screen element is obligatory";
+      return false;
+    }
+
+    if (item.dpi().empty()) {
+      *error =
+          "The dpi child element of splash-screen element is obligatory";
+      return false;
+    }
+
+    if (item.orientation().empty()) {
+      *error =
+          "The orientation element of splash-screen element is obligatory";
+      return false;
+    }
+  }
   return true;
 }
 
