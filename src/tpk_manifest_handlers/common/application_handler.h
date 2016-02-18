@@ -74,8 +74,6 @@ extern const char kSplashScreenOperationKey[];
 
 }  // namespace tpk_app_keys
 
-extern const utils::VersionNumber kLaunchModeRequiredVersion;
-
 class ApplicationInfo : public parser::ManifestData {
  public:
   void set_appid(const std::string& appid) {

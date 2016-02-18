@@ -84,7 +84,7 @@ bool InitializeParsing(const parser::DictionaryValue& app_dict,
 }
 
 bool WidgetAppValidation(const WidgetApplicationSingleEntry& item,
-                     const std::string& api_version, std::string* error) {
+                     const std::string&, std::string* error) {
   if (item.app_info.appid().empty()) {
     *error = "The appid child element of widget-application element "
         "is obligatory";
@@ -100,11 +100,6 @@ bool WidgetAppValidation(const WidgetApplicationSingleEntry& item,
 
   const std::string& launch_mode = item.app_info.launch_mode();
   if (!launch_mode.empty()) {
-    if (utils::VersionNumber(api_version) < kLaunchModeRequiredVersion) {
-      *error = "launch_mode attribute cannot be used for api version lower"
-              " than 2.4";
-      return false;
-    }
     if (launch_mode != "group" &&
         launch_mode != "caller" &&
         launch_mode != "single") {

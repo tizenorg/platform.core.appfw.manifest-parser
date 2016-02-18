@@ -61,7 +61,5 @@ const char kSplashScreenIndicatorDisplayKey[] = "@indicator-display";
 
 }  // namespace tpk_app_keys
 
-const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
-
 }  // namespace parse
 }  // namespace tpk
