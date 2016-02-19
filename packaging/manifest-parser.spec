@@ -52,6 +52,9 @@ Examples of manifest-parser usage
 cp %{SOURCE100} .
 
 %build
+export CFLAGS="$(echo $CFLAGS | sed 's/-Wl,--as-needed//g')"
+export CXXFLAGS="$(echo $CXXFLAGS | sed 's/-Wl,--as-needed//g')"
+export FFLAGS="$(echo $FFLAGS | sed 's/-Wl,--as-needed//g')"
 # BUILD_PARSER macro is defined so we can build two separate projects
 # with cmake, which are on one repository. Later this macro
 # is used in CMakeLists.txt files to distinguish, which project
