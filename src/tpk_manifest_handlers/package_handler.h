@@ -151,6 +151,7 @@ class PackageHandler : public parser::ManifestHandler {
       const parser::ManifestDataMap& handlers_output,
       std::string* error) const override;
   std::string Key() const override;
+  bool AlwaysParseForKey() const override { return true; }
 };
 
 }   // namespace parse
