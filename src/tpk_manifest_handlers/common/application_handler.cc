@@ -58,6 +58,7 @@ const char kSplashScreenTypeKey[] = "@type";
 const char kSplashScreenDpiKey[] = "@dpi";
 const char kSplashScreenOrientationKey[] = "@orientation";
 const char kSplashScreenIndicatorDisplayKey[] = "@indicator-display";
+const char kSplashScreenAppControlOperationKey[] = "@app-control-operation";
 
 }  // namespace tpk_app_keys
 
