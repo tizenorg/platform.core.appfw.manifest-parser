@@ -158,12 +158,14 @@ class ApplicationSplashScreen {
                                    const std::string& type,
                                    const std::string& dpi,
                                    const std::string& orientation,
-                                   const std::string& indicatordisplay)
+                                   const std::string& indicatordisplay,
+                                   const std::string& operation)
                                    : src_(src),
                                    type_(type),
                                    dpi_(dpi),
                                    orientation_(orientation),
-                                   indicatordisplay_(indicatordisplay) {
+                                   indicatordisplay_(indicatordisplay),
+                                   operation_(operation) {
   }
 
   const std::string& src() const {
@@ -181,6 +183,9 @@ class ApplicationSplashScreen {
   const std::string& indicatordisplay() const {
     return indicatordisplay_;
   }
+  const std::string& operation() const {
+    return operation_;
+  }
 
   private:
     std::string src_;
@@ -188,6 +193,7 @@ class ApplicationSplashScreen {
     std::string dpi_;
     std::string orientation_;
     std::string indicatordisplay_;
+    std::string operation_;
 };
 
 class ApplicationSplashScreenInfo : public parser::ManifestData {
