@@ -39,6 +39,12 @@ bool ServiceAppValidation(
              "service application element is obligatory";
     return false;
   }
+  if (!parser::ValidateTizenNativeId(item.app_info.appid())) {
+    *error = "The application id should be composed of alphanumerics "
+             "optionally separate with dots.";
+    return false;
+  }
+
   const std::string& exec = item.app_info.exec();
   if (exec.empty()) {
     *error =

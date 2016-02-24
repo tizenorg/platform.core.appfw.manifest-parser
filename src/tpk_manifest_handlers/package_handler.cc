@@ -141,6 +141,11 @@ bool PackageHandler::Validate(
         "The package child element of manifest element is obligatory";
     return false;
   }
+  if (!parser::ValidateTizenNativeId(package)) {
+    *error = "The package name should be composed of alphanumeric characters "
+             "optionally separate with dots.";
+    return false;
+  }
 
   const std::string& version = app_info.version();
   if (version.empty()) {
