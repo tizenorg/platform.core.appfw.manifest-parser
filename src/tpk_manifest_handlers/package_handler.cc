@@ -6,6 +6,7 @@
 
 #include <cassert>
 #include <map>
+#include <set>
 #include <utility>
 
 #include "manifest_parser/manifest_util.h"
@@ -31,8 +32,11 @@ const char kLabelKey[] = "label";
 const char kLabelLangKey[] = "@lang";
 const char kLabelTextKey[] = "#text";
 const char kPreload[] = "@preload";
+const std::set<std::string> kInstallLocationAllowValues = {
+  "auto", "internal-only", "prefer-external"
+};
 
-void ParsePackageAndStore(
+bool ParsePackageAndStore(
     const parser::DictionaryValue& manifest_dict,
     PackageInfo* pkg_info) {
   std::string xmlns;
@@ -63,6 +67,9 @@ void ParsePackageAndStore(
   if (install_location.empty()) {
     pkg_info->set_install_location(kAutoInstallLocation);
   } else {
+    if (kInstallLocationAllowValues.find(install_location) ==
+        kInstallLocationAllowValues.end())
+      return false;
     pkg_info->set_install_location(install_location);
   }
 
@@ -73,6 +80,7 @@ void ParsePackageAndStore(
     label_dict->GetString(kLabelTextKey, &text);
     pkg_info->AddLabel(lang, text);
   }
+  return true;
 }
 
 }  // namespace
@@ -96,7 +104,10 @@ bool PackageHandler::Parse(
   if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
     const parser::DictionaryValue* dict = nullptr;
     value->GetAsDictionary(&dict);
-    ParsePackageAndStore(*dict, pkg_info.get());
+    if (!ParsePackageAndStore(*dict, pkg_info.get())) {
+      *error = "Cannot parse manifest element";
+      return false;
+    }
   } else {
     *error = "Cannot parse manifest element";
     return false;
