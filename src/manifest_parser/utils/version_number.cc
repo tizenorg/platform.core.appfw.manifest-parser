@@ -24,7 +24,7 @@ VersionNumber::VersionNumber(const std::string& str) {
   for (auto& token : tokens) {
     char* end = nullptr;
     int value = strtol(token.c_str(), &end, 10);
-    if (end != &*token.end() || token.empty()) {
+    if (value < 0 || end != &*token.end() || token.empty()) {
       parts_.clear();
       return;
     }
@@ -89,6 +89,26 @@ std::string VersionNumber::ToString() const {
   std::transform(parts_.begin(), parts_.end(), std::back_inserter(strings),
                  static_cast<std::string(*)(int)>(&std::to_string));
   return ba::join(strings, ".");
+}
+
+bool VersionNumber::IsValidTizenPackageVersion() const {
+  if (!IsValid())
+    return false;
+  switch (parts_.size()) {
+    case 3:
+      if (parts_[2] > 65535)
+        return false;
+    case 2:
+      if (parts_[1] > 255)
+        return false;
+    case 1:
+      if (parts_[0] > 255)
+        return false;
+      break;
+    default:
+      return false;
+  }
+  return true;
 }
 
 }  // namespace utils
