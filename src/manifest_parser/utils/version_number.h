@@ -36,6 +36,21 @@ class VersionNumber {
 
   std::string ToString() const;
 
+  /**
+   * @brief IsValidTizenPackageVersion
+   *        Checks if version is valid tizen package version number.
+   *
+   * Number should follow: a.b.c where
+   *    0 <= a <= 255
+   *    0 <= b <= 255
+   *    0 <= c <= 65535
+   *
+   * b and c part are optional
+   *
+   * @return true if version is ok
+   */
+  bool IsValidTizenPackageVersion() const;
+
  private:
   std::vector<int> parts_;
 };
