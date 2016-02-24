@@ -337,4 +337,9 @@ bool ValidateTizenPackageId(const std::string& id) {
   return std::regex_match(id, package_regex);
 }
 
+bool ValidateTizenNativeId(const std::string& id) {
+  return id.find_first_of('/') == std::string::npos;
+}
+
+
 }  // namespace parser
