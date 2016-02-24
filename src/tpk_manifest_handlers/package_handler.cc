@@ -11,7 +11,8 @@
 
 #include "manifest_parser/manifest_util.h"
 #include "manifest_parser/utils/iri_util.h"
-#include "manifest_parser/utils/logging.h"
+#include "manifest_parser/utils/logging.h""
+#include "manifest_parser/utils/version_number.h"
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 
@@ -136,6 +137,11 @@ bool PackageHandler::Validate(
         "The api-version child element of manifest element is obligatory";
     return false;
   }
+  if (!utils::VersionNumber(api_version).IsValid()) {
+    *error =
+        "The api-version child element of manifest element is invalid";
+    return false;
+  }
 
   const std::string& package = app_info.package();
   if (package.empty()) {
@@ -160,6 +166,11 @@ bool PackageHandler::Validate(
   if (version.empty()) {
     *error =
         "The version child element of manifest element is obligatory";
+    return false;
+  }
+  if (!utils::VersionNumber(version).IsValidTizenPackageVersion()) {
+    *error =
+        "The version child element of manifest element is invalid";
     return false;
   }
 
