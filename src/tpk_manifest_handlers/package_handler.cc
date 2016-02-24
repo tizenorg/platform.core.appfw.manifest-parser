@@ -34,6 +34,8 @@ const char kLabelTextKey[] = "#text";
 const char kPreload[] = "@preload";
 const std::set<std::string> kInstallLocationAllowedValues =
     {"auto", "internal-only", "prefer-external"};
+const std::set<std::string> kPackageTypeAllowedValues =
+    {"tpk", "wgt", "rpm"};
 
 bool ParsePackageAndStore(
     const parser::DictionaryValue& manifest_dict,
@@ -144,6 +146,13 @@ bool PackageHandler::Validate(
   if (!parser::ValidateTizenNativeId(package)) {
     *error = "The package name should be composed of alphanumeric characters "
              "optionally separate with dots.";
+    return false;
+  }
+
+  if (!app_info.type().empty() &&
+      kPackageTypeAllowedValues.find(app_info.type()) ==
+      kPackageTypeAllowedValues.end()) {
+    *error = "Invalid package type";
     return false;
   }
 
