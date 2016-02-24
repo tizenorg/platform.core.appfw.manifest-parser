@@ -27,6 +27,7 @@ const char kTizenApplicationIdKey[] = "@id";
 const char kTizenApplicationPackageKey[] = "@package";
 const char kTizenApplicationLaunchModeKey[] = "@launch_mode";
 const char kTizenApplicationRequiredVersionKey[] = "@required_version";
+const char kTizenApplicationAmbientSupportKey[] = "@ambient_support";
 const utils::VersionNumber kLaunchModeRequiredVersion("2.4");
 }  // namespace
 
@@ -91,6 +92,11 @@ bool TizenApplicationHandler::Parse(
         app_info->set_required_version(value);
       }
     }
+  }
+  std::string ambient_support;
+  if (app_dict->GetString(kTizenApplicationAmbientSupportKey,
+                          &ambient_support)) {
+    app_info->set_ambient_support(ambient_support == "true");
   }
 
   std::string launch_mode;

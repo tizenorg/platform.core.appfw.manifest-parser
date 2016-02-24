@@ -37,6 +37,9 @@ class TizenApplicationInfo : public parser::ManifestData {
       const std::string& required_version) {
     required_version_ = required_version;
   }
+  void set_ambient_support(bool ambient_support) {
+    ambient_support_ = ambient_support;
+  }
   const std::string& id() const {
     return id_;
   }
@@ -49,12 +52,16 @@ class TizenApplicationInfo : public parser::ManifestData {
   const std::string& required_version() const {
     return required_version_;
   }
+  bool ambient_support() const {
+    return ambient_support_;
+  }
 
  private:
   std::string id_;
   std::string launch_mode_;
   std::string package_;
   std::string required_version_;
+  bool ambient_support_;
 };
 
 /**
