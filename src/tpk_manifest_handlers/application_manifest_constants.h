@@ -24,6 +24,9 @@ extern const char kUIApplicationKey[];
 // widget-application
 extern const char kWidgetApplicationKey[];
 
+// watch-application
+extern const char kWatchApplicationKey[];
+
 // account
 extern const char kAccountKey[];
 
