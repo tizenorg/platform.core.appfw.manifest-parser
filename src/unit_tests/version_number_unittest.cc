@@ -92,4 +92,21 @@ TEST(VersionNumber_ToString, Basic) {
   ASSERT_EQ(VersionNumber("7.7.7.7.7.7.7").ToString(), "7.7.7.7.7.7.7");
 }
 
+TEST(VersionNumber_NegativeComponent, Basic) {
+  ASSERT_FALSE(VersionNumber("-1").IsValid());
+  ASSERT_FALSE(VersionNumber("1.-1.3").IsValid());
+  ASSERT_FALSE(VersionNumber("1.1.-3").IsValid());
+}
+
+TEST(VersionNumber_IsValidTizenPackageVersion, Basic) {
+  ASSERT_TRUE(VersionNumber("1").IsValidTizenPackageVersion());
+  ASSERT_TRUE(VersionNumber("1.2").IsValidTizenPackageVersion());
+  ASSERT_TRUE(VersionNumber("1.2.3").IsValidTizenPackageVersion());
+  ASSERT_FALSE(VersionNumber("1.2.3.4").IsValidTizenPackageVersion());
+  ASSERT_FALSE(VersionNumber("256.1").IsValidTizenPackageVersion());
+  ASSERT_FALSE(VersionNumber("32.256.1").IsValidTizenPackageVersion());
+  ASSERT_FALSE(VersionNumber("2.1.100000").IsValidTizenPackageVersion());
+  ASSERT_TRUE(VersionNumber("255.255.65535").IsValidTizenPackageVersion());
+}
+
 }  // namespace utils
