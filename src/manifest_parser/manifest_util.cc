@@ -49,6 +49,7 @@ const char kNamespaceKey[] = "@namespace";
 
 const char kIdPattern[] = "^[0-9a-zA-Z]{10}[.][0-9a-zA-Z]{1,52}$";
 const char kPackagePattern[] = "^[0-9a-zA-Z]{10}$";
+const char kNativeIdPattern[] = "^[0-9a-zA-Z.]+$";
 
 }  // namespace
 
@@ -336,5 +337,11 @@ bool ValidateTizenPackageId(const std::string& id) {
   std::regex package_regex(kPackagePattern);
   return std::regex_match(id, package_regex);
 }
+
+bool ValidateTizenNativeId(const std::string& id) {
+  std::regex id_regex(kNativeIdPattern);
+  return std::regex_match(id, id_regex);
+}
+
 
 }  // namespace parser

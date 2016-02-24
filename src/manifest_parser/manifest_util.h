@@ -33,6 +33,7 @@ std::unique_ptr<DictionaryValue> LoadXMLNode(
 
 bool ValidateTizenApplicationId(const std::string& id);
 bool ValidateTizenPackageId(const std::string& id);
+bool ValidateTizenNativeId(const std::string& id);
 
 }  // namespace parser
 
