@@ -6,6 +6,7 @@
 
 #include <cassert>
 #include <map>
+#include <regex>
 #include <utility>
 
 #include "manifest_parser/manifest_util.h"
@@ -21,43 +22,24 @@ namespace keys = tpk::application_keys;
 
 namespace {
 
-const char kAuthorKey[] = "author";
+const char kAuthorKey[] = "manifest.author";
 const char kAuthorKeyText[] = "#text";
-const char kAuthorEmailKey[] = "email";
-const char kAuthorEmailChildKey[] = "@email";
-const char kAuthorHrefKey[] = "href";
-const char kAuthorHrefChildKey[] = "@href";
+const char kAuthorEmailKey[] = "@email";
+const char kAuthorHrefKey[] = "@href";
 
 void ParseAuthorAndStore(
-    const parser::DictionaryValue& control_dict,
+    const parser::DictionaryValue& author_dict,
     AuthorInfo* author) {
-
   std::string email;
-  const parser::DictionaryValue* email_dict;
-  if (control_dict.GetDictionary(kAuthorEmailKey,
-                                 &email_dict)) {
-    email_dict->GetString(
-        kAuthorEmailChildKey, &email);
-  }
+  author_dict.GetString(kAuthorEmailKey, &email);
+  author->set_email(email);
 
   std::string href;
-  const parser::DictionaryValue* href_dict;
-  if (control_dict.GetDictionary(kAuthorHrefKey,
-                                 &href_dict)) {
-    href_dict->GetString(
-        kAuthorHrefChildKey, &href);
-  }
+  author_dict.GetString(kAuthorHrefKey, &href);
+  author->set_href(href);
 
   std::string name;
-  const parser::DictionaryValue* name_dict;
-  if (control_dict.GetDictionary(kAuthorKey,
-                                 &name_dict)) {
-    name_dict->GetString(
-        kAuthorKeyText, &name);
-  }
-
-  author->set_email(email);
-  author->set_href(href);
+  author_dict.GetString(kAuthorKeyText, &name);
   author->set_name(name);
 }
 
@@ -98,6 +80,11 @@ bool AuthorHandler::Validate(
     *error = "The email child element of author element is obligatory";
     return false;
   }
+  if (!parser::ValidateEmailAddress(author.email())) {
+    *error = "The author email address is not valid";
+    return false;
+  }
+
 
   const std::string& href = author.href();
   if (href.empty()) {
@@ -121,7 +108,7 @@ bool AuthorHandler::Validate(
   return true;
 }
 
-std::string AuthorInfo::key() {
+std::string AuthorInfo::Key() {
   return kAuthorKey;
 }
 
