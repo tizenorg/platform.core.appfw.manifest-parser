@@ -50,6 +50,8 @@ const char kNamespaceKey[] = "@namespace";
 const char kIdPattern[] = "^[0-9a-zA-Z]{10}[.][0-9a-zA-Z]{1,52}$";
 const char kPackagePattern[] = "^[0-9a-zA-Z]{10}$";
 
+const char kEmailPattern[] = "^[^@]+@[^.]+\\.([^.]+)(\\.[^.]+)*$";
+
 }  // namespace
 
 namespace parser {
@@ -341,5 +343,9 @@ bool ValidateTizenNativeId(const std::string& id) {
   return id.find_first_of('/') == std::string::npos;
 }
 
+bool ValidateEmailAddress(const std::string& email) {
+  std::regex regex(kEmailPattern);
+  return std::regex_match(email, regex);
+}
 
 }  // namespace parser

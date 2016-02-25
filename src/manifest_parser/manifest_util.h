@@ -35,6 +35,8 @@ bool ValidateTizenApplicationId(const std::string& id);
 bool ValidateTizenPackageId(const std::string& id);
 bool ValidateTizenNativeId(const std::string& id);
 
+bool ValidateEmailAddress(const std::string& email);
+
 }  // namespace parser
 
 #endif  // MANIFEST_PARSER_MANIFEST_UTIL_H_
