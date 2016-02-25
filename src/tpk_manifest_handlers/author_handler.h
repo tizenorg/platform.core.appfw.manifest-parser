@@ -21,7 +21,7 @@ class AuthorInfo : public parser::ManifestData {
    * @brief key
    * @param key string
    */
-  static std::string key();
+  static std::string Key();
   /**
    * @brief set_email sets email
    * @param email
