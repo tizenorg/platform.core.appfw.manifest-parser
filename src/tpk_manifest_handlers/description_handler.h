@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
@@ -15,13 +16,10 @@
 namespace tpk {
 namespace parse {
 
-class DescriptionInfo : public parser::ManifestData {
+class DescriptionInfo {
  public:
-  /**
-   * @brief key
-   * @param key string
-   */
-  static std::string key();
+  DescriptionInfo(const std::string& description, const std::string& xml_lang);
+
   /**
    * @brief set_description sets description
    * @param description
@@ -51,6 +49,17 @@ class DescriptionInfo : public parser::ManifestData {
  private:
   std::string description_;
   std::string xml_lang_;
+};
+
+class DescriptionInfoList : public parser::ManifestData {
+ public:
+  /**
+   * @brief key
+   * @param key string
+   */
+  static std::string Key();
+
+  std::vector<DescriptionInfo> descriptions;
 };
 
 /**
