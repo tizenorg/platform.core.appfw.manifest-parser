@@ -10,9 +10,6 @@ namespace application_keys {
 // manifest
 const char kManifestKey[] = "manifest";
 
-// description
-const char kDescriptionKey[] = "description";
-
 // privileges
 const char kPrivilegesKey[] = "manifest.privileges";
 

@@ -12,9 +12,6 @@ namespace application_keys {
 // manifest
 extern const char kManifestKey[];
 
-// description
-extern const char kDescriptionKey[];
-
 // privileges
 extern const char kPrivilegesKey[];
 
