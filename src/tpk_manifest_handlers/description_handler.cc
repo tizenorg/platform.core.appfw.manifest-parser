@@ -30,6 +30,11 @@ void ParseDescriptionAndStore(
   description_dict.GetString(kDescriptionTextKey, &description);
   std::string xml_lang;
   description_dict.GetString(kDescriptionLangKey, &xml_lang);
+
+  // ignore empty <description> for preloaded apps
+  if (description.empty())
+    return;
+
   descriptioninfo->descriptions.emplace_back(description, xml_lang);
 }
 
@@ -68,10 +73,6 @@ bool DescriptionHandler::Validate(
       static_cast<const DescriptionInfoList&>(data);
 
   for (const auto& element : elements.descriptions) {
-    if (element.description().empty()) {
-      *error = "The description text is obligatory";
-      return false;
-    }
     if (!element.xml_lang().empty() &&
         !utils::w3c_languages::ValidateLanguageTag(element.xml_lang())) {
       *error = "The decription xml:lang failed to validate";
