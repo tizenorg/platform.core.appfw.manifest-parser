@@ -93,12 +93,6 @@ bool AuthorHandler::Validate(
     return false;
   }
 
-  if (!parser::utils::IsValidIRI(href)) {
-    *error =
-        "The href child element of author element is not valid url";
-    return false;
-  }
-
   const std::string& name = author.name();
   if (name.empty()) {
     *error =
