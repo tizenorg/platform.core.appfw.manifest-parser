@@ -52,7 +52,6 @@ bool AuthorHandler::Parse(
   std::shared_ptr<AuthorInfo> author(new AuthorInfo());
   parser::Value* value = nullptr;
   if (!manifest.Get(kAuthorKey, &value)) {
-    *error = "Author element not found";
     return true;
   }
 
@@ -60,6 +59,10 @@ bool AuthorHandler::Parse(
     const parser::DictionaryValue* dict;
     value->GetAsDictionary(&dict);
     ParseAuthorAndStore(*dict, author.get());
+
+    // for preload apps
+    if (author->name().empty())
+      return true;
   } else {
     *error = "Cannot parse author element";
     return false;
