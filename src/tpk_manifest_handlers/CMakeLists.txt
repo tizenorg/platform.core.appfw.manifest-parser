@@ -13,6 +13,7 @@ SET(SRCS
   tpk_config_parser.cc
   ui_application_handler.cc
   widget_application_handler.cc
+  watch_application_handler.cc
 )
 
 # Target - definition
