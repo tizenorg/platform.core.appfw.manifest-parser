@@ -12,7 +12,7 @@ const char kAppControlKey[] = "app-control";
 const char kAppControlOperationKey[] = "operation";
 const char kAppControlURIKey[] = "uri";
 const char kAppControlMimeKey[] = "mime";
-const char kAppControlNameChildKey[] = "@name";
+const char kAppControlNameKey[] = "@name";
 
 // background-category
 const char kBackgroundCategoryKey[] = "background-category";
