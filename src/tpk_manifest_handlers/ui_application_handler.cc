@@ -39,8 +39,11 @@ const char kUIApplicationIndicatorDisplayKey[] = "@indicatordisplay";
 const char kUIApplicationPortraitEffectImageKey[] = "@portrait-effectimage";
 const char kUIApplicationLandscapeEffectImageKey[] = "@landscape-effectimage";
 const char kUIApplicationEffectImageTypeKey[] = "@effectimage-type";
-const char kUIApplicationHwAccelerationKey[] = "@hwacceleration";
+const char kUIApplicationHwAccelerationKey[] = "@hw-acceleration";
 const char kUIApplicationKey[] = "manifest.ui-application";
+
+const char kTrue[] = "true";
+const char kFalse[] = "false";
 
 // manifest
 const char kManifestKey[] = "manifest";
@@ -134,6 +137,10 @@ bool UIAppValidation(const UIApplicationSingleEntry& item,
         "The multiple child element of ui-application element is obligatory";
     return false;
   }
+  if (multiple != kTrue && multiple != kFalse) {
+    *error = "multiple attribute should have 'true' or 'false' value";
+    return false;
+  }
 
   const std::string& nodisplay = item.app_info.nodisplay();
   if (nodisplay.empty()) {
@@ -142,11 +149,21 @@ bool UIAppValidation(const UIApplicationSingleEntry& item,
     return false;
   }
 
+  if (nodisplay != kTrue && nodisplay != kFalse) {
+    *error = "nodisplay attribute should have 'true' or 'false' value";
+    return false;
+  }
+
   const std::string& taskmanage = item.app_info.taskmanage();
   if (taskmanage.empty()) {
     *error =
         "The taskmanage child element of "
         "ui-application element is obligatory";
+    return false;
+  }
+
+  if (taskmanage != kTrue && taskmanage != kFalse) {
+    *error = "taskmanage attribute should have 'true' or 'false' value";
     return false;
   }
 
