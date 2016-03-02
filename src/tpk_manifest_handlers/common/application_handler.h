@@ -12,6 +12,7 @@
 
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/utils/iri_util.h"
+#include "manifest_parser/utils/language_tag_validator.h"
 #include "manifest_parser/utils/version_number.h"
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/ui_and_service_application_infos.h"
@@ -24,7 +25,7 @@ extern const char kAppControlKey[];
 extern const char kAppControlOperationKey[];
 extern const char kAppControlURIKey[];
 extern const char kAppControlMimeKey[];
-extern const char kAppControlNameChildKey[];
+extern const char kAppControlNameKey[];
 
 // background-category
 extern const char kBackgroundCategoryKey[];
@@ -115,28 +116,46 @@ struct ApplicationInfoList : public parser::ManifestData {
 
 template<typename T>
 bool ParseAppControl(const parser::DictionaryValue& dict,
-                     T* info, std::string*) {
+                     T* info, std::string* error) {
   for (const auto& item_operation : parser::GetOneOrMany(&dict,
       tpk_app_keys::kAppControlOperationKey, "")) {
     std::string operation;
-    std::string uri;
-    std::string mime;
-    item_operation->GetString(
-        tpk_app_keys::kAppControlNameChildKey, &operation);
+    if (!item_operation->GetString(
+        tpk_app_keys::kAppControlNameKey, &operation)) {
+      *error = "appcontrol operation is missing name attribute";
+      return false;
+    }
 
-    auto uri_items = parser::GetOneOrMany(
-        &dict, tpk_app_keys::kAppControlURIKey, "");
-    auto mime_items = parser::GetOneOrMany(
-        &dict, tpk_app_keys::kAppControlMimeKey, "");
+    std::vector<std::string> uris;
+    for (auto& uri_item : parser::GetOneOrMany(&dict,
+        tpk_app_keys::kAppControlURIKey, "")) {
+      std::string uri;
+      if (!uri_item->GetString(tpk_app_keys::kAppControlNameKey, &uri))  {
+        *error = "appcontrol uri is missing name attribute";
+        return false;
+      }
+      uris.push_back(uri);
+    }
 
-    if (uri_items.empty()) uri_items.push_back(new parser::DictionaryValue());
-    if (mime_items.empty()) mime_items.push_back(new parser::DictionaryValue());
+    std::vector<std::string> mimes;
+    for (auto& mime_item : parser::GetOneOrMany(
+        &dict, tpk_app_keys::kAppControlMimeKey, "")) {
+      std::string mime;
+      if (!mime_item->GetString(tpk_app_keys::kAppControlNameKey,
+                                &mime))  {
+        *error = "appcontrol mime is missing name attribute";
+        return false;
+      }
+      mimes.push_back(mime);
+    }
 
-    for (const auto& item_uri : uri_items) {
-      item_uri->GetString(tpk_app_keys::kAppControlNameChildKey, &uri);
+    if (uris.empty())
+      uris.push_back("");
+    if (mimes.empty())
+      mimes.push_back("");
 
-      for (const auto& item_mime : mime_items) {
-        item_mime->GetString(tpk_app_keys::kAppControlNameChildKey, &mime);
+    for (const auto& uri : uris) {
+      for (const auto& mime : mimes) {
         info->app_control.emplace_back(operation, uri, mime);
       }
     }
@@ -340,10 +359,16 @@ bool LabelValidation(const T& it, std::string* error) {
     return false;
   }
 
-  if (std::any_of(it.label.begin(), it.label.end(),
-      [](const LabelInfo& item) { return item.name().empty(); })) {
-    *error = "The name child element of label element is obligatory";
-    return false;
+  for (auto& label : it.label) {
+    if (label.name().empty()) {
+      *error = "The name child element of label element is obligatory";
+      return false;
+    }
+    if (!label.xml_lang().empty() &&
+        !utils::w3c_languages::ValidateLanguageTag(label.xml_lang())) {
+      *error = "The xml:lang attribute of label is invalid";
+      return false;
+    }
   }
 
   return true;

@@ -38,6 +38,9 @@ const char kWidgetApplicationNoDisplayKey[] = "@nodisplay";
 const char kWidgetApplicationHwAccelerationKey[] = "@hwacceleration";
 const char kWidgetApplicationKey[] = "manifest.widget-application";
 
+const char kTrue[] = "true";
+const char kFalse[] = "false";
+
 // manifest
 const char kManifestKey[] = "manifest";
 
@@ -127,12 +130,23 @@ bool WidgetAppValidation(const WidgetApplicationSingleEntry& item,
     return false;
   }
 
+  if (multiple != kTrue && multiple != kFalse) {
+    *error = "multiple attribute should have 'true' or 'false' value";
+    return false;
+  }
+
   const std::string& nodisplay = item.app_info.nodisplay();
   if (nodisplay.empty()) {
     *error = "The nodisplay child element of widget-application element "
         "is obligatory";
     return false;
   }
+
+  if (nodisplay != kTrue && nodisplay != kFalse) {
+    *error = "nodisplay attribute should have 'true' or 'false' value";
+    return false;
+  }
+
   return true;
 }
 
