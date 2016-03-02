@@ -48,25 +48,19 @@ void ParseAuthorAndStore(
 bool AuthorHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
-    std::string* error) {
+    std::string* /*error*/) {
   std::shared_ptr<AuthorInfo> author(new AuthorInfo());
-  parser::Value* value = nullptr;
-  if (!manifest.Get(kAuthorKey, &value)) {
+
+  auto items = parser::GetOneOrMany(manifest.value(), kAuthorKey, "");
+  // TODO(t.iwanek): handle multiple authors
+  if (items.empty())
     return true;
-  }
 
-  if (value->GetType() == parser::Value::TYPE_DICTIONARY) {
-    const parser::DictionaryValue* dict;
-    value->GetAsDictionary(&dict);
-    ParseAuthorAndStore(*dict, author.get());
+  ParseAuthorAndStore(*items[0], author.get());
 
-    // for preload apps
-    if (author->name().empty())
-      return true;
-  } else {
-    *error = "Cannot parse author element";
-    return false;
-  }
+  // TODO(t.iwanek): don't skip it when preloaded apps will be fixed.
+  if (author->name().empty())
+    return true;
 
   *output = std::static_pointer_cast<parser::ManifestData>(author);
   return true;
@@ -83,10 +77,8 @@ bool AuthorHandler::Validate(
     *error = "The email child element of author element is obligatory";
     return false;
   }
-  if (!parser::ValidateEmailAddress(author.email())) {
-    *error = "The author email address is not valid";
-    return false;
-  }
+
+  // TODO(t.iwanek): validate email address when preloaded apps will be fixed.
 
 
   const std::string& href = author.href();
