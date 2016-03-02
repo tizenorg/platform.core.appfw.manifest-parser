@@ -168,11 +168,8 @@ bool PackageHandler::Validate(
         "The version child element of manifest element is obligatory";
     return false;
   }
-  if (!utils::VersionNumber(version).IsValidTizenPackageVersion()) {
-    *error =
-        "The version child element of manifest element is invalid";
-    return false;
-  }
+  // TODO(t.iwanek): use IsValidTizenPackageVersion() for version number if
+  // preloaded apps will be fixed.
 
   return true;
 }

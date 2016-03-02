@@ -31,7 +31,7 @@ void ParseDescriptionAndStore(
   std::string xml_lang;
   description_dict.GetString(kDescriptionLangKey, &xml_lang);
 
-  // ignore empty <description> for preloaded apps
+  // TODO(t.iwanek): do not skip it when preloaded apps will be fixed.
   if (description.empty())
     return;
 
