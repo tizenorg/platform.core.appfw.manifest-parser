@@ -60,7 +60,7 @@ bool AuthorHandler::Parse(
     value->GetAsDictionary(&dict);
     ParseAuthorAndStore(*dict, author.get());
 
-    // for preload apps
+    // TODO(t.iwanek): don't skip it when preloaded apps will be fixed.
     if (author->name().empty())
       return true;
   } else {
@@ -83,10 +83,8 @@ bool AuthorHandler::Validate(
     *error = "The email child element of author element is obligatory";
     return false;
   }
-  if (!parser::ValidateEmailAddress(author.email())) {
-    *error = "The author email address is not valid";
-    return false;
-  }
+
+  // TODO(t.iwanek): validate email address when preloaded apps will be fixed.
 
 
   const std::string& href = author.href();
