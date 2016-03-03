@@ -29,7 +29,12 @@ const char kServiceApplicationExecKey[] = "@exec";
 const char kServiceApplicationOnBootKey[] = "@on-boot";
 const char kServiceApplicationTypeKey[] = "@type";
 const char kServiceApplicationProcessPoolKey[] = "@process-pool";
+const char kServiceApplicationMultipleKey[] = "@multiple";
+const char kServiceApplicationTaskManageKey[] = "@taskmanage";
 const char kServiceApplicationKeyText[] = "#text";
+
+const char kTrue[] = "true";
+const char kFalse[] = "false";
 
 bool ServiceAppValidation(
     const ServiceApplicationSingleEntry& item,
@@ -57,6 +62,27 @@ bool ServiceAppValidation(
         "The type child element of service application element is obligatory";
     return false;
   }
+  const std::string& multiple = item.app_info.multiple();
+  if (multiple != kTrue && multiple != kFalse) {
+    *error = "multiple attribute should have 'true' or 'false' value";
+    return false;
+  }
+  const std::string& taskmanage = item.app_info.taskmanage();
+  if (taskmanage != kTrue && taskmanage != kFalse) {
+    *error = "taskmanage attribute should have 'true' or 'false' value";
+    return false;
+  }
+  const std::string& on_boot = item.app_info.on_boot();
+  if (on_boot != kTrue && on_boot != kFalse) {
+    *error = "on-boot attribute should have 'true' or 'false' value";
+    return false;
+  }
+  const std::string& auto_restart = item.app_info.auto_restart();
+  if (auto_restart != kTrue && auto_restart != kFalse) {
+    *error = "auto-restart attribute should have 'true' or 'false' value";
+    return false;
+  }
+
   return true;
 }
 
@@ -74,12 +100,18 @@ bool ParseServiceApplicationAndStore(
   app_dict.GetString(kServiceApplicationOnBootKey, &on_boot);
   std::string type;
   app_dict.GetString(kServiceApplicationTypeKey, &type);
+  std::string multiple("false");
+  app_dict.GetString(kServiceApplicationMultipleKey, &multiple);
+  std::string taskmanage("true");
+  app_dict.GetString(kServiceApplicationTaskManageKey, &taskmanage);
 
   serviceapplicationinfo->app_info.set_appid(appid);
   serviceapplicationinfo->app_info.set_exec(exec);
   serviceapplicationinfo->app_info.set_auto_restart(auto_restart);
   serviceapplicationinfo->app_info.set_on_boot(on_boot);
   serviceapplicationinfo->app_info.set_type(type);
+  serviceapplicationinfo->app_info.set_multiple(multiple);
+  serviceapplicationinfo->app_info.set_taskmanage(taskmanage);
 
   std::string process_pool;
   if (app_dict.GetString(kServiceApplicationProcessPoolKey, &process_pool)) {

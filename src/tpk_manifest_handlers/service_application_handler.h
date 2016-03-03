@@ -44,6 +44,14 @@ class ServiceApplicationInfo : public ApplicationInfo {
     on_boot_ = on_boot;
   }
 
+  void set_multiple(const std::string& multiple) {
+    multiple_ = multiple;
+  }
+
+  void set_taskmanage(const std::string& taskmanage) {
+    taskmanage_ = taskmanage;
+  }
+
   const std::string& type() const {
     return type_;
   }
@@ -65,11 +73,21 @@ class ServiceApplicationInfo : public ApplicationInfo {
     return on_boot_;
   }
 
+  const std::string& multiple() const {
+    return multiple_;
+  }
+
+  const std::string& taskmanage() const {
+    return taskmanage_;
+  }
+
  private:
   std::string type_;
   std::string process_pool_;
   std::string auto_restart_;
   std::string on_boot_;
+  std::string multiple_;
+  std::string taskmanage_;
 };
 
 struct ServiceApplicationSingleEntry :
