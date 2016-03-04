@@ -29,6 +29,9 @@ const char kWatchApplicationIconKey[] = "icon";
 const char kWatchApplicationAmbientSupport[] = "@ambient-support";
 const char kWatchApplicationKey[] = "manifest.watch-application";
 
+const char kTrue[] = "true";
+const char kFalse[] = "false";
+
 // manifest
 const char kManifestKey[] = "manifest";
 
@@ -40,11 +43,22 @@ bool WatchAppValidation(const WatchApplicationSingleEntry& watch_app_info,
     *error = "The appid attribute of watch-application element is obligatory";
     return false;
   }
+  if (!parser::ValidateTizenNativeId(watch_app_info.app_info.appid())) {
+    *error = "The application id should be composed of alphanumerics "
+             "optionally separate with dots.";
+    return false;
+  }
 
   if (watch_app_info.app_info.exec().empty()) {
     *error = "The exec attribute of watch-application element is obligatory";
     return false;
   }
+  const auto& ambient_support = watch_app_info.app_info.ambient_support();
+  if (ambient_support != kTrue && ambient_support != kFalse) {
+    *error = "ambient-support attribute should have 'true' or 'false' value";
+    return false;
+  }
+
   return true;
 }
 
@@ -100,7 +114,7 @@ bool ParseWatchApplication(
 }
 
 WatchApplicationInfo::WatchApplicationInfo()
-    : ambient_support_(""), icon_(""), label_(""), type_("") {
+    : ambient_support_(kFalse), icon_(""), label_(""), type_("") {
 }
 
 bool WatchApplicationHandler::Parse(
