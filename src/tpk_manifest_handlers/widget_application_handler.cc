@@ -37,6 +37,7 @@ const char kWidgetApplicationMultipleKey[] = "@multiple";
 const char kWidgetApplicationNoDisplayKey[] = "@nodisplay";
 const char kWidgetApplicationHwAccelerationKey[] = "@hwacceleration";
 const char kWidgetApplicationKey[] = "manifest.widget-application";
+const char kWidgetApplicationMainKey[] = "@main";
 
 const char kTrue[] = "true";
 const char kFalse[] = "false";
@@ -147,6 +148,12 @@ bool WidgetAppValidation(const WidgetApplicationSingleEntry& item,
     return false;
   }
 
+  const std::string& main = item.app_info.main();
+  if (main != kTrue && main != kFalse) {
+    *error = "main attribute should have 'true' or 'false' value";
+    return false;
+  }
+
   return true;
 }
 
@@ -166,6 +173,9 @@ bool ParseWidgetApplicationAndStore(
   std::string nodisplay;
   if (app_dict.GetString(kWidgetApplicationNoDisplayKey, &nodisplay))
     widgetapplicationinfo->app_info.set_nodisplay(nodisplay);
+  std::string main("false");
+  app_dict.GetString(kWidgetApplicationMainKey, &main);
+  widgetapplicationinfo->app_info.set_main(main);
 
   std::string launch_mode;
   if (app_dict.GetString(kWidgetApplicationLaunchModeKey, &launch_mode)) {
