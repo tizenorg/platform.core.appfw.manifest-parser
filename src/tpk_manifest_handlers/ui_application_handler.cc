@@ -259,9 +259,11 @@ bool ParseUIApplicationAndStore(
 }
 
 UIApplicationInfo::UIApplicationInfo()
-    : multiple_("false"),
+    : process_pool_("false"),
+      multiple_("false"),
       nodisplay_("false"),
       taskmanage_("true"),
+      submode_("false"),
       indicator_display_("true"),
       effectimage_type_("image"),
       hwacceleration_("default") {
