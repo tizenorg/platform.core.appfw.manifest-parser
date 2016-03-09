@@ -187,25 +187,25 @@ class ApplicationSplashScreen {
     return operation_;
   }
 
-  private:
-    std::string src_;
-    std::string type_;
-    std::string dpi_;
-    std::string orientation_;
-    std::string indicatordisplay_;
-    std::string operation_;
+ private:
+  std::string src_;
+  std::string type_;
+  std::string dpi_;
+  std::string orientation_;
+  std::string indicatordisplay_;
+  std::string operation_;
 };
 
 class ApplicationSplashScreenInfo : public parser::ManifestData {
-  public:
-    const std::vector<ApplicationSplashScreen>& splashscreens() const {
-      return splashscreens_;
-    }
+ public:
+  const std::vector<ApplicationSplashScreen>& splashscreens() const {
+    return splashscreens_;
+  }
 
-    void AddSplashScreen(const ApplicationSplashScreen& splash_src);
+  void AddSplashScreen(const ApplicationSplashScreen& splash_src);
 
-  private:
-    std::vector<ApplicationSplashScreen> splashscreens_;
+ private:
+  std::vector<ApplicationSplashScreen> splashscreens_;
 };
 
 class ApplicationIconsInfo : public parser::ManifestData {
