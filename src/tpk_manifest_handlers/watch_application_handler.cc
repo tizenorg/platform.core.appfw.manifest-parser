@@ -114,7 +114,7 @@ bool ParseWatchApplication(
 }
 
 WatchApplicationInfo::WatchApplicationInfo()
-    : ambient_support_(kFalse), icon_(""), label_(""), type_("") {
+    : type_(""), ambient_support_(kFalse), icon_(""), label_("") {
 }
 
 bool WatchApplicationHandler::Parse(
