@@ -15,7 +15,7 @@
 namespace bf = boost::filesystem;
 namespace {
 const bf::path kLanguagesFile =
-    bf::path(tzplatform_getenv(TZ_SYS_SHARE))
+    bf::path(SHAREDIR)
         / "manifest-parser/languages-only.txt";
 const int kLanguagesNumber = 8094;
 }
