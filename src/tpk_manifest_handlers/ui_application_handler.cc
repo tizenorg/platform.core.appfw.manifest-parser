@@ -40,6 +40,7 @@ const char kUIApplicationPortraitEffectImageKey[] = "@portrait-effectimage";
 const char kUIApplicationLandscapeEffectImageKey[] = "@landscape-effectimage";
 const char kUIApplicationEffectImageTypeKey[] = "@effectimage-type";
 const char kUIApplicationHwAccelerationKey[] = "@hw-acceleration";
+const char kUIApplicationSplashScreenDisplayKey[] = "@splash-screen-display";
 const char kUIApplicationKey[] = "manifest.ui-application";
 
 const char kTrue[] = "true";
@@ -255,6 +256,17 @@ bool ParseUIApplicationAndStore(
   if (app_dict.GetString(kUIApplicationHwAccelerationKey, &hwacceleration))
     uiapplicationinfo->app_info.set_hwacceleration(hwacceleration);
 
+  std::string splash_screen_display;
+  if (app_dict.GetString(kUIApplicationSplashScreenDisplayKey,
+                         &splash_screen_display)) {
+    if (!IsBooleanString(splash_screen_display)) {
+      *error = "splash-screen-display must be 'true' or 'false'";
+      return false;
+    }
+    uiapplicationinfo->app_info.set_splash_screen_display(
+        splash_screen_display);
+  }
+
   return InitializeParsing(app_dict, uiapplicationinfo, error);
 }
 
@@ -266,7 +278,8 @@ UIApplicationInfo::UIApplicationInfo()
       submode_("false"),
       indicator_display_("true"),
       effectimage_type_("image"),
-      hwacceleration_("default") {
+      hwacceleration_("default"),
+      splash_screen_display_("ture") {
 }
 
 bool UIApplicationHandler::Parse(

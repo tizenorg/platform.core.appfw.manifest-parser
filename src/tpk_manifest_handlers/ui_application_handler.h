@@ -83,6 +83,9 @@ class UIApplicationInfo : public ApplicationInfo {
   void set_hwacceleration(const std::string& hwacceleration) {
     hwacceleration_ = hwacceleration;
   }
+  void set_splash_screen_display(const std::string& splash_screen_display) {
+    splash_screen_display_ = splash_screen_display;
+  }
 
   const std::string& type() const {
     return type_;
@@ -151,6 +154,10 @@ class UIApplicationInfo : public ApplicationInfo {
     return hwacceleration_;
   }
 
+  const std::string& splash_screen_display() const {
+    return splash_screen_display_;
+  }
+
  private:
   std::string type_;
   std::string process_pool_;
@@ -166,6 +173,7 @@ class UIApplicationInfo : public ApplicationInfo {
   std::string landscape_image_;
   std::string effectimage_type_;
   std::string hwacceleration_;
+  std::string splash_screen_display_;
 };
 
 struct UIApplicationSingleEntry :
