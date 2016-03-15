@@ -14,7 +14,7 @@ utils::VersionNumber GetMinimumPlatformVersion() {
 #ifdef TIZEN_TV
   return utils::VersionNumber("2.3");
 #elif TIZEN_WEARABLE
-  return utils::VersionNumber("2.3.1");
+  return utils::VersionNumber("2.3");
 #else
   return utils::VersionNumber("2.2.1");
 #endif
