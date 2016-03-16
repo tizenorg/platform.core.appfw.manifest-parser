@@ -50,10 +50,6 @@ class WidgetApplicationInfo : public ApplicationInfo {
     hwacceleration_ = hwacceleration;
   }
 
-  void set_main(const std::string& main) {
-    main_ = main;
-  }
-
   /**
    * @brief launch_mode
    * @return launch mode string
@@ -80,16 +76,11 @@ class WidgetApplicationInfo : public ApplicationInfo {
     return hwacceleration_;
   }
 
-  const std::string& main() const {
-    return main_;
-  }
-
  private:
   std::string launch_mode_;
   std::string multiple_;
   std::string nodisplay_;
   std::string hwacceleration_;
-  std::string main_;
 };
 
 struct WidgetApplicationSingleEntry :
