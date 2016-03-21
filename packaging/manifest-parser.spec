@@ -3,7 +3,7 @@ Summary:        Manifest parser
 Version:        1.5
 Release:        1
 Group:          Application Framework/Package Management
-License:        Apache-2.0 and BSD-2.0
+License:        Apache-2.0 and BSD-3-Clause
 Source0:        %{name}-%{version}.tar.gz
 Source100:      %{name}.manifest
 
