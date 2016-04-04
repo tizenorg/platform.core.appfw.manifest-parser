@@ -82,7 +82,7 @@ ManifestHandlerRegistry::ManifestHandlerRegistry(
     const std::vector<ManifestHandler*>& handlers) {
   for (std::vector<ManifestHandler*>::const_iterator it = handlers.begin();
        it != handlers.end(); ++it) {
-    handlers_[(*it)->Key()] = *it;
+    handlers_[(*it)->Key()] = std::shared_ptr<ManifestHandler>(*it);
   }
 
   ReorderHandlersGivenDependencies();
@@ -93,21 +93,21 @@ ManifestHandlerRegistry::~ManifestHandlerRegistry() {
 
 void ManifestHandlerRegistry::RegisterManifestHandler(
     ManifestHandler* handler) {
-  handlers_[handler->Key()] = handler;
+  handlers_[handler->Key()] = std::shared_ptr<ManifestHandler>(handler);
   ReorderHandlersGivenDependencies();
 }
 
-ManifestHandlerMap ManifestHandlerRegistry::handlers() {
+const ManifestHandlerMap& ManifestHandlerRegistry::handlers() const {
   return handlers_;
 }
 
-ManifestHandlerOrderMap
-ManifestHandlerRegistry::get_manifest_handlers_order_map() {
+const ManifestHandlerOrderMap&
+ManifestHandlerRegistry::get_manifest_handlers_order_map() const {
   return order_map_;
 }
 
 void ManifestHandlerRegistry::ReorderHandlersGivenDependencies() {
-  std::set<ManifestHandler*> unsorted_handlers;
+  std::set<std::shared_ptr<ManifestHandler>> unsorted_handlers;
   for (ManifestHandlerMap::const_iterator iter = handlers_.begin();
        iter != handlers_.end(); ++iter) {
     unsorted_handlers.insert(iter->second);
@@ -115,11 +115,11 @@ void ManifestHandlerRegistry::ReorderHandlersGivenDependencies() {
 
   int order = 0;
   while (true) {
-    std::set<ManifestHandler*> next_unsorted_handlers;
-    for (std::set<ManifestHandler*>::const_iterator iter =
+    std::set<std::shared_ptr<ManifestHandler>> next_unsorted_handlers;
+    for (std::set<std::shared_ptr<ManifestHandler>>::const_iterator iter =
              unsorted_handlers.begin();
          iter != unsorted_handlers.end(); ++iter) {
-      ManifestHandler* handler = *iter;
+      auto handler = *iter;
       const std::vector<std::string>& prerequisites =
           handler->PrerequisiteKeys();
       int unsatisfied = prerequisites.size();

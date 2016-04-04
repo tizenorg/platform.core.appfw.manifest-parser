@@ -96,8 +96,9 @@ const std::vector<const DictionaryValue*> GetOneOrMany(
     const DictionaryValue* dict, const std::string& path,
     const std::string& namespace_prefix);
 
-typedef std::map<std::string, ManifestHandler*> ManifestHandlerMap;
-typedef std::map<ManifestHandler*, int> ManifestHandlerOrderMap;
+typedef std::map<std::string, std::shared_ptr<ManifestHandler>>
+    ManifestHandlerMap;
+typedef std::map<std::shared_ptr<ManifestHandler>, int> ManifestHandlerOrderMap;
 
 class ManifestHandlerRegistry {
  public:
@@ -107,11 +108,12 @@ class ManifestHandlerRegistry {
   ~ManifestHandlerRegistry();
 
   // Register a manifest handler for key, which is provided by Key() method
-  // in ManifestHandler implementer.
+  // in ManifestHandler implementer. Registry takes ownership of registered
+  // handler.
   void RegisterManifestHandler(ManifestHandler* handler);
 
-  ManifestHandlerMap handlers();
-  ManifestHandlerOrderMap get_manifest_handlers_order_map();
+  const ManifestHandlerMap& handlers() const;
+  const ManifestHandlerOrderMap& get_manifest_handlers_order_map() const;
 
  private:
   // This function is sorting handlers as some of them might need to

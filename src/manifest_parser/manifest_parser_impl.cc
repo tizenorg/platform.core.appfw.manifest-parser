@@ -67,7 +67,7 @@ bool ManifestParserImpl::ParseManifest(const bf::path& manifest_path) {
 bool ManifestParserImpl::ValidateAppManifest(std::string* error) {
   const ManifestHandlerMap& handlers = registry_->handlers();
   for (auto p : handlers) {
-    ManifestHandler* handler = p.second;
+    auto handler = p.second;
     if (manifest_data_.find(p.first) != manifest_data_.end() &&
         !handler->Validate(*GetManifestData(handler->Key()).get(),
             manifest_data_, error))
@@ -77,15 +77,15 @@ bool ManifestParserImpl::ValidateAppManifest(std::string* error) {
 }
 
 bool ManifestParserImpl::ParseAppManifest(std::string* error) {
-  std::map<int, ManifestHandler*> handlers_by_order;
+  std::map<int, std::shared_ptr<ManifestHandler>> handlers_by_order;
   const ManifestHandlerMap& handlers = registry_->handlers();
-  ManifestHandlerOrderMap order_map =
+  const ManifestHandlerOrderMap& order_map =
       registry_->get_manifest_handlers_order_map();
   for (auto p : handlers) {
-    ManifestHandler* handler = p.second;
+    auto handler = p.second;
     if (manifest_->HasPath(p.first) ||
         handler->AlwaysParseForKey()) {
-      handlers_by_order[order_map[handler]] = handler;
+      handlers_by_order[order_map.find(handler)->second] = handler;
     }
   }
   for (auto handler : handlers_by_order) {
