@@ -89,6 +89,8 @@ ManifestHandlerRegistry::ManifestHandlerRegistry(
 }
 
 ManifestHandlerRegistry::~ManifestHandlerRegistry() {
+  for (auto& pair : handlers_)
+    delete pair.second;
 }
 
 void ManifestHandlerRegistry::RegisterManifestHandler(
