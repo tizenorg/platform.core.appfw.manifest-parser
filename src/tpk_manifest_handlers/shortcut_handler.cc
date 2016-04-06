@@ -4,7 +4,6 @@
 
 #include "tpk_manifest_handlers/shortcut_handler.h"
 
-#include "manifest_parser/utils/language_tag_validator.h"
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 
@@ -27,12 +26,7 @@ bool ParseShortcutLabel(const parser::DictionaryValue* dict,
                         std::string* error,
                         std::pair<std::string, std::string>* label) {
   std::string lang;
-  if (dict->GetString(kShortcutLabelLangKey, &lang)) {
-    if (!utils::w3c_languages::ValidateLanguageTag(lang)) {
-      *error = "Failed to validate language tag of shortcut's label element";
-      return false;
-    }
-  }
+  dict->GetString(kShortcutLabelLangKey, &lang);
   label->first = lang;
   dict->GetString(kShortcutLabelTextKey, &label->second);
   return true;

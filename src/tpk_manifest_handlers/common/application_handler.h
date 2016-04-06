@@ -12,7 +12,6 @@
 
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/utils/iri_util.h"
-#include "manifest_parser/utils/language_tag_validator.h"
 #include "manifest_parser/utils/version_number.h"
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/ui_and_service_application_infos.h"
@@ -362,11 +361,6 @@ bool LabelValidation(const T& it, std::string* error) {
   for (auto& label : it.label) {
     if (label.name().empty()) {
       *error = "The name child element of label element is obligatory";
-      return false;
-    }
-    if (!label.xml_lang().empty() &&
-        !utils::w3c_languages::ValidateLanguageTag(label.xml_lang())) {
-      *error = "The xml:lang attribute of label is invalid";
       return false;
     }
   }
