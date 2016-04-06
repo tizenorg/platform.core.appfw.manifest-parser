@@ -10,7 +10,6 @@
 
 #include "manifest_parser/manifest_util.h"
 #include "manifest_parser/utils/iri_util.h"
-#include "manifest_parser/utils/language_tag_validator.h"
 #include "manifest_parser/utils/logging.h"
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
@@ -62,23 +61,6 @@ bool DescriptionHandler::Parse(
   }
 
   *output = std::static_pointer_cast<parser::ManifestData>(descriptioninfo);
-  return true;
-}
-
-bool DescriptionHandler::Validate(
-    const parser::ManifestData& data,
-    const parser::ManifestDataMap& /*handlers_output*/,
-    std::string* error) const {
-  const DescriptionInfoList& elements =
-      static_cast<const DescriptionInfoList&>(data);
-
-  for (const auto& element : elements.descriptions) {
-    if (!element.xml_lang().empty() &&
-        !utils::w3c_languages::ValidateLanguageTag(element.xml_lang())) {
-      *error = "The decription xml:lang failed to validate";
-      return false;
-    }
-  }
   return true;
 }
 
