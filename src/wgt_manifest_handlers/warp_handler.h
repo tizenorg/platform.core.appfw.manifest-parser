@@ -14,10 +14,15 @@
 #include "manifest_parser/values.h"
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-class WarpInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API WarpInfo : public parser::ManifestData {
  public:
   static std::string Key();
 
@@ -48,7 +53,7 @@ class WarpInfo : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <w3c:access>.
  */
-class WarpHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API WarpHandler : public parser::ManifestHandler {
  public:
   WarpHandler() {}
   ~WarpHandler() override {}

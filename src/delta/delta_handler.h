@@ -10,11 +10,16 @@
 
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace delta {
 
-extern const char kDeltaInfoKey[];
+LIBSCL_EXPORT_API extern const char kDeltaInfoKey[];
 
-class DeltaInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API DeltaInfo : public parser::ManifestData {
  public:
   void set_added(const std::vector<std::string>& added) {
     added_ = added;
@@ -46,7 +51,7 @@ class DeltaInfo : public parser::ManifestData {
  *
  * Main handler for all tags in delta file
  */
-class DeltaHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API DeltaHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

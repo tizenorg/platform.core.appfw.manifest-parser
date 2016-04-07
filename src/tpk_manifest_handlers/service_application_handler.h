@@ -13,10 +13,15 @@
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 #include "tpk_manifest_handlers/common/application_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
-class ServiceApplicationInfo : public ApplicationInfo {
+class LIBSCL_EXPORT_API ServiceApplicationInfo : public ApplicationInfo {
  public:
   /**
    * @brief key
@@ -90,7 +95,7 @@ class ServiceApplicationInfo : public ApplicationInfo {
   std::string taskmanage_;
 };
 
-struct ServiceApplicationSingleEntry :
+struct LIBSCL_EXPORT_API ServiceApplicationSingleEntry :
     public ApplicationSingleEntry<ServiceApplicationInfo> {
   std::vector<AppControlInfo> app_control;
   std::vector<BackgroundCategoryInfo> background_category;
@@ -114,7 +119,7 @@ using ServiceApplicationInfoList =
  *  \_  <metadata>
  *  \_  <datacontrol>
  */
-class ServiceApplicationHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API ServiceApplicationHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

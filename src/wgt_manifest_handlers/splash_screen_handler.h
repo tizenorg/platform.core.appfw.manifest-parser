@@ -16,20 +16,25 @@
 #include "manifest_parser/values.h"
 #include "wgt_manifest_handlers/setting_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-enum class ReadyWhen { FIRSTPAINT, COMPLETE, CUSTOM };
+enum class LIBSCL_EXPORT_API ReadyWhen { FIRSTPAINT, COMPLETE, CUSTOM };
 
-enum class ScreenOrientation { AUTO, PORTRAIT, LANDSCAPE, NONE };
+enum class LIBSCL_EXPORT_API ScreenOrientation { AUTO, PORTRAIT, LANDSCAPE, NONE };
 
-struct Color {
+struct LIBSCL_EXPORT_API Color {
   unsigned char red;
   unsigned char green;
   unsigned char blue;
 };
 
-struct SplashScreenData {
+struct LIBSCL_EXPORT_API SplashScreenData {
   ScreenOrientation orientation;
   std::shared_ptr<Color> background_color;
   std::vector<std::string> background_image;
@@ -37,7 +42,7 @@ struct SplashScreenData {
   std::vector<std::string> image_border;
 };
 
-class SplashScreenInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API SplashScreenInfo : public parser::ManifestData {
  public:
   SplashScreenInfo() { }
   virtual ~SplashScreenInfo() { }
@@ -69,7 +74,7 @@ class SplashScreenInfo : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:splash-screen>.
  */
-class SplashScreenHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API SplashScreenHandler : public parser::ManifestHandler {
  public:
   SplashScreenHandler() {}
   virtual ~SplashScreenHandler() {}

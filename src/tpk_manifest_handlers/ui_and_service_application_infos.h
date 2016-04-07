@@ -12,11 +12,16 @@
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
 // AppControl
-class AppControlInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API AppControlInfo : public parser::ManifestData {
  public:
   AppControlInfo(const std::string& operation,
                  const std::string& uri,
@@ -44,7 +49,7 @@ class AppControlInfo : public parser::ManifestData {
 };
 
 // Background-category
-class BackgroundCategoryInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API BackgroundCategoryInfo : public parser::ManifestData {
  public:
   explicit BackgroundCategoryInfo(const std::string& value) : value_(value) {}
   virtual ~BackgroundCategoryInfo() {}
@@ -56,7 +61,7 @@ class BackgroundCategoryInfo : public parser::ManifestData {
 };
 
 // DataControl
-class DataControlInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API DataControlInfo : public parser::ManifestData {
  public:
   DataControlInfo(const std::string& access,
                   const std::string& providerid,
@@ -82,7 +87,7 @@ class DataControlInfo : public parser::ManifestData {
 };
 
 // MetaData
-class MetaDataInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API MetaDataInfo : public parser::ManifestData {
  public:
   MetaDataInfo(const std::string& key,
                const std::string& val)
@@ -102,7 +107,7 @@ class MetaDataInfo : public parser::ManifestData {
 };
 
 // Icon
-class ApplicationIcon  {
+class LIBSCL_EXPORT_API ApplicationIcon  {
  public:
   explicit ApplicationIcon(const std::string& path, const std::string& lang,
                            const std::string& dpi)
@@ -126,7 +131,7 @@ class ApplicationIcon  {
   std::string dpi_;
 };
 
-class ApplicationImage  {
+class LIBSCL_EXPORT_API ApplicationImage  {
  public:
   ApplicationImage(const std::string& name, const std::string& section,
                    const std::string& lang)
@@ -152,7 +157,7 @@ class ApplicationImage  {
 };
 
 // SplashScreen
-class ApplicationSplashScreen {
+class LIBSCL_EXPORT_API ApplicationSplashScreen {
  public:
   explicit ApplicationSplashScreen(const std::string& src,
                                    const std::string& type,
@@ -196,7 +201,7 @@ class ApplicationSplashScreen {
   std::string operation_;
 };
 
-class ApplicationSplashScreenInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API ApplicationSplashScreenInfo : public parser::ManifestData {
  public:
   const std::vector<ApplicationSplashScreen>& splashscreens() const {
     return splashscreens_;
@@ -208,7 +213,7 @@ class ApplicationSplashScreenInfo : public parser::ManifestData {
   std::vector<ApplicationSplashScreen> splashscreens_;
 };
 
-class ApplicationIconsInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API ApplicationIconsInfo : public parser::ManifestData {
  public:
   const std::vector<ApplicationIcon>& icons() const {
   return icons_;
@@ -220,13 +225,13 @@ class ApplicationIconsInfo : public parser::ManifestData {
   std::vector<ApplicationIcon> icons_;
 };
 
-class ApplicationImagesInfo {
+class LIBSCL_EXPORT_API ApplicationImagesInfo {
  public:
   std::vector<ApplicationImage> images;
 };
 
 // Label
-class LabelInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API LabelInfo : public parser::ManifestData {
  public:
   LabelInfo(const std::string& text,
             const std::string& name,

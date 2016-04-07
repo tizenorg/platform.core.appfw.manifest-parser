@@ -27,6 +27,11 @@
 #include <utility>
 #include <vector>
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace parser {
 
 class DictionaryValue;
@@ -43,7 +48,7 @@ typedef std::map<std::string, Value*> ValueMap;
 // the subclasses.
 //
 // See the file-level comment above for more information.
-class Value {
+class LIBSCL_EXPORT_API Value {
  public:
   enum Type {
     TYPE_NULL = 0,
@@ -111,7 +116,7 @@ class Value {
 };
 
 // FundamentalValue represents the simple fundamental types of values.
-class FundamentalValue : public Value {
+class LIBSCL_EXPORT_API FundamentalValue : public Value {
  public:
   explicit FundamentalValue(bool in_value);
   explicit FundamentalValue(int in_value);
@@ -135,7 +140,7 @@ class FundamentalValue : public Value {
   };
 };
 
-class StringValue : public Value {
+class LIBSCL_EXPORT_API StringValue : public Value {
  public:
   // Initializes a StringValue with a std::string.
   explicit StringValue(const std::string& in_value);
@@ -156,7 +161,7 @@ class StringValue : public Value {
   std::string value_;
 };
 
-class BinaryValue: public Value {
+class LIBSCL_EXPORT_API BinaryValue: public Value {
  public:
   // Creates a BinaryValue with a null buffer and size of 0.
   BinaryValue();
@@ -190,7 +195,7 @@ class BinaryValue: public Value {
 // DictionaryValue provides a key-value dictionary with (optional) "path"
 // parsing for recursive access; see the comment at the top of the file. Keys
 // are |std::string|s.
-class DictionaryValue : public Value {
+class LIBSCL_EXPORT_API DictionaryValue : public Value {
  public:
   DictionaryValue();
   ~DictionaryValue() override;
@@ -342,7 +347,7 @@ class DictionaryValue : public Value {
 };
 
 // This type of Value represents a list of other Value values.
-class ListValue : public Value {
+class LIBSCL_EXPORT_API ListValue : public Value {
  public:
   typedef ValueVector::iterator iterator;
   typedef ValueVector::const_iterator const_iterator;
@@ -435,7 +440,7 @@ class ListValue : public Value {
 
 // This interface is implemented by classes that know how to serialize and
 // deserialize Value objects.
-class ValueSerializer {
+class LIBSCL_EXPORT_API ValueSerializer {
  public:
   virtual ~ValueSerializer();
 

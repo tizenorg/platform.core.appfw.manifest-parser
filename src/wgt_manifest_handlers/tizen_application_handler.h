@@ -14,10 +14,15 @@
 #include "manifest_parser/values.h"
 #include "wgt_manifest_handlers/application_manifest_constants.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-class TizenApplicationInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API TizenApplicationInfo : public parser::ManifestData {
  public:
   TizenApplicationInfo();
   virtual ~TizenApplicationInfo();
@@ -70,7 +75,7 @@ class TizenApplicationInfo : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:application>.
  */
-class TizenApplicationHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API TizenApplicationHandler : public parser::ManifestHandler {
  public:
   TizenApplicationHandler();
   virtual ~TizenApplicationHandler();

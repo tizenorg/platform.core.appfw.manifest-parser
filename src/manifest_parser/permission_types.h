@@ -10,14 +10,19 @@
 #include <set>
 #include <string>
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace parser {
 
-enum PermissionType {
+enum LIBSCL_EXPORT_API PermissionType {
   SESSION_PERMISSION,
   PERSISTENT_PERMISSION,
 };
 
-enum RuntimePermission {
+enum LIBSCL_EXPORT_API RuntimePermission {
   ALLOW_ONCE = 0,
   ALLOW_SESSION,
   ALLOW_ALWAYS,
@@ -27,7 +32,7 @@ enum RuntimePermission {
   UNDEFINED_RUNTIME_PERM,
 };
 
-enum StoredPermission {
+enum LIBSCL_EXPORT_API StoredPermission {
   ALLOW = 0,
   DENY,
   PROMPT,

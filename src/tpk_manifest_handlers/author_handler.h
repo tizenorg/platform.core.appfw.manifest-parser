@@ -12,10 +12,15 @@
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
-class AuthorInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API AuthorInfo : public parser::ManifestData {
  public:
   /**
    * @brief key
@@ -77,7 +82,7 @@ class AuthorInfo : public parser::ManifestData {
  * Handler of tizen-manifest.xml for xml elements:
  *  <author>
  */
-class AuthorHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API AuthorHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

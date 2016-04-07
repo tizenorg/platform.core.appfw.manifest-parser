@@ -13,10 +13,15 @@
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-class Preference {
+class LIBSCL_EXPORT_API Preference {
  public:
   Preference(const std::string& name, const std::string& value,
              bool readonly)
@@ -35,7 +40,7 @@ class Preference {
 
 typedef std::map<std::string, std::string> LangValMap;
 
-class WidgetInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API WidgetInfo : public parser::ManifestData {
  public:
   WidgetInfo() {}
   WidgetInfo(const WidgetInfo&) = delete;
@@ -96,7 +101,7 @@ class WidgetInfo : public parser::ManifestData {
  *
  * Code parsing rest of children is located in other handlers.
  */
-class WidgetHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API WidgetHandler : public parser::ManifestHandler {
  public:
   WidgetHandler() {}
   virtual ~WidgetHandler() {}

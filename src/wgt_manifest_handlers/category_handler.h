@@ -12,10 +12,15 @@
 
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-struct CategoryInfoList : public parser::ManifestData {
+struct LIBSCL_EXPORT_API CategoryInfoList : public parser::ManifestData {
   static std::string Key();
   std::vector<std::string> categories;
 };
@@ -26,7 +31,7 @@ struct CategoryInfoList : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:category>.
  */
-class CategoryHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API CategoryHandler : public parser::ManifestHandler {
  public:
   CategoryHandler();
   virtual ~CategoryHandler();

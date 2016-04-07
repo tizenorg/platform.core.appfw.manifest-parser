@@ -15,27 +15,32 @@
 
 #include "manifest_parser/manifest.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 // Utilities for manipulating the on-disk storage of applications.
 namespace parser {
 
 // Loads an application manifest from the specified directory. Returns nullptr
 // on failure, with a description of the error in |error|.
-std::shared_ptr<Manifest> LoadManifest(
+LIBSCL_EXPORT_API std::shared_ptr<Manifest> LoadManifest(
     const std::string& file_path, std::string* error);
-std::string GetNodeDir(xmlNode* node, const std::string& inherit_dir);
-std::string GetNodeText(xmlNode* root, const std::string& inherit_dir);
-bool IsPropSupportDir(xmlNode* root, xmlAttr* prop);
-bool IsElementSupportSpanAndDir(xmlNode* root);
-bool IsTrimRequiredForElement(xmlNode* root);
-bool IsTrimRequiredForProp(xmlNode* root, xmlAttr* prop);
-std::unique_ptr<DictionaryValue> LoadXMLNode(
+LIBSCL_EXPORT_API std::string GetNodeDir(xmlNode* node, const std::string& inherit_dir);
+LIBSCL_EXPORT_API std::string GetNodeText(xmlNode* root, const std::string& inherit_dir);
+LIBSCL_EXPORT_API bool IsPropSupportDir(xmlNode* root, xmlAttr* prop);
+LIBSCL_EXPORT_API bool IsElementSupportSpanAndDir(xmlNode* root);
+LIBSCL_EXPORT_API bool IsTrimRequiredForElement(xmlNode* root);
+LIBSCL_EXPORT_API bool IsTrimRequiredForProp(xmlNode* root, xmlAttr* prop);
+LIBSCL_EXPORT_API std::unique_ptr<DictionaryValue> LoadXMLNode(
     xmlNode* root, const std::string& inherit_dir = "");
 
-bool ValidateTizenApplicationId(const std::string& id);
-bool ValidateTizenPackageId(const std::string& id);
-bool ValidateTizenNativeId(const std::string& id);
+LIBSCL_EXPORT_API bool ValidateTizenApplicationId(const std::string& id);
+LIBSCL_EXPORT_API bool ValidateTizenPackageId(const std::string& id);
+LIBSCL_EXPORT_API bool ValidateTizenNativeId(const std::string& id);
 
-bool ValidateEmailAddress(const std::string& email);
+LIBSCL_EXPORT_API bool ValidateEmailAddress(const std::string& email);
 
 }  // namespace parser
 

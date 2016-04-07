@@ -12,10 +12,15 @@
 
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-class AllowedNavigationInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API AllowedNavigationInfo : public parser::ManifestData {
  public:
   explicit AllowedNavigationInfo(const std::string& allowed_domains);
   virtual ~AllowedNavigationInfo();
@@ -39,7 +44,7 @@ class AllowedNavigationInfo : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:allow-navigation>.
  */
-class NavigationHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API NavigationHandler : public parser::ManifestHandler {
  public:
   NavigationHandler();
   virtual ~NavigationHandler();

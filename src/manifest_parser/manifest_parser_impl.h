@@ -17,9 +17,14 @@
 #include "manifest_parser/manifest.h"
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace parser {
 
-class ManifestParserImpl {
+class LIBSCL_EXPORT_API ManifestParserImpl {
  public:
   explicit ManifestParserImpl(
       std::unique_ptr<ManifestHandlerRegistry> registry);

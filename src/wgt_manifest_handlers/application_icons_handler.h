@@ -11,10 +11,15 @@
 #include "manifest_parser/manifest_handler.h"
 #include "wgt_manifest_handlers/application_manifest_constants.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-class ApplicationIcon {
+class LIBSCL_EXPORT_API ApplicationIcon {
  public:
   explicit ApplicationIcon(const std::string& path, int height = -1,
                            int width = -1);
@@ -42,7 +47,7 @@ class ApplicationIcon {
   int width_;
 };
 
-class ApplicationIconsInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API ApplicationIconsInfo : public parser::ManifestData {
  public:
   static std::string Key();
 
@@ -62,7 +67,7 @@ class ApplicationIconsInfo : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <w3c:icon>.
  */
-class ApplicationIconsHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API ApplicationIconsHandler : public parser::ManifestHandler {
  public:
   ApplicationIconsHandler();
   ~ApplicationIconsHandler();

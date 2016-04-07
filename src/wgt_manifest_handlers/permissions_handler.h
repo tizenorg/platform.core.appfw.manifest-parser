@@ -12,10 +12,15 @@
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/permission_types.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-class PermissionsInfo: public parser::ManifestData {
+class LIBSCL_EXPORT_API PermissionsInfo: public parser::ManifestData {
  public:
   PermissionsInfo();
   virtual ~PermissionsInfo();
@@ -46,7 +51,7 @@ class PermissionsInfo: public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:privilege>.
  */
-class PermissionsHandler: public parser::ManifestHandler {
+class LIBSCL_EXPORT_API PermissionsHandler: public parser::ManifestHandler {
  public:
   PermissionsHandler();
   virtual ~PermissionsHandler();

@@ -16,66 +16,71 @@
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/ui_and_service_application_infos.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 namespace tpk_app_keys {
 // app-control
-extern const char kAppControlKey[];
-extern const char kAppControlOperationKey[];
-extern const char kAppControlURIKey[];
-extern const char kAppControlMimeKey[];
-extern const char kAppControlNameKey[];
+LIBSCL_EXPORT_API extern const char kAppControlKey[];
+LIBSCL_EXPORT_API extern const char kAppControlOperationKey[];
+LIBSCL_EXPORT_API extern const char kAppControlURIKey[];
+LIBSCL_EXPORT_API extern const char kAppControlMimeKey[];
+LIBSCL_EXPORT_API extern const char kAppControlNameKey[];
 
 // background-category
-extern const char kBackgroundCategoryKey[];
-extern const char kBackgroundCategoryValueKey[];
+LIBSCL_EXPORT_API extern const char kBackgroundCategoryKey[];
+LIBSCL_EXPORT_API extern const char kBackgroundCategoryValueKey[];
 
 // datacontrol
-extern const char kDataControlKey[];
-extern const char kDataControlAccessKey[];
-extern const char kDataControlProviderIDKey[];
-extern const char kDataControlTypeKey[];
+LIBSCL_EXPORT_API extern const char kDataControlKey[];
+LIBSCL_EXPORT_API extern const char kDataControlAccessKey[];
+LIBSCL_EXPORT_API extern const char kDataControlProviderIDKey[];
+LIBSCL_EXPORT_API extern const char kDataControlTypeKey[];
 
 // icon
-extern const char kIconKey[];
-extern const char kIconTextKey[];
-extern const char kIconLangKey[];
-extern const char kIconDpiKey[];
+LIBSCL_EXPORT_API extern const char kIconKey[];
+LIBSCL_EXPORT_API extern const char kIconTextKey[];
+LIBSCL_EXPORT_API extern const char kIconLangKey[];
+LIBSCL_EXPORT_API extern const char kIconDpiKey[];
 
 // image
-extern const char kImageKey[];
-extern const char kImageNameKey[];
-extern const char kImageSectionKey[];
-extern const char kImageLangKey[];
+LIBSCL_EXPORT_API extern const char kImageKey[];
+LIBSCL_EXPORT_API extern const char kImageNameKey[];
+LIBSCL_EXPORT_API extern const char kImageSectionKey[];
+LIBSCL_EXPORT_API extern const char kImageLangKey[];
 
 // label
-extern const char kLabelKey[];
-extern const char kLabelTextKey[];
-extern const char kLabelLangKey[];
+LIBSCL_EXPORT_API extern const char kLabelKey[];
+LIBSCL_EXPORT_API extern const char kLabelTextKey[];
+LIBSCL_EXPORT_API extern const char kLabelLangKey[];
 
 // metadata
-extern const char kMetaDataKey[];
-extern const char kMetaDataKeyKey[];
-extern const char kMetaDataValueKey[];
+LIBSCL_EXPORT_API extern const char kMetaDataKey[];
+LIBSCL_EXPORT_API extern const char kMetaDataKeyKey[];
+LIBSCL_EXPORT_API extern const char kMetaDataValueKey[];
 
 // category
-extern const char kCategoryKey[];
-extern const char kCategoryNameKey[];
+LIBSCL_EXPORT_API extern const char kCategoryKey[];
+LIBSCL_EXPORT_API extern const char kCategoryNameKey[];
 
 // splash-screen
-extern const char kSplashScreensKey[];
-extern const char kSplashScreenKey[];
-extern const char kSplashScreenSrcKey[];
-extern const char kSplashScreenTypeKey[];
-extern const char kSplashScreenDpiKey[];
-extern const char kSplashScreenOrientationKey[];
-extern const char kSplashScreenIndicatorDisplayKey[];
-extern const char kSplashScreenOperationKey[];
-extern const char kSplashScreenAppControlOperationKey[];
+LIBSCL_EXPORT_API extern const char kSplashScreensKey[];
+LIBSCL_EXPORT_API extern const char kSplashScreenKey[];
+LIBSCL_EXPORT_API extern const char kSplashScreenSrcKey[];
+LIBSCL_EXPORT_API extern const char kSplashScreenTypeKey[];
+LIBSCL_EXPORT_API extern const char kSplashScreenDpiKey[];
+LIBSCL_EXPORT_API extern const char kSplashScreenOrientationKey[];
+LIBSCL_EXPORT_API extern const char kSplashScreenIndicatorDisplayKey[];
+LIBSCL_EXPORT_API extern const char kSplashScreenOperationKey[];
+LIBSCL_EXPORT_API extern const char kSplashScreenAppControlOperationKey[];
 
 }  // namespace tpk_app_keys
 
-class ApplicationInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API ApplicationInfo : public parser::ManifestData {
  public:
   void set_appid(const std::string& appid) {
     appid_ = appid;
@@ -99,7 +104,7 @@ class ApplicationInfo : public parser::ManifestData {
 };
 
 template<typename T>
-struct ApplicationSingleEntry : public parser::ManifestData {
+struct LIBSCL_EXPORT_API ApplicationSingleEntry : public parser::ManifestData {
   T app_info;
   std::vector<MetaDataInfo> meta_data;
   ApplicationIconsInfo app_icons;
@@ -109,12 +114,12 @@ struct ApplicationSingleEntry : public parser::ManifestData {
 };
 
 template<typename T>
-struct ApplicationInfoList : public parser::ManifestData {
+struct LIBSCL_EXPORT_API ApplicationInfoList : public parser::ManifestData {
   std::vector<T> items;
 };
 
 template<typename T>
-bool ParseAppControl(const parser::DictionaryValue& dict,
+LIBSCL_EXPORT_API bool ParseAppControl(const parser::DictionaryValue& dict,
                      T* info, std::string* error) {
   for (const auto& item_operation : parser::GetOneOrMany(&dict,
       tpk_app_keys::kAppControlOperationKey, "")) {
@@ -164,7 +169,7 @@ bool ParseAppControl(const parser::DictionaryValue& dict,
 }
 
 template<typename T>
-bool ParseBackgroundCategoryElement(const parser::DictionaryValue& dict,
+LIBSCL_EXPORT_API bool ParseBackgroundCategoryElement(const parser::DictionaryValue& dict,
                                     T* info, std::string* error) {
   std::string value;
 
@@ -179,7 +184,7 @@ bool ParseBackgroundCategoryElement(const parser::DictionaryValue& dict,
 }
 
 template<typename T>
-bool ParseDataControl(const parser::DictionaryValue& dict,
+LIBSCL_EXPORT_API bool ParseDataControl(const parser::DictionaryValue& dict,
                       T* info, std::string*) {
   std::string access;
   dict.GetString(tpk_app_keys::kDataControlAccessKey, &access);
@@ -192,7 +197,7 @@ bool ParseDataControl(const parser::DictionaryValue& dict,
 }
 
 template<typename T>
-bool ParseAppIcon(const parser::DictionaryValue& dict,
+LIBSCL_EXPORT_API bool ParseAppIcon(const parser::DictionaryValue& dict,
                   T* info, std::string* /*error*/) {
   std::string icon_path;
 
@@ -210,7 +215,7 @@ bool ParseAppIcon(const parser::DictionaryValue& dict,
 }
 
 template<typename T>
-bool ParseAppImage(const parser::DictionaryValue& dict, T* info,
+LIBSCL_EXPORT_API bool ParseAppImage(const parser::DictionaryValue& dict, T* info,
                    std::string*) {
   std::string image_name;
   dict.GetString(tpk_app_keys::kImageNameKey, &image_name);
@@ -223,7 +228,7 @@ bool ParseAppImage(const parser::DictionaryValue& dict, T* info,
 }
 
 template<typename T>
-bool ParseLabel(const parser::DictionaryValue& dict,
+LIBSCL_EXPORT_API bool ParseLabel(const parser::DictionaryValue& dict,
                 T* info, std::string*) {
   std::string text;
   dict.GetString(tpk_app_keys::kLabelTextKey, &text);
@@ -234,7 +239,7 @@ bool ParseLabel(const parser::DictionaryValue& dict,
 }
 
 template<typename T>
-bool ParseMetaData(const parser::DictionaryValue& dict,
+LIBSCL_EXPORT_API bool ParseMetaData(const parser::DictionaryValue& dict,
                    T* info, std::string*) {
   std::string key;
   dict.GetString(tpk_app_keys::kMetaDataKeyKey, &key);
@@ -252,7 +257,7 @@ bool ParseMetaData(const parser::DictionaryValue& dict,
 }
 
 template<typename T>
-bool ParseCategory(const parser::DictionaryValue& dict,
+LIBSCL_EXPORT_API bool ParseCategory(const parser::DictionaryValue& dict,
                    T* info, std::string*) {
   std::string name;
   dict.GetString(tpk_app_keys::kCategoryNameKey, &name);
@@ -262,7 +267,7 @@ bool ParseCategory(const parser::DictionaryValue& dict,
 }
 
 template<typename T>
-bool ParseSplashScreen(const parser::DictionaryValue& dict,
+LIBSCL_EXPORT_API bool ParseSplashScreen(const parser::DictionaryValue& dict,
                        T* info, std::string*) {
   for (const auto& item_splashscreen : parser::GetOneOrMany(&dict,
       tpk_app_keys::kSplashScreenKey, "")) {
@@ -297,7 +302,7 @@ using ParsingFuncPtr =
     std::function<bool(const parser::DictionaryValue&, T*, std::string*)>;
 
 template<typename T>
-bool InitializeParsingElement(
+LIBSCL_EXPORT_API bool InitializeParsingElement(
     const parser::DictionaryValue& app_dict,
     const std::string& key,
     ParsingFuncPtr<T> ParsingFunc,
@@ -311,7 +316,7 @@ bool InitializeParsingElement(
 }
 
 template<typename T>
-bool AppControlValidation(const T& it, std::string* error) {
+LIBSCL_EXPORT_API bool AppControlValidation(const T& it, std::string* error) {
   for (const auto& item : it.app_control) {
     if (item.operation().empty()) {
       *error =
@@ -327,7 +332,7 @@ bool AppControlValidation(const T& it, std::string* error) {
 }
 
 template<typename T>
-bool DataControlValidation(const T& it, std::string* error) {
+LIBSCL_EXPORT_API bool DataControlValidation(const T& it, std::string* error) {
   for (const auto& item : it.data_control) {
     if (item.access().empty()) {
       *error =
@@ -351,7 +356,7 @@ bool DataControlValidation(const T& it, std::string* error) {
 }
 
 template<typename T>
-bool LabelValidation(const T& it, std::string* error) {
+LIBSCL_EXPORT_API bool LabelValidation(const T& it, std::string* error) {
   if (std::any_of(it.label.begin(), it.label.end(),
       [](const LabelInfo& item) { return item.text().empty(); })) {
     *error = "The text child element of label element is obligatory";
@@ -369,7 +374,7 @@ bool LabelValidation(const T& it, std::string* error) {
 }
 
 template<typename T>
-bool MetadataValidation(const T& it, std::string* error) {
+LIBSCL_EXPORT_API bool MetadataValidation(const T& it, std::string* error) {
   if (std::any_of(it.meta_data.begin(), it.meta_data.end(),
       [](const MetaDataInfo& item) { return item.key().empty(); })) {
     *error = "The key child element of metadata element is obligatory";
@@ -380,7 +385,7 @@ bool MetadataValidation(const T& it, std::string* error) {
 }
 
 template<typename T>
-bool SplashScreenValidation(const T& it, std::string* error) {
+LIBSCL_EXPORT_API bool SplashScreenValidation(const T& it, std::string* error) {
   for (const auto& item : it.app_splashscreens.splashscreens()) {
     if (item.src().empty()) {
       *error =

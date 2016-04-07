@@ -11,9 +11,14 @@
 #include <sstream>
 #include <string>
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace utils {
 
-enum class LogLevel {
+enum class LIBSCL_EXPORT_API LogLevel {
   LOG_ERROR,
   LOG_WARNING,
   LOG_INFO,
@@ -34,7 +39,7 @@ template<> struct LogTag<LogLevel::LOG_DEBUG> {
   static constexpr const char* value = "\033[0m| DEBUG   |\033[0m";
 };
 
-class LogCatcher {
+class LIBSCL_EXPORT_API LogCatcher {
  public:
   LogCatcher() { }
   void operator&(const std::ostream& str) const {

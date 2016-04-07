@@ -10,9 +10,14 @@
 
 #include <string>
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace example {
 
-class ItemHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API ItemHandler : public parser::ManifestHandler {
  public:
   ItemHandler();
   ~ItemHandler();
@@ -29,7 +34,7 @@ class ItemHandler : public parser::ManifestHandler {
   bool AlwaysParseForKey() const override;
 };
 
-class ItemInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API ItemInfo : public parser::ManifestData {
  public:
   ItemInfo() {}
   ~ItemInfo() {}

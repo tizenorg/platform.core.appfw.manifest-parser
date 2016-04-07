@@ -11,10 +11,15 @@
 
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
-struct SingleAccountInfo {
+struct LIBSCL_EXPORT_API SingleAccountInfo {
   bool multiple_account_support;
   std::string app_id;
   std::string provider_id;
@@ -23,7 +28,7 @@ struct SingleAccountInfo {
   std::vector<std::pair<std::string, std::string>> labels;
 };
 
-class AccountInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API AccountInfo : public parser::ManifestData {
  public:
   static std::string key();
 
@@ -49,7 +54,7 @@ class AccountInfo : public parser::ManifestData {
  *      \_  <label>
  *      \_  <capability>
  */
-class AccountHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API AccountHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

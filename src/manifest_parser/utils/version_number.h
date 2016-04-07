@@ -8,6 +8,11 @@
 #include <string>
 #include <vector>
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace utils {
 
 /**
@@ -20,7 +25,7 @@ namespace utils {
  * Every new version number should be validate be check result of member
  * function call @ref IsValid()
  */
-class VersionNumber {
+class LIBSCL_EXPORT_API VersionNumber {
  public:
   explicit VersionNumber(const std::string& str);
 

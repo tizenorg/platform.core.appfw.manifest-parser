@@ -8,35 +8,40 @@
 
 #include "manifest_parser/manifest.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 // Keys used in JSON representation of applications.
 namespace wgt {
 
 namespace application_widget_keys {
 
-extern const char kAccessKey[];
-extern const char kAccountKey[];
-extern const char kAllowNavigationKey[];
-extern const char kAuthorKey[];
-extern const char kCSPKey[];
-extern const char kCSPReportOnlyKey[];
-extern const char kDescriptionKey[];
-extern const char kIconsKey[];
-extern const char kTizenApplicationAppControlsKey[];
-extern const char kTizenApplicationKey[];
-extern const char kTizenAppWidgetFullKey[];
-extern const char kTizenBackgroundCategoryKey[];
-extern const char kTizenCategoryKey[];
-extern const char kTizenContentKey[];
-extern const char kTizenImeKey[];
-extern const char kTizenMetaDataKey[];
-extern const char kTizenPermissionsKey[];
-extern const char kTizenServiceKey[];
-extern const char kTizenSettingKey[];
-extern const char kTizenSplashScreenKey[];
-extern const char kTizenWidgetKey[];
-extern const char kVersionKey[];
-extern const char kWidgetKey[];
-extern const char kSplashScreenKey[];
+LIBSCL_EXPORT_API extern const char kAccessKey[];
+LIBSCL_EXPORT_API extern const char kAccountKey[];
+LIBSCL_EXPORT_API extern const char kAllowNavigationKey[];
+LIBSCL_EXPORT_API extern const char kAuthorKey[];
+LIBSCL_EXPORT_API extern const char kCSPKey[];
+LIBSCL_EXPORT_API extern const char kCSPReportOnlyKey[];
+LIBSCL_EXPORT_API extern const char kDescriptionKey[];
+LIBSCL_EXPORT_API extern const char kIconsKey[];
+LIBSCL_EXPORT_API extern const char kTizenApplicationAppControlsKey[];
+LIBSCL_EXPORT_API extern const char kTizenApplicationKey[];
+LIBSCL_EXPORT_API extern const char kTizenAppWidgetFullKey[];
+LIBSCL_EXPORT_API extern const char kTizenBackgroundCategoryKey[];
+LIBSCL_EXPORT_API extern const char kTizenCategoryKey[];
+LIBSCL_EXPORT_API extern const char kTizenContentKey[];
+LIBSCL_EXPORT_API extern const char kTizenImeKey[];
+LIBSCL_EXPORT_API extern const char kTizenMetaDataKey[];
+LIBSCL_EXPORT_API extern const char kTizenPermissionsKey[];
+LIBSCL_EXPORT_API extern const char kTizenServiceKey[];
+LIBSCL_EXPORT_API extern const char kTizenSettingKey[];
+LIBSCL_EXPORT_API extern const char kTizenSplashScreenKey[];
+LIBSCL_EXPORT_API extern const char kTizenWidgetKey[];
+LIBSCL_EXPORT_API extern const char kVersionKey[];
+LIBSCL_EXPORT_API extern const char kWidgetKey[];
+LIBSCL_EXPORT_API extern const char kSplashScreenKey[];
 
 }  // namespace application_widget_keys
 

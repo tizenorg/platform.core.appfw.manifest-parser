@@ -10,6 +10,11 @@
 
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
@@ -19,7 +24,7 @@ namespace parse {
  * Purpose of this class is to hold information declared in background-category
  * element in manifest xml document
  */
-class BackgroundCategoryInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API BackgroundCategoryInfo : public parser::ManifestData {
  public:
   explicit BackgroundCategoryInfo(const std::string& value);
   virtual ~BackgroundCategoryInfo() {}
@@ -34,7 +39,7 @@ class BackgroundCategoryInfo : public parser::ManifestData {
  * \brief Container for detailed information of each declaration of
  *        background-category element
  */
-struct BackgroundCategoryInfoList : public parser::ManifestData {
+struct LIBSCL_EXPORT_API BackgroundCategoryInfoList : public parser::ManifestData {
   std::vector<BackgroundCategoryInfo> background_categories;
 };
 
@@ -44,7 +49,7 @@ struct BackgroundCategoryInfoList : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:background-category>.
  */
-class BackgroundCategoryHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API BackgroundCategoryHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

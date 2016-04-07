@@ -11,17 +11,22 @@
 
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-struct SingleAccountInfo {
+struct LIBSCL_EXPORT_API SingleAccountInfo {
   bool multiple_account_support;
   std::vector<std::pair<std::string, std::string>> names;
   std::vector<std::pair<std::string, std::string>> icon_paths;
   std::vector<std::string> capabilities;
 };
 
-class AccountInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API AccountInfo : public parser::ManifestData {
  public:
   AccountInfo() {}
   ~AccountInfo() override {}
@@ -51,7 +56,7 @@ class AccountInfo : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:account>.
  */
-class AccountHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API AccountHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

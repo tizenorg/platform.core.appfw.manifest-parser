@@ -5,11 +5,16 @@
 #ifndef EXAMPLES_CUSTOM_HANDLERS_HANDLER_CONSTANTS_H_
 #define EXAMPLES_CUSTOM_HANDLERS_HANDLER_CONSTANTS_H_
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace example {
 namespace keys {
 
-extern const char item_handler_key[];
-extern const char item_handler_list_key[];
+LIBSCL_EXPORT_API extern const char item_handler_key[];
+LIBSCL_EXPORT_API extern const char item_handler_list_key[];
 
 }  // namespace keys
 }  // namespace example

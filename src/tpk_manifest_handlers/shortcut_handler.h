@@ -11,10 +11,15 @@
 
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
-struct ShortcutInfo {
+struct LIBSCL_EXPORT_API ShortcutInfo {
   std::string app_id;
   std::string extra_data;
   std::string extra_key;
@@ -22,13 +27,13 @@ struct ShortcutInfo {
   std::vector<std::pair<std::string, std::string>> labels;
 };
 
-class ShortcutListInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API ShortcutListInfo : public parser::ManifestData {
  public:
   static std::string key();
   std::vector<ShortcutInfo> shortcuts;
 };
 
-class ShortcutHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API ShortcutHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

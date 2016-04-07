@@ -9,6 +9,11 @@
 #include <string>
 #include <unordered_set>
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace utils {
 namespace w3c_languages {
 namespace lang_set {
@@ -23,11 +28,11 @@ namespace lang_set {
  * @param language language
  * @return true if language is correct
  */
-bool ValidateOnlyLanguage(const std::string& language);
+LIBSCL_EXPORT_API bool ValidateOnlyLanguage(const std::string& language);
 
 }  // namespace lang_set
 
-extern const std::map<std::string, std::string> kW3CExtLang;
+LIBSCL_EXPORT_API extern const std::map<std::string, std::string> kW3CExtLang;
 extern const std::unordered_set<std::string> kW3CScript;
 extern const std::unordered_set<std::string> kW3CRegion;
 extern const std::unordered_set<std::string> kW3CVariant;

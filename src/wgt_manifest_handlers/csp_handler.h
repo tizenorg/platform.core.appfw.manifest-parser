@@ -14,10 +14,15 @@
 #include "manifest_parser/values.h"
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-class CSPInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API CSPInfo : public parser::ManifestData {
  public:
   CSPInfo() {}
   ~CSPInfo() override {}
@@ -50,7 +55,7 @@ class CSPInfo : public parser::ManifestData {
  *  - <tizen:content-security-policy>,
  *  - <tizen:content-security-policy-report-only>.
  */
-class CSPHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API CSPHandler : public parser::ManifestHandler {
  public:
   enum class SecurityType {
     CSP,

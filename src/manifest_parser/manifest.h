@@ -15,11 +15,16 @@
 
 #include "manifest_parser/values.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace parser {
 
 // Wraps the DictionaryValue form of application's manifest. Enforces access to
 // properties of the manifest using ManifestFeatureProvider.
-class Manifest {
+class LIBSCL_EXPORT_API Manifest {
  public:
   explicit Manifest(
       std::unique_ptr<DictionaryValue> value);

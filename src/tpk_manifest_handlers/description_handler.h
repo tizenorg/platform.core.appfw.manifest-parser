@@ -13,10 +13,15 @@
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
-class DescriptionInfo {
+class LIBSCL_EXPORT_API DescriptionInfo {
  public:
   DescriptionInfo(const std::string& description, const std::string& xml_lang);
 
@@ -51,7 +56,7 @@ class DescriptionInfo {
   std::string xml_lang_;
 };
 
-class DescriptionInfoList : public parser::ManifestData {
+class LIBSCL_EXPORT_API DescriptionInfoList : public parser::ManifestData {
  public:
   /**
    * @brief key
@@ -68,7 +73,7 @@ class DescriptionInfoList : public parser::ManifestData {
  * Handler of tizen-manifest.xml for xml elements:
  *  <description>
  */
-class DescriptionHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API DescriptionHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

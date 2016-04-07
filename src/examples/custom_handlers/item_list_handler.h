@@ -14,9 +14,14 @@
 
 #include "custom_handlers/item_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace example {
 
-class ItemListHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API ItemListHandler : public parser::ManifestHandler {
  public:
   ItemListHandler();
   ~ItemListHandler();
@@ -35,7 +40,7 @@ class ItemListHandler : public parser::ManifestHandler {
   bool AlwaysParseForKey() const override;
 };
 
-class ItemListInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API ItemListInfo : public parser::ManifestData {
   int items_size_;
   std::vector<std::shared_ptr<ItemInfo>> items_;
 

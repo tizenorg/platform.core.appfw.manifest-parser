@@ -11,10 +11,15 @@
 
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-class ContentInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API ContentInfo : public parser::ManifestData {
  public:
   ContentInfo()
      : is_tizen_content_(false) { }
@@ -76,7 +81,7 @@ class ContentInfo : public parser::ManifestData {
  *  - <w3c:content>,
  *  - <tizen:content>.
  */
-class ContentHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API ContentHandler : public parser::ManifestHandler {
  public:
   enum class ParseResult {
     OK,

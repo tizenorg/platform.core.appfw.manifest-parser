@@ -13,6 +13,11 @@
 #include "manifest_parser/manifest.h"
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
@@ -22,7 +27,7 @@ namespace parse {
  * Handler of config.xml for xml elements:
  *  - <tizen:app-control>.
  */
-class AppControlHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API AppControlHandler : public parser::ManifestHandler {
  public:
   AppControlHandler();
   ~AppControlHandler() override;
@@ -38,7 +43,7 @@ class AppControlHandler : public parser::ManifestHandler {
   std::vector<std::string> PrerequisiteKeys() const override;
 };
 
-class AppControlInfo {
+class LIBSCL_EXPORT_API AppControlInfo {
  public:
   AppControlInfo(const std::string& src, const std::string& operation,
       const std::string& uri, const std::string& mime,
@@ -92,7 +97,7 @@ class AppControlInfo {
   std::string reload_;
 };
 
-struct AppControlInfoList : public parser::ManifestData {
+struct LIBSCL_EXPORT_API AppControlInfoList : public parser::ManifestData {
   std::vector<AppControlInfo> controls;
 };
 

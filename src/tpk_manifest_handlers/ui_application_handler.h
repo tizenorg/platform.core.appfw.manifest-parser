@@ -14,10 +14,15 @@
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 #include "tpk_manifest_handlers/common/application_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
-class UIApplicationInfo : public ApplicationInfo {
+class LIBSCL_EXPORT_API UIApplicationInfo : public ApplicationInfo {
  public:
   UIApplicationInfo();
   /**
@@ -176,7 +181,7 @@ class UIApplicationInfo : public ApplicationInfo {
   std::string splash_screen_display_;
 };
 
-struct UIApplicationSingleEntry :
+struct LIBSCL_EXPORT_API UIApplicationSingleEntry :
     public ApplicationSingleEntry<UIApplicationInfo> {
   ApplicationImagesInfo app_images;
   std::vector<AppControlInfo> app_control;
@@ -204,7 +209,7 @@ using UIApplicationInfoList = ApplicationInfoList<UIApplicationSingleEntry>;
  *  \_  <splash-screens>
  *      \_  <splash-screen>
  */
-class UIApplicationHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API UIApplicationHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

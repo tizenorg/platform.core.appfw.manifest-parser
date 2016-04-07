@@ -14,12 +14,17 @@
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
 using LangTextPair = std::pair<std::string, std::string>;
 
-class PackageInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API PackageInfo : public parser::ManifestData {
  public:
   /**
    * @brief key
@@ -140,7 +145,7 @@ class PackageInfo : public parser::ManifestData {
  * Handler of tizen-manifest.xml for root xml element <manifest>
  * Child elements are parsed in other handlers.
  */
-class PackageHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API PackageHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

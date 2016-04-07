@@ -7,6 +7,11 @@
 
 #include <string>
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace parser {
 namespace utils {
 
@@ -19,7 +24,7 @@ namespace utils {
  * @param iri_string iri string to check
  * @return bool if iri is valid
  */
-bool IsValidIRI(const std::string& iri_string);
+LIBSCL_EXPORT_API bool IsValidIRI(const std::string& iri_string);
 
 }  // namespace utils
 }  // namespace parser

@@ -13,11 +13,16 @@
 
 #include "manifest_parser/manifest.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace parser {
 
 // A base class for parsed manifest data that APIs want to store on
 // the application.
-class ManifestData {
+class LIBSCL_EXPORT_API ManifestData {
  public:
   ManifestData() : exists_(true) {}
   virtual ~ManifestData() {}
@@ -36,7 +41,7 @@ class ManifestData {
 typedef std::map<std::string, std::shared_ptr<ManifestData> >
     ManifestDataMap;
 
-class ManifestHandler {
+class LIBSCL_EXPORT_API ManifestHandler {
  public:
   virtual ~ManifestHandler();
 
@@ -76,7 +81,7 @@ class ManifestHandler {
   virtual std::string Key() const = 0;
 };
 
-bool VerifyElementNamespace(const parser::DictionaryValue& dict,
+LIBSCL_EXPORT_API bool VerifyElementNamespace(const parser::DictionaryValue& dict,
                             const std::string& requested_namespace);
 /**
  * @brief GetOneOrMany
@@ -92,7 +97,7 @@ bool VerifyElementNamespace(const parser::DictionaryValue& dict,
  *                         elements
  * @return elements matching parameters
  */
-const std::vector<const DictionaryValue*> GetOneOrMany(
+LIBSCL_EXPORT_API const std::vector<const DictionaryValue*> GetOneOrMany(
     const DictionaryValue* dict, const std::string& path,
     const std::string& namespace_prefix);
 
@@ -100,7 +105,7 @@ typedef std::map<std::string, std::shared_ptr<ManifestHandler>>
     ManifestHandlerMap;
 typedef std::map<std::shared_ptr<ManifestHandler>, int> ManifestHandlerOrderMap;
 
-class ManifestHandlerRegistry {
+class LIBSCL_EXPORT_API ManifestHandlerRegistry {
  public:
   ManifestHandlerRegistry();
   explicit ManifestHandlerRegistry(

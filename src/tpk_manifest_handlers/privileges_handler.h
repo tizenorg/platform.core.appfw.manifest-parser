@@ -14,10 +14,15 @@
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
-class PrivilegesInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API PrivilegesInfo : public parser::ManifestData {
  public:
   /**
    * @brief key
@@ -50,7 +55,7 @@ class PrivilegesInfo : public parser::ManifestData {
  *  <privileges>
  *  \_  <privilege>
  */
-class PrivilegesHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API PrivilegesHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

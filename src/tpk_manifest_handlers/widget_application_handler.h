@@ -14,10 +14,15 @@
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 #include "tpk_manifest_handlers/common/application_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
-class WidgetApplicationInfo : public ApplicationInfo {
+class LIBSCL_EXPORT_API WidgetApplicationInfo : public ApplicationInfo {
  public:
   WidgetApplicationInfo();
   /**
@@ -83,7 +88,7 @@ class WidgetApplicationInfo : public ApplicationInfo {
   std::string hwacceleration_;
 };
 
-struct WidgetApplicationSingleEntry :
+struct LIBSCL_EXPORT_API WidgetApplicationSingleEntry :
     public ApplicationSingleEntry<WidgetApplicationInfo> {
   ApplicationImagesInfo app_images;
 };
@@ -101,7 +106,7 @@ using WidgetApplicationInfoList =
  *  \_  <image>
  *  \_  <metadata>
  */
-class WidgetApplicationHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API WidgetApplicationHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

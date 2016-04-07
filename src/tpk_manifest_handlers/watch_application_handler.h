@@ -14,10 +14,15 @@
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 #include "tpk_manifest_handlers/common/application_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
-class WatchApplicationInfo : public ApplicationInfo {
+class LIBSCL_EXPORT_API WatchApplicationInfo : public ApplicationInfo {
  public:
   WatchApplicationInfo();
 
@@ -81,7 +86,7 @@ class WatchApplicationInfo : public ApplicationInfo {
   std::string label_;
 };
 
-struct WatchApplicationSingleEntry :
+struct LIBSCL_EXPORT_API WatchApplicationSingleEntry :
     public ApplicationSingleEntry<WatchApplicationInfo> {
   ApplicationImagesInfo app_images;
 };
@@ -97,7 +102,7 @@ using WatchApplicationInfoList =
  *  \_  <label>
  *  \_  <icon>
  */
-class WatchApplicationHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API WatchApplicationHandler : public parser::ManifestHandler {
  public:
   bool Parse(
       const parser::Manifest& manifest,

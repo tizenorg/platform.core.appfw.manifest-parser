@@ -7,6 +7,11 @@
 #include <string>
 #include <unordered_set>
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace utils {
 namespace w3c_languages {
 
@@ -21,7 +26,7 @@ namespace w3c_languages {
  * @param error output parameter for error
  * @return true if tag is correct
  */
-bool ValidateLanguageTag(const std::string& tag, std::string* error = nullptr);
+LIBSCL_EXPORT_API bool ValidateLanguageTag(const std::string& tag, std::string* error = nullptr);
 
 }  // namespace w3c_languages
 }  // namespace utils

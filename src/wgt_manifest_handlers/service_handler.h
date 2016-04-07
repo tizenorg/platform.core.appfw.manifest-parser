@@ -13,13 +13,18 @@
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
 using LangNameVector = std::vector<std::pair<std::string, std::string>>;
 using KeyValueVector = std::vector<std::pair<std::string, std::string>>;
 
-class ServiceInfo {
+class LIBSCL_EXPORT_API ServiceInfo {
  public:
   explicit ServiceInfo(const std::string& id, bool auto_restart = false,
       bool on_boot = false);
@@ -153,7 +158,7 @@ class ServiceInfo {
   KeyValueVector metadata_set_;
 };
 
-struct ServiceList : public parser::ManifestData {
+struct LIBSCL_EXPORT_API ServiceList : public parser::ManifestData {
   std::vector<ServiceInfo> services;
 };
 
@@ -163,7 +168,7 @@ struct ServiceList : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:service>.
  */
-class ServiceHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API ServiceHandler : public parser::ManifestHandler {
  public:
   ServiceHandler();
   virtual ~ServiceHandler();

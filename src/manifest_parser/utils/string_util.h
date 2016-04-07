@@ -8,17 +8,22 @@
 
 #include <string>
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace parser {
 namespace utils {
 
 // utf8 representation of unicode BIDI characters
-extern const char kRightToLeftMark[];
-extern const char kLeftToRightMark[];
-extern const char kLeftToRightEmbeddingMark[];
-extern const char kRightToLeftEmbeddingMark[];
-extern const char kPopDirectionalFormatting[];
-extern const char kLeftToRightOverride[];
-extern const char kRightToLeftOverride[];
+LIBSCL_EXPORT_API extern const char kRightToLeftMark[];
+LIBSCL_EXPORT_API extern const char kLeftToRightMark[];
+LIBSCL_EXPORT_API extern const char kLeftToRightEmbeddingMark[];
+LIBSCL_EXPORT_API extern const char kRightToLeftEmbeddingMark[];
+LIBSCL_EXPORT_API extern const char kPopDirectionalFormatting[];
+LIBSCL_EXPORT_API extern const char kLeftToRightOverride[];
+LIBSCL_EXPORT_API extern const char kRightToLeftOverride[];
 
 /**
  * @brief CollapseWhitespaceUTF8
@@ -29,7 +34,7 @@ extern const char kRightToLeftOverride[];
  * @param text input string
  * @return collapsed string
  */
-std::string CollapseWhitespaceUTF8(const std::string& text);
+LIBSCL_EXPORT_API std::string CollapseWhitespaceUTF8(const std::string& text);
 
 /**
  * @brief StripWrappingBidiControlCharactersUTF8
@@ -42,7 +47,7 @@ std::string CollapseWhitespaceUTF8(const std::string& text);
  * @param text input string
  * @return transformed string
  */
-std::string StripWrappingBidiControlCharactersUTF8(const std::string& text);
+LIBSCL_EXPORT_API std::string StripWrappingBidiControlCharactersUTF8(const std::string& text);
 
 /**
  * @brief GetDirTextUTF8
@@ -54,7 +59,7 @@ std::string StripWrappingBidiControlCharactersUTF8(const std::string& text);
  *        allowed values: "ltr", "rtl", "lro", "rlo"
  * @return transformed string
  */
-std::string GetDirTextUTF8(const std::string& text, const std::string& dir);
+LIBSCL_EXPORT_API std::string GetDirTextUTF8(const std::string& text, const std::string& dir);
 
 /**
  * @brief GetDirUTF8Start
@@ -64,7 +69,7 @@ std::string GetDirTextUTF8(const std::string& text, const std::string& dir);
  *        allowed values: "ltr", "rtl", "lro", "rlo"
  * @return utf-8 character
  */
-std::string GetDirUTF8Start(const std::string& dir);
+LIBSCL_EXPORT_API std::string GetDirUTF8Start(const std::string& dir);
 
 /**
  * @brief GetDirUTF8End
@@ -72,7 +77,7 @@ std::string GetDirUTF8Start(const std::string& dir);
  *
  * @return UTF-8 PDF bidi character
  */
-std::string GetDirUTF8End();
+LIBSCL_EXPORT_API std::string GetDirUTF8End();
 
 /**
  * @brief DecodePercentEscapedCharacter
@@ -84,7 +89,7 @@ std::string GetDirUTF8End();
  * @param path string with url-encoded characters
  * @return decoded value of text
  */
-std::string DecodePercentEscapedCharacter(const std::string& text);
+LIBSCL_EXPORT_API std::string DecodePercentEscapedCharacter(const std::string& text);
 
 }  // namespace utils
 }  // namespace parser

@@ -14,10 +14,15 @@
 #include "manifest_parser/values.h"
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-class SettingInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API SettingInfo : public parser::ManifestData {
  public:
   enum class ScreenOrientation {
     PORTRAIT,
@@ -195,7 +200,7 @@ class SettingInfo : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:setting>.
  */
-class SettingHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API SettingHandler : public parser::ManifestHandler {
  public:
   SettingHandler();
   virtual ~SettingHandler();

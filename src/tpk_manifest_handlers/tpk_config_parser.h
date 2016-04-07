@@ -12,6 +12,11 @@
 
 #include "manifest_parser/manifest_parser.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace tpk {
 namespace parse {
 
@@ -31,7 +36,7 @@ namespace parse {
  * check the key reported by handler's @ref ManifestHandler::Key() method.
  * Key returned by this method is the key to access data set by handler.
  */
-class TPKConfigParser {
+class LIBSCL_EXPORT_API TPKConfigParser {
  public:
   TPKConfigParser();
 

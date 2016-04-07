@@ -14,10 +14,15 @@
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-class MetaDataInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API MetaDataInfo : public parser::ManifestData {
  public:
   MetaDataInfo();
   virtual ~MetaDataInfo();
@@ -59,7 +64,7 @@ class MetaDataInfo : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:metadata>.
  */
-class MetaDataHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API MetaDataHandler : public parser::ManifestHandler {
  public:
   MetaDataHandler();
   virtual ~MetaDataHandler();

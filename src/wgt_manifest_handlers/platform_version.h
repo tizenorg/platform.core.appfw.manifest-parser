@@ -9,18 +9,23 @@
 
 #include "manifest_parser/utils/version_number.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace parser {
 /**
  * @brief GetCurrentPlatformVersion
  * @return number version of the platform currently used
  */
-utils::VersionNumber GetCurrentPlatformVersion();
+LIBSCL_EXPORT_API utils::VersionNumber GetCurrentPlatformVersion();
 
 /**
  * @brief GetMinimumPlatformVersion
  * @return number version of the minimum platform for current profile
  */
-utils::VersionNumber GetMinimumPlatformVersion();
+LIBSCL_EXPORT_API utils::VersionNumber GetMinimumPlatformVersion();
 
 }  // namespace parser
 

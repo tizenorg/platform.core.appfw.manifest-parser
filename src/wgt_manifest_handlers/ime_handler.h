@@ -12,10 +12,15 @@
 
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
-class ImeInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API ImeInfo : public parser::ManifestData {
  public:
   ImeInfo();
   virtual ~ImeInfo();
@@ -51,7 +56,7 @@ class ImeInfo : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:ime>.
  */
-class ImeHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API ImeHandler : public parser::ManifestHandler {
  public:
   ImeHandler();
   virtual ~ImeHandler();

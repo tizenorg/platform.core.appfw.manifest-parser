@@ -13,12 +13,17 @@
 
 #include "manifest_parser/manifest_handler.h"
 
+#ifndef LIBSCL_EXPORT_API
+#define LIBSCL_EXPORT_API
+#endif // LIBSCL_EXPORT_API
+
+
 namespace wgt {
 namespace parse {
 
 typedef std::map<std::string, std::string> AppWidgetLabelLangValueMap;
 
-struct AppWidgetLabel {
+struct LIBSCL_EXPORT_API AppWidgetLabel {
   // may be empty
   std::string default_value;
 
@@ -26,11 +31,11 @@ struct AppWidgetLabel {
   AppWidgetLabelLangValueMap lang_value_map;
 };
 
-enum AppWidgetSizeType {
+enum LIBSCL_EXPORT_API AppWidgetSizeType {
   k1x1, k2x1, k2x2
 };
 
-struct AppWidgetSize {
+struct LIBSCL_EXPORT_API AppWidgetSize {
   // mandatory
   AppWidgetSizeType type;
 
@@ -43,7 +48,7 @@ struct AppWidgetSize {
 
 typedef std::vector<AppWidgetSize> AppWidgetSizeVector;
 
-struct AppWidgetDropView {
+struct LIBSCL_EXPORT_API AppWidgetDropView {
   // mandatory, relative to web app directory or remote URL
   std::string src;
 
@@ -56,7 +61,7 @@ struct AppWidgetDropView {
 
 typedef std::vector<AppWidgetDropView> AppWidgetDropViewVector;
 
-struct AppWidget {
+struct LIBSCL_EXPORT_API AppWidget {
   // mandatory, unique, must start with application id and end with label
   // separated with dot, the label can contain only 0-9, a-z, A-Z
   std::string id;
@@ -99,7 +104,7 @@ struct AppWidget {
 
 typedef std::vector<AppWidget> AppWidgetVector;
 
-class AppWidgetInfo : public parser::ManifestData {
+class LIBSCL_EXPORT_API AppWidgetInfo : public parser::ManifestData {
  public:
   explicit AppWidgetInfo(const AppWidgetVector& app_widgets);
   virtual ~AppWidgetInfo();
@@ -119,7 +124,7 @@ class AppWidgetInfo : public parser::ManifestData {
  * Handler of config.xml for xml elements:
  *  - <tizen:app-widget>.
  */
-class AppWidgetHandler : public parser::ManifestHandler {
+class LIBSCL_EXPORT_API AppWidgetHandler : public parser::ManifestHandler {
  public:
   AppWidgetHandler();
   virtual ~AppWidgetHandler();
