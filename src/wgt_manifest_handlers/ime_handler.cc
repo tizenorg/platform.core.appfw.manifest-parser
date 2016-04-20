@@ -124,7 +124,7 @@ bool ImeHandler::Parse(
 
   auto ime_info = std::make_shared<ImeInfo>();
 
-  const auto& dict = parser::GetOneOrMany(manifest.value(),
+  const auto dict = parser::GetOneOrMany(manifest.value(),
       kTizenImeKey, kTizenNamespacePrefix).front();
 
   if (!ParseImeEntryAndStore(*dict, ime_info.get(), error)) {
