@@ -12,8 +12,8 @@
 namespace delta {
 
 DeltaParser::DeltaParser() {
-  std::vector<parser::ManifestHandler*> handlers = {
-    new DeltaHandler,
+  std::vector<std::shared_ptr<parser::ManifestHandler>> handlers = {
+    std::make_shared<DeltaHandler>(),
   };
 
   std::unique_ptr<parser::ManifestHandlerRegistry> registry(

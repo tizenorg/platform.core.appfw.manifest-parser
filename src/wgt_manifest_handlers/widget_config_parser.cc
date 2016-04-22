@@ -209,26 +209,26 @@ namespace wgt {
 namespace parse {
 
 WidgetConfigParser::WidgetConfigParser() {
-  std::vector<parser::ManifestHandler*> handlers = {
-    new AccountHandler,
-    new AppControlHandler,
-    new ApplicationIconsHandler,
-    new AppWidgetHandler,
-    new CategoryHandler,
-    new ContentHandler,
-    new CSPHandler(CSPHandler::SecurityType::CSP),
-    new CSPHandler(CSPHandler::SecurityType::CSP_REPORT_ONLY),
-    new ImeHandler,
-    new MetaDataHandler,
-    new NavigationHandler,
-    new PermissionsHandler,
-    new ServiceHandler,
-    new SettingHandler,
-    new SplashScreenHandler,
-    new TizenApplicationHandler,
-    new WarpHandler,
-    new WidgetHandler,
-    new BackgroundCategoryHandler
+  std::vector<std::shared_ptr<parser::ManifestHandler>> handlers = {
+    std::make_shared<AccountHandler>(),
+    std::make_shared<AppControlHandler>(),
+    std::make_shared<ApplicationIconsHandler>(),
+    std::make_shared<AppWidgetHandler>(),
+    std::make_shared<CategoryHandler>(),
+    std::make_shared<ContentHandler>(),
+    std::make_shared<CSPHandler>(CSPHandler::SecurityType::CSP),
+    std::make_shared<CSPHandler>(CSPHandler::SecurityType::CSP_REPORT_ONLY),
+    std::make_shared<ImeHandler>(),
+    std::make_shared<MetaDataHandler>(),
+    std::make_shared<NavigationHandler>(),
+    std::make_shared<PermissionsHandler>(),
+    std::make_shared<ServiceHandler>(),
+    std::make_shared<SettingHandler>(),
+    std::make_shared<SplashScreenHandler>(),
+    std::make_shared<TizenApplicationHandler>(),
+    std::make_shared<WarpHandler>(),
+    std::make_shared<WidgetHandler>(),
+    std::make_shared<BackgroundCategoryHandler>()
   };
 
   std::unique_ptr<parser::ManifestHandlerRegistry> registry(

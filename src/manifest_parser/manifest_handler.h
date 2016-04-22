@@ -104,7 +104,7 @@ class ManifestHandlerRegistry {
  public:
   ManifestHandlerRegistry();
   explicit ManifestHandlerRegistry(
-      const std::vector<ManifestHandler*>& handlers);
+      const std::vector<std::shared_ptr<ManifestHandler>>& handlers);
   ~ManifestHandlerRegistry();
 
   // Register a manifest handler for key, which is provided by Key() method
