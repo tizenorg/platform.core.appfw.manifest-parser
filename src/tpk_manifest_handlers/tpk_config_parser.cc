@@ -37,18 +37,18 @@ namespace tpk {
 namespace parse {
 
 TPKConfigParser::TPKConfigParser() {
-  std::vector<parser::ManifestHandler*> handlers = {
-  new AccountHandler,
-  new AuthorHandler,
-  new DescriptionHandler,
-  new PackageHandler,
-  new PrivilegesHandler,
-  new ProfileHandler,
-  new WidgetApplicationHandler,
-  new WatchApplicationHandler,
-  new ServiceApplicationHandler,
-  new UIApplicationHandler,
-  new ShortcutHandler
+  std::vector<std::shared_ptr<parser::ManifestHandler>> handlers = {
+    std::make_shared<AccountHandler>(),
+    std::make_shared<AuthorHandler>(),
+    std::make_shared<DescriptionHandler>(),
+    std::make_shared<PackageHandler>(),
+    std::make_shared<PrivilegesHandler>(),
+    std::make_shared<ProfileHandler>(),
+    std::make_shared<WidgetApplicationHandler>(),
+    std::make_shared<WatchApplicationHandler>(),
+    std::make_shared<ServiceApplicationHandler>(),
+    std::make_shared<UIApplicationHandler>(),
+    std::make_shared<ShortcutHandler>()
   };
 
   std::unique_ptr<parser::ManifestHandlerRegistry> registry(

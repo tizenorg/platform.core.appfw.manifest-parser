@@ -131,8 +131,8 @@ class ParseManifestTest : public testing::Test {
 TEST_F(ParseManifestTest, HandlesProperManifestFile) {
   bf::path path =
       "/usr/share/manifest-parser-ut/test_samples/good_manifest.xml";
-  std::vector<parser::ManifestHandler*> handlers = {
-    new wgt::parse::TizenApplicationHandler,
+  std::vector<std::shared_ptr<parser::ManifestHandler>> handlers = {
+    std::make_shared<wgt::parse::TizenApplicationHandler>(),
   };
 
   std::unique_ptr<ManifestHandlerRegistry> registry;
@@ -153,8 +153,8 @@ TEST_F(ParseManifestTest, HandlesProperManifestFile) {
 // Tests manifest parser with broken manifest
 TEST_F(ParseManifestTest, HandlesBrokenManifestFile) {
   bf::path path = "/usr/share/manifest-parser-ut/test_samples/bad_manifest.xml";
-  std::vector<parser::ManifestHandler*> handlers = {
-    new wgt::parse::TizenApplicationHandler,
+  std::vector<std::shared_ptr<parser::ManifestHandler>> handlers = {
+      std::make_shared<wgt::parse::TizenApplicationHandler>(),
   };
 
   std::unique_ptr<ManifestHandlerRegistry> registry =

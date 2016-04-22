@@ -79,10 +79,9 @@ ManifestHandlerRegistry::ManifestHandlerRegistry() {
 }
 
 ManifestHandlerRegistry::ManifestHandlerRegistry(
-    const std::vector<ManifestHandler*>& handlers) {
-  for (std::vector<ManifestHandler*>::const_iterator it = handlers.begin();
-       it != handlers.end(); ++it) {
-    handlers_[(*it)->Key()] = std::shared_ptr<ManifestHandler>(*it);
+    const std::vector<std::shared_ptr<ManifestHandler>>& handlers) {
+  for (auto it = handlers.begin(); it != handlers.end(); ++it) {
+    handlers_[(*it)->Key()] = *it;
   }
 
   ReorderHandlersGivenDependencies();
