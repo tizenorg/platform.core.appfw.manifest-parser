@@ -21,7 +21,7 @@
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/utils/iri_util.h"
 #include "manifest_parser/utils/language_tag_validator.h"
-#include "manifest_parser/utils/logging.h"
+#include "manifest_parser/utils/logger.h"
 #include "wgt_manifest_handlers/account_handler.h"
 #include "wgt_manifest_handlers/app_control_handler.h"
 #include "wgt_manifest_handlers/application_icons_handler.h"

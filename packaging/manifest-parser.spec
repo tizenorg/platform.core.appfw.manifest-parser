@@ -10,6 +10,7 @@ Source100:      %{name}.manifest
 BuildRequires:  boost-devel
 BuildRequires:  cmake
 BuildRequires:  gtest-devel
+BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(pkgmgr-parser)
 BuildRequires:  pkgconfig(pkgmgr-info)
 BuildRequires:  pkgconfig(libiri)

@@ -12,7 +12,7 @@
 #include <set>
 
 #include "manifest_parser/utils/iri_util.h"
-#include "manifest_parser/utils/logging.h"
+#include "manifest_parser/utils/logger.h"
 #include "manifest_parser/utils/string_util.h"
 #include "wgt_manifest_handlers/application_manifest_constants.h"
 

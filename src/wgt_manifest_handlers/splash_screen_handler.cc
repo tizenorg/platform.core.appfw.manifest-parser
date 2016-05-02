@@ -15,7 +15,7 @@
 #include <map>
 #include <utility>
 
-#include "manifest_parser/utils/logging.h"
+#include "manifest_parser/utils/logger.h"
 #include "wgt_manifest_handlers/application_manifest_constants.h"
 
 namespace bf = boost::filesystem;

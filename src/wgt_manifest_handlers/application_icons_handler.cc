@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <string>
 
-#include "manifest_parser/utils/logging.h"
+#include "manifest_parser/utils/logger.h"
 
 namespace {
 

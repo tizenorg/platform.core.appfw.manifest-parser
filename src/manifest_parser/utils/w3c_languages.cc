@@ -10,7 +10,7 @@
 #include <fstream>
 #include <vector>
 
-#include "manifest_parser/utils/logging.h"
+#include "manifest_parser/utils/logger.h"
 
 namespace bf = boost::filesystem;
 namespace {

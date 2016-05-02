@@ -5,7 +5,7 @@
 #include "wgt_manifest_handlers/account_handler.h"
 
 #include "manifest_parser/utils/language_tag_validator.h"
-#include "manifest_parser/utils/logging.h"
+#include "manifest_parser/utils/logger.h"
 #include "wgt_manifest_handlers/application_manifest_constants.h"
 
 namespace {
