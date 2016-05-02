@@ -10,7 +10,7 @@
 
 #include "manifest_parser/manifest_util.h"
 #include "manifest_parser/utils/iri_util.h"
-#include "manifest_parser/utils/logging.h"
+#include "manifest_parser/utils/logger.h"
 #include "manifest_parser/values.h"
 #include "tpk_manifest_handlers/application_manifest_constants.h"
 

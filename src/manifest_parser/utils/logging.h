@@ -5,6 +5,16 @@
 #ifndef MANIFEST_PARSER_UTILS_LOGGING_H_
 #define MANIFEST_PARSER_UTILS_LOGGING_H_
 
+#include <dlog/dlog.h>
+
+#ifndef PROJECT_TAG
+#warning "PROJECT_TAG must be specified before including this file"
+#endif
+
+#ifdef LOG
+#undef LOG
+#endif
+
 #include <cassert>
 #include <iomanip>
 #include <iostream>
@@ -19,6 +29,8 @@ enum class LogLevel {
   LOG_INFO,
   LOG_DEBUG,
 };
+
+log_priority LogLevelToPriority(LogLevel level);
 
 template<LogLevel> struct LogTag;
 template<> struct LogTag<LogLevel::LOG_ERROR> {
@@ -36,16 +48,28 @@ template<> struct LogTag<LogLevel::LOG_DEBUG> {
 
 class LogCatcher {
  public:
-  LogCatcher() { }
+  explicit LogCatcher(LogLevel level, const char* tag)
+    : level_(level), tag_(tag) { }
   void operator&(const std::ostream& str) const {
-    std::cerr << static_cast<const std::ostringstream*>(&str)->str()
-              << std::endl;
+    dlog_print(LogLevelToPriority(level_), tag_.c_str(),
+               static_cast<const std::ostringstream*>(&str)->str().c_str());
+    if (level_ == LogLevel::LOG_ERROR) {
+      std::cerr << static_cast<const std::ostringstream*>(&str)->str()
+        << std::endl;
+    }
   }
+ private:
+  LogLevel level_;
+  std::string tag_;
 };
 
 }  // namespace utils
 
 inline static const constexpr char* __tag_for_logging() {
+  return "";
+}
+
+inline static const constexpr char* __tag_for_project() {
   return "";
 }
 
@@ -61,7 +85,8 @@ inline static const constexpr char* __tag_for_logging() {
 //     where:
 //       LEVEL = ERROR | WARNING | INFO | DEBUG
 #define LOG(LEVEL)                                                             \
-    ::utils::LogCatcher() & std::ostringstream()                               \
+    ::utils::LogCatcher(                                                       \
+      ::utils::LogLevel::LOG_ ## LEVEL, PROJECT_TAG) & std::ostringstream()    \
       << std::string(::utils::LogTag<::utils::LogLevel::LOG_ ## LEVEL>::value) \
       << " " << std::setw(20) << std::left << __tag_for_logging()              \
       << std::setw(0) << " : "                                                 \
