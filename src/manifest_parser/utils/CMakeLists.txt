@@ -1,5 +1,6 @@
 # Target - sources
 SET(SRCS
+  logging.cc
   iri_util.cc
   string_util.cc
   language_tag_validator.cc
