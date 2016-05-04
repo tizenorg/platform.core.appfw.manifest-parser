@@ -78,6 +78,18 @@ bool InitializeParsing(const parser::DictionaryValue& app_dict,
   if (!InitializeParsingElement(app_dict, tpk_app_keys::kImageKey,
                                 parsingFunc, widgetapplicationinfo, error))
     return false;
+  parsingFunc = ParseMetaData<WatchApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kMetaDataKey,
+                                parsingFunc, widgetapplicationinfo, error))
+    return false;
+  parsingFunc = ParseCategory<WatchApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kCategoryKey,
+                                parsingFunc, widgetapplicationinfo, error))
+    return false;
+  parsingFunc = ParseBackgroundCategoryElement<WatchApplicationSingleEntry>;
+  if (!InitializeParsingElement(app_dict, tpk_app_keys::kBackgroundCategoryKey,
+                                parsingFunc, widgetapplicationinfo, error))
+    return false;
   return true;
 }
 

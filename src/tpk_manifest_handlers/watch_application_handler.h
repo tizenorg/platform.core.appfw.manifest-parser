@@ -84,6 +84,7 @@ class WatchApplicationInfo : public ApplicationInfo {
 struct WatchApplicationSingleEntry :
     public ApplicationSingleEntry<WatchApplicationInfo> {
   ApplicationImagesInfo app_images;
+  std::vector<BackgroundCategoryInfo> background_category;
 };
 
 using WatchApplicationInfoList =
