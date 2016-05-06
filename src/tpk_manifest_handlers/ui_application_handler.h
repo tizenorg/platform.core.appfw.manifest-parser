@@ -29,62 +29,62 @@ class UIApplicationInfo : public ApplicationInfo {
    * @brief set_launch_mode sets launch mdoe
    * @param launch_mode
    */
-  void set_type(const std::string& type) {
-    type_ = type;
+  void set_type(std::string type) {
+    type_ = std::move(type);
   }
-  void set_process_pool(const std::string& process_pool) {
-    process_pool_ = process_pool;
+  void set_process_pool(std::string process_pool) {
+    process_pool_ = std::move(process_pool);
   }
-  void set_launch_mode(const std::string& launch_mode) {
-    launch_mode_ = launch_mode;
+  void set_launch_mode(std::string launch_mode) {
+    launch_mode_ = std::move(launch_mode);
   }
   /**
    * @brief set_multiple sets multiple
    * @param multiple
    */
-  void set_multiple(const std::string& multiple) {
-    multiple_ = multiple;
+  void set_multiple(std::string multiple) {
+    multiple_ = std::move(multiple);
   }
   /**
    * @brief set_nodisplay sets no display
    * @param nodisplay
    */
-  void set_nodisplay(const std::string& nodisplay) {
-    nodisplay_ = nodisplay;
+  void set_nodisplay(std::string nodisplay) {
+    nodisplay_ = std::move(nodisplay);
   }
   /**
    * @brief set_taskmanage set task manage
    * @param taskmanage
    */
-  void set_taskmanage(const std::string& taskmanage) {
-    taskmanage_ = taskmanage;
+  void set_taskmanage(std::string taskmanage) {
+    taskmanage_ = std::move(taskmanage);
   }
-  void set_uigadget(const std::string& uigadget) {
-    uigadget_ = uigadget;
+  void set_uigadget(std::string uigadget) {
+    uigadget_ = std::move(uigadget);
   }
-  void set_submode(const std::string& submode) {
-    submode_ = submode;
+  void set_submode(std::string submode) {
+    submode_ = std::move(submode);
   }
-  void set_submode_mainid(const std::string& submode_mainid) {
-    submode_mainid_ = submode_mainid;
+  void set_submode_mainid(std::string submode_mainid) {
+    submode_mainid_ = std::move(submode_mainid);
   }
-  void set_indicator_display(const std::string& indicator_display) {
-    indicator_display_ = indicator_display;
+  void set_indicator_display(std::string indicator_display) {
+    indicator_display_ = std::move(indicator_display);
   }
-  void set_portrait_image(const std::string& portrait_image) {
-    portrait_image_ = portrait_image;
+  void set_portrait_image(std::string portrait_image) {
+    portrait_image_ = std::move(portrait_image);
   }
-  void set_landscape_image(const std::string& landscape_image) {
-    landscape_image_ = landscape_image;
+  void set_landscape_image(std::string landscape_image) {
+    landscape_image_ = std::move(landscape_image);
   }
-  void set_effectimage_type(const std::string& effectimage_type) {
-    effectimage_type_ = effectimage_type;
+  void set_effectimage_type(std::string effectimage_type) {
+    effectimage_type_ = std::move(effectimage_type);
   }
-  void set_hwacceleration(const std::string& hwacceleration) {
-    hwacceleration_ = hwacceleration;
+  void set_hwacceleration(std::string hwacceleration) {
+    hwacceleration_ = std::move(hwacceleration);
   }
-  void set_splash_screen_display(const std::string& splash_screen_display) {
-    splash_screen_display_ = splash_screen_display;
+  void set_splash_screen_display(std::string splash_screen_display) {
+    splash_screen_display_ = std::move(splash_screen_display);
   }
 
   const std::string& type() const {

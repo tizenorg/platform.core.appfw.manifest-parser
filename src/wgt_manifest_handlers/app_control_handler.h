@@ -80,8 +80,8 @@ class AppControlInfo {
   const std::string& reload() const {
     return reload_;
   }
-  void set_reload(const std::string &rel)  {
-    reload_ = rel;
+  void set_reload(std::string rel)  {
+    reload_ = std::move(rel);
   }
 
  private:

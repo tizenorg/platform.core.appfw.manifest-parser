@@ -44,17 +44,17 @@ class SplashScreenInfo : public parser::ManifestData {
 
   static std::string Key();
 
-  void set_src(const std::string& src) { src_ = src; }
+  void set_src(std::string src) { src_ = std::move(src); }
   const std::string& src() const { return src_; }
   void set_splash_screen_data(
       std::pair<ScreenOrientation, SplashScreenData> splash_screen_data) {
-    splash_screen_data_.insert(splash_screen_data);
+    splash_screen_data_.insert(std::move(splash_screen_data));
   }
   const std::map<ScreenOrientation, SplashScreenData>& splash_screen_data()
       const {
     return splash_screen_data_;
   }
-  void set_ready_when(ReadyWhen ready_when) { ready_when_ = ready_when; }
+  void set_ready_when(ReadyWhen ready_when) { ready_when_ = std::move(ready_when); }
   ReadyWhen ready_when() const { return ready_when_; }
 
  private:

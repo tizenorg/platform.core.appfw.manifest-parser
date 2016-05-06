@@ -9,6 +9,7 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/utils/iri_util.h"
@@ -77,12 +78,12 @@ extern const char kSplashScreenAppControlOperationKey[];
 
 class ApplicationInfo : public parser::ManifestData {
  public:
-  void set_appid(const std::string& appid) {
-    appid_ = appid;
+  void set_appid(std::string appid) {
+    appid_ = std::move(appid);
   }
 
-  void set_exec(const std::string& exec) {
-    exec_ = exec;
+  void set_exec(std::string exec) {
+    exec_ = std::move(exec);
   }
 
   const std::string& appid() const {

@@ -59,19 +59,19 @@ class WatchApplicationInfo : public ApplicationInfo {
     return type_;
   }
 
-  void set_ambient_support(const std::string& ambient_support) {
-    ambient_support_ = ambient_support;
+  void set_ambient_support(std::string ambient_support) {
+    ambient_support_ = std::move(ambient_support);
   }
 
-  void set_icon(const std::string& icon) {
-    icon_ = icon;
+  void set_icon(std::string icon) {
+    icon_ = std::move(icon);
   }
 
-  void set_label(const std::string& label) {
-    label_ = label;
+  void set_label(std::string label) {
+    label_ = std::move(label);
   }
-  void set_type(const std::string& type) {
-    type_ = type;
+  void set_type(std::string type) {
+    type_ = std::move(type);
   }
 
  private:

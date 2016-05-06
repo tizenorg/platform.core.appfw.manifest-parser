@@ -11,6 +11,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "custom_handlers/item_handler.h"
 
@@ -46,7 +47,7 @@ class ItemListInfo : public parser::ManifestData {
     items_.push_back(info);
   }
   std::shared_ptr<ItemInfo> get_item(int idx) const { return items_[idx]; }
-  void set_items_size(int items_size) { items_size_ = items_size; }
+  void set_items_size(int items_size) { items_size_ = std::move(items_size); }
   int items_size() const { return items_size_; }
 };
 

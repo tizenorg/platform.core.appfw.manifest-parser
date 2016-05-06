@@ -8,6 +8,7 @@
 #include <utility>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "manifest_parser/manifest_handler.h"
 
@@ -31,8 +32,8 @@ class AccountInfo : public parser::ManifestData {
     return accounts_;
   }
 
-  void set_account(const SingleAccountInfo& single_account) {
-    accounts_.push_back(single_account);
+  void set_account(SingleAccountInfo single_account) {
+    accounts_.push_back(std::move(single_account));
   }
 
  private:

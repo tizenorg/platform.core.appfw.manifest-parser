@@ -30,7 +30,7 @@ class ImeInfo : public parser::ManifestData {
    * @brief set_uuid sets uuid string
    * @param uuid
    */
-  void set_uuid(const std::string& uuid) { uuid_ = uuid; }
+  void set_uuid(std::string uuid) { uuid_ = std::move(uuid); }
   const std::vector<std::string>& languages() const {
     return languages_;
   }

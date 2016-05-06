@@ -22,7 +22,7 @@ class ManifestData {
   ManifestData() : exists_(true) {}
   virtual ~ManifestData() {}
   bool exists() const { return exists_; }
-  void set_exists(bool exists) { exists_ = exists; }
+  void set_exists(bool exists) { exists_ = std::move(exists); }
  private:
   // This member should be set to false in case of there are no
   // elements for specific handler to be parsed in manifest

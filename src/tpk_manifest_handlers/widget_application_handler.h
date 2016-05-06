@@ -29,25 +29,25 @@ class WidgetApplicationInfo : public ApplicationInfo {
    * @brief set_launch_mode sets launch mdoe
    * @param launch_mode
    */
-  void set_launch_mode(const std::string& launch_mode) {
-    launch_mode_ = launch_mode;
+  void set_launch_mode(std::string launch_mode) {
+    launch_mode_ = std::move(launch_mode);
   }
   /**
    * @brief set_multiple sets multiple
    * @param multiple
    */
-  void set_multiple(const std::string& multiple) {
-    multiple_ = multiple;
+  void set_multiple(std::string multiple) {
+    multiple_ = std::move(multiple);
   }
   /**
    * @brief set_nodisplay sets no display
    * @param nodisplay
    */
-  void set_nodisplay(const std::string& nodisplay) {
-    nodisplay_ = nodisplay;
+  void set_nodisplay(std::string nodisplay) {
+    nodisplay_ = std::move(nodisplay);
   }
-  void set_hwacceleration(const std::string& hwacceleration) {
-    hwacceleration_ = hwacceleration;
+  void set_hwacceleration(std::string hwacceleration) {
+    hwacceleration_ = std::move(hwacceleration);
   }
 
   /**

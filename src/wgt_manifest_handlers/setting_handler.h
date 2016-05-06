@@ -44,7 +44,7 @@ class SettingInfo : public parser::ManifestData {
    * @brief set_hwkey_enabled sets value of hw_key to true or false
    * @param enabled
    */
-  void set_hwkey_enabled(bool enabled) { hwkey_enabled_ = enabled; }
+  void set_hwkey_enabled(bool enabled) { hwkey_enabled_ = std::move(enabled); }
   /**
    * @brief hwkey_enabled
    * @return  current value of hw_key
@@ -55,7 +55,7 @@ class SettingInfo : public parser::ManifestData {
    * @param orientation
    */
   void set_screen_orientation(ScreenOrientation orientation) {
-    screen_orientation_ = orientation;
+    screen_orientation_ = std::move(orientation);
   }
   /**
    * @brief screen_orientation
@@ -67,7 +67,7 @@ class SettingInfo : public parser::ManifestData {
    * @brief set_encryption_enabled sets if encryption is enabled or disabled
    * @param enabled
    */
-  void set_encryption_enabled(bool enabled) { encryption_enabled_ = enabled; }
+  void set_encryption_enabled(bool enabled) { encryption_enabled_ = std::move(enabled); }
   /**
    * @brief encryption_enabled
    * @return true if encryption is enable
@@ -78,7 +78,7 @@ class SettingInfo : public parser::ManifestData {
    * @param enabled
    */
   void set_context_menu_enabled(bool enabled) {
-    context_menu_enabled_ = enabled;
+    context_menu_enabled_ = std::move(enabled);
   }
   /**
    * @brief context_menu_enabled
@@ -90,7 +90,7 @@ class SettingInfo : public parser::ManifestData {
    * @param enabled
    */
   void set_background_support_enabled(bool enabled) {
-    background_support_enabled_ = enabled;
+    background_support_enabled_ = std::move(enabled);
   }
   /**
    * @brief background_support_enabled
@@ -104,7 +104,7 @@ class SettingInfo : public parser::ManifestData {
    * @param installLocation
    */
   void set_install_location(InstallLocation installLocation) {
-    install_location_ = installLocation;
+    install_location_ = std::move(installLocation);
   }
   /**
    * @brief install_location
@@ -115,7 +115,7 @@ class SettingInfo : public parser::ManifestData {
    * @brief set_no_display sets is there is no display
    * @param enabled
    */
-  void set_no_display(bool enabled) { no_display_ = enabled; }
+  void set_no_display(bool enabled) { no_display_ = std::move(enabled); }
   /**
    * @brief no_display
    * @return if there is no supoort for display
@@ -125,7 +125,7 @@ class SettingInfo : public parser::ManifestData {
    * @brief set_indicator_presence sets indicator presence
    * @param enabled
    */
-  void set_indicator_presence(bool enabled) { indicator_presence_ = enabled; }
+  void set_indicator_presence(bool enabled) { indicator_presence_ = std::move(enabled); }
   /**
    * @brief indicator_presence
    * @return  if the indicator is present
@@ -135,7 +135,7 @@ class SettingInfo : public parser::ManifestData {
    * @brief set_backbutton_presence sets if backbutton is present
    * @param enabled
    */
-  void set_backbutton_presence(bool enabled) { backbutton_presence_ = enabled; }
+  void set_backbutton_presence(bool enabled) { backbutton_presence_ = std::move(enabled); }
   /**
    * @brief backbutton_presence
    * @return true if backbutton is present
@@ -145,7 +145,7 @@ class SettingInfo : public parser::ManifestData {
    * @brief set_user_agent sets user_agent()
    * @param user_agent
    */
-  void set_user_agent(std::string user_agent) { user_agent_ = user_agent; }
+  void set_user_agent(std::string user_agent) { user_agent_ = std::move(user_agent); }
   /**
    * @brief user_agent
    * @return actual user agent
@@ -155,7 +155,7 @@ class SettingInfo : public parser::ManifestData {
    * @brief set_sound_mode sets sound mode
    * @param soundMode
    */
-  void set_sound_mode(SoundMode soundMode) { sound_mode_ = soundMode; }
+  void set_sound_mode(SoundMode soundMode) { sound_mode_ = std::move(soundMode); }
   /**
    * @brief sound_mode
    * @return current sound mode
@@ -166,7 +166,7 @@ class SettingInfo : public parser::ManifestData {
    * @param enabled
    */
   void set_background_vibration(bool enabled) {
-    background_vibration_ = enabled;
+    background_vibration_ = std::move(enabled);
   }
   /**
    * @brief background_vibration

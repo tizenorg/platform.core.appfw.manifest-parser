@@ -5,6 +5,8 @@
 #include <boost/filesystem/path.hpp>
 #include <gtest/gtest.h>
 
+#include <memory>
+
 #include "manifest_parser/manifest_parser.h"
 
 namespace bf = boost::filesystem;
@@ -28,15 +30,15 @@ class TizenApplicationInfo : public parser::ManifestData {
   TizenApplicationInfo() {}
   virtual ~TizenApplicationInfo() {}
 
-  void set_id(const std::string& id) {
-    id_ = id;
+  void set_id(std::string id) {
+    id_ = std::move(id);
   }
-  void set_package(const std::string& package) {
-    package_ = package;
+  void set_package(std::string package) {
+    package_ = std::move(package);
   }
   void set_required_version(
-      const std::string& required_version) {
-    required_version_ = required_version;
+      std::string required_version) {
+    required_version_ = std::move(required_version);
   }
   const std::string& id() const {
     return id_;

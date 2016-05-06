@@ -31,8 +31,8 @@ class ServiceInfo {
    * @return string id
    */
   const std::string& id() const { return id_; }
-  void set_id(const std::string& id) {
-    id_ = id;
+  void set_id(std::string id) {
+    id_ = std::move(id);
   }
   /**
    * @brief auto_restart
@@ -44,7 +44,7 @@ class ServiceInfo {
    * @param auto_restart
    */
   void set_auto_restart(bool auto_restart) {
-    auto_restart_ = auto_restart;
+    auto_restart_ = std::move(auto_restart);
   }
   /**
    * @brief on_boot
@@ -52,7 +52,7 @@ class ServiceInfo {
    */
   bool on_boot() const { return on_boot_; }
   void set_on_boot(bool on_boot) {
-    on_boot_ = on_boot;
+    on_boot_ = std::move(on_boot);
   }
   /**
    * @brief names
@@ -65,8 +65,8 @@ class ServiceInfo {
    * @brief set_names sets name lang vector
    * @param names
    */
-  void set_names(const LangNameVector& names) {
-    names_ = names;
+  void set_names(LangNameVector names) {
+    names_ = std::move(names);
   }
   /**
    * @brief icon
@@ -79,8 +79,8 @@ class ServiceInfo {
    * @brief set_icon set string to the icon
    * @param icon
    */
-  void set_icon(const std::string& icon) {
-    icon_ = icon;
+  void set_icon(std::string icon) {
+    icon_ = std::move(icon);
   }
   /**
    * @brief content
@@ -94,8 +94,8 @@ class ServiceInfo {
    * @brief set_content sets content string
    * @param content
    */
-  void set_content(const std::string& content) {
-    content_ = content;
+  void set_content(std::string content) {
+    content_ = std::move(content);
   }
   /**
    * @brief description
@@ -108,8 +108,8 @@ class ServiceInfo {
    * @brief set_description sets description
    * @param description
    */
-  void set_description(const std::string& description) {
-    description_ = description;
+  void set_description(std::string description) {
+    description_ = std::move(description);
   }
   /**
    * @brief categories
@@ -123,8 +123,8 @@ class ServiceInfo {
    * @brief set_categories sets categories
    * @param categories
    */
-  void set_categories(const std::vector<std::string>& categories) {
-    categories_ = categories;
+  void set_categories(std::vector<std::string> categories) {
+    categories_ = std::move(categories);
   }
   /**
    * @brief metadata_set
@@ -137,8 +137,8 @@ class ServiceInfo {
    * @brief set_metadata_set sets metadata
    * @param metadata_set
    */
-  void set_metadata_set(const KeyValueVector& metadata_set) {
-    metadata_set_ = metadata_set;
+  void set_metadata_set(KeyValueVector metadata_set) {
+    metadata_set_ = std::move(metadata_set);
   }
 
  private:

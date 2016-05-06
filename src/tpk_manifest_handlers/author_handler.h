@@ -26,22 +26,22 @@ class AuthorInfo : public parser::ManifestData {
    * @brief set_email sets email
    * @param email
    */
-  void set_email(const std::string& email) {
-    email_ = email;
+  void set_email(std::string email) {
+    email_ = std::move(email);
   }
   /**
    * @brief set_href sets href
    * @param href
    */
-  void set_href(const std::string& href) {
-    href_ = href;
+  void set_href(std::string href) {
+    href_ = std::move(href);
   }
   /**
    * @brief set_name sets name
    * @param name
    */
-  void set_name(const std::string& name) {
-    name_ = name;
+  void set_name(std::string name) {
+    name_ = std::move(name);
   }
   /**
    * @brief email
