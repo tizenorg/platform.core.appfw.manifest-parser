@@ -9,6 +9,7 @@
 #include <manifest_parser/manifest_handler.h>
 
 #include <string>
+#include <utility>
 
 namespace example {
 
@@ -33,8 +34,8 @@ class ItemInfo : public parser::ManifestData {
  public:
   ItemInfo() {}
   ~ItemInfo() {}
-  void set_type(const std::string& type) { type_ = type; }
-  void set_value(const std::string& value) { value_ = value; }
+  void set_type(std::string type) { type_ = std::move(type); }
+  void set_value(std::string value) { value_ = std::move(value); }
   const std::string& type() const { return type_; }
   const std::string& value() const { return value_; }
 

@@ -30,47 +30,47 @@ class PackageInfo : public parser::ManifestData {
    * @brief set_xmlns xmlns
    * @param xmlns
    */
-  void set_xmlns(const std::string& xmlns) {
-    xmlns_ = xmlns;
+  void set_xmlns(std::string xmlns) {
+    xmlns_ = std::move(xmlns);
   }
   /**
    * @brief set_api_version set api version
    * @param api_version
    */
-  void set_api_version(const std::string& api_version) {
-    api_version_ = api_version;
+  void set_api_version(std::string api_version) {
+    api_version_ = std::move(api_version);
   }
   /**
    * @brief set_package set package
    * @param package
    */
-  void set_package(const std::string& package) {
-    package_ = package;
+  void set_package(std::string package) {
+    package_ = std::move(package);
   }
   /**
    * @brief set_version sets version
    * @param version
    */
-  void set_version(const std::string& version) {
-    version_ = version;
+  void set_version(std::string version) {
+    version_ = std::move(version);
   }
-  void set_type(const std::string& type) {
-    type_ = type;
+  void set_type(std::string type) {
+    type_ = std::move(type);
   }
   /**
    * @brief set_install_location sets install location
    * @param install_location
    */
-  void set_install_location(const std::string& install_location) {
-    install_location_ = install_location;
+  void set_install_location(std::string install_location) {
+    install_location_ = std::move(install_location);
   }
 
-  void set_nodisplay_setting(const std::string& nodisplay_setting) {
-    nodisplay_setting_ = nodisplay_setting;
+  void set_nodisplay_setting(std::string nodisplay_setting) {
+    nodisplay_setting_ = std::move(nodisplay_setting);
   }
 
-  void set_preload(const std::string& preload) {
-    preload_ = preload;
+  void set_preload(std::string preload) {
+    preload_ = std::move(preload);
   }
 
   void AddLabel(const std::string& lang, const std::string& text) {
