@@ -36,17 +36,17 @@ class ContentInfo : public parser::ManifestData {
    * @brief set_src sets source
    * @param src
    */
-  void set_src(const std::string& src) { src_ = src; }
+  void set_src(std::string src) { src_ = std::move(src); }
   /**
    * @brief set_type sets type
    * @param type
    */
-  void set_type(const std::string& type) { type_ = type; }
+  void set_type(std::string type) { type_ = std::move(type); }
   /**
    * @brief set_encoding sets encoding
    * @param encoding
    */
-  void set_encoding(const std::string& encoding) { encoding_ = encoding; }
+  void set_encoding(std::string encoding) { encoding_ = std::move(encoding); }
   /**
    * @brief is_tizen_content
    * @return if is tizen content

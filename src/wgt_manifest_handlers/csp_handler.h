@@ -28,8 +28,8 @@ class CSPInfo : public parser::ManifestData {
    * @brief set_security_rules sets up string with security rules
    * @param security_rules
    */
-  void set_security_rules(const std::string& security_rules) {
-    security_rules_ = security_rules;
+  void set_security_rules(std::string security_rules) {
+    security_rules_ = std::move(security_rules);
   }
   /**
    * @brief security_rules

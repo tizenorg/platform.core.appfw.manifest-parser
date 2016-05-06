@@ -23,33 +23,33 @@ class ServiceApplicationInfo : public ApplicationInfo {
    * @param key string
    */
   static std::string key();
-  void set_type(const std::string& type) {
-    type_ = type;
+  void set_type(std::string type) {
+    type_ = std::move(type);
   }
-  void set_process_pool(const std::string& process_pool) {
-    process_pool_ = process_pool;
+  void set_process_pool(std::string process_pool) {
+    process_pool_ = std::move(process_pool);
   }
   /**
    * @brief set_auto_restart sets auto restart
    * @param auto_restart
    */
-  void set_auto_restart(const std::string& auto_restart) {
-    auto_restart_ = auto_restart;
+  void set_auto_restart(std::string auto_restart) {
+    auto_restart_ = std::move(auto_restart);
   }
   /**
    * @brief set_on_boot sets on boot
    * @param on_boot
    */
-  void set_on_boot(const std::string& on_boot) {
-    on_boot_ = on_boot;
+  void set_on_boot(std::string on_boot) {
+    on_boot_ = std::move(on_boot);
   }
 
-  void set_multiple(const std::string& multiple) {
-    multiple_ = multiple;
+  void set_multiple(std::string multiple) {
+    multiple_ = std::move(multiple);
   }
 
-  void set_taskmanage(const std::string& taskmanage) {
-    taskmanage_ = taskmanage;
+  void set_taskmanage(std::string taskmanage) {
+    taskmanage_ = std::move(taskmanage);
   }
 
   const std::string& type() const {
