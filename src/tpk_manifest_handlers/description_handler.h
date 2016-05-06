@@ -24,15 +24,15 @@ class DescriptionInfo {
    * @brief set_description sets description
    * @param description
    */
-  void set_description(const std::string& description) {
-    description_ = description;
+  void set_description(std::string description) {
+    description_ = std::move(description);
   }
   /**
    * @brief set_xml_lang sets xml lang
    * @param xml_lang
    */
-  void set_xml_lang(const std::string& xml_lang) {
-    xml_lang_ = xml_lang;
+  void set_xml_lang(std::string xml_lang) {
+    xml_lang_ = std::move(xml_lang);
   }
   /**
    * @brief description

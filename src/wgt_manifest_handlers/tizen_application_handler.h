@@ -9,6 +9,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "manifest_parser/manifest_handler.h"
 #include "manifest_parser/values.h"
@@ -24,18 +25,18 @@ class TizenApplicationInfo : public parser::ManifestData {
 
   static std::string Key();
 
-  void set_id(const std::string& id) {
-    id_ = id;
+  void set_id(std::string id) {
+    id_ = std::move(id);
   }
-  void set_launch_mode(const std::string& launch_mode) {
-    launch_mode_ = launch_mode;
+  void set_launch_mode(std::string launch_mode) {
+    launch_mode_ = std::move(launch_mode);
   }
-  void set_package(const std::string& package) {
-    package_ = package;
+  void set_package(std::string package) {
+    package_ = std::move(package);
   }
   void set_required_version(
-      const std::string& required_version) {
-    required_version_ = required_version;
+      std::string required_version) {
+    required_version_ = std::move(required_version);
   }
   void set_ambient_support(bool ambient_support) {
     ambient_support_ = ambient_support;
