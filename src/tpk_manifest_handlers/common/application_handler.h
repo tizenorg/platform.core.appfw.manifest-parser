@@ -72,6 +72,7 @@ extern const char kSplashScreenOrientationKey[];
 extern const char kSplashScreenIndicatorDisplayKey[];
 extern const char kSplashScreenOperationKey[];
 extern const char kSplashScreenAppControlOperationKey[];
+extern const char kSplashScreenColorDepthKey[];
 
 }  // namespace tpk_app_keys
 
@@ -285,8 +286,11 @@ bool ParseSplashScreen(const parser::DictionaryValue& dict,
     std::string operation;
     item_splashscreen->GetString(
         tpk_app_keys::kSplashScreenAppControlOperationKey, &operation);
+    std::string colordepth;
+    item_splashscreen->GetString(
+        tpk_app_keys::kSplashScreenColorDepthKey, &colordepth);
     info->app_splashscreens.AddSplashScreen(ApplicationSplashScreen(src, type,
-        dpi, orientation, indicatordisplay, operation));
+        dpi, orientation, indicatordisplay, operation, colordepth));
   }
 
   return true;
