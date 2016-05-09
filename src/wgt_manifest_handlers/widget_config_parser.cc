@@ -255,12 +255,11 @@ bool WidgetConfigParser::CheckStartFile() {
       std::static_pointer_cast<const ContentInfo>(parser_->GetManifestData(
           ContentInfo::Key()));
   if (content_info) {
-    std::string content = content_info->src();
-    if (content_info->is_tizen_content()) {
-      // tizen:content may be external url
-      if (parser::utils::IsValidIRI(content))
-        return true;
-    }
+    const std::string& content = content_info->src();
+    // To support any exising applications
+    // content as well as tizen:content may be external url
+    if (parser::utils::IsValidIRI(content))
+      return true;
 
     if (CheckW3CContentSrcExits(widget_path_, content)) {
       // Content is valid
