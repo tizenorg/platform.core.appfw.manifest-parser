@@ -479,13 +479,13 @@ bool AppWidgetHandler::Parse(
     const parser::Manifest& manifest,
     std::shared_ptr<parser::ManifestData>* output,
     std::string* error) {
-  if (!manifest.HasPath(kTizenAppWidgetKey))
+  if (!manifest.HasPath(kTizenAppWidgetFullKey))
     return false;
 
   AppWidgetVector app_widgets;
 
   for (const auto& dict : parser::GetOneOrMany(manifest.value(),
-      kTizenAppWidgetKey, kTizenNamespacePrefix)) {
+      kTizenAppWidgetFullKey, kTizenNamespacePrefix)) {
     if (!ParseAppWidget(*dict, kTizenAppWidgetKey, &app_widgets, error))
       return false;
   }
