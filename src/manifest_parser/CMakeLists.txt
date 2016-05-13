@@ -12,6 +12,8 @@ SET(INCLUDES
   ${CMAKE_CURRENT_SOURCE_DIR}/manifest.h
   ${CMAKE_CURRENT_SOURCE_DIR}/manifest_handler.h
   ${CMAKE_CURRENT_SOURCE_DIR}/manifest_parser.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/manifest_util.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/manifest_parser_impl.h
   ${CMAKE_CURRENT_SOURCE_DIR}/permission_types.h
   ${CMAKE_CURRENT_SOURCE_DIR}/values.h
 )
