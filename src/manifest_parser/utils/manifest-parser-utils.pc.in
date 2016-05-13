@@ -6,6 +6,6 @@ includedir=@INCLUDEDIR@
 Name: manifest-parser-utils
 Description: Universal manifest parser utils
 Version: @VERSION@
-Requires: libiri
+Requires: libiri dlog
 Libs: -L${libdir} -lmanifest-parser-utils
 Cflags: -I${includedir}
