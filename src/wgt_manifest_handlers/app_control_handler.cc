@@ -17,7 +17,6 @@ const char kTizenNamespacePrefix[] = "http://tizen.org/ns/widgets";
 const char kEnabledValue[] = "enable";
 const char kDisabledValue[] = "disable";
 
-const utils::VersionNumber kReloadRequiredVersion("2.4");
 const char kTizenApplicationKey[] = "widget.application";
 const char kTizenApplicationAppControlSrcKey[] = "src";
 const char kTizenApplicationAppControlOperationKey[] = "operation";
@@ -137,19 +136,13 @@ bool AppControlHandler::Validate(
       return false;
     }
 
-    if (required_version >= kReloadRequiredVersion) {
-      if (item.reload().empty()) {
-        // FIXME for now, this const_cast is used, but it is not the best way.
-        AppControlInfo &tmp = const_cast<AppControlInfo &>(item);
-        tmp.set_reload(kEnabledValue);  // default parameter
-      } else if (item.reload() != kEnabledValue &&
-                 item.reload() != kDisabledValue) {
-        *error = "The improper value was given for appcontrol reload";
-        return false;
-      }
-    } else if (!item.reload().empty()) {
-      *error = "reload attribute cannot be used for api version lower "
-               "than 2.4";
+    if (item.reload().empty()) {
+      // FIXME for now, this const_cast is used, but it is not the best way.
+      AppControlInfo &tmp = const_cast<AppControlInfo &>(item);
+      tmp.set_reload(kEnabledValue);  // default parameter
+    } else if (item.reload() != kEnabledValue &&
+               item.reload() != kDisabledValue) {
+      *error = "The improper value was given for appcontrol reload";
       return false;
     }
   }
