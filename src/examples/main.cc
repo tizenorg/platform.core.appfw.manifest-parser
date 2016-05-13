@@ -5,7 +5,6 @@
 // Include manifest parser
 #include <manifest_parser/manifest_parser.h>
 // Include manifest handler, which is packaged with manifest parser
-#include <wgt_manifest_handlers/tizen_application_handler.h>
 
 #include <boost/filesystem/path.hpp>
 #include <cassert>
@@ -24,7 +23,6 @@ int main() {
   std::unique_ptr<parser::ManifestHandlerRegistry> registry(
       new parser::ManifestHandlerRegistry());
   // Add some manifest handlers
-  registry->RegisterManifestHandler(new wgt::parse::TizenApplicationHandler);
   registry->RegisterManifestHandler(new example::ItemListHandler);
   registry->RegisterManifestHandler(new example::ItemHandler);
 
@@ -53,9 +51,6 @@ int main() {
   std::shared_ptr<const example::ItemListInfo> item_info_list =
       std::static_pointer_cast<const example::ItemListInfo>(
           m_parser->GetManifestData(example::keys::item_handler_list_key));
-  std::shared_ptr<const wgt::parse::TizenApplicationInfo> tizen_app_info =
-      std::static_pointer_cast<const wgt::parse::TizenApplicationInfo>(
-          m_parser->GetManifestData(wgt::parse::TizenApplicationInfo::Key()));
 
   // Check parsed ItemInfo data
   assert(!strcmp("additional", item_info->type().c_str()));
@@ -68,11 +63,6 @@ int main() {
   assert(!strcmp("second.png", item_info_list->get_item(1)->value().c_str()));
   assert(!strcmp("text", item_info_list->get_item(2)->type().c_str()));
   assert(!strcmp("third", item_info_list->get_item(2)->value().c_str()));
-
-  // Check parsed TizenApplicationInfo data
-  assert(!strcmp("nNBDOItqjN.sample", tizen_app_info->id().c_str()));
-  assert(!strcmp("nNBDOItqjN", tizen_app_info->package().c_str()));
-  assert(!strcmp("2.2", tizen_app_info->required_version().c_str()));
 
   return 0;
 }

@@ -78,8 +78,6 @@ make %{?_smp_mflags}
 %{_datarootdir}/manifest-parser/languages-only.txt
 %{_libdir}/libmanifest-parser.so*
 %{_libdir}/libmanifest-parser-utils.so*
-%{_libdir}/libtpk-manifest-handlers.so*
-%{_libdir}/libwgt-manifest-handlers.so*
 %{_libdir}/libdelta-manifest-handlers.so*
 %license LICENSE LICENSE-xwalk
 
@@ -88,9 +86,6 @@ make %{?_smp_mflags}
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/manifest_parser/*.h
 %{_includedir}/manifest_parser/utils/*.h
-%{_includedir}/tpk_manifest_handlers/*.h
-%{_includedir}/tpk_manifest_handlers/common/*.h
-%{_includedir}/wgt_manifest_handlers/*.h
 %{_includedir}/delta/*.h
 
 %files tests
