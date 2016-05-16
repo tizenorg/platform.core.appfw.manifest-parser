@@ -253,8 +253,15 @@ bool ParseUIApplicationAndStore(
   }
 
   std::string hwacceleration;
-  if (app_dict.GetString(kUIApplicationHwAccelerationKey, &hwacceleration))
+  if (app_dict.GetString(kUIApplicationHwAccelerationKey, &hwacceleration)) {
+    if (hwacceleration == "use-GL")
+      hwacceleration = "on";
+    else if (hwacceleration == "not-use-GL")
+      hwacceleration = "off";
+    else if (hwacceleration == "use-system-setting")
+      hwacceleration = "default";
     uiapplicationinfo->app_info.set_hwacceleration(hwacceleration);
+  }
 
   std::string splash_screen_display;
   if (app_dict.GetString(kUIApplicationSplashScreenDisplayKey,

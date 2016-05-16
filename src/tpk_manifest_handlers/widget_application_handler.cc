@@ -177,8 +177,16 @@ bool ParseWidgetApplicationAndStore(
   }
 
   std::string hwacceleration;
-  if (app_dict.GetString(kWidgetApplicationHwAccelerationKey, &hwacceleration))
+  if (app_dict.GetString(kWidgetApplicationHwAccelerationKey,
+      &hwacceleration)) {
+    if (hwacceleration == "use-GL")
+      hwacceleration = "on";
+    else if (hwacceleration == "not-use-GL")
+      hwacceleration = "off";
+    else if (hwacceleration == "use-system-setting")
+      hwacceleration = "default";
     widgetapplicationinfo->app_info.set_hwacceleration(hwacceleration);
+  }
 
   return InitializeParsing(app_dict, widgetapplicationinfo, error);
 }
