@@ -21,4 +21,4 @@ log_priority LogLevelToPriority(LogLevel level) {
   }
 }
 
-}  // namespace utilschce
+}  // namespace utils
