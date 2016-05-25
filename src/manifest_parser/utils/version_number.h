@@ -26,6 +26,7 @@ class VersionNumber {
 
   bool IsValid() const;
   int Compare(const VersionNumber& other) const;
+  VersionNumber& Trim(unsigned size);
 
   bool operator<(const VersionNumber& other) const;
   bool operator>=(const VersionNumber& other) const;

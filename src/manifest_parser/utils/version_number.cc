@@ -60,6 +60,11 @@ int VersionNumber::Compare(const VersionNumber& other) const {
   }
 }
 
+VersionNumber& VersionNumber::Trim(unsigned size) {
+  parts_.resize(size);
+  return *this;
+}
+
 bool VersionNumber::operator<(const VersionNumber& other) const {
   return Compare(other) < 0;
 }
