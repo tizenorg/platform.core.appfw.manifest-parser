@@ -1,0 +1,9 @@
+Code-Review+1: Tomasz Iwanek <t.iwanek@samsung.com>
+Verified+1: Sangyoon Jang <s89.jang@samsung.com>
+Code-Review+1: Piotr Ganicz <p.ganicz@samsung.com>
+Code-Review+2: Semun Lee <sm79.lee@samsung.com>
+Submitted-by: Sangyoon Jang <s89.jang@samsung.com>
+Submitted-at: Wed, 25 May 2016 19:22:37 -0700
+Reviewed-on: https://review.tizen.org/gerrit/71327
+Project: platform/core/appfw/manifest-parser
+Branch: refs/heads/tizen
