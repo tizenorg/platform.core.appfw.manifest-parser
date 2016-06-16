@@ -40,12 +40,12 @@ ENDFOREACH(test)
 # FindGTest module do not sets all needed libraries in GTEST_LIBRARIES and
 # GTest main libraries is still missing, so additional linking of
 # GTEST_MAIN_LIBRARIES is needed.
-target_link_libraries(values_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${GTEST_MAIN_LIBRARIES})
-target_link_libraries(manifest_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${GTEST_MAIN_LIBRARIES})
-target_link_libraries(manifest_handler_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${GTEST_MAIN_LIBRARIES})
-target_link_libraries(parser_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${GTEST_MAIN_LIBRARIES})
-target_link_libraries(string_util_unittest PUBLIC ${TARGET_LIBNAME_UTILS} ${GTEST_MAIN_LIBRARIES})
-target_link_libraries(version_number_unittest PUBLIC ${TARGET_LIBNAME_UTILS} ${GTEST_MAIN_LIBRARIES})
+TARGET_LINK_LIBRARIES(values_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${GTEST_MAIN_LIBRARIES})
+TARGET_LINK_LIBRARIES(manifest_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${GTEST_MAIN_LIBRARIES})
+TARGET_LINK_LIBRARIES(manifest_handler_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${GTEST_MAIN_LIBRARIES})
+TARGET_LINK_LIBRARIES(parser_unittest PUBLIC ${TARGET_LIBNAME_PARSER} ${GTEST_MAIN_LIBRARIES})
+TARGET_LINK_LIBRARIES(string_util_unittest PUBLIC ${TARGET_LIBNAME_UTILS} ${GTEST_MAIN_LIBRARIES})
+TARGET_LINK_LIBRARIES(version_number_unittest PUBLIC ${TARGET_LIBNAME_UTILS} ${GTEST_MAIN_LIBRARIES})
 
 FOREACH(test ${TESTS})
   INSTALL(TARGETS ${test} DESTINATION ${BINDIR}/${DESTINATION_DIR})

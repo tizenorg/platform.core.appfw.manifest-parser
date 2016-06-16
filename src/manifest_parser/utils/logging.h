@@ -5,7 +5,7 @@
 #ifndef MANIFEST_PARSER_UTILS_LOGGING_H_
 #define MANIFEST_PARSER_UTILS_LOGGING_H_
 
-#include <dlog/dlog.h>
+#include <dlog.h>
 
 #ifndef PROJECT_TAG
 #define PROJECT_TAG ""
