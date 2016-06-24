@@ -16,10 +16,16 @@
 #endif
 
 #include <cassert>
+#include <cstring>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <string>
+
+#ifndef __FILENAME__
+#define __FILENAME__                                                           \
+    (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#endif
 
 namespace utils {
 
@@ -104,7 +110,9 @@ inline static const constexpr char* __tag_for_project() {
       ::utils::LogLevel::LOG_ ## LEVEL, __tag_for_project())                   \
       & ::utils::StringStream<char>()                                          \
       << std::string(::utils::LogTag<::utils::LogLevel::LOG_ ## LEVEL>::value) \
-      << " " << std::setw(20) << std::left << __tag_for_logging()              \
+      << " " << std::setw(25) << std::left << __tag_for_logging()              \
+      << " : " << std::setw(36)                                                \
+      << (std::string(__FILENAME__) + ":" + std::to_string(__LINE__)).c_str()  \
       << std::setw(0) << " : "                                                 \
 
 #endif  // MANIFEST_PARSER_UTILS_LOGGING_H_
